@@ -67,9 +67,7 @@ const toggleFavorite = (event: MouseEvent) => {
   border: 1px solid transparent;
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    border-color: var(--color-primary);
+    transform: translateY(-1px);
 
     .favorite-button {
       opacity: 1;

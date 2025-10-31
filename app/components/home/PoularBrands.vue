@@ -3,7 +3,7 @@ import { ref } from "vue";
 
 const brands = ref([
   { name: "Samsung", icon: "📱", color: "#1428A0" },
-  { name: "Apple", icon: "", color: "#000000" },
+  { name: "Apple", icon: "📱", color: "#000000" },
   { name: "Xiaomi", icon: "📱", color: "#FF6900" },
   { name: "Huawei", icon: "📱", color: "#ED1C24" },
   { name: "Oppo", icon: "📱", color: "#00A862" },
@@ -27,7 +27,7 @@ const brands = ref([
 
       <div class="carousel-wrapper">
         <el-carousel
-          :interval="30000"
+          :interval="3000"
           type="card"
           height="200px"
           arrow="never"
@@ -51,7 +51,7 @@ const brands = ref([
 .brands {
   background: var(--color-bg-primary);
   padding: 60px 20px 0;
-  margin: 40px 0;
+  margin: 40px 0 0;
 }
 
 .section-title {
