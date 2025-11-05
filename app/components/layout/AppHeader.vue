@@ -1,8 +1,16 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { Search, Plus } from "@element-plus/icons-vue";
+import { useRootStore } from "~/store/root";
+
+const rootStore = useRootStore();
+const router = useRouter();
 
 const searchQuery = ref("");
+
+const goToLogin = () => {
+  router.push("/login");
+};
 </script>
 
 <template>
@@ -34,9 +42,18 @@ const searchQuery = ref("");
             <span>Подать объявление</span>
           </el-button>
 
+          <el-button v-if="!rootStore.user" type="default" size="large" @click="goToLogin">
+            Войти
+          </el-button>
+
           <el-avatar
-            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+            v-else-if="rootStore.user?.image_url"
+            :src="rootStore.user.image_url"
           />
+
+          <el-avatar v-else>
+            {{ rootStore.user.first_name?.charAt(0) }}{{ rootStore.user.last_name?.charAt(0) }}
+          </el-avatar>
         </div>
       </div>
     </div>

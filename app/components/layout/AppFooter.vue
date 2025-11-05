@@ -36,10 +36,9 @@ import { Phone, Message, Location } from "@element-plus/icons-vue";
         <div class="footer-section">
           <h3>Помощь</h3>
           <ul class="footer-links">
-            <li><a href="#">Как разместить объявление</a></li>
-            <li><a href="#">Правила безопасности</a></li>
-            <li><a href="#">Частые вопросы</a></li>
-            <li><a href="#">Служба поддержки</a></li>
+            <li><NuxtLink to="/rules">Правила безопасности</NuxtLink></li>
+            <li><NuxtLink to="/faq">Частые вопросы</NuxtLink></li>
+            <li><NuxtLink to="/support">Служба поддержки</NuxtLink></li>
           </ul>
         </div>
 
@@ -47,10 +46,8 @@ import { Phone, Message, Location } from "@element-plus/icons-vue";
         <div class="footer-section">
           <h3>О сервисе</h3>
           <ul class="footer-links">
-            <li><a href="#">О компании</a></li>
-            <li><a href="#">Карьера</a></li>
-            <li><a href="#">Блог</a></li>
-            <li><a href="#">Партнерство</a></li>
+            <li><NuxtLink to="/contacts">Контакты</NuxtLink></li>
+            <li><NuxtLink to="/blog">Блог</NuxtLink></li>
           </ul>
         </div>
 
