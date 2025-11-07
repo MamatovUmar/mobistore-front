@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { User, Document, Star, SwitchButton } from "@element-plus/icons-vue";
+import { useRootStore } from "~/store/root";
+
+const root = useRootStore();
 
 const menuItems = [
-  { title: "Личные данные", icon: User, path: "/account/profile" },
+  { title: "Личные данные", icon: User, path: "/account" },
   { title: "Мои объявления", icon: Document, path: "/account/listings" },
   { title: "Избранные", icon: Star, path: "/account/favorites" },
 ];
@@ -26,7 +29,7 @@ const menuItems = [
 
       <div class="sidebar-divider" />
 
-      <button class="nav-item nav-item--logout">
+      <button class="nav-item nav-item--logout" @click="root.logout()">
         <el-icon class="nav-icon">
           <SwitchButton />
         </el-icon>

@@ -2,10 +2,6 @@
 import { Document } from "@element-plus/icons-vue";
 import MyListingCard from "@/components/account/MyListingCard.vue";
 
-definePageMeta({
-  layout: false,
-});
-
 const activeTab = ref("all");
 
 // Моковые данные для объявлений
@@ -59,60 +55,56 @@ const listings = [
 </script>
 
 <template>
-  <div>
-    <NuxtLayout name="default">
-      <main class="page-account">
-        <div class="container">
-          <div class="page-header">
-            <h1 class="page-title">Мой аккаунт</h1>
-          </div>
+  <main class="page-account">
+    <div class="container">
+      <div class="page-header">
+        <h1 class="page-title">Мой аккаунт</h1>
+      </div>
 
-          <div class="account-layout">
-            <!-- Сайдбар с навигацией -->
-            <AccountSidebar />
+      <div class="account-layout">
+        <!-- Сайдбар с навигацией -->
+        <AccountSidebar />
 
-            <!-- Основной контент -->
-            <div class="account-content">
-              <div class="listings-section">
-                <div class="section-header">
-                  <h2 class="section-title">Мои объявления</h2>
-                  <el-button type="primary" @click="$router.push('/create')">
-                    Создать объявление
-                  </el-button>
-                </div>
+        <!-- Основной контент -->
+        <div class="account-content">
+          <div class="listings-section">
+            <div class="section-header">
+              <h2 class="section-title">Мои объявления</h2>
+              <el-button type="primary" @click="$router.push('/create')">
+                Создать объявление
+              </el-button>
+            </div>
 
-                <!-- Табы для фильтрации -->
-                <el-tabs v-model="activeTab" class="listings-tabs">
-                  <el-tab-pane label="Все объявления" name="all" />
-                  <el-tab-pane label="Активные" name="active" />
-                  <el-tab-pane label="Черновики" name="draft" />
-                  <el-tab-pane label="Архив" name="archived" />
-                </el-tabs>
+            <!-- Табы для фильтрации -->
+            <el-tabs v-model="activeTab" class="listings-tabs">
+              <el-tab-pane label="Все объявления" name="all" />
+              <el-tab-pane label="Активные" name="active" />
+              <el-tab-pane label="Черновики" name="draft" />
+              <el-tab-pane label="Архив" name="archived" />
+            </el-tabs>
 
-                <!-- Список объявлений -->
-                <div class="listings-list">
-                  <MyListingCard
-                    v-for="listing in listings"
-                    :key="listing.id"
-                    :listing="listing"
-                  />
-                </div>
+            <!-- Список объявлений -->
+            <div class="listings-list">
+              <MyListingCard
+                v-for="listing in listings"
+                :key="listing.id"
+                :listing="listing"
+              />
+            </div>
 
-                <!-- Пустое состояние -->
-                <div v-if="listings.length === 0" class="empty-state">
-                  <el-icon class="empty-icon"><Document /></el-icon>
-                  <p class="empty-text">У вас пока нет объявлений</p>
-                  <el-button type="primary" @click="$router.push('/create')">
-                    Создать первое объявление
-                  </el-button>
-                </div>
-              </div>
+            <!-- Пустое состояние -->
+            <div v-if="listings.length === 0" class="empty-state">
+              <el-icon class="empty-icon"><Document /></el-icon>
+              <p class="empty-text">У вас пока нет объявлений</p>
+              <el-button type="primary" @click="$router.push('/create')">
+                Создать первое объявление
+              </el-button>
             </div>
           </div>
         </div>
-      </main>
-    </NuxtLayout>
-  </div>
+      </div>
+    </div>
+  </main>
 </template>
 
 <style lang="scss" scoped>

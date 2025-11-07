@@ -13,8 +13,5 @@ export interface IRegisterForm {
   last_name: string;
 }
 
-export interface IAuthResponse extends IBaseResponse {
-  user: IUser;
-  token: string;
-}
+export interface IAuthResponse extends IBaseResponse<{ user: IUser; token: string }> {}
   

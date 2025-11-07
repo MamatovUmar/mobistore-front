@@ -2,10 +2,6 @@
 import { Star } from "@element-plus/icons-vue";
 import FavoriteCard from "@/components/account/FavoriteCard.vue";
 
-definePageMeta({
-  layout: false,
-});
-
 // Моковые данные для избранных объявлений
 const favorites = [
   {
@@ -64,9 +60,7 @@ const favorites = [
 </script>
 
 <template>
-  <div>
-    <NuxtLayout name="default">
-      <main class="page-account">
+  <main class="page-account">
         <div class="container">
           <div class="page-header">
             <h1 class="page-title">Мой аккаунт</h1>
@@ -111,8 +105,6 @@ const favorites = [
           </div>
         </div>
       </main>
-    </NuxtLayout>
-  </div>
 </template>
 
 <style lang="scss" scoped>

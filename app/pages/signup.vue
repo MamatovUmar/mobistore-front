@@ -66,8 +66,8 @@ const register = async () => {
           body: form
         });
 
-        rootStore.user = res.user;
-        tokenCookie.value = res.token;
+        rootStore.user = res.data?.user;
+        tokenCookie.value = res.data?.token;
         ElMessage({
           message: "Вы успешно зарегистрировались",
           type: "success",

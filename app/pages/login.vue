@@ -57,8 +57,8 @@ const login = async () => {
           body: form
         });
 
-        rootStore.user = res.user;
-        tokenCookie.value = res.token;
+        rootStore.user = res.data?.user;
+        tokenCookie.value = res.data?.token;
         navigateTo('/')
       } catch (error) {
         console.log(error);

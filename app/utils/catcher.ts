@@ -4,6 +4,7 @@ export function catcher<T>(cb: (...args: any) => (T), error?: (err: Error) => vo
             await cb(...args)
         } catch (e) {
             console.error(e)
+            error?.(e as Error)
         }
     }
 }
