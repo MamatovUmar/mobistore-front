@@ -1,60 +1,168 @@
 <script setup lang="ts">
 import { UploadFilled } from "@element-plus/icons-vue";
+import type { FormInstance, FormRules } from "element-plus";
 import BrandAutocomplete from "~/components/autocompletes/BrandAutocomplete.vue";
 import ModelAutocomplete from "~/components/autocompletes/ModelAutocomplete.vue";
 import RegionAutocomplete from "~/components/autocompletes/RegionAutocomplete.vue";
 import CityAutocomplete from "~/components/autocompletes/CityAutocomplete.vue";
 import PhoneNumber from "~/components/form/PhoneNumber.vue";
 import TelegramLink from "~/components/form/TelegramLink.vue";
-import type { IListingForm } from "~/types/ads";
-import { ListingStatus } from "~/types/ads";
+import type { IListing, IListingForm } from "~/types/ads";
+import { ListingStatus, ImageFolder, EntityType } from "~/types/ads";
 import type { IBaseResponse } from "~/types/index";
 
 const { $api } = useNuxtApp();
 
 const loading = ref(false);
-const form = reactive<IListingForm>({
-  "title": "dfsdfgh sehreythsdfgsd fghd",
-  "description": "dsfgdj asdfgsdfydrjfghncv jkyfjnghd tyjghnfhj dhjdfg ndgj",
-  "region_id": 5,
-  "city_id": 230,
-  "brand_id": 6,
-  "model_id": 26152,
-  "price": 34543,
-  "currency": "UZS",
-  "state": "new",
-  "allow_trade_in": true,
-  "color": "sdfgdsgd",
-  "storage": 8,
-  "ram": 1,
-  "phone_number": "3453453453",
-  "telegram_link": "https://t.me/4dsgdfg",
-  "show_phone": true,
-  "status": ListingStatus.ACTIVE
+const fileList = ref<any[]>([]);
+const formRef = ref<FormInstance>();
+
+const validateImages = (rule: any, value: any, callback: any) => {
+  if (fileList.value.length === 0) {
+    callback(new Error('Загрузите хотя бы одну фотографию'));
+  } else {
+    callback();
+  }
+};
+
+const rules = reactive<FormRules<IListingForm & { images?: any }>>({
+  title: [
+    { required: true, message: "Введите название", trigger: "blur" },
+  ],
+  description: [
+    { required: true, message: "Введите описание", trigger: "blur" },
+  ],
+  region_id: [
+    { required: true, message: "Выберите регион", trigger: "change" },
+  ],
+  city_id: [
+    { required: true, message: "Выберите город", trigger: "change" },
+  ],
+  brand_id: [
+    { required: true, message: "Выберите бренд", trigger: "change" },
+  ],
+  model_id: [
+    { required: true, message: "Выберите модель", trigger: "change" },
+  ],
+  price: [
+    { required: true, message: "Введите цену", trigger: "blur" },
+  ],
+  storage: [
+    { required: true, message: "Выберите память", trigger: "change" },
+    { type: "number", min: 1, message: "Выберите память", trigger: "change" },
+  ],
+  ram: [
+    { required: true, message: "Выберите оперативку", trigger: "change" },
+    { type: "number", min: 1, message: "Выберите оперативку", trigger: "change" },
+  ],
+  phone_number: [
+    { required: true, message: "Введите телефон", trigger: "blur" },
+  ],
+  images: [
+    { validator: validateImages, trigger: "change" },
+  ],
 });
 
-const createListing = catcher(async (status: ListingStatus) => {
-  loading.value = true;
-  const response = await $api<IBaseResponse<string>>("/ads", {
-    method: "POST",
-    body: {
-      ...form,
-      status
-    },
-  }); 
-  if (response?.status) {
-    ElMessage.success("Объявление создано успешно");
-    navigateTo(`/${response.data}`);
-  }  
-  loading.value = false;
-}, (e: any) => {
-  loading.value = false;
-  const details = e?.response?._data?.details ?? [];
-  details?.forEach((detail: any) => {
-    ElMessage.error(detail.errors?.join("\n"));
-  });
+const form = reactive<IListingForm & { images?: any }>({
+  title: "",
+  description: "",
+  region_id: undefined,
+  city_id: undefined,
+  brand_id: undefined,
+  model_id: undefined,
+  price: undefined,
+  currency: "UZS",
+  state: "new",
+  allow_trade_in: false,
+  color: "",
+  storage: undefined as any,
+  ram: undefined as any,
+  phone_number: "",
+  telegram_link: "",
+  show_phone: true,
+  status: ListingStatus.ACTIVE,
+  images: [],
 });
 
+const createListing = catcher(
+  async (status: ListingStatus) => {
+    if (!formRef.value) return;
+    
+    const isValid = await formRef.value.validate().catch(() => false);
+    
+    if (!isValid) {
+      ElMessage.error("Заполните все обязательные поля");
+      return;
+    }
+
+    loading.value = true;
+    const response = await $api<IBaseResponse<IListing>>("/ads", {
+      method: "POST",
+      body: {
+        ...form,
+        status,
+      },
+    });
+    if (response?.status) {
+      ElMessage.success("Объявление создано успешно");
+      await saveImages(response.data?.id);
+      navigateTo(`/${response.data?.alias}`);
+    }
+    loading.value = false;
+  },
+  (e: any) => {
+    loading.value = false;
+    const details = e?.response?._data?.details ?? [];
+    details?.forEach((detail: any) => {
+      ElMessage.error(detail.errors?.join("\n"));
+    });
+  }
+);
+
+const saveImages = catcher(
+  async (entityId: number | undefined) => {
+    if (!entityId || fileList.value.length === 0) {
+      return;
+    }
+
+    const formData = new FormData();
+
+    // Добавляем все файлы
+    fileList.value.forEach((file) => {
+      formData.append("images", file.raw);
+    });
+
+    // Добавляем метаданные
+    formData.append("folder", ImageFolder.AD);
+    formData.append("entityType", EntityType.AD);
+    formData.append("entityId", entityId.toString());
+
+    const response = await $api<IBaseResponse<any>>("/image/upload-multiple", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (response?.status) {
+      ElMessage.success("Изображения загружены успешно");
+    }
+  },
+  (e: any) => {
+    ElMessage.error("Ошибка при загрузке изображений");
+    console.error("Upload error:", e);
+  }
+);
+
+const handleFileChange = (file: any, fileListData: any[]) => {
+  fileList.value = fileListData;
+  form.images = fileListData;
+  formRef.value?.validateField('images');
+};
+
+const handleFileRemove = (file: any, fileListData: any[]) => {
+  fileList.value = fileListData;
+  form.images = fileListData;
+  formRef.value?.validateField('images');
+};
 </script>
 
 <template>
@@ -66,15 +174,15 @@ const createListing = catcher(async (status: ListingStatus) => {
       </div>
 
       <div class="form-container">
-        <el-form label-position="top" size="large">
+        <el-form ref="formRef" :model="form" :rules="rules" label-position="top" size="large">
           <div class="form-section">
             <h2 class="section-title">Основная информация</h2>
 
-            <el-form-item label="Название">
+            <el-form-item label="Название" prop="title">
               <el-input v-model="form.title" placeholder="Введите название" />
             </el-form-item>
 
-            <el-form-item label="Описание">
+            <el-form-item label="Описание" prop="description">
               <el-input
                 type="textarea"
                 v-model="form.description"
@@ -88,13 +196,13 @@ const createListing = catcher(async (status: ListingStatus) => {
 
             <el-row :gutter="20">
               <el-col :span="12">
-                <el-form-item label="Бренд">
+                <el-form-item label="Бренд" prop="brand_id">
                   <BrandAutocomplete v-model="form.brand_id" />
                 </el-form-item>
               </el-col>
 
               <el-col :span="12">
-                <el-form-item label="Модель">
+                <el-form-item label="Модель" prop="model_id">
                   <ModelAutocomplete
                     v-model="form.model_id"
                     :brand-id="form.brand_id"
@@ -105,7 +213,7 @@ const createListing = catcher(async (status: ListingStatus) => {
 
             <el-row :gutter="20">
               <el-col :span="8">
-                <el-form-item label="Память">
+                <el-form-item label="Память" prop="storage">
                   <el-select
                     v-model="form.storage"
                     placeholder="Выберите память"
@@ -121,7 +229,7 @@ const createListing = catcher(async (status: ListingStatus) => {
               </el-col>
 
               <el-col :span="8">
-                <el-form-item label="Оперативка">
+                <el-form-item label="Оперативка" prop="ram">
                   <el-select
                     v-model="form.ram"
                     placeholder="Выберите оперативку"
@@ -158,8 +266,12 @@ const createListing = catcher(async (status: ListingStatus) => {
               </el-col>
 
               <el-col :span="8">
-                <el-form-item label="Цена">
-                  <el-input type="number" v-model="form.price" placeholder="Введите цену" />
+                <el-form-item label="Цена" prop="price">
+                  <el-input
+                    type="number"
+                    v-model="form.price"
+                    placeholder="Введите цену"
+                  />
                 </el-form-item>
               </el-col>
 
@@ -190,13 +302,13 @@ const createListing = catcher(async (status: ListingStatus) => {
 
             <el-row :gutter="20">
               <el-col :span="12">
-                <el-form-item label="Регион">
+                <el-form-item label="Регион" prop="region_id">
                   <RegionAutocomplete v-model="form.region_id" />
                 </el-form-item>
               </el-col>
 
               <el-col :span="12">
-                <el-form-item label="Город">
+                <el-form-item label="Город" prop="city_id">
                   <CityAutocomplete
                     v-model="form.city_id"
                     :region-id="form.region_id"
@@ -205,20 +317,24 @@ const createListing = catcher(async (status: ListingStatus) => {
               </el-col>
             </el-row>
 
-            <el-form-item label="Фотографии (макс. 8)">
+            <el-form-item label="Фотографии (макс. 8)" prop="images">
               <el-upload
                 class="upload-demo"
                 drag
-                action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+                :auto-upload="false"
+                :limit="8"
+                :on-change="handleFileChange"
+                :on-remove="handleFileRemove"
+                accept="image/*"
                 multiple
               >
                 <el-icon class="el-icon--upload"><upload-filled /></el-icon>
                 <div class="el-upload__text">
-                  Drop file here or <em>click to upload</em>
+                  Перетащите файлы сюда или <em>нажмите для загрузки</em>
                 </div>
                 <template #tip>
                   <div class="el-upload__tip">
-                    jpg/png files with a size less than 500kb
+                    Поддерживаемые форматы: jpg, png (макс. 8 файлов)
                   </div>
                 </template>
               </el-upload>
@@ -230,7 +346,7 @@ const createListing = catcher(async (status: ListingStatus) => {
 
             <el-row :gutter="20">
               <el-col :span="12">
-                <el-form-item label="Телефон">
+                <el-form-item label="Телефон" prop="phone_number">
                   <PhoneNumber v-model="form.phone_number" />
                 </el-form-item>
               </el-col>
@@ -244,14 +360,19 @@ const createListing = catcher(async (status: ListingStatus) => {
           </div>
 
           <el-row :gutter="20">
-            <el-col :span="10">
+            <!-- <el-col :span="10">
               <el-button type="primary" plain style="width: 100%">
                 Сохранить в черновик
               </el-button>
-            </el-col>
+            </el-col> -->
 
-            <el-col :span="14">
-              <el-button type="primary" style="width: 100%" :loading="loading" @click="createListing(ListingStatus.ACTIVE)">
+            <el-col :span="24">
+              <el-button
+                type="primary"
+                style="width: 100%"
+                :loading="loading"
+                @click="createListing(ListingStatus.ACTIVE)"
+              >
                 Опубликовать
               </el-button>
             </el-col>

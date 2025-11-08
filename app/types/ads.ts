@@ -34,6 +34,7 @@ export enum ListingStatus {
 export interface IListing {
   title: string;
   description: string;
+  alias: string;
   region_id: number;
   city_id: number;
   brand_id: number;
@@ -57,4 +58,20 @@ export interface IListing {
   favorites_count: number;
   created_at: string;
   updated_at: string;
+}
+
+export enum ImageFolder {
+  AD = 'ad',
+  USER = 'user',
+  BRAND = 'brand',
+  MODEL = 'model',
+  TEMP = 'temp'
+}
+
+export enum EntityType {
+  AD = 'ad',
+  USER = 'user',
+  BRAND = 'brand',
+  MODEL = 'model',
+  PLACE = 'place'
 }
