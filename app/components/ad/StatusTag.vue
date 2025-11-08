@@ -5,13 +5,13 @@ const props = defineProps<{
   state: IState;
 }>();
 
-const state: Record<IState, string> = {
+const states: Record<IState, string> = {
   new: "Новый",
   restored: "Восстановленный",
   used: "Б/У",
 };
 
-const stateText = computed(() => state[props.state]);
+const stateText = computed(() => states[props.state]);
 </script>
 
 <template>
