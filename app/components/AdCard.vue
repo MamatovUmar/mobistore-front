@@ -1,10 +1,26 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { LocationInformation } from "@element-plus/icons-vue";
+import { LocationInformation, Picture } from "@element-plus/icons-vue";
+import type { IListing } from "~/types/ads";
+import { formatCurrency } from "~/utils/formatters";
+import StatusTag from "~/components/ad/StatusTag.vue";
 
-const image = "https://frankfurt.apollo.olxcdn.com/v1/files/htop2ltrgevj3-UZ/image;s=1000x700";
+const props = defineProps<{
+  listing: IListing;
+}>()
 
 const isFavorite = ref(false);
+
+
+
+const image = computed(() => {
+  if(props.listing.images.length > 0) {
+    return props.listing.images[0]?.url;
+  }
+  return '';
+});
+
+const hasImage = computed(() => props.listing.images.length > 0);
 
 const toggleFavorite = (event: MouseEvent) => {
   event.stopPropagation();
@@ -13,8 +29,14 @@ const toggleFavorite = (event: MouseEvent) => {
 </script>
 
 <template>
-  <div class="listing-card">
-    <div class="listing-image" :style="{ backgroundImage: `url(${image})` }">
+  <div class="listing-card" @click="navigateTo(`/${listing.alias}`)">
+    <div class="listing-image" :class="{ 'no-image': !hasImage }" :style="hasImage ? { backgroundImage: `url(${image})` } : {}">
+      <div v-if="!hasImage" class="no-image-placeholder">
+        <el-icon :size="48" color="#dcdfe6">
+          <Picture />
+        </el-icon>
+        <span class="no-image-text">Нет фото</span>
+      </div>
       <button 
         class="favorite-button" 
         :class="{ active: isFavorite }"
@@ -43,14 +65,14 @@ const toggleFavorite = (event: MouseEvent) => {
       </button>
     </div>
     <div class="listing-info">
-      <div class="listing-brand">Samsung</div>
-      <h3 class="listing-title">Galaxy Z Flip5 256GB</h3>
-      <div class="listing-price">9 300 000 сум</div>
-      <div class="listing-footer">
-        <div class="listing-location">
-          <el-icon><LocationInformation /></el-icon> Фергана
-        </div>
-        <span class="listing-condition used">Б/У</span>
+      <div class="listing-header">
+        <div class="listing-brand">{{ props.listing.brand.name }}</div>
+        <StatusTag :state="props.listing.state" />
+      </div>
+      <h3 class="listing-title">{{ props.listing.title }}</h3>
+      <div class="listing-price">{{ formatCurrency(props.listing.price, props.listing.currency) }}</div>
+      <div class="listing-location">
+        <el-icon><LocationInformation /></el-icon> {{ props.listing.region.name_ru }}
       </div>
     </div>
   </div>
@@ -64,7 +86,6 @@ const toggleFavorite = (event: MouseEvent) => {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   cursor: pointer;
-  border: 1px solid transparent;
 
   &:hover {
     transform: translateY(-1px);
@@ -87,6 +108,24 @@ const toggleFavorite = (event: MouseEvent) => {
   justify-content: center;
   font-size: 64px;
   position: relative;
+
+  &.no-image {
+    background-color: #f5f7fa;
+  }
+}
+
+.no-image-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.no-image-text {
+  font-size: 14px;
+  color: #a8abb2;
+  font-weight: 500;
 }
 
 .favorite-button {
@@ -134,6 +173,13 @@ const toggleFavorite = (event: MouseEvent) => {
   gap: 8px;
 }
 
+.listing-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
 .listing-brand {
   font-size: 13px;
   font-weight: 600;
@@ -147,27 +193,21 @@ const toggleFavorite = (event: MouseEvent) => {
   font-weight: 600;
   color: var(--color-text-primary);
   line-height: 1.4;
+  margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
+  word-break: break-word;
+  height: 45px;
 }
 
 .listing-price {
   font-size: 20px;
   font-weight: 700;
   color: var(--color-primary);
-}
-
-.listing-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 8px;
-  border-top: 1px solid var(--color-border-light);
-  margin-top: auto;
 }
 
 .listing-location {
@@ -179,21 +219,6 @@ const toggleFavorite = (event: MouseEvent) => {
 
   .el-icon {
     font-size: 16px;
-  }
-}
-
-.listing-condition {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 12px;
-  background: var(--color-success);
-  color: var(--color-bg-primary);
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-
-  &.used {
-    background: var(--color-warning);
   }
 }
 </style>

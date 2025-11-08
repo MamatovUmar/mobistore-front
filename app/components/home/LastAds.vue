@@ -1,4 +1,24 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { IBaseResponse } from "~/types";
+import type { IListing } from "~/types/ads";
+import AdCard from "~/components/AdCard.vue";
+
+const {$api} = useNuxtApp();
+
+const listings = ref<IListing[]>([]);
+
+const getLatest = catcher(async () => {
+  const res = await $api<IBaseResponse<IListing[]>>("/ads/latest", {
+    params: {
+      limit: 8,
+    },
+  });
+  listings.value = res.data || [];
+});
+
+getLatest();
+
+</script>
 
 <template>
   <section id="listings" class="listings">
@@ -6,10 +26,7 @@
       <h2 class="section-title">Последние объявления</h2>
 
       <div class="listings-grid">
-        <AdCard />
-        <AdCard />
-        <AdCard />
-        <AdCard />
+        <AdCard v-for="listing in listings" :key="listing.id" :listing="listing" />
       </div>
     </div>
   </section>

@@ -35,12 +35,12 @@ const handleCreateListing = () => {
     </div>
     <div class="header-main">
       <div class="header-content">
-        <a href="#" class="logo">
+        <NuxtLink to="/" class="logo">
           <div class="logo-text">
             <span class="logo-title">SmartMarket</span>
             <span class="logo-subtitle">МАРКЕТПЛЕЙС СМАРТФОНОВ</span>
           </div>
-        </a>
+        </NuxtLink>
 
         <div class="search-box">
           <el-input

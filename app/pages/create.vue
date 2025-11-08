@@ -10,57 +10,40 @@ import TelegramLink from "~/components/form/TelegramLink.vue";
 import type { IListing, IListingForm } from "~/types/ads";
 import { ListingStatus, ImageFolder, EntityType } from "~/types/ads";
 import type { IBaseResponse } from "~/types/index";
+import type { IModel } from "~/types/model";
 
 const { $api } = useNuxtApp();
 
 const loading = ref(false);
 const fileList = ref<any[]>([]);
 const formRef = ref<FormInstance>();
+const colors = ref<string[]>([]);
 
 const validateImages = (rule: any, value: any, callback: any) => {
   if (fileList.value.length === 0) {
-    callback(new Error('Загрузите хотя бы одну фотографию'));
+    callback(new Error("Загрузите хотя бы одну фотографию"));
   } else {
     callback();
   }
 };
 
 const rules = reactive<FormRules<IListingForm & { images?: any }>>({
-  title: [
-    { required: true, message: "Введите название", trigger: "blur" },
-  ],
+  title: [{ required: true, message: "Введите название", trigger: "blur" }],
   description: [
     { required: true, message: "Введите описание", trigger: "blur" },
   ],
   region_id: [
     { required: true, message: "Выберите регион", trigger: "change" },
   ],
-  city_id: [
-    { required: true, message: "Выберите город", trigger: "change" },
-  ],
-  brand_id: [
-    { required: true, message: "Выберите бренд", trigger: "change" },
-  ],
-  model_id: [
-    { required: true, message: "Выберите модель", trigger: "change" },
-  ],
-  price: [
-    { required: true, message: "Введите цену", trigger: "blur" },
-  ],
-  storage: [
-    { required: true, message: "Выберите память", trigger: "change" },
-    { type: "number", min: 1, message: "Выберите память", trigger: "change" },
-  ],
-  ram: [
-    { required: true, message: "Выберите оперативку", trigger: "change" },
-    { type: "number", min: 1, message: "Выберите оперативку", trigger: "change" },
-  ],
+  city_id: [{ required: true, message: "Выберите город", trigger: "change" }],
+  brand_id: [{ required: true, message: "Выберите бренд", trigger: "change" }],
+  model_id: [{ required: true, message: "Выберите модель", trigger: "change" }],
+  price: [{ required: true, message: "Введите цену", trigger: "blur" }],
   phone_number: [
     { required: true, message: "Введите телефон", trigger: "blur" },
   ],
-  images: [
-    { validator: validateImages, trigger: "change" },
-  ],
+  images: [{ validator: validateImages, trigger: "change" }],
+  state: [{ required: true, message: "Выберите состояние", trigger: "change" }],
 });
 
 const form = reactive<IListingForm & { images?: any }>({
@@ -72,11 +55,11 @@ const form = reactive<IListingForm & { images?: any }>({
   model_id: undefined,
   price: undefined,
   currency: "UZS",
-  state: "new",
+  state: undefined,
   allow_trade_in: false,
   color: "",
-  storage: undefined as any,
-  ram: undefined as any,
+  storage: undefined,
+  ram: undefined,
   phone_number: "",
   telegram_link: "",
   show_phone: true,
@@ -87,9 +70,9 @@ const form = reactive<IListingForm & { images?: any }>({
 const createListing = catcher(
   async (status: ListingStatus) => {
     if (!formRef.value) return;
-    
+
     const isValid = await formRef.value.validate().catch(() => false);
-    
+
     if (!isValid) {
       ElMessage.error("Заполните все обязательные поля");
       return;
@@ -100,6 +83,7 @@ const createListing = catcher(
       method: "POST",
       body: {
         ...form,
+        price: Number(form.price),
         status,
       },
     });
@@ -155,13 +139,18 @@ const saveImages = catcher(
 const handleFileChange = (file: any, fileListData: any[]) => {
   fileList.value = fileListData;
   form.images = fileListData;
-  formRef.value?.validateField('images');
+  formRef.value?.validateField("images");
 };
 
 const handleFileRemove = (file: any, fileListData: any[]) => {
   fileList.value = fileListData;
   form.images = fileListData;
-  formRef.value?.validateField('images');
+  formRef.value?.validateField("images");
+};
+
+const handleModelSelect = (model: IModel) => {
+  console.log(model);
+  colors.value = model.colors;
 };
 </script>
 
@@ -174,7 +163,13 @@ const handleFileRemove = (file: any, fileListData: any[]) => {
       </div>
 
       <div class="form-container">
-        <el-form ref="formRef" :model="form" :rules="rules" label-position="top" size="large">
+        <el-form
+          ref="formRef"
+          :model="form"
+          :rules="rules"
+          label-position="top"
+          size="large"
+        >
           <div class="form-section">
             <h2 class="section-title">Основная информация</h2>
 
@@ -182,10 +177,13 @@ const handleFileRemove = (file: any, fileListData: any[]) => {
               <el-input v-model="form.title" placeholder="Введите название" />
             </el-form-item>
 
-            <el-form-item label="Описание" prop="description">
-              <el-input
-                type="textarea"
-                v-model="form.description"
+            <el-form-item
+              label="Описание"
+              prop="description"
+              class="quill-form-item"
+            >
+              <RichTextEditor
+                v-model:content="form.description"
                 placeholder="Введите описание"
               />
             </el-form-item>
@@ -206,6 +204,7 @@ const handleFileRemove = (file: any, fileListData: any[]) => {
                   <ModelAutocomplete
                     v-model="form.model_id"
                     :brand-id="form.brand_id"
+                    @select="handleModelSelect"
                   />
                 </el-form-item>
               </el-col>
@@ -246,14 +245,17 @@ const handleFileRemove = (file: any, fileListData: any[]) => {
 
               <el-col :span="8">
                 <el-form-item label="Цвет">
-                  <el-input v-model="form.color" placeholder="Введите цвет" />
+                  <el-input v-if="colors.length === 0" v-model="form.color" placeholder="Введите цвет" />
+                  <el-select v-else v-model="form.color" placeholder="Выберите цвет">
+                    <el-option v-for="color in colors" :key="color" :label="color" :value="color" />
+                  </el-select>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row :gutter="20">
               <el-col :span="8">
-                <el-form-item label="Состояние">
+                <el-form-item label="Состояние" prop="state">
                   <el-select
                     v-model="form.state"
                     placeholder="Выберите состояние"
@@ -431,6 +433,56 @@ const handleFileRemove = (file: any, fileListData: any[]) => {
     display: flex;
     align-items: center;
     gap: 8px;
+  }
+
+  /* === QUILL EDITOR === */
+  .quill-form-item {
+    :deep(.el-form-item__content) {
+      line-height: normal;
+    }
+  }
+
+  :deep(.ql-container) {
+    min-height: 150px;
+    font-size: 14px;
+    border-radius: 0 0 4px 4px;
+    border: 1px solid #dcdfe6;
+    border-top: none;
+    font-family: inherit;
+  }
+
+  :deep(.ql-toolbar) {
+    border-radius: 4px 4px 0 0;
+    background: #f5f7fa;
+    border: 1px solid #dcdfe6;
+    font-family: inherit;
+  }
+
+  :deep(.ql-editor) {
+    min-height: 150px;
+    line-height: 1.5;
+    white-space: normal;
+    word-wrap: break-word;
+    font-family: inherit;
+  }
+
+  :deep(.ql-editor p) {
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+  }
+
+  :deep(.ql-editor.ql-blank::before) {
+    color: #a8abb2;
+    font-style: normal;
+  }
+
+  :deep(.quill-editor) {
+    width: 100%;
+  }
+
+  :deep(.ql-editor *) {
+    font-family: inherit;
   }
 }
 </style>

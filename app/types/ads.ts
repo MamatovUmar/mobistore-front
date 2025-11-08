@@ -1,4 +1,8 @@
+import type { IBrand } from "./brand";
 import type { ICurrency } from "./index";
+import type { IModel } from "./model";
+import type { ICity, IRegion } from "./place";
+import type { IUser } from "./user";
 
 export type IState = "new" | "restored" | "used";
 
@@ -11,11 +15,11 @@ export interface IListingForm {
   model_id: number | undefined;
   price: number | undefined;
   currency: ICurrency;
-  state: IState;
+  state: IState | undefined;
   allow_trade_in: boolean;
   color: string;
-  storage: number;
-  ram: number;
+  storage: number | undefined;
+  ram: number | undefined;
   phone_number: string;
   telegram_link: string;
   show_phone: boolean;
@@ -56,6 +60,25 @@ export interface IListing {
   id: number;
   views_count: number;
   favorites_count: number;
+  created_at: string;
+  updated_at: string;
+  brand: IBrand;
+  model: IModel;
+  city: ICity;
+  user: IUser;
+  region: IRegion;
+  images: IImage[];
+}
+
+export interface IImage {
+  id: number;
+  url: string;
+  entity_type: EntityType;
+  entity_id: number;
+  folder: ImageFolder;
+  file_name: string;
+  file_size: string;
+  mime_type: string;
   created_at: string;
   updated_at: string;
 }
