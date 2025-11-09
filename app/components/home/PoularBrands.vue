@@ -1,20 +1,28 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import type { IBrand } from "~/types/brand";
+import type { IBaseResponse } from "~/types";
 
-const brands = ref([
-  { name: "Samsung", icon: "📱", color: "#1428A0" },
-  { name: "Apple", icon: "📱", color: "#000000" },
-  { name: "Xiaomi", icon: "📱", color: "#FF6900" },
-  { name: "Huawei", icon: "📱", color: "#ED1C24" },
-  { name: "Oppo", icon: "📱", color: "#00A862" },
-  { name: "Vivo", icon: "📱", color: "#0066CC" },
-  { name: "Realme", icon: "📱", color: "#FFC900" },
-  { name: "OnePlus", icon: "📱", color: "#F5010C" },
-  { name: "Nokia", icon: "📱", color: "#124191" },
-  { name: "Motorola", icon: "📱", color: "#5C92FA" },
-  { name: "Sony", icon: "📱", color: "#000000" },
-  { name: "Honor", icon: "📱", color: "#0075C9" },
-]);
+const { $api } = useNuxtApp();
+
+const loading = ref(false);
+const brands = ref<IBrand[]>([]);
+
+const getPopularBrands = async () => {
+  loading.value = true;
+  try {
+    const res = await $api<IBaseResponse<IBrand[]>>(`/brands/popular`);
+    brands.value = res.data || [];
+  } catch (error) {
+    console.error("Error searching brands:", error);
+    brands.value = [];
+  } finally {
+    loading.value = false;
+  }
+};
+
+getPopularBrands();
+
 </script>
 
 <template>
@@ -29,16 +37,29 @@ const brands = ref([
         <el-carousel
           :interval="3000"
           type="card"
-          height="200px"
+          height="240px"
           arrow="never"
           :autoplay="true"
           :indicator-position="'none'"
         >
           <el-carousel-item v-for="brand in brands" :key="brand.name">
             <div class="brand-card">
-              <div class="brand-icon">{{ brand.icon }}</div>
+              <div class="brand-logo-container">
+                <img
+                  v-if="brand.logo"
+                  :src="brand.logo"
+                  :alt="brand.name"
+                  class="brand-logo"
+                >
+                <div v-else class="brand-logo-placeholder">
+                  <span class="brand-initial">{{ brand.name.charAt(0) }}</span>
+                </div>
+              </div>
               <h3 class="brand-name">{{ brand.name }}</h3>
-              <div class="brand-count">1250+ объявлений</div>
+              <div class="brand-count">
+                <span class="count-number">{{ brand.ads_count }}</span>
+                <span class="count-label">объявлений</span>
+              </div>
             </div>
           </el-carousel-item>
         </el-carousel>
@@ -50,7 +71,7 @@ const brands = ref([
 <style lang="scss" scoped>
 .brands {
   background: var(--color-bg-primary);
-  padding: 60px 20px 0;
+  padding: 60px 20px 40px;
   margin: 40px 0 0;
 }
 
@@ -81,47 +102,100 @@ const brands = ref([
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-  border-radius: 16px;
-  border: 2px solid var(--color-border-light);
-  padding: 24px 20px;
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid #e5e7eb;
+  padding: 32px 24px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 
   &:hover {
     border-color: var(--color-primary);
-    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.15);
+    background: #ffffff;
+    box-shadow: 0 12px 32px rgba(59, 130, 246, 0.12);
+    transform: translateY(-4px);
 
-    .brand-icon {
-      transform: scale(1.08);
+    .brand-logo-container {
+      transform: scale(1.05);
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
     }
 
     .brand-name {
       color: var(--color-primary);
     }
+
+    .count-number {
+      color: var(--color-primary);
+    }
   }
 }
 
-.brand-icon {
-  font-size: 52px;
-  margin-bottom: 10px;
-  transition: transform 0.3s ease;
+.brand-logo-container {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9fafb;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid #f3f4f6;
+  overflow: hidden;
+}
+
+.brand-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 12px;
+}
+
+.brand-logo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.brand-initial {
+  font-size: 40px;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
 }
 
 .brand-name {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   color: var(--color-text-primary);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   text-align: center;
+  transition: color 0.3s ease;
+  line-height: 1.3;
 }
 
 .brand-count {
-  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.count-number {
+  font-weight: 700;
+  color: var(--color-text-primary);
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.count-label {
   color: var(--color-text-secondary);
   font-weight: 500;
-  text-align: center;
 }
 
 :deep(.el-carousel__container) {
@@ -161,23 +235,33 @@ const brands = ref([
   }
 
   .brand-card {
-    padding: 20px 16px;
+    padding: 24px 20px;
   }
 
-  .brand-icon {
-    font-size: 44px;
+  .brand-logo-container {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 16px;
+  }
+
+  .brand-initial {
+    font-size: 32px;
   }
 
   .brand-name {
     font-size: 18px;
   }
 
-  .brand-count {
+  .count-number {
+    font-size: 14px;
+  }
+
+  .count-label {
     font-size: 12px;
   }
 
   :deep(.el-carousel) {
-    height: 160px !important;
+    height: 200px !important;
   }
 
   :deep(.el-carousel__item) {

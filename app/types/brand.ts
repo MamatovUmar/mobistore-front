@@ -4,4 +4,5 @@ export interface IBrand {
   is_popular: boolean;
   logo: string | null;
   alias: string;
+  ads_count: number;
 }
