@@ -1,14 +1,7 @@
 <script setup lang="ts">
 import AppHeader from "../components/layout/AppHeader.vue";
 import AppFooter from "../components/layout/AppFooter.vue";
-import { useRootStore } from "~/store/root";
-
-const rootStore = useRootStore();
-
-onMounted(() => {
-  rootStore.fetchUser();
-});
-
+// Инициализация пользователя теперь происходит в plugins/auth.ts
 </script>
 
 <template>

@@ -15,12 +15,41 @@ export default defineNuxtConfig({
       apiUrl: 'http://localhost:5050'
     }
   },
+  // Конфигурация SSR
+  ssr: true,
+
+  // SEO и производительность
+  app: {
+    head: {
+      charset: 'utf-8',
+      viewport: 'width=device-width, initial-scale=1',
+      meta: [
+        { name: 'format-detection', content: 'telephone=no' }
+      ]
+    }
+  },
+
+  // Настройки Element Plus для SSR
+  elementPlus: {
+    importStyle: 'scss',
+  },
+
   vite: {
     optimizeDeps: {
       include: ['dayjs', 'dayjs/plugin/localeData', 'dayjs/plugin/customParseFormat']
     },
     ssr: {
-      noExternal: ['dayjs']
+      noExternal: ['dayjs', 'element-plus']
     }
+  },
+
+  // Экспериментальные функции для улучшения производительности
+  experimental: {
+    payloadExtraction: false,
+  },
+
+  // Настройки рендеринга
+  routeRules: {
+    '/': { prerender: true }, // Пререндер главной страницы
   }
 })

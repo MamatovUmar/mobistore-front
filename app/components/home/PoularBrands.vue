@@ -1,28 +1,25 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import type { IBrand } from "~/types/brand";
 import type { IBaseResponse } from "~/types";
 
 const { $api } = useNuxtApp();
 
-const loading = ref(false);
-const brands = ref<IBrand[]>([]);
-
-const getPopularBrands = async () => {
-  loading.value = true;
-  try {
-    const res = await $api<IBaseResponse<IBrand[]>>(`/brands/popular`);
-    brands.value = res.data || [];
-  } catch (error) {
-    console.error("Error searching brands:", error);
-    brands.value = [];
-  } finally {
-    loading.value = false;
+// Используем useAsyncData для SSR-совместимости
+const { data: brands } = await useAsyncData(
+  "popular-brands",
+  async () => {
+    try {
+      const res = await $api<IBaseResponse<IBrand[]>>("/brands/popular");
+      return res.data || [];
+    } catch (error) {
+      console.error("Error fetching popular brands:", error);
+      return [];
+    }
+  },
+  {
+    default: () => [],
   }
-};
-
-getPopularBrands();
-
+);
 </script>
 
 <template>

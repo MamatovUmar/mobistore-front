@@ -3,21 +3,28 @@ import type { IBaseResponse } from "~/types";
 import type { IListing } from "~/types/ads";
 import AdCard from "~/components/AdCard.vue";
 
-const {$api} = useNuxtApp();
+const { $api } = useNuxtApp();
 
-const listings = ref<IListing[]>([]);
-
-const getLatest = catcher(async () => {
-  const res = await $api<IBaseResponse<IListing[]>>("/ads/latest", {
-    params: {
-      limit: 6,
-    },
-  });
-  listings.value = res.data || [];
-});
-
-getLatest();
-
+// Используем useAsyncData для SSR-совместимости
+const { data: listings } = await useAsyncData(
+  "latest-ads",
+  async () => {
+    try {
+      const res = await $api<IBaseResponse<IListing[]>>("/ads/latest", {
+        params: {
+          limit: 6,
+        },
+      });
+      return res.data || [];
+    } catch (error) {
+      console.error("Error fetching latest ads:", error);
+      return [];
+    }
+  },
+  {
+    default: () => [],
+  }
+);
 </script>
 
 <template>
