@@ -8,4 +8,7 @@ export interface IUser {
   role: string;
   phone_number: string | null;
   telegram: string | null;
+  last_entered_at: string;
+  created_at: string;
+  show_contacts: boolean;
 }

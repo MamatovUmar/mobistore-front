@@ -17,3 +17,13 @@ body {
   margin: 0 auto;
   padding: 0 20px;
 }
+
+.el-button {
+  .el-icon {
+    width: 18px;
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
