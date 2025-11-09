@@ -1,43 +1,161 @@
 <script setup lang="ts">
+import type { IListing } from "~/types/ads";
+import { ChatDotRound, Phone, ChatLineRound, Star } from "@element-plus/icons-vue";
+import StatusTag from "~/components/ad/StatusTag.vue";
+
+const { listing } = defineProps<{ listing: IListing }>();
+
+// Состояние отображения контактов
+const showContacts = ref(false);
+const isFavorite = ref(false);
+
+// Форматирование цены
+const formattedPrice = computed(() => {
+  return new Intl.NumberFormat('ru-RU').format(listing.price);
+});
+
+// Перевод состояния
+const stateText = computed(() => {
+  const states = {
+    new: 'Новый',
+    restored: 'Восстановленный',
+    used: 'Б/У'
+  };
+  return states[listing.state] || listing.state;
+});
+
+// Форматирование даты
+const formattedDate = computed(() => {
+  if (!listing.published_at) return 'Не опубликовано';
+  return new Date(listing.published_at).toLocaleDateString('ru-RU', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+});
+
+// Информация о памяти
+const memoryInfo = computed(() => {
+  const parts = [];
+  if (listing.storage) parts.push(`${listing.storage} ГБ`);
+  if (listing.ram) parts.push(`${listing.ram} ГБ RAM`);
+  return parts.length ? parts.join(' / ') : null;
+});
+
+const handleShowContacts = () => {
+  showContacts.value = !showContacts.value;
+};
+
+const handleMessage = () => {
+  // Функция отправки сообщений
+  console.log('Send message');
+};
+
+const toggleFavorite = () => {
+  isFavorite.value = !isFavorite.value;
+};
+
+// Форматированный номер телефона
+const formattedPhone = computed(() => {
+  if (!listing.phone_number) return '';
+  const phone = listing.phone_number.replace(/\D/g, '');
+  if (phone.length === 12) {
+    return `+${phone[0]} ${phone.slice(1, 4)} ${phone.slice(4, 7)} ${phone.slice(7, 9)} ${phone.slice(9)}`;
+  }
+  return listing.phone_number;
+});
+
+const hasContacts = computed(() => {
+  return !!(listing.phone_number || listing.telegram_link);
+});
 </script>
 
 <template>
   <div class="info-section">
     <div class="listing-badges">
-      <span class="listing-brand">Samsung</span>
+      <span class="listing-brand">{{ listing.brand.name }}</span>
+      <span v-if="listing.allow_trade_in" class="badge-trade">Trade-In</span>
     </div>
 
-    <h1 class="listing-title"> Galaxy S24 Ultra 256GB </h1>
+    <h1 class="listing-title">{{ listing.title }}</h1>
 
-    <div class="listing-price">12 500 000 сум</div>
+    <div class="listing-price">{{ formattedPrice }} {{ listing.currency }}</div>
 
     <div class="listing-actions">
-      <el-button size="large" type="primary"> Показать телефон</el-button>
-      <el-button size="large"> Добавить в избранное</el-button>
+      <el-button
+        size="large"
+        type="primary"
+        :icon="ChatDotRound"
+        @click="handleMessage"
+      />
+      <el-button
+        v-if="listing.user.show_contacts && hasContacts"
+        size="large"
+        :icon="Phone"
+        plain
+        type="warning"
+        @click="handleShowContacts"
+      />
+      <el-button
+        size="large"
+        :icon="Star"
+        :type="isFavorite ? 'primary' : 'default'"
+        @click="toggleFavorite"
+      />
     </div>
+
+    <!-- Компактный блок контактов -->
+    <transition name="contacts-slide">
+      <div v-if="showContacts" class="contacts-compact">
+        <div v-if="listing.phone_number" class="contact-compact">
+          <a :href="`tel:${listing.phone_number}`" class="contact-compact-link">
+            <el-icon><Phone /></el-icon>
+            <span>{{ formattedPhone }}</span>
+          </a>
+        </div>
+        <div v-if="listing.telegram_link" class="contact-compact">
+          <a :href="listing.telegram_link" target="_blank" class="contact-compact-link telegram">
+            <el-icon><ChatLineRound /></el-icon>
+            <span>{{ listing.telegram_link.replace('https://t.me/', '@') }}</span>
+          </a>
+        </div>
+      </div>
+    </transition>
 
     <div class="listing-meta">
       <div class="meta-item">
         <span class="meta-label">Состояние</span>
-        <span class="meta-value">Новый</span>
+        <span class="meta-value">
+          <StatusTag :state="listing.state" />
+        </span>
+      </div>
+      <div v-if="listing.color" class="meta-item">
+        <span class="meta-label">Цвет</span>
+        <span class="meta-value">{{ listing.color }}</span>
+      </div>
+      <div v-if="memoryInfo" class="meta-item">
+        <span class="meta-label">Память</span>
+        <span class="meta-value">{{ memoryInfo }}</span>
       </div>
       <div class="meta-item">
         <span class="meta-label">Локация</span>
-        <span class="meta-value">Ташкент, Мирабадский район</span>
+        <span class="meta-value">{{ listing.city.name_ru }}, {{ listing.region.name_ru }}</span>
       </div>
       <div class="meta-item">
         <span class="meta-label">Дата публикации</span>
-        <span class="meta-value">31 октября 2025</span>
+        <span class="meta-value">{{ formattedDate }}</span>
       </div>
       <div class="meta-item">
         <span class="meta-label">Просмотры</span>
-        <span class="meta-value">247 просмотров</span>
+        <span class="meta-value">{{ listing.views_count }} просмотров</span>
       </div>
       <div class="meta-item">
         <span class="meta-label">ID объявления</span>
-        <span class="meta-value">#SM-24-00847</span>
+        <span class="meta-value">#SM-{{ listing.id }}</span>
       </div>
     </div>
+
+    <el-button v-if="listing.status === 'draft'" type="primary" class="mt-20 w-full" size="large"> Опубликовать </el-button>
   </div>
 </template>
 
@@ -56,6 +174,7 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 16px;
+  flex-wrap: wrap;
 }
 
 .listing-brand {
@@ -67,6 +186,18 @@
   font-size: 13px;
   font-weight: 700;
   color: var(--color-text-primary);
+  text-transform: uppercase;
+}
+
+.badge-trade {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
   text-transform: uppercase;
 }
 
@@ -88,12 +219,77 @@
 
 .listing-actions {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 24px;
-  .el-button+.el-button {
-    margin-left: 0;
+  justify-content: center;
+  margin-bottom: 20px;
+  .el-button {
+    flex: 1;
   }
+}
+
+// Компактный блок контактов
+.contacts-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: var(--color-bg-secondary);
+  border-radius: 10px;
+  margin-bottom: 24px;
+}
+
+.contact-compact {
+  display: flex;
+}
+
+.contact-compact-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: white;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--color-text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  width: 100%;
+  transition: all 0.2s;
+  
+  .el-icon {
+    color: var(--el-color-success);
+    font-size: 18px;
+  }
+  
+  &:hover {
+    background: var(--el-color-success-light-9);
+    transform: translateX(4px);
+  }
+  
+  &.telegram {
+    .el-icon {
+      color: #0088cc;
+    }
+    
+    &:hover {
+      background: rgba(0, 136, 204, 0.1);
+    }
+  }
+}
+
+// Анимация контактов
+.contacts-slide-enter-active,
+.contacts-slide-leave-active {
+  transition: all 0.3s ease;
+}
+
+.contacts-slide-enter-from {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.contacts-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
 }
 
 .btn-contact {
@@ -138,7 +334,7 @@
 }
 
 .listing-meta {
-  padding-top: 24px;
+  padding-top: 20px;
   border-top: 2px solid var(--color-border-light);
 }
 
