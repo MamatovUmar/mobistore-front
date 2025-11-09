@@ -68,7 +68,7 @@ const form = reactive<IListingForm & { images?: any }>({
 });
 
 const createListing = catcher(
-  async (status: ListingStatus) => {
+  async () => {
     if (!formRef.value) return;
 
     const isValid = await formRef.value.validate().catch(() => false);
@@ -84,7 +84,6 @@ const createListing = catcher(
       body: {
         ...form,
         price: Number(form.price),
-        status,
       },
     });
     if (response?.status) {
@@ -373,9 +372,9 @@ const handleModelSelect = (model: IModel) => {
                 type="primary"
                 style="width: 100%"
                 :loading="loading"
-                @click="createListing(ListingStatus.ACTIVE)"
+                @click="createListing"
               >
-                Опубликовать
+                Предварительный просмотр
               </el-button>
             </el-col>
           </el-row>

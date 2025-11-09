@@ -10,7 +10,7 @@ import type { IBaseResponse } from "~/types";
 const route = useRoute();
 const { $api } = useNuxtApp();
 
-const { data, error, pending: loading } = await useAsyncData(
+const { data, error, pending: loading, refresh } = await useAsyncData(
   `listing-${route.params.alias}`,
   () => $api<IBaseResponse<IListing>>(`/ads/alias/${route.params.alias}`)
 );
@@ -22,6 +22,10 @@ if (error.value) {
     ElMessage.error("Ошибка при загрузке объявления");
   }
 }
+
+const handleUpdate = async () => {
+  await refresh();
+};
 
 </script>
 
@@ -48,7 +52,7 @@ if (error.value) {
             <SellerSection :listing="listing" />
           </div>
           <div v-if="listing"> 
-            <SidebarSection :listing="listing" />
+            <SidebarSection :listing="listing" @update="handleUpdate" />
           </div>
         </div>
       </template>

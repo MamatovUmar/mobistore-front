@@ -1,36 +1,36 @@
 <script setup lang="ts">
 import type { IListing } from "~/types/ads";
-import { ChatDotRound, Phone, ChatLineRound, Star } from "@element-plus/icons-vue";
+import {
+  ChatDotRound,
+  Phone,
+  ChatLineRound,
+  Star,
+} from "@element-plus/icons-vue";
 import StatusTag from "~/components/ad/StatusTag.vue";
 
 const { listing } = defineProps<{ listing: IListing }>();
 
+const emit = defineEmits(['update']);
+
+const { $api } = useNuxtApp();
+
 // Состояние отображения контактов
 const showContacts = ref(false);
 const isFavorite = ref(false);
+const publishLoading = ref(false);
 
 // Форматирование цены
 const formattedPrice = computed(() => {
-  return new Intl.NumberFormat('ru-RU').format(listing.price);
-});
-
-// Перевод состояния
-const stateText = computed(() => {
-  const states = {
-    new: 'Новый',
-    restored: 'Восстановленный',
-    used: 'Б/У'
-  };
-  return states[listing.state] || listing.state;
+  return new Intl.NumberFormat("ru-RU").format(listing.price);
 });
 
 // Форматирование даты
 const formattedDate = computed(() => {
-  if (!listing.published_at) return 'Не опубликовано';
-  return new Date(listing.published_at).toLocaleDateString('ru-RU', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
+  if (!listing.published_at) return "Не опубликовано";
+  return new Date(listing.published_at).toLocaleDateString("ru-RU", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
   });
 });
 
@@ -39,7 +39,24 @@ const memoryInfo = computed(() => {
   const parts = [];
   if (listing.storage) parts.push(`${listing.storage} ГБ`);
   if (listing.ram) parts.push(`${listing.ram} ГБ RAM`);
-  return parts.length ? parts.join(' / ') : null;
+  return parts.length ? parts.join(" / ") : null;
+});
+
+// Форматированный номер телефона
+const formattedPhone = computed(() => {
+  if (!listing.phone_number) return "";
+  const phone = listing.phone_number.replace(/\D/g, "");
+  if (phone.length === 12) {
+    return `+${phone[0]} ${phone.slice(1, 4)} ${phone.slice(
+      4,
+      7
+    )} ${phone.slice(7, 9)} ${phone.slice(9)}`;
+  }
+  return listing.phone_number;
+});
+
+const hasContacts = computed(() => {
+  return !!(listing.phone_number || listing.telegram_link);
 });
 
 const handleShowContacts = () => {
@@ -48,26 +65,23 @@ const handleShowContacts = () => {
 
 const handleMessage = () => {
   // Функция отправки сообщений
-  console.log('Send message');
+  console.log("Send message");
 };
 
 const toggleFavorite = () => {
   isFavorite.value = !isFavorite.value;
 };
 
-// Форматированный номер телефона
-const formattedPhone = computed(() => {
-  if (!listing.phone_number) return '';
-  const phone = listing.phone_number.replace(/\D/g, '');
-  if (phone.length === 12) {
-    return `+${phone[0]} ${phone.slice(1, 4)} ${phone.slice(4, 7)} ${phone.slice(7, 9)} ${phone.slice(9)}`;
-  }
-  return listing.phone_number;
+const publishListing = catcher(async () => {
+  publishLoading.value = true;
+  await $api(`/ads/${listing.id}/publish`, { method: 'POST' });
+  ElMessage.success("Объявление будет опубликовано по завершению проверки");
+  emit('update');
+  publishLoading.value = false;
+}, () => {
+  publishLoading.value = false;
 });
 
-const hasContacts = computed(() => {
-  return !!(listing.phone_number || listing.telegram_link);
-});
 </script>
 
 <template>
@@ -97,6 +111,7 @@ const hasContacts = computed(() => {
         @click="handleShowContacts"
       />
       <el-button
+        v-if="listing.user.show_contacts && hasContacts"
         size="large"
         :icon="Star"
         :type="isFavorite ? 'primary' : 'default'"
@@ -114,9 +129,13 @@ const hasContacts = computed(() => {
           </a>
         </div>
         <div v-if="listing.telegram_link" class="contact-compact">
-          <a :href="listing.telegram_link" target="_blank" class="contact-compact-link telegram">
+          <a
+            :href="listing.telegram_link"
+            target="_blank"
+            class="contact-compact-link telegram"
+          >
             <el-icon><ChatLineRound /></el-icon>
-            <span>{{ listing.telegram_link.replace('https://t.me/', '@') }}</span>
+            <span> {{ listing.telegram_link.replace("https://t.me/", "@") }} </span>
           </a>
         </div>
       </div>
@@ -139,7 +158,9 @@ const hasContacts = computed(() => {
       </div>
       <div class="meta-item">
         <span class="meta-label">Локация</span>
-        <span class="meta-value">{{ listing.city.name_ru }}, {{ listing.region.name_ru }}</span>
+        <span class="meta-value"
+          >{{ listing.city.name_ru }}, {{ listing.region.name_ru }}</span
+        >
       </div>
       <div class="meta-item">
         <span class="meta-label">Дата публикации</span>
@@ -155,7 +176,16 @@ const hasContacts = computed(() => {
       </div>
     </div>
 
-    <el-button v-if="listing.status === 'draft'" type="primary" class="mt-20 w-full" size="large"> Опубликовать </el-button>
+    <el-button
+      v-if="listing.status === 'draft'"
+      type="primary"
+      class="mt-20 w-full"
+      :loading="publishLoading"
+      size="large"
+      @click="publishListing"
+    >
+      Опубликовать
+    </el-button>
   </div>
 </template>
 
@@ -254,22 +284,22 @@ const hasContacts = computed(() => {
   font-weight: 600;
   width: 100%;
   transition: all 0.2s;
-  
+
   .el-icon {
     color: var(--el-color-success);
     font-size: 18px;
   }
-  
+
   &:hover {
     background: var(--el-color-success-light-9);
     transform: translateX(4px);
   }
-  
+
   &.telegram {
     .el-icon {
       color: #0088cc;
     }
-    
+
     &:hover {
       background: rgba(0, 136, 204, 0.1);
     }
