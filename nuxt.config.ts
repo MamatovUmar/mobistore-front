@@ -14,5 +14,13 @@ export default defineNuxtConfig({
     public: {
       apiUrl: 'http://localhost:5050'
     }
+  },
+  vite: {
+    optimizeDeps: {
+      include: ['dayjs', 'dayjs/plugin/localeData', 'dayjs/plugin/customParseFormat']
+    },
+    ssr: {
+      noExternal: ['dayjs']
+    }
   }
 })

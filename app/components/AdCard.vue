@@ -27,7 +27,7 @@ const toggleFavorite = (event: MouseEvent) => {
 </script>
 
 <template>
-  <div class="listing-card" @click="navigateTo(`/${listing.alias}`)">
+  <NuxtLink class="listing-card" :to="`/${listing.alias}`">
     <div class="listing-image-wrapper">
       <div class="listing-image" :class="{ 'no-image': !hasImage }" :style="hasImage ? { backgroundImage: `url(${image})` } : {}">
         <div v-if="!hasImage" class="no-image-placeholder">
@@ -89,7 +89,7 @@ const toggleFavorite = (event: MouseEvent) => {
         </div>
       </div>
     </div>
-  </div>
+  </NuxtLink>
 </template>
 
 <style lang="scss" scoped>
@@ -104,6 +104,7 @@ const toggleFavorite = (event: MouseEvent) => {
   display: flex;
   flex-direction: column;
   border: 1px solid rgba(0, 0, 0, 0.04);
+  text-decoration: none;
 
   &:hover {
     transform: translateY(-4px);
