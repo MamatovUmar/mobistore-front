@@ -1,51 +1,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import ModelSpecsModal from "./ModelSpecsModal.vue";
+import type { IListing } from '~/types/ads';
+
+const { listing } = defineProps<{
+  listing: IListing;
+}>();
 
 // Пример данных модели - в реальном приложении придут из API
-const modelData = ref({
-  id: 3,
-  name: "Apple iPhone 16 Pro Max",
-  brand: {
-    id: 6,
-    name: "Apple",
-  },
-  battery: {
-    type: "Li-Ion 4685 mAh",
-    charging: [
-      "Wired, PD2.0, 50% in 30 min",
-      "25W wireless (MagSafe), 15W wireless (China only)",
-      "15W wireless (Qi2)",
-      "4.5W reverse wired",
-    ],
-  },
-  platform: {
-    os: "iOS 18, upgradable to iOS 18.4",
-    chipset: "Apple A18 Pro (3 nm)",
-    cpu: "Hexa-core (2x4.05 GHz + 4x2.42 GHz)",
-    gpu: "Apple GPU (6-core graphics)",
-  },
-  display: {
-    type: "LTPO Super Retina XDR OLED, 120Hz, HDR10, Dolby Vision",
-    size: "6.9 inches",
-    resolution: "1320 x 2868 pixels (~460 ppi density)",
-    protection: "Ceramic Shield glass (2024 gen)",
-  },
-  memory: {
-    cardSlot: "No",
-    internal: "256GB 8GB RAM, 512GB 8GB RAM, 1TB 8GB RAM",
-  },
-  cameras: {
-    mainCamera: {
-      type: "triple",
-      cameraSpecs: [
-        '48 MP, f/1.8, 24mm (wide)',
-        '12 MP, f/2.8, 120mm (periscope telephoto)',
-        '48 MP, f/2.2, 13mm (ultrawide)',
-      ],
-    },
-  },
-});
+const modelData = computed(() => listing.model);
 
 const showModelSpecs = ref(false);
 
@@ -53,37 +16,50 @@ const openModelSpecs = () => {
   showModelSpecs.value = true;
 };
 
+// Формируем значение памяти
+const memoryValue = computed(() => {
+  // Если есть storage или ram в объявлении, показываем их
+  if (listing.storage || listing.ram) {
+    const parts = [];
+    if (listing.storage) parts.push(`${listing.storage} ГБ`);
+    if (listing.ram) parts.push(`${listing.ram} ГБ RAM`);
+    return parts.join(' / ');
+  }
+  // Иначе показываем данные из модели
+  return modelData.value?.memory?.internal || "—";
+});
+
 // Основные характеристики для отображения на странице
 const mainSpecs = [
   {
     label: "Процессор",
-    value: modelData.value.platform?.chipset || "—",
+    value: modelData.value?.platform?.chipset || "—",
   },
   {
     label: "Операционная система",
-    value: modelData.value.platform?.os || "—",
+    value: modelData.value?.platform?.os || "—",
   },
   {
     label: "Память",
-    value: modelData.value.memory?.internal || "—",
+    value: memoryValue.value,
   },
   {
     label: "Экран",
-    value: modelData.value.display?.size || "—",
+    value: modelData.value?.display?.size || "—",
   },
   {
     label: "Тип экрана",
-    value: modelData.value.display?.type || "—",
+    value: modelData.value?.display?.type || "—",
   },
   {
     label: "Батарея",
-    value: modelData.value.battery?.type || "—",
+    value: modelData.value?.battery?.type || "—",
   },
 ];
 </script>
 
 <template>
-  <div class="specs-section">
+  <div v-if="listing" class="specs-section">
     <div class="specs-header">
       <h2 class="section-title">Характеристики</h2>
       <el-button type="info" plain @click="openModelSpecs">
@@ -100,8 +76,10 @@ const mainSpecs = [
 
     <!-- Модалка с полными характеристиками -->
     <ModelSpecsModal
+      v-if="modelData && listing.brand"
       v-model:model-visible="showModelSpecs"
       :model-data="modelData"
+      :brand="listing.brand"
     />
   </div>
 </template>
@@ -110,7 +88,7 @@ const mainSpecs = [
 .specs-section {
   background: var(--color-bg-primary);
   border-radius: 16px;
-  padding: 28px;
+  padding: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   margin-top: 20px;
 }

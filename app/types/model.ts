@@ -10,14 +10,16 @@ export interface IModel {
     charging: string[];
   };
   platform: {
-    os: string;
-    cpu: string;
-    gpu: string;
+    os?: string;
+    cpu?: string;
+    chipset?: string;
+    gpu?: string;
   };
   network: {
     "2g"?: string;
     "3g"?: string;
     "4g"?: string;
+    "5g"?: string;
     "speed"?: string;
     technology: string;
   };
@@ -36,6 +38,7 @@ export interface IModel {
     sim: string;
     weight: string;
     dimensions: string;
+    build?: string;
   };
   memory: {
     cardSlot: string;
@@ -51,6 +54,7 @@ export interface IModel {
     radio: string;
     bluetooth: string;
     positioning: string;
+    nfc: string;
   };
   features: {
     browser: string;

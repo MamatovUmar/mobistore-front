@@ -41,13 +41,13 @@ if (error.value) {
         </div>
 
         <div class="listing-grid">
-          <div>
+          <div v-if="listing">
             <AdGallery :listing="listing" />
             <InfoSection :listing="listing" />
             <CharacterSection :listing="listing" />
             <SellerSection :listing="listing" />
           </div>
-          <div> 
+          <div v-if="listing"> 
             <SidebarSection :listing="listing" />
           </div>
         </div>

@@ -10,7 +10,9 @@ const { listing } = defineProps<{
 <template>
   <div class="description-section">
     <h2 class="section-title">Описание</h2>
-    <p class="description-text" v-html="listing.description"></p>
+    <ClientOnly>
+      <p class="description-text" v-html="listing.description"></p>
+    </ClientOnly>
   </div>
 </template>
 

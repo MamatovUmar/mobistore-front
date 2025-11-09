@@ -10,7 +10,7 @@ const listings = ref<IListing[]>([]);
 const getLatest = catcher(async () => {
   const res = await $api<IBaseResponse<IListing[]>>("/ads/latest", {
     params: {
-      limit: 8,
+      limit: 6,
     },
   });
   listings.value = res.data || [];
