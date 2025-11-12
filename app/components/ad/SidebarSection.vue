@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IListing } from "~/types/ads";
+import { ListingStatus, type IListing } from "~/types/ads";
 import {
   ChatDotRound,
   Phone,
@@ -13,6 +13,7 @@ const { listing } = defineProps<{ listing: IListing }>();
 const emit = defineEmits(['update']);
 
 const { $api } = useNuxtApp();
+const { changeStatus } = useAds();
 
 // Состояние отображения контактов
 const showContacts = ref(false);
@@ -74,8 +75,7 @@ const toggleFavorite = () => {
 
 const publishListing = catcher(async () => {
   publishLoading.value = true;
-  await $api(`/ads/${listing.id}/publish`, { method: 'POST' });
-  ElMessage.success("Объявление будет опубликовано по завершению проверки");
+  await changeStatus(listing.id, ListingStatus.ACTIVE);
   emit('update');
   publishLoading.value = false;
 }, () => {

@@ -46,9 +46,6 @@ const getImageUrl = (listing: IListing) => {
   return listing.images?.[0]?.url || "/no-image.png";
 };
 
-const formatPrice = (price: number) => {
-  return new Intl.NumberFormat("ru-RU").format(price);
-};
 </script>
 
 <template>

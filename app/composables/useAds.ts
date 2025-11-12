@@ -47,7 +47,11 @@ export const useAds = () => {
         status,
       },
     });
-    ElMessage.success("Статус изменен");
+    if (status === ListingStatus.ACTIVE) {
+      ElMessage.success("Объявление будет опубликовано по завершению проверки");
+    } else {
+      ElMessage.success("Статус изменен");
+    }
   }, (error: any) => {
     const details = error?.response?._data?.details ?? []
     const message = details.map((detail: any) => detail.errors?.join(". ")).join(". ");
