@@ -1,17 +1,14 @@
 <script setup lang="ts">
 import type { IState } from "~/types/ads";
+import { useAds } from "~/composables/useAds";
 
 const props = defineProps<{
   state: IState;
 }>();
 
-const states: Record<IState, string> = {
-  new: "Новый",
-  restored: "Восстановленный",
-  used: "Б/У",
-};
+const { getStateLabel } = useAds();
 
-const stateText = computed(() => states[props.state]);
+const stateText = computed(() => getStateLabel(props.state));
 </script>
 
 <template>

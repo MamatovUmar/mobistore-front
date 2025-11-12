@@ -1,5 +1,5 @@
 import type { IBrand } from "./brand";
-import type { ICurrency } from "./index";
+import type { ICurrency, IPagination } from "./index";
 import type { IModel } from "./model";
 import type { ICity, IRegion } from "./place";
 import type { IUser } from "./user";
@@ -84,17 +84,22 @@ export interface IImage {
 }
 
 export enum ImageFolder {
-  AD = 'ad',
-  USER = 'user',
-  BRAND = 'brand',
-  MODEL = 'model',
-  TEMP = 'temp'
+  AD = "ad",
+  USER = "user",
+  BRAND = "brand",
+  MODEL = "model",
+  TEMP = "temp",
 }
 
 export enum EntityType {
-  AD = 'ad',
-  USER = 'user',
-  BRAND = 'brand',
-  MODEL = 'model',
-  PLACE = 'place'
+  AD = "ad",
+  USER = "user",
+  BRAND = "brand",
+  MODEL = "model",
+  PLACE = "place",
+}
+
+export interface IMyAdsResponse {
+  ads: IListing[];
+  pagination: IPagination;
 }
