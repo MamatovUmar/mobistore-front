@@ -42,25 +42,14 @@ const handleCreateListing = () => {
           </div>
         </NuxtLink>
 
-        <div class="search-box">
-          <el-input
-            v-model="searchQuery"
-            placeholder="Поиск"
-            clearable
-            size="large"
-            :prefix-icon="Search"
-          />
-        </div>
-
         <div class="header-actions">
-          <el-button
-            type="primary"
-            size="large"
-            :icon="Plus"
+          <button
+            class="create-listing-btn"
             @click="handleCreateListing"
           >
-            Подать объявление
-          </el-button>
+            <el-icon class="btn-icon"><Plus /></el-icon>
+            <span class="btn-text">Подать объявление</span>
+          </button>
 
           <el-button
             v-if="!rootStore.user"
@@ -74,8 +63,8 @@ const handleCreateListing = () => {
           <el-dropdown v-else trigger="click" class="user-dropdown">
             <div class="user-avatar-wrapper">
               <el-avatar
-                v-if="rootStore.user?.image_url"
-                :src="rootStore.user.image_url"
+                v-if="rootStore.user?.avatar"
+                :src="rootStore.user.avatar.url"
                 :size="40"
               />
               <el-avatar v-else :size="40" class="user-avatar">
@@ -220,6 +209,75 @@ const handleCreateListing = () => {
   align-items: center;
   gap: 12px;
   flex-shrink: 0;
+}
+
+.create-listing-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .btn-icon,
+  .btn-text {
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn-icon {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(102, 126, 234, 0.4);
+  }
+}
+
+@media (max-width: 768px) {
+  .create-listing-btn {
+    .btn-text {
+      display: none;
+    }
+
+    padding: 12px;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    justify-content: center;
+  }
 }
 
 .auth-dialog-content {

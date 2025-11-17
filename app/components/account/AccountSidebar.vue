@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { User, Document, Star, SwitchButton } from "@element-plus/icons-vue";
 import { useRootStore } from "~/store/root";
+import ProfileImage from "./ProfileImage.vue";
 
 const root = useRootStore();
 
@@ -13,6 +14,8 @@ const menuItems = [
 
 <template>
   <aside class="account-sidebar">
+    <ProfileImage />
+    
     <nav class="sidebar-nav">
       <NuxtLink
         v-for="item in menuItems"

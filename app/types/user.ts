@@ -1,12 +1,12 @@
 import type { IRegion, ICity } from "./place";
-
+import type { IImage } from "./index";
 export interface IUser {
   id: number;
   email: string;
   first_name: string;
   last_name: string;
   language_code: string | null;
-  image_url: string | null;
+  avatar: IImage | null;
   role: string;
   phone_number: string | null;
   telegram: string | null;
