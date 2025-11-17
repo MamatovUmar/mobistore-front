@@ -46,10 +46,16 @@ const formatPhoneNumber = (value: string): string => {
   return formatted;
 };
 
-// Получение чистого номера (только цифры)
-const getCleanNumber = (value: string): string => {
+// Получение полного номера с кодом страны
+const getFullNumber = (value: string): string => {
   const cleaned = value.replace(/\D/g, "");
-  return cleaned.startsWith("998") ? cleaned.slice(3) : cleaned;
+  const withoutPrefix = cleaned.startsWith("998") ? cleaned.slice(3) : cleaned;
+  
+  // Возвращаем полный номер с + и кодом страны, если есть цифры
+  if (withoutPrefix.length > 0) {
+    return `+998${withoutPrefix}`;
+  }
+  return "";
 };
 
 const handleInput = (value: string) => {
@@ -57,9 +63,9 @@ const handleInput = (value: string) => {
   const formatted = formatPhoneNumber(value);
   displayValue.value = formatted;
 
-  // Обновляем model только цифрами (без +998)
-  const cleanNumber = getCleanNumber(value);
-  model.value = cleanNumber;
+  // Обновляем model полным номером с +998
+  const fullNumber = getFullNumber(value);
+  model.value = fullNumber;
 };
 
 const handleFocus = () => {

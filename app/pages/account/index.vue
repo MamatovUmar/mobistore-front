@@ -1,8 +1,95 @@
 <script setup lang="ts">
 import { Edit, Lock } from "@element-plus/icons-vue";
+import { useRootStore } from "~/store/root";
+import type { FormInstance, FormRules } from "element-plus";
+import type { IUpdateProfilePayload } from "~/types/user";
+import PhoneNumber from "~/components/form/PhoneNumber.vue";
+import TelegramLink from "~/components/form/TelegramLink.vue";
 
 const isEditingProfile = ref(false);
 const isChangingPassword = ref(false);
+const profileFormRef = ref<FormInstance>();
+const loading = ref(false);
+
+const root = useRootStore();
+
+const user = computed(() => root.user);
+
+// Форма профиля
+const profileForm = ref<IUpdateProfilePayload>({
+  first_name: "",
+  last_name: "",
+  phone_number: "",
+  telegram: "",
+  show_contacts: true,
+  language_code: "ru",
+  region_id: undefined,
+  city_id: undefined,
+});
+
+// Правила валидации
+const profileRules = reactive<FormRules<IUpdateProfilePayload>>({
+  first_name: [
+    { required: true, message: "Введите имя", trigger: "blur" },
+    { min: 2, max: 50, message: "Длина должна быть от 2 до 50 символов", trigger: "blur" },
+  ],
+  last_name: [
+    { required: true, message: "Введите фамилию", trigger: "blur" },
+    { min: 2, max: 50, message: "Длина должна быть от 2 до 50 символов", trigger: "blur" },
+  ],
+  language_code: [
+    { required: true, message: "Выберите язык", trigger: "change" },
+  ],
+});
+
+// Инициализация формы данными пользователя
+const initProfileForm = () => {
+  if (user.value) {
+    profileForm.value = {
+      first_name: user.value.first_name || "",
+      last_name: user.value.last_name || "",
+      phone_number: user.value.phone_number || undefined,
+      telegram: user.value.telegram || undefined,
+      show_contacts: user.value.show_contacts ?? true,
+      language_code: user.value.language_code || "ru",
+      region_id: user.value.region_id || undefined,
+      city_id: user.value.city_id || undefined,
+    };
+  }
+};
+
+// Открытие формы редактирования
+const openEditMode = () => {
+  initProfileForm();
+  isEditingProfile.value = true;
+};
+
+// Отмена редактирования
+const cancelEdit = () => {
+  isEditingProfile.value = false;
+  profileFormRef.value?.clearValidate();
+};
+
+// Сохранение профиля
+const saveProfile = async () => {
+  if (!profileFormRef.value) return;
+
+  await profileFormRef.value.validate(async (valid) => {
+    if (!valid) return;
+
+    loading.value = true;
+    await root.updateProfile(profileForm.value);
+    loading.value = false;
+    isEditingProfile.value = false;
+  });
+};
+
+// Обработчик выбора региона
+const handleRegionSelect = () => {
+  // Сброс города при изменении региона
+  profileForm.value.city_id = undefined;
+};
+
 </script>
 
 <template>
@@ -26,51 +113,91 @@ const isChangingPassword = ref(false);
                 v-if="!isEditingProfile"
                 type="primary"
                 :icon="Edit"
-                @click="isEditingProfile = true"
+                @click="openEditMode"
               >
                 Редактировать
               </el-button>
             </div>
 
-            <div v-if="!isEditingProfile" class="profile-info">
+            <div v-if="!isEditingProfile && user" class="profile-info">
               <div class="info-row">
                 <span class="info-label">Имя:</span>
-                <span class="info-value">Иван Иванов</span>
+                <span class="info-value">{{ user.first_name }} {{ user.last_name }}</span>
               </div>
               <div class="info-row">
                 <span class="info-label">Email:</span>
-                <span class="info-value">ivan@example.com</span>
+                <span class="info-value">{{ user.email }}</span>
               </div>
               <div class="info-row">
                 <span class="info-label">Телефон:</span>
-                <span class="info-value">+998 90 123 45 67</span>
+                <span class="info-value">{{ user.phone_number || 'Не указан' }}</span>
               </div>
               <div class="info-row">
                 <span class="info-label">Telegram:</span>
-                <span class="info-value">@ivan_ivanov</span>
+                <span class="info-value">
+                  <TelegramAppear :value="user.telegram" />
+                </span>
               </div>
               <div class="info-row">
                 <span class="info-label">Регион:</span>
-                <span class="info-value">Toshkent</span>
+                <span class="info-value">{{ user.region?.name_ru || 'Не указан' }}</span>
               </div>
               <div class="info-row">
                 <span class="info-label">Город:</span>
-                <span class="info-value">Toshkent</span>
+                <span class="info-value">{{ user.city?.name_ru || 'Не указан' }}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Показывать контакты:</span>
+                <span class="info-value">{{ user.show_contacts ? 'Да' : 'Нет' }}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Язык:</span>
+                <span class="info-value">{{ user.language_code === 'ru' ? 'Русский' : 'O\'zbekcha' }}</span>
               </div>
             </div>
 
-            <el-form v-else label-position="top" size="large">
+            <el-form
+              v-else
+              ref="profileFormRef"
+              :model="profileForm"
+              :rules="profileRules"
+              label-position="top"
+              size="large"
+            >
               <el-row :gutter="20">
                 <el-col :span="12">
-                  <el-form-item label="Имя">
-                    <el-input placeholder="Введите имя" value="Иван Иванов" />
+                  <el-form-item label="Имя" prop="first_name">
+                    <el-input
+                      v-model="profileForm.first_name"
+                      placeholder="Введите имя"
+                    />
                   </el-form-item>
                 </el-col>
+                <el-col :span="12">
+                  <el-form-item label="Фамилия" prop="last_name">
+                    <el-input
+                      v-model="profileForm.last_name"
+                      placeholder="Введите фамилию"
+                    />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-row :gutter="20">
                 <el-col :span="12">
                   <el-form-item label="Email">
                     <el-input
-                      placeholder="Введите email"
-                      value="ivan@example.com"
+                      :model-value="user?.email"
+                      disabled
+                      placeholder="Email"
+                    />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="Телефон" prop="phone_number">
+                    <PhoneNumber
+                      v-model="profileForm.phone_number"
+                      placeholder="+998 90 123 45 67"
                     />
                   </el-form-item>
                 </el-col>
@@ -78,55 +205,64 @@ const isChangingPassword = ref(false);
 
               <el-row :gutter="20">
                 <el-col :span="12">
-                  <el-form-item label="Телефон">
-                    <el-input
-                      placeholder="Введите телефон"
-                      value="+998 90 123 45 67"
+                  <el-form-item label="Telegram" prop="telegram">
+                    <TelegramLink
+                      v-model="profileForm.telegram"
+                      placeholder="@username"
                     />
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                  <el-form-item label="Telegram">
-                    <el-input
-                      placeholder="Введите Telegram"
-                      value="@ivan_ivanov"
-                    />
-                  </el-form-item>
-                </el-col>
-              </el-row>
-
-              <el-row :gutter="20">
-                <el-col :span="12">
-                  <el-form-item label="Регион">
+                  <el-form-item label="Язык" prop="language_code">
                     <el-select
+                      v-model="profileForm.language_code"
+                      placeholder="Выберите язык"
+                    >
+                      <el-option label="Русский" value="ru" />
+                      <el-option label="O'zbekcha" value="uz" />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-row :gutter="20">
+                <el-col :span="12">
+                  <el-form-item label="Регион" prop="region_id">
+                    <AutocompletesRegionAutocomplete
+                      v-model="profileForm.region_id"
                       placeholder="Выберите регион"
-                      model-value="toshkent"
-                    >
-                      <el-option label="Toshkent" value="toshkent" />
-                      <el-option label="Samarqand" value="samarqand" />
-                      <el-option label="Bukhara" value="bukhara" />
-                      <el-option label="Fergana" value="fergana" />
-                    </el-select>
+                      @select="handleRegionSelect"
+                    />
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                  <el-form-item label="Город">
-                    <el-select
+                  <el-form-item label="Город" prop="city_id">
+                    <AutocompletesCityAutocomplete
+                      v-model="profileForm.city_id"
+                      :region-id="profileForm.region_id"
                       placeholder="Выберите город"
-                      model-value="toshkent"
-                    >
-                      <el-option label="Toshkent" value="toshkent" />
-                      <el-option label="Samarqand" value="samarqand" />
-                      <el-option label="Bukhara" value="bukhara" />
-                      <el-option label="Fergana" value="fergana" />
-                    </el-select>
+                    />
                   </el-form-item>
                 </el-col>
               </el-row>
+
+              <el-form-item label="Показывать контакты">
+                <el-switch
+                  v-model="profileForm.show_contacts"
+                  active-text="Да"
+                  inactive-text="Нет"
+                />
+              </el-form-item>
 
               <div class="form-actions">
-                <el-button @click="isEditingProfile = false">Отмена</el-button>
-                <el-button type="primary" @click="isEditingProfile = false">
+                <el-button :disabled="loading" @click="cancelEdit">
+                  Отмена
+                </el-button>
+                <el-button
+                  type="primary"
+                  :loading="loading"
+                  @click="saveProfile"
+                >
                   Сохранить
                 </el-button>
               </div>

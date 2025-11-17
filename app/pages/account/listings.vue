@@ -6,7 +6,6 @@ import type { IListing, IMyAdsResponse } from "~/types/ads";
 import type { IBaseResponse, IPagination } from "~/types";
 import { ListingStatus } from "~/types/ads";
 
-const router = useRouter();
 const { $api } = useNuxtApp();
 
 const activeTab = ref("all");

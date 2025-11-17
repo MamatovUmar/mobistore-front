@@ -1,4 +1,5 @@
 import { ListingStatus, type IState } from "~/types/ads";
+import type { IBaseResponse } from "~/types";
 
 export const useAds = () => {
 
@@ -41,20 +42,16 @@ export const useAds = () => {
   };
 
   const changeStatus = catcher(async (id: number, status: ListingStatus) => {
-    await $api(`/ads/${id}/status`, {
+    const result = await $api<IBaseResponse<{}>>(`/ads/${id}/status`, {
       method: "PATCH",
       body: {
         status,
       },
     });
-    if (status === ListingStatus.ACTIVE) {
-      ElMessage.success("Объявление будет опубликовано по завершению проверки");
-    } else {
-      ElMessage.success("Статус изменен");
-    }
+    
+    ElMessage.success(result.message);
   }, (error: any) => {
-    const details = error?.response?._data?.details ?? []
-    const message = details.map((detail: any) => detail.errors?.join(". ")).join(". ");
+    const message = getErrorMessage(error)
     ElMessage.error(message || "Не удалось изменить статус");
   });
 

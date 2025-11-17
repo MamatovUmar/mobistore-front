@@ -28,20 +28,13 @@ const formatUsername = (value: string): string => {
   return cleaned ? `@${cleaned}` : "";
 };
 
-// Получение ссылки на профиль
-const getTelegramLink = (username: string): string => {
-  const cleaned = username.replace(/[^a-zA-Z0-9_]/g, "");
-  return cleaned ? `https://t.me/${cleaned}` : "";
-};
-
 const handleInput = (value: string) => {
   // Форматируем введенное значение
   const formatted = formatUsername(value);
   displayValue.value = formatted;
   
-  // Обновляем model с полной ссылкой
-  const link = getTelegramLink(value);
-  model.value = link;
+  // Обновляем model с отформатированным username
+  model.value = formatted;
 };
 
 const handleFocus = () => {
@@ -61,9 +54,7 @@ watch(
   () => model.value,
   (newValue) => {
     if (newValue) {
-      // Если это ссылка, извлекаем username
-      const username = newValue.replace(/https?:\/\/(t\.me|telegram\.me)\//, "");
-      displayValue.value = formatUsername(username);
+      displayValue.value = formatUsername(newValue);
     } else {
       displayValue.value = "";
     }
