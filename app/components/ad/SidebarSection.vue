@@ -10,7 +10,10 @@ import StatusTag from "~/components/ad/StatusTag.vue";
 
 const { listing } = defineProps<{ listing: IListing }>();
 
-const emit = defineEmits(['update']);
+const emit = defineEmits<{
+  update: [];
+  "open-chat": [];
+}>();
 
 const { $api } = useNuxtApp();
 const { changeStatus } = useAds();
@@ -65,8 +68,7 @@ const handleShowContacts = () => {
 };
 
 const handleMessage = () => {
-  // Функция отправки сообщений
-  console.log("Send message");
+  emit("open-chat");
 };
 
 const toggleFavorite = () => {

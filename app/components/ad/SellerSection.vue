@@ -1,8 +1,17 @@
 <script setup lang="ts">
 import type { IListing } from "~/types/ads";
-import { ChatDotRound, Phone, ChatLineRound, InfoFilled } from "@element-plus/icons-vue";
+import {
+  ChatDotRound,
+  Phone,
+  ChatLineRound,
+  InfoFilled,
+} from "@element-plus/icons-vue";
 
 const { listing } = defineProps<{ listing: IListing }>();
+
+const emit = defineEmits<{
+  "open-chat": [];
+}>();
 
 const seller = computed(() => listing.user);
 
@@ -35,7 +44,7 @@ const registrationYear = computed(() => {
 });
 
 const handleMessage = () => {
-  ElMessage.info("Функция отправки сообщений в разработке");
+  emit("open-chat");
 };
 
 const handleShowContacts = () => {
@@ -61,11 +70,14 @@ const hasContacts = computed(() => {
 
 // Форматированный номер телефона для отображения
 const formattedPhone = computed(() => {
-  if (!listing.phone_number) return '';
-  const phone = listing.phone_number.replace(/\D/g, '');
+  if (!listing.phone_number) return "";
+  const phone = listing.phone_number.replace(/\D/g, "");
   // Форматируем как +X XXX XXX XX XX
   if (phone.length === 12) {
-    return `+${phone[0]} ${phone.slice(1, 4)} ${phone.slice(4, 7)} ${phone.slice(7, 9)} ${phone.slice(9)}`;
+    return `+${phone[0]} ${phone.slice(1, 4)} ${phone.slice(
+      4,
+      7
+    )} ${phone.slice(7, 9)} ${phone.slice(9)}`;
   }
   return listing.phone_number;
 });
@@ -76,9 +88,16 @@ const formattedPhone = computed(() => {
     <h2 class="section-title">Продавец</h2>
 
     <nuxt-link :to="`/user/${seller.id}`" class="seller-info">
-      <el-avatar :size="64" class="seller-avatar">
-        {{ seller.first_name.charAt(0).toUpperCase() }}
-      </el-avatar>
+      <div class="user-avatar-wrapper">
+        <el-avatar v-if="seller?.avatar" :src="seller.avatar.url" :size="64" />
+        <el-avatar v-else :size="64" class="user-avatar">
+          {{
+            `${seller.first_name?.charAt(0)}${seller.last_name?.charAt(
+              0
+            )}`.trim()
+          }}
+        </el-avatar>
+      </div>
       <div class="seller-details">
         <div class="seller-name">
           {{ seller.first_name }} {{ seller.last_name }}
@@ -123,7 +142,7 @@ const formattedPhone = computed(() => {
             <el-icon class="contacts-icon"><InfoFilled /></el-icon>
             <span>Контактная информация</span>
           </div>
-          
+
           <div class="contacts-list">
             <div v-if="listing.phone_number" class="contact-item phone-item">
               <div class="contact-label">
@@ -146,14 +165,21 @@ const formattedPhone = computed(() => {
               </div>
             </div>
 
-            <div v-if="listing.telegram_link" class="contact-item telegram-item">
+            <div
+              v-if="listing.telegram_link"
+              class="contact-item telegram-item"
+            >
               <div class="contact-label">
                 <el-icon><ChatLineRound /></el-icon>
                 <span>Telegram</span>
               </div>
               <div class="contact-value">
-                <a :href="listing.telegram_link" target="_blank" class="contact-link telegram-link">
-                  {{ listing.telegram_link.replace('https://t.me/', '@') }}
+                <a
+                  :href="listing.telegram_link"
+                  target="_blank"
+                  class="contact-link telegram-link"
+                >
+                  {{ listing.telegram_link.replace("https://t.me/", "@") }}
                 </a>
                 <el-button
                   text
@@ -199,12 +225,20 @@ const formattedPhone = computed(() => {
   width: fit-content;
 }
 
-.seller-avatar {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.user-avatar-wrapper {
+  cursor: pointer;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.user-avatar {
+  background: linear-gradient(135deg, var(--color-primary) 0%, #5b8ff9 100%);
+  font-weight: 600;
   font-size: 24px;
-  font-weight: 700;
-  color: white;
-  flex-shrink: 0;
+  cursor: pointer;
 }
 
 .seller-details {
@@ -331,7 +365,7 @@ const formattedPhone = computed(() => {
   color: var(--color-text-primary);
   text-decoration: none;
   flex: 1;
-  
+
   &:hover {
     color: var(--el-color-primary);
   }
@@ -339,19 +373,20 @@ const formattedPhone = computed(() => {
 
 .telegram-link {
   color: #0088cc;
-  
+
   &:hover {
     color: #006699;
   }
 }
 
-.call-btn, .telegram-btn {
+.call-btn,
+.telegram-btn {
   font-weight: 600;
 }
 
 .call-btn {
   color: var(--el-color-success);
-  
+
   &:hover {
     color: var(--el-color-success);
     background: var(--el-color-success-light-9);
@@ -360,7 +395,7 @@ const formattedPhone = computed(() => {
 
 .telegram-btn {
   color: #0088cc;
-  
+
   &:hover {
     color: #0088cc;
     background: rgba(0, 136, 204, 0.1);
@@ -400,14 +435,15 @@ const formattedPhone = computed(() => {
   .action-buttons {
     grid-template-columns: 1fr;
   }
-  
+
   .contact-value {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
   }
-  
-  .call-btn, .telegram-btn {
+
+  .call-btn,
+  .telegram-btn {
     align-self: stretch;
   }
 }

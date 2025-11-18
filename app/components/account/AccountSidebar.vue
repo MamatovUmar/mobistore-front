@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { User, Document, Star, SwitchButton } from "@element-plus/icons-vue";
+import { User, Document, Star, SwitchButton, MessageBox } from "@element-plus/icons-vue";
 import { useRootStore } from "~/store/root";
 import ProfileImage from "./ProfileImage.vue";
 
@@ -9,6 +9,7 @@ const menuItems = [
   { title: "Личные данные", icon: User, path: "/account" },
   { title: "Мои объявления", icon: Document, path: "/account/listings" },
   { title: "Избранные", icon: Star, path: "/account/favorites" },
+  { title: "Переписки", icon: MessageBox, path: "/account/conversations" },
 ];
 </script>
 
