@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import { ArrowRight } from "@element-plus/icons-vue";
 import type { IBrand } from "~/types/brand";
 import type { IBaseResponse } from "~/types";
 
 const { $api } = useNuxtApp();
 
-// Используем useAsyncData для SSR-совместимости
+// Fetch brands
 const { data: brands } = await useAsyncData(
   "popular-brands",
   async () => {
@@ -20,253 +21,299 @@ const { data: brands } = await useAsyncData(
     default: () => [],
   }
 );
+
+// Duplicate brands to ensure smooth infinite scroll even with few items
+const marqueeBrands = computed(() => {
+  const list = brands.value || [];
+  if (list.length === 0) return [];
+  // Repeat list enough times to fill width
+  return [...list, ...list, ...list, ...list]; 
+});
 </script>
 
 <template>
-  <section class="brands">
+  <section class="brands-showcase">
+    <div class="ambient-light"></div>
+    
     <div class="container">
-      <h2 class="section-title">Популярные бренды</h2>
-      <p class="section-subtitle">
-        Выберите бренд, чтобы увидеть актуальные предложения
-      </p>
+      <div class="header-content">
+        <h2 class="title">
+          Топ <span class="highlight">Бренды</span>
+        </h2>
+        <p class="subtitle">Выбор миллионов пользователей</p>
+      </div>
+    </div>
 
-      <div class="carousel-wrapper">
-        <el-carousel
-          :interval="3000"
-          type="card"
-          height="240px"
-          arrow="never"
-          :autoplay="true"
-          :indicator-position="'none'"
-        >
-          <el-carousel-item v-for="brand in brands" :key="brand.name">
-            <div class="brand-card">
-              <div class="brand-logo-container">
+    <div class="marquee-wrapper">
+      <!-- Row 1: Left to Right -->
+      <div class="marquee-track scroll-left">
+        <div class="marquee-content">
+          <div
+            v-for="(brand, index) in marqueeBrands"
+            :key="`${brand.name}-1-${index}`"
+            class="brand-card glass-card"
+            @click="navigateTo(`/search?brand=${brand.id}`)"
+          >
+            <div class="card-inner">
+              <div class="logo-box">
                 <img
                   v-if="brand.logo"
                   :src="brand.logo"
                   :alt="brand.name"
                   class="brand-logo"
-                >
-                <div v-else class="brand-logo-placeholder">
-                  <span class="brand-initial">{{ brand.name.charAt(0) }}</span>
-                </div>
+                />
+                <span v-else class="brand-text">{{ brand.name }}</span>
               </div>
-              <h3 class="brand-name">{{ brand.name }}</h3>
-              <div class="brand-count">
-                <span class="count-number">{{ brand.ads_count }}</span>
-                <span class="count-label">объявлений</span>
+              <div class="brand-meta">
+                <span class="name">{{ brand.name }}</span>
+                <span class="count">{{ brand.ads_count }} объявлений</span>
               </div>
             </div>
-          </el-carousel-item>
-        </el-carousel>
+            <div class="glow-effect"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: Right to Left -->
+      <div class="marquee-track scroll-right">
+        <div class="marquee-content">
+          <div
+            v-for="(brand, index) in marqueeBrands"
+            :key="`${brand.name}-2-${index}`"
+            class="brand-card glass-card"
+            @click="navigateTo(`/search?brand=${brand.id}`)"
+          >
+            <div class="card-inner">
+              <div class="logo-box">
+                <img
+                  v-if="brand.logo"
+                  :src="brand.logo"
+                  :alt="brand.name"
+                  class="brand-logo"
+                />
+                <span v-else class="brand-text">{{ brand.name }}</span>
+              </div>
+              <div class="brand-meta">
+                <span class="name">{{ brand.name }}</span>
+                <span class="count">{{ brand.ads_count }} объявлений</span>
+              </div>
+            </div>
+            <div class="glow-effect"></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 </template>
 
 <style lang="scss" scoped>
-.brands {
-  background: var(--color-bg-primary);
-  padding: 60px 20px 40px;
-  margin: 40px 0 0;
-}
-
-.section-title {
-  font-size: 36px;
-  font-weight: 700;
-  text-align: center;
-  color: var(--color-text-primary);
-  margin-bottom: 12px;
-}
-
-.section-subtitle {
-  text-align: center;
-  color: var(--color-text-secondary);
-  font-size: 16px;
-  margin-bottom: 48px;
-}
-
-.carousel-wrapper {
+.brands-showcase {
+  position: relative;
+  padding: 100px 0;
+  background: #020617; /* Deepest Slate */
   overflow: hidden;
-  margin: 0 -20px;
+  color: #fff;
+}
+
+.ambient-light {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(56, 189, 248, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 0 20px;
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.title {
+  font-size: 48px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  letter-spacing: -0.03em;
+  
+  .highlight {
+    background: linear-gradient(to right, #38bdf8, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #94a3b8;
+}
+
+.marquee-wrapper {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  
+  /* Fade edges */
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.marquee-track {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  
+  &:hover .marquee-content {
+    animation-play-state: paused;
+  }
+}
+
+.marquee-content {
+  display: flex;
+  gap: 24px;
+  padding: 10px 0; /* Space for shadows */
+}
+
+.scroll-left .marquee-content {
+  animation: scroll-left 60s linear infinite;
+}
+
+.scroll-right .marquee-content {
+  animation: scroll-right 60s linear infinite;
 }
 
 .brand-card {
+  flex: 0 0 240px;
+  height: 140px;
+  position: relative;
+  cursor: pointer;
+  border-radius: 20px;
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px) scale(1.02);
+    z-index: 10;
+    
+    .glow-effect {
+      opacity: 1;
+    }
+    
+    .card-inner {
+      border-color: rgba(56, 189, 248, 0.5);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .brand-logo {
+      filter: grayscale(0) brightness(1.1);
+      transform: scale(1.1);
+    }
+  }
+}
+
+.glass-card .card-inner {
+  width: 100%;
   height: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #ffffff;
-  border-radius: 20px;
-  border: 1px solid #e5e7eb;
-  padding: 32px 24px;
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-
-  &:hover {
-    border-color: var(--color-primary);
-    background: #ffffff;
-    box-shadow: 0 12px 32px rgba(59, 130, 246, 0.12);
-    transform: translateY(-4px);
-
-    .brand-logo-container {
-      transform: scale(1.05);
-      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
-    }
-
-    .brand-name {
-      color: var(--color-primary);
-    }
-
-    .count-number {
-      color: var(--color-primary);
-    }
-  }
+  padding: 20px;
+  transition: all 0.3s ease;
 }
 
-.brand-logo-container {
-  width: 100px;
-  height: 100px;
+.logo-box {
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f9fafb;
-  border-radius: 16px;
-  margin-bottom: 20px;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid #f3f4f6;
-  overflow: hidden;
+  margin-bottom: 12px;
 }
 
 .brand-logo {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  padding: 12px;
+  max-height: 100%;
+  max-width: 100%;
+  filter: grayscale(100%) brightness(1.5); /* Monochrome by default */
+  transition: all 0.3s ease;
+  opacity: 0.8;
 }
 
-.brand-logo-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.brand-initial {
-  font-size: 40px;
+.brand-text {
+  font-size: 24px;
   font-weight: 700;
-  color: #ffffff;
-  text-transform: uppercase;
+  color: #fff;
 }
 
-.brand-name {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--color-text-primary);
-  margin-bottom: 8px;
-  text-align: center;
-  transition: color 0.3s ease;
-  line-height: 1.3;
-}
-
-.brand-count {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 14px;
+.brand-meta {
   text-align: center;
 }
 
-.count-number {
-  font-weight: 700;
-  color: var(--color-text-primary);
+.name {
+  display: block;
   font-size: 16px;
-  transition: color 0.3s ease;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 4px;
 }
 
-.count-label {
-  color: var(--color-text-secondary);
-  font-weight: 500;
+.count {
+  display: block;
+  font-size: 12px;
+  color: #94a3b8;
 }
 
-:deep(.el-carousel__container) {
-  max-width: 1200px;
-  margin: 0 auto;
+.glow-effect {
+  position: absolute;
+  inset: -1px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #38bdf8, #818cf8);
+  opacity: 0;
+  filter: blur(15px);
+  z-index: -1;
+  transition: opacity 0.3s ease;
 }
 
-:deep(.el-carousel__item) {
-  padding: 0 12px;
+@keyframes scroll-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
-:deep(.el-carousel__item--card) {
-  width: 48%;
-}
-
-:deep(.el-carousel__item.is-active) {
-  z-index: 2;
+@keyframes scroll-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
 }
 
 @media (max-width: 768px) {
-  .brands {
-    padding: 40px 20px 0;
+  .brands-showcase {
+    padding: 60px 0;
   }
-
-  .section-title {
-    font-size: 28px;
-  }
-
-  .section-subtitle {
-    font-size: 14px;
-    margin-bottom: 32px;
-  }
-
-  .carousel-wrapper {
-    margin: 0 -10px;
-    padding: 0 10px;
-  }
-
-  .brand-card {
-    padding: 24px 20px;
-  }
-
-  .brand-logo-container {
-    width: 80px;
-    height: 80px;
-    margin-bottom: 16px;
-  }
-
-  .brand-initial {
+  
+  .title {
     font-size: 32px;
   }
-
-  .brand-name {
-    font-size: 18px;
+  
+  .brand-card {
+    flex: 0 0 180px;
+    height: 110px;
   }
-
-  .count-number {
+  
+  .logo-box {
+    height: 40px;
+  }
+  
+  .name {
     font-size: 14px;
-  }
-
-  .count-label {
-    font-size: 12px;
-  }
-
-  :deep(.el-carousel) {
-    height: 200px !important;
-  }
-
-  :deep(.el-carousel__item) {
-    padding: 0 8px;
-  }
-
-  :deep(.el-carousel__item--card) {
-    width: 45%;
   }
 }
 </style>

@@ -4,14 +4,15 @@ import { Phone, Message, Location } from "@element-plus/icons-vue";
 
 <template>
   <footer class="footer">
+    <div class="footer-glow"></div>
     <div class="container">
       <div class="footer-content">
-        <!-- О компании -->
-        <div class="footer-section footer-section--about">
+        <!-- Brand & Socials -->
+        <div class="footer-column brand-column">
           <h3 class="footer-logo">SmartMarket</h3>
           <p class="footer-description">
-            Крупнейший маркетплейс смартфонов в Узбекистане. Покупайте и продавайте 
-            новые и б/у телефоны безопасно и удобно.
+            Крупнейшая экосистема для покупки и продажи гаджетов в Узбекистане.
+            Безопасность, скорость и комфорт в каждой сделке.
           </p>
           <div class="social-links">
             <a href="#" class="social-icon" aria-label="Facebook">
@@ -32,9 +33,9 @@ import { Phone, Message, Location } from "@element-plus/icons-vue";
           </div>
         </div>
 
-        <!-- Помощь -->
-        <div class="footer-section">
-          <h3>Помощь</h3>
+        <!-- Help Links -->
+        <div class="footer-column">
+          <h4>Помощь</h4>
           <ul class="footer-links">
             <li><NuxtLink to="/rules">Правила безопасности</NuxtLink></li>
             <li><NuxtLink to="/faq">Частые вопросы</NuxtLink></li>
@@ -42,40 +43,33 @@ import { Phone, Message, Location } from "@element-plus/icons-vue";
           </ul>
         </div>
 
-        <!-- О сервисе -->
-        <div class="footer-section">
-          <h3>О сервисе</h3>
-          <ul class="footer-links">
-            <li><NuxtLink to="/contacts">Контакты</NuxtLink></li>
-            <li><NuxtLink to="/blog">Блог</NuxtLink></li>
-          </ul>
-        </div>
-
-        <!-- Контакты -->
-        <div class="footer-section">
-          <h3>Контакты</h3>
-          <ul class="footer-links contact-list">
-            <li class="contact-item">
-              <el-icon class="contact-icon"><Phone /></el-icon>
+        <!-- Contacts -->
+        <div class="footer-column">
+          <h4>Контакты</h4>
+          <ul class="contact-list">
+            <li>
+              <el-icon><Phone /></el-icon>
               <span>+998 71 123 45 67</span>
             </li>
-            <li class="contact-item">
-              <el-icon class="contact-icon"><Message /></el-icon>
+            <li>
+              <el-icon><Message /></el-icon>
               <span>info@smartmarket.uz</span>
             </li>
-            <li class="contact-item">
-              <el-icon class="contact-icon"><Location /></el-icon>
+            <li>
+              <el-icon><Location /></el-icon>
               <span>Ташкент, Узбекистан</span>
             </li>
           </ul>
         </div>
       </div>
 
+      <div class="footer-divider"></div>
+
+      <!-- Bottom Section -->
       <div class="footer-bottom">
         <p>&copy; 2025 SmartMarket. Все права защищены.</p>
-        <div class="footer-links-inline">
+        <div class="legal-links">
           <a href="#">Пользовательское соглашение</a>
-          <span class="divider">•</span>
           <a href="#">Политика конфиденциальности</a>
         </div>
       </div>
@@ -85,42 +79,88 @@ import { Phone, Message, Location } from "@element-plus/icons-vue";
 
 <style lang="scss" scoped>
 .footer {
-  background: var(--color-bg-dark);
-  color: rgba(255, 255, 255, 0.7);
-  padding: 64px 0 0;
+  background: #020617; /* Deep Slate */
+  color: #94a3b8;
+  padding: 80px 0 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-glow {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 400px;
+  background: radial-gradient(circle at bottom, rgba(56, 189, 248, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+  z-index: 1;
 }
 
 .footer-content {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1.2fr;
-  gap: 48px;
-  padding-bottom: 48px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  grid-template-columns: 2fr 1fr 1.2fr;
+  gap: 60px;
+  margin-bottom: 60px;
 }
 
-.footer-section {
-  h3 {
-    color: var(--color-bg-primary);
+.footer-column {
+  h4 {
     font-size: 16px;
     font-weight: 700;
-    margin-bottom: 20px;
-    letter-spacing: 0.3px;
+    color: #fff;
+    margin-bottom: 24px;
   }
 }
 
-.footer-section--about {
-  .footer-logo {
-    color: var(--color-bg-primary);
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 16px;
-  }
+.brand-column {
+  max-width: 400px;
+}
 
-  .footer-description {
-    color: rgba(255, 255, 255, 0.65);
-    font-size: 14px;
-    line-height: 1.7;
-    margin-bottom: 24px;
+.footer-logo {
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+.footer-description {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+.social-links {
+  display: flex;
+  gap: 16px;
+}
+
+.social-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(59, 130, 246, 0.2);
   }
 }
 
@@ -130,141 +170,105 @@ import { Phone, Message, Location } from "@element-plus/icons-vue";
   margin: 0;
 
   li {
-    margin-bottom: 12px;
+    margin-bottom: 16px;
   }
 
   a {
-    color: rgba(255, 255, 255, 0.7);
+    color: #94a3b8;
     text-decoration: none;
-    font-size: 14px;
     transition: all 0.3s ease;
     display: inline-block;
 
     &:hover {
-      color: var(--color-bg-primary);
+      color: #3b82f6;
       transform: translateX(4px);
     }
   }
 }
 
 .contact-list {
-  .contact-item {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
     display: flex;
     align-items: center;
     gap: 12px;
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 14px;
+    color: #94a3b8;
     margin-bottom: 16px;
 
-    .contact-icon {
+    .el-icon {
+      color: #3b82f6;
       font-size: 18px;
-      color: var(--color-primary);
     }
   }
 }
 
-.social-links {
-  display: flex;
-  gap: 12px;
-  margin-top: 24px;
-}
-
-.social-icon {
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255, 255, 255, 0.7);
-  transition: all 0.3s ease;
-  text-decoration: none;
-
-  svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  &:hover {
-    background: var(--color-primary);
-    color: var(--color-bg-primary);
-    transform: translateY(-3px);
-  }
+.footer-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
+  margin: 0;
 }
 
 .footer-bottom {
+  padding: 32px 0;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 24px 0;
+  align-items: center;
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.5);
-
-  p {
-    margin: 0;
-  }
 }
 
-.footer-links-inline {
+.legal-links {
   display: flex;
-  align-items: center;
-  gap: 16px;
+  gap: 24px;
 
   a {
-    color: rgba(255, 255, 255, 0.5);
+    color: #64748b;
     text-decoration: none;
     transition: color 0.3s ease;
 
     &:hover {
-      color: var(--color-bg-primary);
+      color: #fff;
     }
-  }
-
-  .divider {
-    color: rgba(255, 255, 255, 0.3);
   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 992px) {
   .footer-content {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr 1fr;
     gap: 40px;
   }
 
-  .footer-section--about {
+  .brand-column {
     grid-column: span 2;
+    max-width: 100%;
   }
 }
 
 @media (max-width: 768px) {
   .footer {
-    padding: 48px 0 0;
+    padding: 60px 0 0;
   }
 
   .footer-content {
     grid-template-columns: 1fr;
-    gap: 32px;
-    padding-bottom: 32px;
+    gap: 40px;
   }
 
-  .footer-section--about {
+  .brand-column {
     grid-column: 1;
   }
 
   .footer-bottom {
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
     text-align: center;
   }
 
-  .footer-links-inline {
+  .legal-links {
     flex-direction: column;
-    gap: 8px;
-
-    .divider {
-      display: none;
-    }
+    gap: 12px;
   }
 }
 </style>
