@@ -2,7 +2,7 @@
 import { Document } from "@element-plus/icons-vue";
 import MyListingCard from "@/components/account/MyListingCard.vue";
 import MyListingCardSkeleton from "@/components/account/MyListingCardSkeleton.vue";
-import type { IListing, IMyAdsResponse } from "~/types/ads";
+import type { IListing, IAdsResponse } from "~/types/ads";
 import type { IBaseResponse, IPagination } from "~/types";
 import { ListingStatus } from "~/types/ads";
 
@@ -35,7 +35,7 @@ const statuses = [
 const getMyListings = catcher(
   async () => {
     loading.value = true;
-    const result = await $api<IBaseResponse<IMyAdsResponse>>("/ads/my", {
+    const result = await $api<IBaseResponse<IAdsResponse>>("/ads/my", {
       params: {
         ...params,
         status: params.status === "all" ? undefined : params.status,

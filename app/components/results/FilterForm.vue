@@ -1,37 +1,69 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import RegionAutocompletes from "@/components/autocompletes/RegionAutocomplete.vue";
+import CityAutocompletes from "@/components/autocompletes/CityAutocomplete.vue";
+import BrandAutocomplete from "@/components/autocompletes/BrandAutocomplete.vue";
+import ModelAutocomplete from "@/components/autocompletes/ModelAutocomplete.vue";
+import type { IResultFilterForm } from "~/types/ads";
 
-const filters = reactive({
-  region: "",
-  city: "",
-  brand: "",
-  model: "",
-  condition: "",
+const route = useRoute();
+const router = useRouter();
+
+const filters = reactive<IResultFilterForm>({
+  page: 1,
+  limit: 10,
+  regionId: undefined,
+  cityId: undefined,
+  brandId: undefined,
+  modelId: undefined,
+  state: undefined,
   priceRange: [0, 50000000],
-  ram: "",
-  storage: "",
-  color: "",
-  year: "",
-  barter: false,
+  ram: undefined,
+  storage: undefined,
+  allowTradeIn: false,
+  sortBy: "updated_at",
+  sortOrder: "desc",
 });
 
-const formatPrice = (value) => {
-  return new Intl.NumberFormat("ru-RU").format(value);
+const resetFilters = () => {
+  filters.regionId = undefined;
+  filters.cityId = undefined;
+  filters.brandId = undefined;
+  filters.modelId = undefined;
+  filters.state = undefined;
+  filters.priceRange = [0, 50000000];
+  filters.ram = undefined;
+  filters.storage = undefined;
+  filters.allowTradeIn = false;
+  filters.sortBy = "updated_at";
+  filters.sortOrder = "desc";
 };
 
-const resetFilters = () => {
-  filters.region = "";
-  filters.city = "";
-  filters.brand = "";
-  filters.model = "";
-  filters.condition = "";
-  filters.priceRange = [0, 50000000];
-  filters.ram = "";
-  filters.storage = "";
-  filters.color = "";
-  filters.year = "";
-  filters.barter = false;
-};
+watch(() => filters, () => {
+  router.replace({
+    path: '/search',
+    query: {
+      ...filters,
+      minPrice: filters.priceRange?.[0],
+      maxPrice: filters.priceRange?.[1],
+    }
+  })
+}, { deep: true })
+
+onMounted(() => {
+  const query = route.query as Record<string, any>;
+  filters.regionId = query?.regionId;
+  filters.cityId = query?.cityId;
+  filters.brandId = query?.brandId;
+  filters.modelId = query?.modelId;
+  filters.state = query?.state;
+  filters.priceRange = [Number(query?.minPrice || 0), Number(query?.maxPrice || 50000000)];
+  filters.ram = query?.ram ? Number(query.ram) : undefined;
+  filters.storage = query?.storage ? Number(query.storage) : undefined;
+  filters.allowTradeIn = query.allowTradeIn === 'true';
+  filters.sortBy = query?.sortBy || 'updated_at';
+  filters.sortOrder = query?.sortOrder || 'desc';
+})
+
 </script>
 
 <template>
@@ -43,153 +75,86 @@ const resetFilters = () => {
       </el-button>
     </div>
 
-    <el-form :model="filters" label-position="top" size="default">
-      <!-- Локация -->
-      <div class="filter-section">
-        <h3 class="filter-section-title">Локация</h3>
+    <el-form :model="filters" label-position="top" size="large">
+      <el-form-item label="Область">
+        <RegionAutocompletes v-model="filters.regionId" />
+      </el-form-item>
 
-        <el-form-item label="Область">
-          <el-select
-            v-model="filters.region"
-            placeholder="Выберите область"
-            clearable
-          >
-            <el-option label="Все области" value="" />
-            <el-option label="Ташкент" value="tashkent" />
-            <el-option label="Самарканд" value="samarkand" />
-            <el-option label="Бухара" value="bukhara" />
-            <el-option label="Андижан" value="andijan" />
-            <el-option label="Наманган" value="namangan" />
-            <el-option label="Фергана" value="fergana" />
-          </el-select>
-        </el-form-item>
+      <el-form-item label="Город">
+        <CityAutocompletes
+          v-model="filters.cityId"
+          :region-id="filters.regionId"
+        />
+      </el-form-item>
 
-        <el-form-item label="Город">
-          <el-select
-            v-model="filters.city"
-            placeholder="Выберите город"
-            clearable
-          >
-            <el-option label="Все города" value="" />
-            <el-option label="Ташкент" value="tashkent" />
-            <el-option label="Самарканд" value="samarkand" />
-            <el-option label="Бухара" value="bukhara" />
-            <el-option label="Андижан" value="andijan" />
-          </el-select>
-        </el-form-item>
-      </div>
+      <el-form-item label="Бренд">
+        <BrandAutocomplete v-model="filters.brandId" />
+      </el-form-item>
 
-      <!-- Характеристики -->
-      <div class="filter-section">
-        <h3 class="filter-section-title">Характеристики</h3>
+      <el-form-item label="Модель">
+        <ModelAutocomplete
+          v-model="filters.modelId"
+          :brand-id="filters.brandId"
+        />
+      </el-form-item>
 
-        <el-form-item label="Бренд">
-          <el-select
-            v-model="filters.brand"
-            placeholder="Выберите бренд"
-            clearable
-          >
-            <el-option label="Все бренды" value="" />
-            <el-option label="Samsung" value="samsung" />
-            <el-option label="Apple" value="apple" />
-            <el-option label="Xiaomi" value="xiaomi" />
-            <el-option label="Huawei" value="huawei" />
-            <el-option label="Oppo" value="oppo" />
-            <el-option label="Vivo" value="vivo" />
-            <el-option label="Realme" value="realme" />
-            <el-option label="Honor" value="honor" />
-          </el-select>
-        </el-form-item>
+      <el-form-item label="Состояние">
+        <el-select v-model="filters.state" placeholder="Все" clearable>
+          <el-option label="Новый" value="new" />
+          <el-option label="Б/У" value="used" />
+          <el-option label="Восстановленный" value="refurbished" />
+        </el-select>
+      </el-form-item>
 
-        <el-form-item label="Модель">
-          <el-select
-            v-model="filters.model"
-            placeholder="Выберите модель"
-            clearable
-          >
-            <el-option label="Любая модель" value="" />
-            <el-option label="iPhone 14" value="iphone-14" />
-            <el-option label="iPhone 15" value="iphone-15" />
-            <el-option label="iPhone 15 Pro" value="iphone-15-pro" />
-            <el-option label="iPhone 16" value="iphone-16" />
-            <el-option label="Galaxy S24" value="galaxy-s24" />
-            <el-option label="Xiaomi 14" value="xiaomi-14" />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="Состояние">
-          <el-select
-            v-model="filters.condition"
-            placeholder="Выберите состояние"
-            clearable
-          >
-            <el-option label="Любое" value="" />
-            <el-option label="Новый" value="new" />
-            <el-option label="Б/У" value="used" />
-            <el-option label="Восстановленный" value="refurbished" />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="Оперативная память (RAM)">
-          <el-select v-model="filters.ram" placeholder="Выберите RAM" clearable>
-            <el-option label="Любой объем" value="" />
-            <el-option label="4 GB" value="4" />
-            <el-option label="6 GB" value="6" />
-            <el-option label="8 GB" value="8" />
-            <el-option label="12 GB" value="12" />
-            <el-option label="16 GB" value="16" />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="Встроенная память">
-          <el-select
-            v-model="filters.storage"
-            placeholder="Выберите память"
-            clearable
-          >
-            <el-option label="Любой объем" value="" />
-            <el-option label="64 GB" value="64" />
-            <el-option label="128 GB" value="128" />
-            <el-option label="256 GB" value="256" />
-            <el-option label="512 GB" value="512" />
-            <el-option label="1 TB" value="1024" />
-          </el-select>
-        </el-form-item>
-      </div>
-
-      <!-- Цена -->
-      <div class="filter-section">
-        <h3 class="filter-section-title">Цена, сум</h3>
-
-        <div class="price-slider">
-          <div class="price-values">
-            <span class="price-value">
-              {{ formatPrice(filters.priceRange[0]) }}
-            </span>
-            <span class="price-separator">—</span>
-            <span class="price-value">
-              {{ formatPrice(filters.priceRange[1]) }}
-            </span>
-          </div>
-
-          <el-slider
-            v-model="filters.priceRange"
-            :min="0"
-            :max="50000000"
-            :step="100000"
-            range
-            :show-tooltip="false"
+      <el-form-item label="Оперативная память (RAM)">
+        <el-select v-model="filters.ram" placeholder="Любой объем" clearable>
+          <el-option
+            v-for="ram in 36"
+            :key="ram"
+            :label="ram + 'GB'"
+            :value="ram"
           />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="Встроенная память">
+        <el-select
+          v-model="filters.storage"
+          placeholder="Любой объем"
+          clearable
+        >
+          <el-option
+            v-for="storage in [4, 8, 16, 32, 64, 128, 256, 512, 1024]"
+            :key="storage"
+            :label="storage + 'GB'"
+            :value="storage"
+          />
+        </el-select>
+      </el-form-item>
+
+      <el-checkbox v-model="filters.allowTradeIn" size="large">
+        Возможен бартер
+      </el-checkbox>
+
+      <div class="price-slider mt-20">
+        <div class="price-values">
+          <span class="price-value">
+            {{ formatCurrency(filters.priceRange[0] ?? 0) }}
+          </span>
+          <span class="price-separator">—</span>
+          <span class="price-value">
+            {{ formatCurrency(filters.priceRange[1] ?? 0) }}
+          </span>
         </div>
-      </div>
 
-      <!-- Дополнительные опции -->
-      <div class="filter-section">
-        <h3 class="filter-section-title">Дополнительно</h3>
-
-        <el-checkbox v-model="filters.barter" size="large">
-          Возможен бартер
-        </el-checkbox>
+        <el-slider
+          v-model="filters.priceRange"
+          :min="0"
+          :max="50000000"
+          :step="100000"
+          range
+          :show-tooltip="false"
+        />
       </div>
     </el-form>
   </aside>

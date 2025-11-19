@@ -1,6 +1,35 @@
 <script setup lang="ts">
 import FilterForm from "@/components/results/FilterForm.vue";
 import AdCard from "@/components/AdCard.vue";
+import type { IBaseResponse, IPagination } from "~/types";
+import type { IListing, IAdsResponse } from "~/types/ads";
+
+const route = useRoute();
+const { $api } = useNuxtApp();
+
+
+const ads = ref<IListing[]>([]);
+const pagination = ref<IPagination>()
+
+
+const getAds = async () => {
+  const res = await $api<IBaseResponse<IAdsResponse>>(`/ads`, {
+    params: route.query,
+  });
+  ads.value = res.data?.ads ?? [];
+  pagination.value = res.data?.pagination;
+  console.log(res);
+  
+}
+
+watch(() => route.query, () => {
+  getAds()
+}, { deep: true })
+
+
+
+getAds()
+
 </script>
 
 <template>
@@ -8,7 +37,7 @@ import AdCard from "@/components/AdCard.vue";
     <div class="breadcrumbs">
       <div class="container">
         <el-breadcrumb>
-          <el-breadcrumb-item>Главная</el-breadcrumb-item>
+          <el-breadcrumb-item to="/">Главная</el-breadcrumb-item>
           <el-breadcrumb-item>Результаты поиска</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
@@ -20,7 +49,11 @@ import AdCard from "@/components/AdCard.vue";
           <FilterForm />
 
           <div class="results">
-            <AdCard v-for="ad in 9" :key="ad" />
+            <pre>
+              {{ route.query }}
+              {{ ads }}
+            </pre>
+            <AdCard v-for="ad in ads" :key="ad.id" :listing="ad" />
           </div>
         </div>
       </div>

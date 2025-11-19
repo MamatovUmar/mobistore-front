@@ -65,6 +65,16 @@ export const useChat = () => {
     }
   };
 
+  const getAllConversations = async () => {
+    try {
+      const res = await $api<IBaseResponse<IConversation[]>>(`/conversations`);
+      return res.data;
+    } catch (error) {
+      console.error("Error getting conversations:", error);
+      throw error;
+    }
+  }
+
   return {
     createOrGetConversation,
     getConversationMessages,
@@ -72,5 +82,6 @@ export const useChat = () => {
     messagesLoading,
     setMessagesAsRead,
     sendConversationMessage,
+    getAllConversations,
   };
 };

@@ -99,7 +99,23 @@ export enum EntityType {
   PLACE = "place",
 }
 
-export interface IMyAdsResponse {
+export interface IAdsResponse {
   ads: IListing[];
   pagination: IPagination;
+}
+
+export interface IResultFilterForm {
+  page: number;
+  limit: number;
+  regionId: number | undefined;
+  cityId: number | undefined;
+  brandId: number | undefined;
+  modelId: number | undefined;
+  state: string | undefined;
+  priceRange: number[];
+  ram: number | undefined;
+  storage: number | undefined;
+  allowTradeIn: boolean;
+  sortBy: "updated_at" | "favorites_count" | "views_count" | "price";
+  sortOrder: "asc" | "desc";
 }

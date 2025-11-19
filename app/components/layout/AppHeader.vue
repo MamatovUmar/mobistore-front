@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { Search, Plus, Lock, User, Document, Star, SwitchButton } from "@element-plus/icons-vue";
+import { MessageBox, Plus, Lock, User, Document, Star, SwitchButton } from "@element-plus/icons-vue";
 import { useRootStore } from "~/store/root";
 
 const rootStore = useRootStore();
 const router = useRouter();
 
-const searchQuery = ref("");
 const showAuthDialog = ref(false);
 
 const goToLogin = () => {
@@ -85,6 +84,10 @@ const handleCreateListing = () => {
                 <el-dropdown-item @click="router.push('/account/favorites')">
                   <el-icon><Star /></el-icon>
                   <span>Избранное</span>
+                </el-dropdown-item>
+                <el-dropdown-item @click="router.push('/account/conversations')">
+                  <el-icon><MessageBox /></el-icon>
+                  <span>Переписки</span>
                 </el-dropdown-item>
                 <el-dropdown-item divided @click="rootStore.logout()">
                   <el-icon><SwitchButton /></el-icon>

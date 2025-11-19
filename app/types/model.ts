@@ -69,6 +69,7 @@ export interface IModel {
   created_at: string;
   updated_at: string;
   brand: IBrand;
+  alias: string;
 }
 
 export interface IModelCamera {

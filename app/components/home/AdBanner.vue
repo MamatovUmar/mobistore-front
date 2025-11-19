@@ -1,70 +1,99 @@
 <script setup lang="ts">
-import { Plus, Clock, Medal, Discount, Check } from "@element-plus/icons-vue";
+import {
+  Right,
+  Money,
+  CircleCheckFilled,
+  TrendCharts,
+  Iphone,
+} from "@element-plus/icons-vue";
 
-const features = [
-  {
-    icon: Clock,
-    title: "Быстрое размещение",
-    description: "Создайте объявление за 2 минуты",
-  },
-  {
-    icon: Medal,
-    title: "Бесплатно навсегда",
-    description: "Без скрытых платежей и комиссий",
-  },
-  {
-    icon: Discount,
-    title: "Широкая аудитория",
-    description: "Тысячи покупателей каждый день",
-  },
+const benefits = [
+  "Бесплатное размещение за 2 минуты",
+  "Тысячи реальных покупателей",
+  "Безопасные сделки без комиссий",
 ];
 </script>
 
 <template>
-  <section class="cta">
+  <section class="promo-section">
     <div class="container">
-      <div class="cta-content">
-        <div class="cta-header">
-          <span class="cta-badge">
-            <el-icon><Check /></el-icon>
-            Проверенная платформа
-          </span>
-          <h2 class="cta-title">
-            Продайте свой смартфон быстро и выгодно
+      <div class="promo-grid">
+        <!-- Left Content -->
+        <div class="promo-content">
+          <div class="promo-badge">
+            <span class="pulse"></span>
+            SmartMarket Pro
+          </div>
+          
+          <h2 class="promo-title">
+            Превратите старый гаджет в 
+            <span class="gradient-text">новые возможности</span>
           </h2>
-          <p class="cta-description">
-            Разместите бесплатное объявление о продаже смартфона, планшета или
-            другой техники. Найдите покупателя среди тысяч активных пользователей
-            нашей платформы. Простое размещение, безопасные сделки, оперативная
-            продажа.
+          
+          <p class="promo-description">
+            Не дайте вашему смартфону пылиться на полке. Продайте его выгодно 
+            на главной площадке Узбекистана.
           </p>
-        </div>
 
-        <div class="features-grid">
-          <div
-            v-for="feature in features"
-            :key="feature.title"
-            class="feature-card"
-          >
-            <div class="feature-icon">
-              <el-icon><component :is="feature.icon" /></el-icon>
+          <ul class="promo-benefits">
+            <li v-for="(benefit, index) in benefits" :key="index">
+              <el-icon class="check-icon"><CircleCheckFilled /></el-icon>
+              {{ benefit }}
+            </li>
+          </ul>
+
+          <div class="promo-actions">
+            <el-button
+              type="primary"
+              size="large"
+              class="main-btn"
+              @click="navigateTo('/create')"
+            >
+              Начать продажу
+              <el-icon class="el-icon--right"><Right /></el-icon>
+            </el-button>
+            
+            <div class="stats-mini">
+              <div class="avatars">
+                <span class="avatar" v-for="n in 3" :key="n"></span>
+              </div>
+              <p>+150 продаж сегодня</p>
             </div>
-            <h3 class="feature-title">{{ feature.title }}</h3>
-            <p class="feature-description">{{ feature.description }}</p>
           </div>
         </div>
 
-        <div class="cta-actions">
-          <el-button
-            type="primary"
-            size="large"
-            round
-            class="cta-button"
-            :icon="Plus"
-            @click="navigateTo('/create')"
-          >
-            Разместить объявление бесплатно
-          </el-button>
+        <!-- Right Visuals -->
+        <div class="promo-visuals">
+          <div class="visual-card card-main">
+            <div class="card-header">
+              <div class="user-info">
+                <div class="user-avatar"></div>
+                <div class="user-text">
+                  <div class="line line-short"></div>
+                  <div class="line line-long"></div>
+                </div>
+              </div>
+              <div class="status-badge">Продано</div>
+            </div>
+            <div class="card-image-placeholder">
+              <el-icon><Iphone /></el-icon>
+            </div>
+            <div class="card-price">
+              <span>iPhone 13 Pro</span>
+              <strong>8 500 000 UZS</strong>
+            </div>
+          </div>
+
+          <!-- Floating Elements -->
+          <div class="float-card float-1">
+            <el-icon><Money /></el-icon>
+            <span>Выгодно</span>
+          </div>
+          
+          <div class="float-card float-2">
+            <el-icon><TrendCharts /></el-icon>
+            <span>Быстро</span>
+          </div>
         </div>
       </div>
     </div>
@@ -72,226 +101,353 @@ const features = [
 </template>
 
 <style lang="scss" scoped>
-.cta {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  position: relative;
-  padding: 100px 20px;
+.promo-section {
+  background: #0f172a; /* Dark Slate 900 */
+  padding: 100px 0;
+  color: #ffffff;
   overflow: hidden;
+  position: relative;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="white" opacity="0.1"/></svg>');
-    background-size: 40px 40px;
-    opacity: 0.3;
+    top: -20%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+    filter: blur(60px);
+    z-index: 0;
   }
 }
 
-.cta-content {
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
   position: relative;
   z-index: 1;
-  max-width: 900px;
-  margin: 0 auto;
-  text-align: center;
 }
 
-.cta-header {
-  margin-bottom: 56px;
+.promo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
 }
 
-.cta-badge {
+/* Left Content Styles */
+.promo-content {
+  max-width: 540px;
+}
+
+.promo-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  color: #ffffff;
-  padding: 8px 20px;
+  gap: 8px;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  padding: 6px 16px;
   border-radius: 100px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
+  color: #60a5fa;
   margin-bottom: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 
-  .el-icon {
-    font-size: 16px;
+  .pulse {
+    width: 8px;
+    height: 8px;
+    background: #60a5fa;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(96, 165, 250, 0.7);
+    animation: pulse-blue 2s infinite;
   }
 }
 
-.cta-title {
+.promo-title {
   font-size: 48px;
   font-weight: 800;
-  color: #ffffff;
-  margin-bottom: 20px;
-  line-height: 1.2;
-  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
-}
+  line-height: 1.1;
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
 
-.cta-description {
-  font-size: 18px;
-  color: rgba(255, 255, 255, 0.95);
-  line-height: 1.7;
-  max-width: 700px;
-  margin: 0 auto;
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 24px;
-  margin-bottom: 48px;
-}
-
-.feature-card {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 16px;
-  padding: 32px 24px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.25);
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  .gradient-text {
+    background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 }
 
-.feature-icon {
-  width: 56px;
-  height: 56px;
-  background: rgba(255, 255, 255, 0.25);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 16px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-
-  .el-icon {
-    font-size: 28px;
-    color: #ffffff;
-  }
-}
-
-.feature-title {
+.promo-description {
   font-size: 18px;
-  font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 8px;
-}
-
-.feature-description {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.9);
+  color: #94a3b8;
   line-height: 1.6;
+  margin-bottom: 32px;
 }
 
-.cta-actions {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-}
+.promo-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 40px 0;
 
-.cta-button {
-  font-size: 18px;
-  font-weight: 600;
-  padding: 28px 48px;
-  height: auto;
-  background: #ffffff;
-  color: #667eea;
-  border: none;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  &:hover {
-    background: #ffffff;
-    color: #667eea;
-    transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
-
-  :deep(.el-icon) {
-    font-size: 20px;
-  }
-}
-
-.cta-note {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.85);
-  font-weight: 500;
-}
-
-@media (max-width: 768px) {
-  .cta {
-    padding: 60px 20px;
-  }
-
-  .cta-header {
-    margin-bottom: 40px;
-  }
-
-  .cta-badge {
-    font-size: 13px;
-    padding: 6px 16px;
-  }
-
-  .cta-title {
-    font-size: 32px;
+  li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     margin-bottom: 16px;
-  }
-
-  .cta-description {
     font-size: 16px;
+    color: #e2e8f0;
+
+    .check-icon {
+      color: #10b981;
+      font-size: 20px;
+    }
   }
+}
 
-  .features-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    margin-bottom: 40px;
+.promo-actions {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+
+  .main-btn {
+    height: 56px;
+    padding: 0 32px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 12px;
+    background: #3b82f6;
+    border: none;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: #2563eb;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.5);
+    }
   }
+}
 
-  .feature-card {
-    padding: 24px 20px;
-  }
+.stats-mini {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 
-  .feature-icon {
-    width: 48px;
-    height: 48px;
-
-    .el-icon {
-      font-size: 24px;
+  .avatars {
+    display: flex;
+    
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #334155;
+      border: 2px solid #0f172a;
+      margin-left: -10px;
+      
+      &:first-child {
+        margin-left: 0;
+        background: #475569;
+      }
+      &:nth-child(2) { background: #64748b; }
+      &:nth-child(3) { background: #94a3b8; }
     }
   }
 
-  .feature-title {
-    font-size: 16px;
+  p {
+    font-size: 14px;
+    color: #94a3b8;
+    font-weight: 500;
+  }
+}
+
+/* Right Visuals Styles */
+.promo-visuals {
+  position: relative;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.visual-card {
+  background: rgba(30, 41, 59, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 24px;
+  width: 320px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  transform: rotate(-3deg);
+  transition: transform 0.5s ease;
+
+  &:hover {
+    transform: rotate(0) scale(1.02);
+  }
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
 
-  .feature-description {
-    font-size: 13px;
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #475569;
   }
 
-  .cta-button {
-    font-size: 16px;
-    padding: 22px 36px;
+  .user-text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    .line {
+      height: 6px;
+      background: #334155;
+      border-radius: 4px;
+    }
+    .line-short { width: 60px; }
+    .line-long { width: 100px; }
+  }
+
+  .status-badge {
+    background: rgba(16, 185, 129, 0.2);
+    color: #34d399;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+}
+
+.card-image-placeholder {
+  height: 180px;
+  background: #1e293b;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .el-icon {
+    font-size: 64px;
+    color: #334155;
+  }
+}
+
+.card-price {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  span {
+    color: #94a3b8;
+    font-size: 14px;
+  }
+  
+  strong {
+    color: #ffffff;
+    font-size: 18px;
+  }
+}
+
+.float-card {
+  position: absolute;
+  background: #ffffff;
+  color: #0f172a;
+  padding: 12px 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+  animation: float 6s ease-in-out infinite;
+
+  .el-icon {
+    font-size: 18px;
+    color: #3b82f6;
+  }
+
+  &.float-1 {
+    top: 20%;
+    right: 10%;
+    animation-delay: 0s;
+  }
+
+  &.float-2 {
+    bottom: 20%;
+    left: 10%;
+    animation-delay: 3s;
+  }
+}
+
+@keyframes pulse-blue {
+  0% { box-shadow: 0 0 0 0 rgba(96, 165, 250, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(96, 165, 250, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(96, 165, 250, 0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+@media (max-width: 992px) {
+  .promo-grid {
+    grid-template-columns: 1fr;
+    gap: 60px;
+    text-align: center;
+  }
+
+  .promo-content {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .promo-benefits {
+    align-items: flex-start;
+    display: inline-flex;
+    flex-direction: column;
+  }
+
+  .promo-visuals {
+    height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .promo-section {
+    padding: 60px 0;
+  }
+
+  .promo-title {
+    font-size: 32px;
+  }
+
+  .promo-actions {
+    flex-direction: column;
+    gap: 20px;
     width: 100%;
-    max-width: 400px;
+
+    .main-btn {
+      width: 100%;
+    }
   }
 
-  .cta-note {
-    font-size: 13px;
+  .visual-card {
+    width: 280px;
   }
 }
 </style>

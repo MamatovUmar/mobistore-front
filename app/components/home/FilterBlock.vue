@@ -1,13 +1,37 @@
 <script setup lang="ts">
 import { reactive } from "vue";
+import RegionAutocomplete from "@/components/autocompletes/RegionAutocomplete.vue";
+import CityAutocomplete from "@/components/autocompletes/CityAutocomplete.vue";
+import BrandAutocomplete from "@/components/autocompletes/BrandAutocomplete.vue";
+import ModelAutocomplete from "@/components/autocompletes/ModelAutocomplete.vue";
 
-const form = reactive({
-  region: "",
-  city: "",
-  brand: "",
-  model: "",
-  condition: "",
+const router = useRouter();
+
+const form = reactive<IFilterForm>({
+  region: undefined,
+  city: undefined,
+  brand: undefined,
+  model: undefined,
+  condition: undefined,
 });
+
+function handleSubmit() {
+  console.log(form);
+  router.push({
+    path: "/search",
+    query: form,
+  });
+}
+
+
+interface IFilterForm {
+  region: number | undefined;
+  city: number | undefined;
+  brand: number | undefined;
+  model: number | undefined;
+  condition: number | undefined;
+}
+
 </script>
 
 <template>
@@ -16,56 +40,23 @@ const form = reactive({
       <el-form :model="form" label-position="top" size="large">
         <div class="filters-grid">
           <el-form-item label="Область" class="filter-item">
-            <el-select v-model="form.region" placeholder="Выберите область">
-              <el-option label="Все области" value="all" />
-              <el-option label="Ташкент" value="tashkent" />
-              <el-option label="Самарканд" value="samarkand" />
-              <el-option label="Бухара" value="bukhara" />
-              <el-option label="Андижан" value="andijan" />
-              <el-option label="Наманган" value="namangan" />
-              <el-option label="Фергана" value="fergana" />
-            </el-select>
+            <RegionAutocomplete v-model="form.region" placeholder="Вся страна" />
           </el-form-item>
 
           <el-form-item label="Город" class="filter-item">
-            <el-select v-model="form.city" placeholder="Выберите город">
-              <el-option label="Все города" value="all" />
-              <el-option label="Ташкент" value="tashkent" />
-              <el-option label="Самарканд" value="samarkand" />
-              <el-option label="Бухара" value="bukhara" />
-              <el-option label="Андижан" value="andijan" />
-              <el-option label="Наманган" value="namangan" />
-              <el-option label="Фергана" value="fergana" />
-            </el-select>
+            <CityAutocomplete v-model="form.city" :region-id="form.region" placeholder="Все города" />
           </el-form-item>
 
           <el-form-item label="Бренд" class="filter-item">
-            <el-select v-model="form.brand" placeholder="Выберите бренд">
-              <el-option label="Все бренды" value="all" />
-              <el-option label="Samsung" value="samsung" />
-              <el-option label="Apple" value="apple" />
-              <el-option label="Xiaomi" value="xiaomi" />
-              <el-option label="Huawei" value="huawei" />
-              <el-option label="Oppo" value="oppo" />
-              <el-option label="Vivo" value="vivo" />
-            </el-select>
+            <BrandAutocomplete v-model="form.brand" placeholder="Все бренды" />
           </el-form-item>
 
           <el-form-item label="Модель" class="filter-item">
-            <el-select v-model="form.model" placeholder="Выберите модель">
-              <el-option label="Любая модель" value="all" />
-              <el-option label="iPhone 14" value="iphone-14" />
-              <el-option label="iPhone 15" value="iphone-15" />
-              <el-option label="iPhone 15 Pro" value="iphone-15-pro" />
-              <el-option label="iPhone 15 Pro Max" value="iphone-15-pro-max" />
-              <el-option label="iPhone 16" value="iphone-16" />
-              <el-option label="iPhone 16 Pro" value="iphone-16-pro" />
-              <el-option label="iPhone 16 Pro Max" value="iphone-16-pro-max" />
-            </el-select>
+            <ModelAutocomplete v-model="form.model" :brand-id="form.brand" placeholder="Все модели" />
           </el-form-item>
 
           <el-form-item label=" " class="filter-item filter-item--button">
-            <el-button type="primary" size="large" class="search-button">
+            <el-button type="primary" size="large" class="search-button" @click="handleSubmit">
               Показать результаты
             </el-button>
           </el-form-item>
