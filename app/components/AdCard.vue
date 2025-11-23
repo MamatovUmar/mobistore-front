@@ -127,7 +127,7 @@ const postDate = "Сегодня";
   padding-top: 75%; /* 4:3 */
   overflow: hidden;
   background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-  border-radius: 20px 20px 0 0;
+  border-radius: 8px 8px 0 0;
 }
 
 .card-image {
