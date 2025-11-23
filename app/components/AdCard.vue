@@ -1,361 +1,333 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { LocationInformation, Picture, Clock } from "@element-plus/icons-vue";
+import { LocationInformation, Picture, StarFilled } from "@element-plus/icons-vue";
 import type { IListing } from "~/types/ads";
 import { formatCurrency } from "~/utils/formatters";
 import StatusTag from "~/components/ad/StatusTag.vue";
 
 const props = defineProps<{
   listing: IListing;
-}>()
+}>();
 
 const isFavorite = ref(false);
 
 const image = computed(() => {
-  if(props.listing.images.length > 0) {
+  if (props.listing.images.length > 0) {
     return props.listing.images[0]?.url;
   }
-  return '';
+  return "";
 });
 
 const hasImage = computed(() => props.listing.images.length > 0);
 
 const toggleFavorite = (event: MouseEvent) => {
+  event.preventDefault();
   event.stopPropagation();
   isFavorite.value = !isFavorite.value;
 };
+
+// Format date (placeholder - replace with actual date from listing)
+const postDate = "Сегодня";
 </script>
 
 <template>
-  <NuxtLink class="listing-card" :to="`/${listing.alias}`">
-    <div class="listing-image-wrapper">
-      <div class="listing-image" :class="{ 'no-image': !hasImage }" :style="hasImage ? { backgroundImage: `url(${image})` } : {}">
-        <div v-if="!hasImage" class="no-image-placeholder">
-          <el-icon :size="48" color="#dcdfe6">
-            <Picture />
-          </el-icon>
-          <span class="no-image-text">Нет фото</span>
+  <NuxtLink class="ad-card" :to="`/${listing.alias}`">
+    <div class="card-glow"></div>
+    
+    <!-- Image Container -->
+    <div class="image-wrapper">
+      <div
+        class="card-image"
+        :class="{ 'no-image': !hasImage }"
+        :style="hasImage ? { backgroundImage: `url(${image})` } : {}"
+      >
+        <div v-if="!hasImage" class="placeholder">
+          <el-icon :size="40" color="#cbd5e1"><Picture /></el-icon>
+          <span>Нет фото</span>
         </div>
-
-        <!-- Градиентный оверлей снизу для лучшей читаемости -->
-        <div v-if="hasImage" class="image-gradient" />
-
-        <!-- Кнопка избранного -->
-        <button
-          class="favorite-button"
-          :class="{ active: isFavorite }"
-          @click="toggleFavorite"
-        >
-          <svg
-            v-if="!isFavorite"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-          </svg>
-          <svg
-            v-else
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-          >
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-          </svg>
-        </button>
+        
+        <!-- Gradient Overlay -->
+        <div v-if="hasImage" class="image-overlay"></div>
       </div>
+      
+      <!-- Status Badge -->
+      <div class="top-badges">
+        <StatusTag :state="listing.state" />
+      </div>
+
+      <!-- Favorite Button -->
+      <button
+        class="fav-button"
+        :class="{ active: isFavorite }"
+        @click="toggleFavorite"
+      >
+        <el-icon><StarFilled /></el-icon>
+      </button>
     </div>
 
-    <div class="listing-info">
-      <div class="listing-header">
-        <div class="listing-brand">{{ props.listing.brand.name }}</div>
-        <StatusTag :state="props.listing.state" />
+    <!-- Content -->
+    <div class="card-body">
+      <!-- Brand & Date -->
+      <div class="meta-row">
+        <span class="brand">{{ listing.brand.name }}</span>
+        <span class="date">{{ postDate }}</span>
       </div>
 
-      <h3 class="listing-title">{{ props.listing.title }}</h3>
+      <!-- Title -->
+      <h3 class="title">{{ listing.title }}</h3>
 
-      <div class="listing-price-wrapper">
-        <div class="listing-price">{{ formatCurrency(props.listing.price, props.listing.currency) }}</div>
+      <!-- Price with gradient -->
+      <div class="price-tag">
+        {{ formatCurrency(listing.price, listing.currency) }}
       </div>
 
-      <div class="listing-footer">
-        <div class="listing-location">
-          <el-icon><LocationInformation /></el-icon>
-          <span>{{ props.listing.region.name_ru }}</span>
-        </div>
+      <!-- Location -->
+      <div class="location-row">
+        <el-icon class="location-icon"><LocationInformation /></el-icon>
+        <span>{{ listing.region.name_ru }}</span>
       </div>
     </div>
   </NuxtLink>
 </template>
 
 <style lang="scss" scoped>
-.listing-card {
-  background: var(--color-bg-primary);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
-  height: 100%;
+.ad-card {
+  position: relative;
   display: flex;
   flex-direction: column;
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 24px;
+  overflow: hidden;
   text-decoration: none;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  box-shadow: 
+    0 1px 3px rgba(15, 23, 42, 0.03),
+    0 1px 2px rgba(15, 23, 42, 0.06);
+  height: 100%;
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
-    border-color: rgba(0, 0, 0, 0.08);
+    border-color: rgba(59, 130, 246, 0.2);
 
-    .listing-image {
-      transform: scale(1.03);
+    &::before {
+      opacity: 1;
     }
 
-    .favorite-button {
+    .card-glow {
+      opacity: 1;
+    }
+
+    .fav-button {
       opacity: 1;
       transform: scale(1);
     }
   }
-
-  &:active {
-    transform: translateY(-2px);
-  }
 }
 
-.listing-image-wrapper {
-  overflow: hidden;
+.image-wrapper {
   position: relative;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf0 100%);
+  width: 100%;
+  padding-top: 75%; /* 4:3 */
+  overflow: hidden;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  border-radius: 20px 20px 0 0;
 }
 
-.listing-image {
+.card-image {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 240px;
+  height: 100%;
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 
   &.no-image {
-    background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf0 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
-.image-gradient {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 100px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 100%);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.no-image-placeholder {
+.placeholder {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  opacity: 0.5;
-}
-
-.no-image-text {
-  font-size: 14px;
-  color: #909399;
+  gap: 8px;
+  color: #94a3b8;
+  font-size: 13px;
   font-weight: 500;
 }
 
-.badges {
+.image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(15, 23, 42, 0.05) 50%,
+    rgba(15, 23, 42, 0.15) 100%
+  );
+  opacity: 0.6;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.top-badges {
   position: absolute;
   top: 12px;
   left: 12px;
+  z-index: 3;
   display: flex;
   gap: 8px;
-  z-index: 2;
 }
 
-.badge {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
-  &.badge-new {
-    background: linear-gradient(135deg, rgba(103, 194, 58, 0.95) 0%, rgba(76, 175, 80, 0.95) 100%);
-    color: white;
-  }
-}
-
-.favorite-button {
+.fav-button {
   position: absolute;
   top: 12px;
   right: 12px;
-  width: 44px;
-  height: 44px;
+  z-index: 3;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border: none;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(148, 163, 184, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  color: #64748b;
   opacity: 0;
   transform: scale(0.8);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  color: #606266;
-  z-index: 2;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 
-  &:hover {
-    transform: scale(1.15);
-    background: rgba(255, 255, 255, 1);
-    color: #f56c6c;
+  @media (max-width: 768px) {
+    opacity: 1;
+    transform: scale(1);
   }
 
-  &:active {
-    transform: scale(1.05);
+  &:hover {
+    background: #fff;
+    transform: scale(1.15) rotate(12deg);
+    color: #f59e0b;
+    border-color: rgba(245, 158, 11, 0.3);
+    box-shadow: 0 8px 16px -4px rgba(245, 158, 11, 0.3);
   }
 
   &.active {
     opacity: 1;
     transform: scale(1);
-    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
-    color: white;
-
+    background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+    color: #fff;
+    border-color: transparent;
+    
     &:hover {
       transform: scale(1.15);
-      box-shadow: 0 6px 16px rgba(245, 108, 108, 0.4);
+      box-shadow: 0 8px 20px -4px rgba(245, 158, 11, 0.5);
     }
   }
 
-  svg {
-    width: 22px;
-    height: 22px;
+  .el-icon {
+    font-size: 20px;
   }
 }
 
-.listing-info {
+.card-body {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
   flex: 1;
 }
 
-.listing-header {
+.meta-row {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  align-items: center;
 }
 
-.listing-brand {
-  font-size: 12px;
+.brand {
+  font-size: 11px;
   font-weight: 700;
-  color: var(--color-text-secondary);
   text-transform: uppercase;
-  letter-spacing: 1px;
-  background: linear-gradient(135deg, #909399 0%, #606266 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  padding: 4px 10px;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  border-radius: 6px;
 }
 
-.listing-title {
-  font-size: 16px;
+.date {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.title {
+  font-size: 17px;
   font-weight: 600;
-  color: var(--color-text-primary);
-  line-height: 1.5;
+  color: #0f172a;
+  line-height: 1.4;
   margin: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
-  word-break: break-word;
+  overflow: hidden;
   min-height: 48px;
-  transition: color 0.2s ease;
-
-  &:hover {
-    color: var(--color-primary);
-  }
+  transition: color 0.3s ease;
 }
 
-.listing-price-wrapper {
-  margin: 4px 0;
-}
-
-.listing-price {
+.price-tag {
   font-size: 24px;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--color-primary) 0%, #409eff 100%);
+  font-weight: 800;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.03em;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: inline-block;
 }
 
-.listing-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: auto;
-  padding-top: 8px;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-.listing-location {
-  font-size: 13px;
-  color: var(--color-text-secondary);
+.location-row {
   display: flex;
   align-items: center;
   gap: 6px;
+  color: #64748b;
+  font-size: 14px;
   font-weight: 500;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid rgba(148, 163, 184, 0.12);
 
-  .el-icon {
+  .location-icon {
+    color: #3b82f6;
     font-size: 16px;
-    color: var(--color-primary);
   }
 
   span {
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
   }
 }
 
-// Адаптивность для мобильных устройств
 @media (max-width: 768px) {
-  .listing-image {
-    height: 200px;
-  }
-
-  .listing-info {
+  .card-body {
     padding: 16px;
   }
 
-  .listing-title {
+  .title {
     font-size: 15px;
   }
 
-  .listing-price {
+  .price-tag {
     font-size: 20px;
   }
 }

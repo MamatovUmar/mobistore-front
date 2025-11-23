@@ -1,18 +1,19 @@
 <script setup lang="ts">
+import { Right } from "@element-plus/icons-vue";
 import type { IBaseResponse } from "~/types";
 import type { IListing } from "~/types/ads";
 import AdCard from "~/components/AdCard.vue";
 
 const { $api } = useNuxtApp();
 
-// Используем useAsyncData для SSR-совместимости
+// Fetch latest ads
 const { data: listings } = await useAsyncData(
   "latest-ads",
   async () => {
     try {
       const res = await $api<IBaseResponse<IListing[]>>("/ads/latest", {
         params: {
-          limit: 6,
+          limit: 9, // Increased limit for better grid fill
         },
       });
       return res.data || [];
@@ -28,34 +29,102 @@ const { data: listings } = await useAsyncData(
 </script>
 
 <template>
-  <section id="listings" class="listings">
+  <section id="listings" class="listings-section">
     <div class="container">
-      <h2 class="section-title">Последние объявления</h2>
+      <div class="section-header">
+        <div class="header-content">
+          <h2 class="section-title">Свежие объявления</h2>
+          <p class="section-subtitle">Самые актуальные предложения на рынке</p>
+        </div>
+        
+        <NuxtLink to="/catalog" class="view-all-link">
+          <span>Смотреть все</span>
+          <el-icon><Right /></el-icon>
+        </NuxtLink>
+      </div>
 
       <div class="listings-grid">
-        <AdCard v-for="listing in listings" :key="listing.id" :listing="listing" />
+        <AdCard
+          v-for="listing in listings"
+          :key="listing.id"
+          :listing="listing"
+        />
       </div>
     </div>
   </section>
 </template>
 
 <style lang="scss" scoped>
-.listings {
-  padding: 0 0 40px;
+.listings-section {
+  padding: 60px 0 80px;
+  background: #f8fafc; /* Light background to contrast with white cards */
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 40px;
 }
 
 .section-title {
-  font-size: 32px;
-  font-weight: 700;
-  margin-bottom: 32px;
-  color: var(--color-text-primary);
+  font-size: 36px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 8px;
+  letter-spacing: -0.03em;
+}
+
+.section-subtitle {
+  font-size: 16px;
+  color: #64748b;
+}
+
+.view-all-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #3b82f6;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  padding-bottom: 4px;
+
+  &:hover {
+    color: #2563eb;
+    transform: translateX(4px);
+  }
+
+  .el-icon {
+    font-size: 18px;
+  }
 }
 
 .listings-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
-  margin-bottom: 40px;
+  gap: 32px;
 }
 
+@media (max-width: 768px) {
+  .listings-section {
+    padding: 40px 0 60px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .section-title {
+    font-size: 28px;
+  }
+
+  .listings-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Smaller cards on mobile */
+    gap: 16px;
+  }
+}
 </style>

@@ -4,7 +4,6 @@ import { Phone, Message, Location } from "@element-plus/icons-vue";
 
 <template>
   <footer class="footer">
-    <div class="footer-glow"></div>
     <div class="container">
       <div class="footer-content">
         <!-- Brand & Socials -->

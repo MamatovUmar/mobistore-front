@@ -1,12 +1,25 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { MessageBox, Plus, Lock, User, Document, Star, SwitchButton } from "@element-plus/icons-vue";
+import { ref, onMounted, onUnmounted } from "vue";
+import { MessageBox, Plus, User, Document, Star, SwitchButton, Lock } from "@element-plus/icons-vue";
 import { useRootStore } from "~/store/root";
 
 const rootStore = useRootStore();
 const router = useRouter();
 
 const showAuthDialog = ref(false);
+const isScrolled = ref(false);
+
+const handleScroll = () => {
+  isScrolled.value = window.scrollY > 20;
+};
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+});
 
 const goToLogin = () => {
   showAuthDialog.value = false;
@@ -28,39 +41,40 @@ const handleCreateListing = () => {
 </script>
 
 <template>
-  <header class="header">
-    <div class="header-top">
-      🎉 Специальное предложение: бесплатное размещение объявлений весь месяц!
-    </div>
-    <div class="header-main">
+  <header class="app-header" :class="{ scrolled: isScrolled }">
+    <div class="header-container">
       <div class="header-content">
-        <NuxtLink to="/" class="logo">
-          <div class="logo-text">
-            <span class="logo-title">SmartMarket</span>
-            <span class="logo-subtitle">МАРКЕТПЛЕЙС СМАРТФОНОВ</span>
+        <!-- Logo -->
+        <NuxtLink to="/" class="logo-link">
+          <div class="logo">
+            <div class="logo-icon">SM</div>
+            <div class="logo-text">
+              <span class="logo-title">SmartMarket</span>
+              <span class="logo-subtitle">Marketplace</span>
+            </div>
           </div>
         </NuxtLink>
 
+        <!-- Actions -->
         <div class="header-actions">
-          <button
-            class="create-listing-btn"
-            @click="handleCreateListing"
-          >
+          <!-- Create Listing Button -->
+          <button class="btn-create" @click="handleCreateListing">
             <el-icon class="btn-icon"><Plus /></el-icon>
             <span class="btn-text">Подать объявление</span>
           </button>
 
+          <!-- Login Button or User Menu -->
           <el-button
             v-if="!rootStore.user"
-            type="default"
+            class="btn-login"
             size="large"
             @click="goToLogin"
           >
             Войти
           </el-button>
 
-          <el-dropdown v-else trigger="click" class="user-dropdown">
-            <div class="user-avatar-wrapper">
+          <el-dropdown v-else trigger="click" class="user-menu">
+            <div class="user-trigger">
               <el-avatar
                 v-if="rootStore.user?.avatar"
                 :src="rootStore.user.avatar.url"
@@ -72,7 +86,7 @@ const handleCreateListing = () => {
             </div>
 
             <template #dropdown>
-              <el-dropdown-menu class="user-dropdown-menu">
+              <el-dropdown-menu class="user-dropdown">
                 <el-dropdown-item @click="router.push('/account')">
                   <el-icon><User /></el-icon>
                   <span>Личные данные</span>
@@ -100,33 +114,27 @@ const handleCreateListing = () => {
       </div>
     </div>
 
+    <!-- Auth Dialog -->
     <el-dialog
       v-model="showAuthDialog"
       width="450px"
       align-center
       :show-close="false"
     >
-      <div class="auth-dialog-content">
+      <div class="auth-dialog">
         <div class="dialog-icon">
-          <el-icon :size="48">
-            <Lock />
-          </el-icon>
+          <el-icon :size="48"><Lock /></el-icon>
         </div>
         <h3 class="dialog-title">Требуется авторизация</h3>
         <p class="dialog-text">
-          Для размещения объявлений необходимо войти в систему или создать новый
-          аккаунт.
+          Для размещения объявлений необходимо войти в систему или создать новый аккаунт.
         </p>
       </div>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="large" @click="showAuthDialog = false"
-            >Отмена</el-button
-          >
-          <el-button size="large" @click="goToSignup"> Регистрация </el-button>
-          <el-button type="primary" size="large" @click="goToLogin">
-            Войти
-          </el-button>
+          <el-button size="large" @click="showAuthDialog = false">Отмена</el-button>
+          <el-button size="large" @click="goToSignup">Регистрация</el-button>
+          <el-button type="primary" size="large" @click="goToLogin">Войти</el-button>
         </div>
       </template>
     </el-dialog>
@@ -134,52 +142,67 @@ const handleCreateListing = () => {
 </template>
 
 <style lang="scss" scoped>
-.header {
-  background: var(--color-bg-primary);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  border-bottom: 1px solid var(--color-border-light);
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 
+      0 1px 3px rgba(15, 23, 42, 0.05),
+      0 4px 12px rgba(15, 23, 42, 0.08);
+  }
 }
 
-.header-top {
-  background: linear-gradient(135deg, var(--color-primary) 0%, #5b8ff9 100%);
-  padding: 8px 0;
-  color: var(--color-bg-primary);
-  font-size: 13px;
-  text-align: center;
-}
-
-.header-main {
-  padding: 20px 0;
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .header-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+  height: 72px;
   gap: 24px;
+}
+
+/* Logo */
+.logo-link {
+  text-decoration: none;
+  display: flex;
+  flex-shrink: 0;
 }
 
 .logo {
   display: flex;
   align-items: center;
   gap: 12px;
-  text-decoration: none;
-  flex-shrink: 0;
 }
 
 .logo-icon {
   width: 44px;
   height: 44px;
-  background: linear-gradient(135deg, var(--color-primary) 0%, #5b8ff9 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  color: #fff;
+  font-weight: 800;
+  font-size: 16px;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
 }
 
 .logo-text {
@@ -189,65 +212,41 @@ const handleCreateListing = () => {
 }
 
 .logo-title {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--color-text-primary);
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
 }
 
 .logo-subtitle {
-  font-size: 11px;
-  color: var(--color-text-secondary);
-  font-weight: 500;
-  letter-spacing: 0.5px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.search-box {
-  flex: 1;
-  max-width: 600px;
-  position: relative;
-}
-
+/* Actions */
 .header-actions {
   display: flex;
   align-items: center;
   gap: 12px;
-  flex-shrink: 0;
 }
 
-.create-listing-btn {
+.btn-create {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  color: #fff;
   border: none;
-  border-radius: 50px;
+  border-radius: 12px;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .btn-icon,
-  .btn-text {
-    position: relative;
-    z-index: 1;
-  }
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 
   .btn-icon {
     font-size: 18px;
@@ -256,75 +255,27 @@ const handleCreateListing = () => {
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
-
-    &::before {
-      opacity: 1;
-    }
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
   }
 
   &:active {
     transform: translateY(0);
-    box-shadow: 0 2px 10px rgba(102, 126, 234, 0.4);
   }
 }
 
-@media (max-width: 768px) {
-  .create-listing-btn {
-    .btn-text {
-      display: none;
-    }
-
-    padding: 12px;
-    border-radius: 50%;
-    width: 44px;
-    height: 44px;
-    justify-content: center;
+.btn-login {
+  border-radius: 12px;
+  font-weight: 600;
+  
+  &:hover {
+    transform: translateY(-2px);
   }
 }
 
-.auth-dialog-content {
-  text-align: center;
-  padding: 20px 0;
-
-  .dialog-icon {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 20px;
-    background: linear-gradient(135deg, var(--color-primary) 0%, #5b8ff9 100%);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
-  }
-
-  .dialog-title {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--color-text-primary);
-    margin: 0 0 12px 0;
-  }
-
-  .dialog-text {
-    font-size: 15px;
-    line-height: 1.6;
-    color: var(--color-text-secondary);
-    margin: 0;
-  }
-}
-
-.dialog-footer {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  padding-top: 10px;
-}
-
-.user-avatar-wrapper {
+/* User Menu */
+.user-trigger {
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: transform 0.2s ease;
 
   &:hover {
     transform: scale(1.05);
@@ -332,82 +283,139 @@ const handleCreateListing = () => {
 }
 
 .user-avatar {
-  background: linear-gradient(135deg, var(--color-primary) 0%, #5b8ff9 100%);
-  font-weight: 600;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);
 }
 
-:deep(.user-dropdown-menu) {
-  min-width: 240px;
-  padding: 0;
-  margin-top: 12px;
-
-  .dropdown-header {
-    padding: 16px;
-    background: linear-gradient(135deg, var(--color-primary) 0%, #5b8ff9 100%);
-    border-radius: 4px 4px 0 0;
-    margin-bottom: 8px;
-  }
-
-  .user-info {
-    .user-name {
-      font-size: 16px;
-      font-weight: 600;
-      color: white;
-      margin-bottom: 4px;
-    }
-
-    .user-email {
-      font-size: 13px;
-      color: rgba(255, 255, 255, 0.9);
-    }
-  }
+:deep(.user-dropdown) {
+  min-width: 220px;
+  margin-top: 8px;
+  padding: 8px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15);
 
   .el-dropdown-menu__item {
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 12px 16px;
+    border-radius: 8px;
     font-size: 14px;
-    transition: all 0.2s;
+    font-weight: 500;
+    transition: all 0.2s ease;
 
     .el-icon {
       font-size: 18px;
-      color: var(--color-text-secondary);
+      color: #64748b;
     }
 
     span {
-      color: var(--color-text-primary);
+      color: #0f172a;
     }
 
     &:hover {
-      background: var(--color-bg-secondary);
+      background: #f8fafc;
 
       .el-icon {
-        color: var(--color-primary);
+        color: #3b82f6;
       }
 
       span {
-        color: var(--color-primary);
+        color: #3b82f6;
       }
     }
 
     &.is-divided {
-      border-top: 1px solid var(--color-border);
-      margin-top: 8px;
+      border-top: 1px solid #f1f5f9;
+      margin-top: 4px;
+      padding-top: 12px;
 
       .el-icon {
-        color: #f56c6c;
+        color: #ef4444;
       }
 
       span {
-        color: #f56c6c;
+        color: #ef4444;
       }
 
       &:hover {
-        background: rgba(245, 108, 108, 0.1);
+        background: rgba(239, 68, 68, 0.08);
       }
     }
+  }
+}
+
+/* Auth Dialog */
+.auth-dialog {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.dialog-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 24px;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+}
+
+.dialog-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 12px;
+}
+
+.dialog-text {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #64748b;
+  margin: 0;
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .header-content {
+    height: 64px;
+  }
+
+  .btn-create {
+    padding: 12px;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    justify-content: center;
+
+    .btn-text {
+      display: none;
+    }
+  }
+
+  .logo-subtitle {
+    display: none;
+  }
+
+  .logo-title {
+    font-size: 18px;
+  }
+
+  .logo-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
   }
 }
 </style>
