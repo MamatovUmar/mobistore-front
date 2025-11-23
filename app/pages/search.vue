@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import FilterForm from "@/components/results/FilterForm.vue";
-import AdCard from "@/components/AdCard.vue";
+import AdRowCard from "@/components/AdRowCard.vue";
 import JsonLd from "@/components/JsonLd.vue";
-import AdCardSkeleton from "@/components/skeletons/AdCardSkeleton.vue";
+import AdRowCardSkeleton from "@/components/skeletons/AdRowCardSkeleton.vue";
 import FilterFormSkeleton from "@/components/skeletons/FilterFormSkeleton.vue";
 import type { IBaseResponse } from "~/types";
 import type { IAdsResponse } from "~/types/ads";
@@ -291,13 +291,13 @@ definePageMeta({
           <section class="results-section" role="main" aria-label="Результаты поиска">
             <!-- Скелетоны при загрузке -->
             <div v-if="loading" class="results-grid">
-              <AdCardSkeleton v-for="i in 12" :key="`skeleton-${i}`" />
+              <AdRowCardSkeleton v-for="i in 6" :key="`skeleton-${i}`" />
             </div>
             
             <!-- Результаты поиска -->
             <div v-else-if="ads.length > 0">
               <div class="results-grid">
-                <AdCard 
+                <AdRowCard 
                   v-for="ad in ads" 
                   :key="ad.id" 
                   :listing="ad"
@@ -370,9 +370,9 @@ definePageMeta({
   }
   
   .results-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
     margin-bottom: 40px;
   }
   
@@ -475,10 +475,7 @@ definePageMeta({
       position: static;
     }
     
-    .results-grid {
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 16px;
-    }
+    /* .results-grid уже flex-column */
     
     .pagination-container {
       padding: 16px 0;
@@ -493,9 +490,7 @@ definePageMeta({
 
 @media (max-width: 480px) {
   .results-page {
-    .results-grid {
-      grid-template-columns: 1fr;
-    }
+    /* results-grid уже имеет нужные стили (column layout) */
     
     .pagination-container {
       :deep(.el-pagination) {
