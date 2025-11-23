@@ -2,6 +2,7 @@
 import { Loading } from '@element-plus/icons-vue';
 import FilterForm from "@/components/results/FilterForm.vue";
 import AdCard from "@/components/AdCard.vue";
+import JsonLd from "@/components/JsonLd.vue";
 import type { IBaseResponse, _IPagination } from "~/types";
 import type { _IListing, IAdsResponse } from "~/types/ads";
 
@@ -195,7 +196,7 @@ const jsonLd = computed(() => ({
         '@type': 'Offer',
         price: ad.price,
         priceCurrency: 'UZS',
-        availability: ad.state === 'active' ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'
+        availability: ad.status === 'active' ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'
       },
       image: ad.images?.[0]?.url,
       brand: ad.brand?.name
