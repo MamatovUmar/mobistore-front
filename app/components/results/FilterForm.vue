@@ -3,34 +3,48 @@ import RegionAutocompletes from "@/components/autocompletes/RegionAutocomplete.v
 import CityAutocompletes from "@/components/autocompletes/CityAutocomplete.vue";
 import BrandAutocomplete from "@/components/autocompletes/BrandAutocomplete.vue";
 import ModelAutocomplete from "@/components/autocompletes/ModelAutocomplete.vue";
-import type { IResultFilterForm } from "~/types/ads";
+import type { IAdsResponse, IResultFilterForm } from "~/types/ads";
+
+const props = defineProps<{ defaults?: IAdsResponse['filters'] }>()
 
 const route = useRoute();
 const router = useRouter();
 
+// Вычисляем min/max цены из props.defaults или query
+const minPrice = computed(() => props?.defaults?.minPrice || Number(route.query?.minPrice || 0))
+const maxPrice = computed(() => props?.defaults?.maxPrice || Number(route.query?.maxPrice || 50000000))
+
+// Инициализируем фильтры сразу с данными из route.query для SSR
+const query = route.query as Record<string, any>;
 const filters = reactive<IResultFilterForm>({
   page: 1,
   limit: 10,
-  regionId: undefined,
-  cityId: undefined,
-  brandId: undefined,
-  modelId: undefined,
-  state: undefined,
-  priceRange: [0, 50000000],
-  ram: undefined,
-  storage: undefined,
-  allowTradeIn: false,
-  sortBy: "updated_at",
-  sortOrder: "desc",
+  regionId: query?.regionId ? Number(query.regionId) : undefined,
+  cityId: query?.cityId ? Number(query.cityId) : undefined,
+  brandId: query?.brandId ? Number(query.brandId) : undefined,
+  modelId: query?.modelId ? Number(query.modelId) : undefined,
+  state: query?.state,
+  priceRange: [minPrice.value, maxPrice.value],
+  ram: query?.ram ? Number(query.ram) : undefined,
+  storage: query?.storage ? Number(query.storage) : undefined,
+  allowTradeIn: query.allowTradeIn === 'true',
+  sortBy: query?.sortBy || "updated_at",
+  sortOrder: query?.sortOrder || "desc",
 });
 
+const formatPrice = (val: number | undefined) => {
+  const value = val ?? 0;
+  return Math.round(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+}
+
 const resetFilters = () => {
+  // Сбрасываем все значения фильтров
   filters.regionId = undefined;
   filters.cityId = undefined;
   filters.brandId = undefined;
   filters.modelId = undefined;
   filters.state = undefined;
-  filters.priceRange = [0, 50000000];
+  filters.priceRange = [minPrice.value, maxPrice.value];
   filters.ram = undefined;
   filters.storage = undefined;
   filters.allowTradeIn = false;
@@ -38,31 +52,48 @@ const resetFilters = () => {
   filters.sortOrder = "desc";
 };
 
-watch(() => filters, () => {
-  router.replace({
-    path: '/search',
-    query: {
-      ...filters,
-      minPrice: filters.priceRange?.[0],
-      maxPrice: filters.priceRange?.[1],
-    }
-  })
+let timer: ReturnType<typeof setTimeout>;
+
+watch(filters, () => {
+  if (timer) clearTimeout(timer);
+  timer = setTimeout(() => {
+    // Формируем query параметры, исключая пустые значения
+    const query: Record<string, string> = {};
+    
+    if (filters.regionId) query.regionId = String(filters.regionId);
+    if (filters.cityId) query.cityId = String(filters.cityId);
+    if (filters.brandId) query.brandId = String(filters.brandId);
+    if (filters.modelId) query.modelId = String(filters.modelId);
+    if (filters.state) query.state = filters.state;
+    if (filters.ram) query.ram = String(filters.ram);
+    if (filters.storage) query.storage = String(filters.storage);
+    if (filters.allowTradeIn) query.allowTradeIn = 'true';
+    if (filters.sortBy) query.sortBy = filters.sortBy;
+    if (filters.sortOrder) query.sortOrder = filters.sortOrder;
+    if (filters.priceRange?.[0]) query.minPrice = String(filters.priceRange[0]);
+    if (filters.priceRange?.[1]) query.maxPrice = String(filters.priceRange[1]);
+    
+    router.replace({
+      path: '/search',
+      query
+    })
+  }, 500);
 }, { deep: true })
 
-onMounted(() => {
-  const query = route.query as Record<string, any>;
-  filters.regionId = query?.regionId;
-  filters.cityId = query?.cityId;
-  filters.brandId = query?.brandId;
-  filters.modelId = query?.modelId;
-  filters.state = query?.state;
-  filters.priceRange = [Number(query?.minPrice || 0), Number(query?.maxPrice || 50000000)];
-  filters.ram = query?.ram ? Number(query.ram) : undefined;
-  filters.storage = query?.storage ? Number(query.storage) : undefined;
-  filters.allowTradeIn = query.allowTradeIn === 'true';
-  filters.sortBy = query?.sortBy || 'updated_at';
-  filters.sortOrder = query?.sortOrder || 'desc';
+watch(() => filters.brandId, () => {
+  filters.modelId = undefined;
 })
+
+watch(() => filters.regionId, () => {
+  filters.cityId = undefined;
+})
+
+// Обновляем priceRange когда меняются minPrice/maxPrice из props
+watch([minPrice, maxPrice], ([newMin, newMax]) => {
+  if (newMin !== filters.priceRange[0] || newMax !== filters.priceRange[1]) {
+    filters.priceRange = [newMin, newMax];
+  }
+}, { immediate: true });
 
 </script>
 
@@ -77,24 +108,26 @@ onMounted(() => {
 
     <el-form :model="filters" label-position="top" size="large">
       <el-form-item label="Область">
-        <RegionAutocompletes v-model="filters.regionId" />
+        <RegionAutocompletes v-model="filters.regionId" :init-data="defaults?.region" />
       </el-form-item>
 
       <el-form-item label="Город">
         <CityAutocompletes
           v-model="filters.cityId"
           :region-id="filters.regionId"
+          :init-data="defaults?.city"
         />
       </el-form-item>
 
       <el-form-item label="Бренд">
-        <BrandAutocomplete v-model="filters.brandId" />
+        <BrandAutocomplete v-model="filters.brandId" :init-data="defaults?.brand" />
       </el-form-item>
 
       <el-form-item label="Модель">
         <ModelAutocomplete
           v-model="filters.modelId"
           :brand-id="filters.brandId"
+          :init-data="defaults?.model"
         />
       </el-form-item>
 
@@ -102,7 +135,7 @@ onMounted(() => {
         <el-select v-model="filters.state" placeholder="Все" clearable>
           <el-option label="Новый" value="new" />
           <el-option label="Б/У" value="used" />
-          <el-option label="Восстановленный" value="refurbished" />
+          <el-option label="Восстановленный" value="restored" />
         </el-select>
       </el-form-item>
 
@@ -137,20 +170,28 @@ onMounted(() => {
       </el-checkbox>
 
       <div class="price-slider mt-20">
-        <div class="price-values">
-          <span class="price-value">
-            {{ formatCurrency(filters.priceRange[0] ?? 0) }}
-          </span>
-          <span class="price-separator">—</span>
-          <span class="price-value">
-            {{ formatCurrency(filters.priceRange[1] ?? 0) }}
-          </span>
+        <div class="price-range-compact">
+          <div class="price-field">
+            <span class="label">от</span>
+            <div class="value-wrapper">
+              <span class="amount">{{ formatPrice(filters.priceRange[0]) }}</span>
+              <span class="currency">сум</span>
+            </div>
+          </div>
+          <div class="divider" />
+          <div class="price-field">
+            <span class="label">до</span>
+            <div class="value-wrapper">
+              <span class="amount">{{ formatPrice(filters.priceRange[1]) }}</span>
+              <span class="currency">сум</span>
+            </div>
+          </div>
         </div>
 
         <el-slider
           v-model="filters.priceRange"
-          :min="0"
-          :max="50000000"
+          :min="minPrice"
+          :max="maxPrice"
           :step="100000"
           range
           :show-tooltip="false"
@@ -167,7 +208,7 @@ onMounted(() => {
   padding: 20px;
   border: 1px solid var(--color-border-light);
   position: sticky;
-  top: 20px;
+  top: 80px;
   max-height: calc(100vh - 120px);
   overflow-y: auto;
 
@@ -266,27 +307,61 @@ onMounted(() => {
   padding: 4px 0;
 }
 
-.price-values {
+.price-range-compact {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 6px;
-  padding: 8px 12px;
   background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-light);
   border-radius: 8px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  transition: all 0.2s ease;
 
-  .price-value {
-    font-size: 13px;
+  &:hover {
+    border-color: var(--color-border-medium);
+  }
+}
+
+.price-field {
+  flex: 1;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0; /* Prevent overflow */
+
+  .label {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    margin-bottom: 2px;
+    line-height: 1;
+  }
+
+  .value-wrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .amount {
+    font-size: 14px;
     font-weight: 600;
     color: var(--color-text-primary);
   }
 
-  .price-separator {
-    font-size: 12px;
+  .currency {
+    font-size: 11px;
     color: var(--color-text-secondary);
-    font-weight: 400;
+    font-weight: 500;
   }
+}
+
+.divider {
+  width: 1px;
+  height: 24px;
+  background-color: var(--color-border-light);
 }
 
 :deep(.el-slider) {

@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import type { IBrand } from "~/types/brand";
 import type { IBaseResponse } from "~/types";
 
 interface Props {
   placeholder?: string;
+  initData?: IBrand;
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   placeholder: "Введите название бренда",
 });
 
@@ -20,16 +21,25 @@ const emit = defineEmits<{
 const { $api } = useNuxtApp();
 
 const loading = ref(false);
-const brands = ref<IBrand[]>([]);
+// Инициализируем список брендов с initData для SSR
+const brands = ref<IBrand[]>(props.initData ? [props.initData] : []);
 
 const remoteSearch = async (query: string) => {
   loading.value = true;
   try {
     const res = await $api<IBaseResponse<IBrand[]>>(`/brands/search?q=${query}`);
-    brands.value = res.data || [];
+    const loadedBrands = res.data || [];
+    
+    // Сохраняем initData в списке если оно есть и не входит в загруженные бренды
+    if (props.initData && !loadedBrands.find(b => b.id === props.initData!.id)) {
+      brands.value = [props.initData, ...loadedBrands];
+    } else {
+      brands.value = loadedBrands;
+    }
   } catch (error) {
     console.error("Error searching brands:", error);
-    brands.value = [];
+    // Сохраняем initData даже при ошибке
+    brands.value = props.initData ? [props.initData] : [];
   } finally {
     loading.value = false;
   }
@@ -41,6 +51,17 @@ const handleChange = (value: number) => {
     emit("select", selectedBrand);
   }
 };
+
+// Следим за изменениями initData
+watch(() => props.initData, (newData) => {
+  if (newData) {
+    // Добавляем initData в список если его там нет
+    if (!brands.value.find(b => b.id === newData.id)) {
+      brands.value = [newData, ...brands.value];
+    }
+    model.value = newData.id;
+  }
+}, { immediate: true });
 </script>
 
 <template>

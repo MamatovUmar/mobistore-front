@@ -101,6 +101,14 @@ export enum EntityType {
 
 export interface IAdsResponse {
   ads: IListing[];
+  filters: {
+    minPrice?: number;
+    maxPrice?: number;
+    brand?: IBrand;
+    model?: IModel;
+    region?: IRegion;
+    city?: ICity;
+  }
   pagination: IPagination;
 }
 

@@ -6,6 +6,7 @@ import type { IBaseResponse } from "~/types";
 interface Props {
   placeholder?: string;
   brandId?: number;
+  initData?: IModel;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -21,11 +22,13 @@ const emit = defineEmits<{
 const { $api } = useNuxtApp();
 
 const loading = ref(false);
-const models = ref<IModel[]>([]);
+// Инициализируем список моделей с initData для SSR
+const models = ref<IModel[]>(props.initData ? [props.initData] : []);
 
 const remoteSearch = async (query: string) => {
   if (!query || query.trim() === "") {
-    models.value = [];
+    // При пустом поиске сохраняем только initData
+    models.value = props.initData ? [props.initData] : [];
     return;
   }
 
@@ -37,10 +40,18 @@ const remoteSearch = async (query: string) => {
     }
     
     const res = await $api<IBaseResponse<IModelResponse>>(url);
-    models.value = res.data?.models || [];
+    const loadedModels = res.data?.models || [];
+    
+    // Сохраняем initData в списке если оно есть и не входит в загруженные модели
+    if (props.initData && !loadedModels.find(m => m.id === props.initData!.id)) {
+      models.value = [props.initData, ...loadedModels];
+    } else {
+      models.value = loadedModels;
+    }
   } catch (error) {
     console.error("Error searching models:", error);
-    models.value = [];
+    // Сохраняем initData даже при ошибке
+    models.value = props.initData ? [props.initData] : [];
   } finally {
     loading.value = false;
   }
@@ -54,10 +65,24 @@ const handleChange = (value: number) => {
 };
 
 // Сброс модели при изменении бренда
-watch(() => props.brandId, () => {
-  model.value = undefined;
-  models.value = [];
+watch(() => props.brandId, (newBrandId, oldBrandId) => {
+  // Сбрасываем модель только если бренд действительно изменился (не первая загрузка)
+  if (oldBrandId !== undefined && newBrandId !== oldBrandId) {
+    model.value = undefined;
+    models.value = [];
+  }
 });
+
+// Следим за изменениями initData
+watch(() => props.initData, (newData) => {
+  if (newData) {
+    // Добавляем initData в список если его там нет
+    if (!models.value.find(m => m.id === newData.id)) {
+      models.value = [newData, ...models.value];
+    }
+    model.value = newData.id;
+  }
+}, { immediate: true });
 </script>
 
 <template>

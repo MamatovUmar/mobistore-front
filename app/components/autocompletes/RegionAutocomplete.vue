@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { watch } from "vue";
 import { usePlacesStore } from "~/store/places";
 import type { IRegion } from "~/types/place";
 
 interface Props {
   placeholder?: string;
+  initData?: IRegion;
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   placeholder: "Выберите регион",
 });
 
@@ -26,10 +27,15 @@ const handleChange = (value: number) => {
   }
 };
 
-// Загружаем регионы при монтировании компонента
-onMounted(() => {
-  placesStore.fetchRegions();
-});
+// Загружаем регионы сразу для SSR
+placesStore.fetchRegions();
+
+// Следим за изменениями initData
+watch(() => props.initData, (newData) => {
+  if (newData) {
+    model.value = newData.id;
+  }
+}, { immediate: true });
 </script>
 
 <template>

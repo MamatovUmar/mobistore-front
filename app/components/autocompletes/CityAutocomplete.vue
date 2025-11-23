@@ -6,6 +6,7 @@ import type { IBaseResponse } from "~/types";
 interface Props {
   placeholder?: string;
   regionId?: number;
+  initData?: ICity;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -21,7 +22,8 @@ const emit = defineEmits<{
 const { $api } = useNuxtApp();
 
 const loading = ref(false);
-const cities = ref<ICity[]>([]);
+// Инициализируем список городов с initData для SSR
+const cities = ref<ICity[]>(props.initData ? [props.initData] : []);
 
 const remoteSearch = async () => {
   if (!props.regionId) {
@@ -34,10 +36,18 @@ const remoteSearch = async () => {
     const url = `/places/regions/${props.regionId}/cities`;
     
     const res = await $api<IBaseResponse<ICityResponse>>(url);
-    cities.value = res.data?.cities || [];
+    const loadedCities = res.data?.cities || [];
+    
+    // Сохраняем initData в списке если оно есть и не входит в загруженные города
+    if (props.initData && !loadedCities.find(c => c.id === props.initData!.id)) {
+      cities.value = [props.initData, ...loadedCities];
+    } else {
+      cities.value = loadedCities;
+    }
   } catch (error) {
     console.error("Error searching cities:", error);
-    cities.value = [];
+    // Сохраняем initData даже при ошибке
+    cities.value = props.initData ? [props.initData] : [];
   } finally {
     loading.value = false;
   }
@@ -50,17 +60,28 @@ const handleChange = (value: number) => {
   }
 };
 
+// Следим за изменениями initData
+watch(() => props.initData, (newData) => {
+  if (newData) {
+    // Добавляем initData в список если его там нет
+    if (!cities.value.find(c => c.id === newData.id)) {
+      cities.value = [newData, ...cities.value];
+    }
+    model.value = newData.id;
+  }
+}, { immediate: true });
+
 // Сброс города при изменении региона
-watch(() => props.regionId, () => {
-  model.value = undefined;
-  cities.value = [];
-  remoteSearch();
-});
-
-
-onMounted(() => {
-  remoteSearch();
-});
+watch(() => props.regionId, (newRegionId, oldRegionId) => {
+  // Сбрасываем город только если регион действительно изменился (не первая загрузка)
+  if (oldRegionId !== undefined && newRegionId !== oldRegionId) {
+    model.value = undefined;
+    cities.value = [];
+  }
+  if (newRegionId) {
+    remoteSearch();
+  }
+}, { immediate: true });
 </script>
 
 <template>

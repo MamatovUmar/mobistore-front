@@ -96,14 +96,11 @@ const postDate = "Сегодня";
   display: flex;
   flex-direction: column;
   background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-  border-radius: 24px;
+  border-radius: 8px;
   overflow: hidden;
   text-decoration: none;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  border: 1px solid rgba(148, 163, 184, 0.12);
-  box-shadow: 
-    0 1px 3px rgba(15, 23, 42, 0.03),
-    0 1px 2px rgba(15, 23, 42, 0.06);
+  border: 1px solid var(--color-border-light);
   height: 100%;
 
   &:hover {
