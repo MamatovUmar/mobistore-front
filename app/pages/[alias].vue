@@ -58,7 +58,7 @@ const openChat = () => {
             <AdGallery :listing="listing" />
             <InfoSection :listing="listing" />
             <CharacterSection :listing="listing" />
-            <SellerSection :listing="listing" @open-chat="openChat" />
+            <SellerSection :listing="listing" />
           </div>
           <div v-if="listing"> 
             <SidebarSection :listing="listing" @update="handleUpdate" @open-chat="openChat" />

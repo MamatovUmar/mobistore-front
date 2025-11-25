@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ListingStatus, type IListing } from "~/types/ads";
+import { ListingStatus, type IListing, type IListingContacts } from "~/types/ads";
 import {
   ChatDotRound,
   Phone,
@@ -7,6 +7,7 @@ import {
   Star,
 } from "@element-plus/icons-vue";
 import StatusTag from "~/components/ad/StatusTag.vue";
+import ContactsInfo from "~/components/ad/ContactsInfo.vue";
 
 const { listing } = defineProps<{ listing: IListing }>();
 
@@ -15,13 +16,14 @@ const emit = defineEmits<{
   "open-chat": [];
 }>();
 
-const { $api } = useNuxtApp();
 const { changeStatus } = useAds();
 
 // Состояние отображения контактов
 const showContacts = ref(false);
 const isFavorite = ref(false);
 const publishLoading = ref(false);
+const contacts = ref<IListingContacts>();
+
 
 // Форматирование цены
 const formattedPrice = computed(() => {
@@ -48,23 +50,22 @@ const memoryInfo = computed(() => {
 
 // Форматированный номер телефона
 const formattedPhone = computed(() => {
-  if (!listing.phone_number) return "";
-  const phone = listing.phone_number.replace(/\D/g, "");
+  if (!contacts.value?.phone_number) return "";
+  const phone = contacts.value.phone_number.replace(/\D/g, "");
   if (phone.length === 12) {
     return `+${phone[0]} ${phone.slice(1, 4)} ${phone.slice(
       4,
       7
     )} ${phone.slice(7, 9)} ${phone.slice(9)}`;
   }
-  return listing.phone_number;
+  return contacts.value.phone_number;
 });
 
-const hasContacts = computed(() => {
-  return !!(listing.phone_number || listing.telegram_link);
-});
-
-const handleShowContacts = () => {
-  showContacts.value = !showContacts.value;
+const handleShowContacts = (data: IListingContacts) => {
+  console.log("Contacts data:", data);
+  
+  contacts.value = data;
+  showContacts.value = true;
 };
 
 const handleMessage = () => {
@@ -83,7 +84,6 @@ const publishListing = catcher(async () => {
 }, () => {
   publishLoading.value = false;
 });
-
 </script>
 
 <template>
@@ -104,16 +104,8 @@ const publishListing = catcher(async () => {
         :icon="ChatDotRound"
         @click="handleMessage"
       />
+      <ContactsInfo :listing="listing" @contacts-shown="handleShowContacts" />
       <el-button
-        v-if="listing.user.show_contacts && hasContacts"
-        size="large"
-        :icon="Phone"
-        plain
-        type="warning"
-        @click="handleShowContacts"
-      />
-      <el-button
-        v-if="listing.user.show_contacts && hasContacts"
         size="large"
         :icon="Star"
         :type="isFavorite ? 'primary' : 'default'"
@@ -124,20 +116,22 @@ const publishListing = catcher(async () => {
     <!-- Компактный блок контактов -->
     <transition name="contacts-slide">
       <div v-if="showContacts" class="contacts-compact">
-        <div v-if="listing.phone_number" class="contact-compact">
-          <a :href="`tel:${listing.phone_number}`" class="contact-compact-link">
+        <div v-if="contacts?.phone_number" class="contact-compact">
+          <a :href="`tel:${contacts.phone_number}`" class="contact-compact-link">
             <el-icon><Phone /></el-icon>
             <span>{{ formattedPhone }}</span>
           </a>
         </div>
-        <div v-if="listing.telegram_link" class="contact-compact">
+        <div v-if="contacts?.telegram_link" class="contact-compact">
           <a
-            :href="listing.telegram_link"
+            :href="contacts?.telegram_link"
             target="_blank"
             class="contact-compact-link telegram"
           >
             <el-icon><ChatLineRound /></el-icon>
-            <span> {{ listing.telegram_link.replace("https://t.me/", "@") }} </span>
+            <span>
+              {{ contacts?.telegram_link?.replace("https://t.me/", "@") }}
+            </span>
           </a>
         </div>
       </div>

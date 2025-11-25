@@ -37,7 +37,7 @@ const { data: listings } = await useAsyncData(
           <p class="section-subtitle">Самые актуальные предложения на рынке</p>
         </div>
         
-        <NuxtLink to="/catalog" class="view-all-link">
+        <NuxtLink to="/search" class="view-all-link">
           <span>Смотреть все</span>
           <el-icon><Right /></el-icon>
         </NuxtLink>

@@ -52,7 +52,7 @@ const marqueeBrands = computed(() => {
             v-for="(brand, index) in marqueeBrands"
             :key="`${brand.name}-1-${index}`"
             class="brand-card glass-card"
-            @click="navigateTo(`/search?brand=${brand.id}`)"
+            @click="navigateTo(`/search?brandId=${brand.id}`)"
           >
             <div class="card-inner">
               <div class="logo-box">

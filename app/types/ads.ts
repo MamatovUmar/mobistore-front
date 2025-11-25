@@ -127,3 +127,8 @@ export interface IResultFilterForm {
   sortBy: "updated_at" | "favorites_count" | "views_count" | "price";
   sortOrder: "asc" | "desc";
 }
+
+export interface IListingContacts {
+  phone_number: IListing['phone_number'];
+  telegram_link: IListing['telegram_link'];
+}

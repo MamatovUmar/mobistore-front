@@ -143,8 +143,6 @@ const handleCreateListing = () => {
 
 <style lang="scss" scoped>
 .app-header {
-  position: sticky;
-  top: 0;
   z-index: 1000;
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(20px);
