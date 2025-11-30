@@ -5,6 +5,8 @@ export const useAds = () => {
 
   const {$api} = useNuxtApp();
 
+  const bumpLoading = ref(false);
+
   const getStatusLabel = (status: ListingStatus) => {
     const labels: Record<ListingStatus, string> = {
       [ListingStatus.ACTIVE]: "Активно",
@@ -55,10 +57,27 @@ export const useAds = () => {
     ElMessage.error(message || "Не удалось изменить статус");
   });
 
+  const bumpAd = catcher(async (id: number) => {
+    bumpLoading.value = true;
+    const result = await $api<IBaseResponse<any>>(`/ads/${id}/bump`, {
+      method: "POST",
+      body: { id }
+    });
+    
+    ElMessage.success(result.message);
+    bumpLoading.value = false;
+  }, (error: any) => {
+    bumpLoading.value = false
+    const message = error?.response?._data?.message
+    ElMessage.error(message || "Не удалось поднять объявление");
+  });
+
   return {
     getStatusLabel,
     getStatusType,
     getStateLabel,
     changeStatus,
+    bumpAd,
+    bumpLoading,
   };
 };

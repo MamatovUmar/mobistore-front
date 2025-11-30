@@ -17,6 +17,7 @@ export interface IUser {
   city_id: number | null;
   region?: IRegion;
   city?: ICity;
+  favorites: number[];
 }
 
 export interface IUpdateProfilePayload {

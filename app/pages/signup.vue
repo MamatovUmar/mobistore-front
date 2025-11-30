@@ -185,7 +185,7 @@ const register = async () => {
 
 <style lang="scss" scoped>
 .signup-page {
-  min-height: calc(100vh - 80px);
+  min-height: 100dvh;
   background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
   padding: 40px 20px;
   display: flex;

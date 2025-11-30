@@ -31,13 +31,6 @@ const goToSignup = () => {
   router.push("/signup");
 };
 
-const handleCreateListing = () => {
-  if (rootStore.user) {
-    router.push("/create");
-  } else {
-    showAuthDialog.value = true;
-  }
-};
 </script>
 
 <template>
@@ -47,22 +40,12 @@ const handleCreateListing = () => {
         <!-- Logo -->
         <NuxtLink to="/" class="logo-link">
           <div class="logo">
-            <div class="logo-icon">SM</div>
-            <div class="logo-text">
-              <span class="logo-title">SmartMarket</span>
-              <span class="logo-subtitle">Marketplace</span>
-            </div>
+            <img src="@/assets/images/logo.png" alt="">
           </div>
         </NuxtLink>
 
         <!-- Actions -->
         <div class="header-actions">
-          <!-- Create Listing Button -->
-          <button class="btn-create" @click="handleCreateListing">
-            <el-icon class="btn-icon"><Plus /></el-icon>
-            <span class="btn-text">Подать объявление</span>
-          </button>
-
           <!-- Login Button or User Menu -->
           <el-button
             v-if="!rootStore.user"
@@ -182,46 +165,9 @@ const handleCreateListing = () => {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-.logo-icon {
-  width: 44px;
-  height: 44px;
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-weight: 800;
-  font-size: 16px;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-  transition: transform 0.3s ease;
-
-  &:hover {
-    transform: scale(1.05);
+  img {
+    height: 40px;
   }
-}
-
-.logo-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
-}
-
-.logo-title {
-  font-size: 20px;
-  font-weight: 800;
-  color: #0f172a;
-  letter-spacing: -0.02em;
-}
-
-.logo-subtitle {
-  font-size: 10px;
-  font-weight: 600;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
 /* Actions */

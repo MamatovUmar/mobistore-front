@@ -4,12 +4,14 @@ import { LocationInformation, Picture, StarFilled } from "@element-plus/icons-vu
 import type { IListing } from "~/types/ads";
 import { formatCurrency } from "~/utils/formatters";
 import StatusTag from "~/components/ad/StatusTag.vue";
+import { useRootStore } from "~/store/root";
 
 const props = defineProps<{
   listing: IListing;
 }>();
 
-const isFavorite = ref(false);
+const root = useRootStore()
+const { addToFavorite, removeFavorite } = useFavorite();
 
 const image = computed(() => {
   if (props.listing.images.length > 0) {
@@ -19,11 +21,16 @@ const image = computed(() => {
 });
 
 const hasImage = computed(() => props.listing.images.length > 0);
+const favorites = computed(() => root.user?.favorites || []);
 
-const toggleFavorite = (event: MouseEvent) => {
-  event.preventDefault();
-  event.stopPropagation();
-  isFavorite.value = !isFavorite.value;
+const toggleFavorite = (e: MouseEvent) => {
+  e.preventDefault();
+  e.stopPropagation();
+  if (favorites.value.includes(props.listing.id)) {
+    removeFavorite(props.listing.id);
+  } else {
+    addToFavorite(props.listing.id);
+  }
 };
 
 // Format date (placeholder - replace with actual date from listing)
@@ -58,8 +65,8 @@ const postDate = "Сегодня";
       <!-- Favorite Button -->
       <button
         class="fav-button"
-        :class="{ active: isFavorite }"
-        @click="toggleFavorite"
+        :class="{ active: favorites.includes(listing.id) }"
+        @click.stop="toggleFavorite"
       >
         <el-icon><StarFilled /></el-icon>
       </button>

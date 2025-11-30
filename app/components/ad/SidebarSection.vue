@@ -5,9 +5,12 @@ import {
   Phone,
   ChatLineRound,
   Star,
+  StarFilled
 } from "@element-plus/icons-vue";
 import StatusTag from "~/components/ad/StatusTag.vue";
 import ContactsInfo from "~/components/ad/ContactsInfo.vue";
+import { useFavorite } from "#imports";
+import { useRootStore } from "~/store/root";
 
 const { listing } = defineProps<{ listing: IListing }>();
 
@@ -16,7 +19,9 @@ const emit = defineEmits<{
   "open-chat": [];
 }>();
 
-const { changeStatus } = useAds();
+const root = useRootStore()
+const { changeStatus, bumpAd, bumpLoading } = useAds();
+const { addToFavorite, addLoading, removeFavorite, removeLoading } = useFavorite();
 
 // Состояние отображения контактов
 const showContacts = ref(false);
@@ -24,6 +29,7 @@ const isFavorite = ref(false);
 const publishLoading = ref(false);
 const contacts = ref<IListingContacts>();
 
+const favorites = computed(() => root.user?.favorites || []);
 
 // Форматирование цены
 const formattedPrice = computed(() => {
@@ -62,8 +68,6 @@ const formattedPhone = computed(() => {
 });
 
 const handleShowContacts = (data: IListingContacts) => {
-  console.log("Contacts data:", data);
-  
   contacts.value = data;
   showContacts.value = true;
 };
@@ -90,7 +94,7 @@ const publishListing = catcher(async () => {
   <div class="info-section">
     <div class="listing-badges">
       <span class="listing-brand">{{ listing.brand.name }}</span>
-      <span v-if="listing.allow_trade_in" class="badge-trade">Trade-In</span>
+      <span v-if="listing.allow_trade_in" class="badge-trade">Возможен обмен</span>
     </div>
 
     <h1 class="listing-title">{{ listing.title }}</h1>
@@ -105,11 +109,13 @@ const publishListing = catcher(async () => {
         @click="handleMessage"
       />
       <ContactsInfo :listing="listing" @contacts-shown="handleShowContacts" />
+
       <el-button
         size="large"
-        :icon="Star"
-        :type="isFavorite ? 'primary' : 'default'"
-        @click="toggleFavorite"
+        :icon="favorites.includes(listing.id) ? StarFilled : Star"
+        :type="favorites.includes(listing.id) ? 'warning' : 'default'"
+        :loading="addLoading || removeLoading"
+        @click="favorites.includes(listing.id) ? removeFavorite(listing.id) : addToFavorite(listing.id)"
       />
     </div>
 
@@ -181,6 +187,17 @@ const publishListing = catcher(async () => {
       @click="publishListing"
     >
       Опубликовать
+    </el-button>
+
+    <el-button
+      v-else-if="listing.user_id === root.user?.id"
+      type="primary"
+      class="mt-20 w-full"
+      :loading="bumpLoading"
+      size="large"
+      @click="bumpAd(listing.id)"
+    >
+      Поднять в поиске
     </el-button>
   </div>
 </template>

@@ -1,110 +1,61 @@
 <script setup lang="ts">
 import { Star } from "@element-plus/icons-vue";
-import FavoriteCard from "@/components/account/FavoriteCard.vue";
 
-// Моковые данные для избранных объявлений
-const favorites = [
-  {
-    id: 1,
-    image: "/images/phone1.png",
-    title: "iPhone 16 Pro Max 256GB",
-    brand: "Apple",
-    model: "iPhone 16 Pro Max",
-    price: "15 000 000",
-    currency: "UZS",
-    location: "Toshkent",
-    condition: "new",
-    seller: "Магазин iStore",
-    addedAt: "2024-10-28",
-  },
-  {
-    id: 2,
-    image: "/images/phone2.png",
-    title: "Samsung Galaxy S24 Ultra 512GB",
-    brand: "Samsung",
-    model: "Galaxy S24 Ultra",
-    price: "12 500 000",
-    currency: "UZS",
-    location: "Toshkent",
-    condition: "used",
-    seller: "Частное лицо",
-    addedAt: "2024-10-26",
-  },
-  {
-    id: 3,
-    image: "/images/phone3.png",
-    title: "Xiaomi 14 Pro 256GB Black",
-    brand: "Xiaomi",
-    model: "14 Pro",
-    price: "7 500 000",
-    currency: "UZS",
-    location: "Samarqand",
-    condition: "new",
-    seller: "Mi Store",
-    addedAt: "2024-10-25",
-  },
-  {
-    id: 4,
-    image: "/images/phone4.png",
-    title: "iPhone 15 Pro 128GB Blue Titanium",
-    brand: "Apple",
-    model: "iPhone 15 Pro",
-    price: "13 000 000",
-    currency: "UZS",
-    location: "Bukhara",
-    condition: "restored",
-    seller: "TechMarket",
-    addedAt: "2024-10-24",
-  },
-];
+const { getProfileFavorites, favorites } = useFavorite();
+
+getProfileFavorites();
 </script>
 
 <template>
   <main class="page-account">
-        <div class="container">
-          <div class="page-header">
-            <h1 class="page-title">Мой аккаунт</h1>
-          </div>
+    <div class="container">
+      <div class="page-header">
+        <h1 class="page-title">Мой аккаунт</h1>
+      </div>
 
-          <div class="account-layout">
-            <!-- Сайдбар с навигацией -->
-            <AccountSidebar />
+      <div class="account-layout">
+        <!-- Сайдбар с навигацией -->
+        <AccountSidebar />
 
-            <!-- Основной контент -->
-            <div class="account-content">
-              <div class="favorites-section">
-                <div class="section-header">
-                  <div>
-                    <h2 class="section-title">Избранные объявления</h2>
-                    <p class="section-subtitle">{{ favorites.length }} объявлений</p>
-                  </div>
-                </div>
-
-                <!-- Список избранных -->
-                <div class="favorites-grid">
-                  <FavoriteCard
-                    v-for="favorite in favorites"
-                    :key="favorite.id"
-                    :favorite="favorite"
-                  />
-                </div>
-
-                <!-- Пустое состояние -->
-                <div v-if="favorites.length === 0" class="empty-state">
-                  <el-icon class="empty-icon"><Star /></el-icon>
-                  <p class="empty-text">У вас пока нет избранных объявлений</p>
-                  <p class="empty-description">
-                    Добавляйте понравившиеся объявления в избранное, чтобы не потерять их
-                  </p>
-                  <el-button type="primary" @click="$router.push('/')">
-                    Перейти к объявлениям
-                  </el-button>
-                </div>
+        <!-- Основной контент -->
+        <div class="account-content">
+          <div class="favorites-section">
+            <div class="section-header">
+              <div>
+                <h2 class="section-title">Избранные объявления</h2>
+                <p class="section-subtitle">
+                  {{ favorites.length }} объявлений
+                </p>
               </div>
+            </div>
+
+            <!-- Список избранных -->
+            <div class="favorites-grid">
+              <AdRowCard
+                v-for="favorite in favorites"
+                :key="favorite.id"
+                :listing="favorite"
+                @favorite-changed="getProfileFavorites"
+              />
+            </div>
+
+            <!-- Пустое состояние -->
+            <div v-if="favorites.length === 0" class="empty-state">
+              <el-icon class="empty-icon"><Star /></el-icon>
+              <p class="empty-text">У вас пока нет избранных объявлений</p>
+              <p class="empty-description">
+                Добавляйте понравившиеся объявления в избранное, чтобы не
+                потерять их
+              </p>
+              <el-button type="primary" @click="$router.push('/search')">
+                Перейти к объявлениям
+              </el-button>
             </div>
           </div>
         </div>
-      </main>
+      </div>
+    </div>
+  </main>
 </template>
 
 <style lang="scss" scoped>
@@ -161,6 +112,7 @@ const favorites = [
     font-weight: 700;
     color: var(--color-text-primary);
     margin-bottom: 4px;
+    margin-top: 0;
   }
 
   .section-subtitle {
@@ -170,8 +122,8 @@ const favorites = [
 
   /* === СЕТКА ИЗБРАННЫХ === */
   .favorites-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 20px;
 
     @media (max-width: 640px) {
