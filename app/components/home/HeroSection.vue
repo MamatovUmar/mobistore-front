@@ -1,18 +1,9 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-
-const isVisible = ref(false);
-
-onMounted(() => {
-  setTimeout(() => {
-    isVisible.value = true;
-  }, 100);
-});
 </script>
 
 <template>
   <div class="hero-wrapper">
-    <section class="hero" :class="{ 'is-visible': isVisible }">
+    <section class="hero">
       <div class="ambient-light"></div>
       <div class="container">
         <div class="hero-content">
@@ -22,7 +13,7 @@ onMounted(() => {
               <span class="line gradient-text">в твоих руках</span>
             </h1>
             <p class="hero-subtitle">
-              Откройте мир лучших смартфонов в Узбекистане. Покупайте, продавайте и открывайте новое на Smart Market.
+              Купите новый или б/у смартфон по лучшей цене. Публикуйте объявления и находите покупателей в любом городе Узбекистана.
             </p>
             <div class="hero-actions">
               <NuxtLink to="/search" class="btn btn-primary">
@@ -51,15 +42,6 @@ onMounted(() => {
   text-align: center;
   overflow: hidden;
   padding: 20px 0 60px;
-  
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-
-  &.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .ambient-light {
@@ -72,12 +54,6 @@ onMounted(() => {
   background: radial-gradient(circle at center, rgba(56, 189, 248, 0.15) 0%, transparent 55%);
   pointer-events: none;
   z-index: 0;
-  opacity: 0;
-  transition: opacity 1.5s ease 0.5s;
-
-  .is-visible & {
-    opacity: 1;
-  }
 }
 
 .container {
@@ -97,14 +73,6 @@ onMounted(() => {
 
 .text-content {
   max-width: 750px;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.8s ease 0.4s, transform 0.8s ease 0.4s;
-
-  .is-visible & {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .hero-title {
@@ -133,7 +101,7 @@ onMounted(() => {
   color: #64748b; // Slate 500
   margin-bottom: 40px;
   line-height: 1.6;
-  max-width: 600px;
+  max-width: 650px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -142,14 +110,6 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   gap: 20px;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.8s ease 0.6s, transform 0.8s ease 0.6s;
-
-  .is-visible & {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .btn {

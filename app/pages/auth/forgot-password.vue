@@ -4,6 +4,7 @@ import { Message, ArrowLeft } from "@element-plus/icons-vue";
 
 definePageMeta({
   layout: "empty",
+  middleware: "guest",
 });
 
 const { $api } = useNuxtApp();

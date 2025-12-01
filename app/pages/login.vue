@@ -7,6 +7,7 @@ import { useCookie } from "#app";
 
 definePageMeta({
   layout: "empty",
+  middleware: "guest",
 });
 
 const { $api } = useNuxtApp();
@@ -68,6 +69,7 @@ const login = async () => {
     }
   });
 };
+
 </script>
 
 <template>
@@ -111,7 +113,7 @@ const login = async () => {
           </el-form-item>
 
           <div class="form-options">
-            <NuxtLink to="/forgot-password" class="forgot-link">
+            <NuxtLink to="/auth/forgot-password" class="forgot-link">
               Забыли пароль?
             </NuxtLink>
           </div>
@@ -128,15 +130,10 @@ const login = async () => {
         </el-form>
 
         <div class="divider">
-          <span>или</span>
+          <span>или войдите с помощью</span>
         </div>
 
-        <div class="social-login">
-          <button class="social-button google">
-            <span class="social-icon">G</span>
-            <span>Google</span>
-          </button>
-        </div>
+        <AuthGoogleButton />
 
         <div class="register-prompt">
           <span>Нет аккаунта?</span>
@@ -278,7 +275,6 @@ const login = async () => {
   font-size: 16px;
   font-weight: 600;
   border-radius: 10px;
-  margin-bottom: 24px;
 }
 
 .divider {
@@ -312,71 +308,11 @@ const login = async () => {
   }
 }
 
-.social-login {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 24px;
-}
-
-.social-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px;
-  border: 1.5px solid var(--color-border);
-  background: white;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s;
-
-  .social-icon {
-    width: 24px;
-    height: 24px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 14px;
-    color: white;
-  }
-
-  &.google {
-    .social-icon {
-      background: linear-gradient(135deg, #ea4335 0%, #fbbc05 100%);
-    }
-
-    &:hover {
-      border-color: #ea4335;
-      background: rgba(234, 67, 53, 0.05);
-    }
-  }
-
-  &.telegram {
-    .social-icon {
-      background: linear-gradient(135deg, #0088cc 0%, #229ed9 100%);
-    }
-
-    &:hover {
-      border-color: #0088cc;
-      background: rgba(0, 136, 204, 0.05);
-    }
-  }
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-}
-
 .register-prompt {
   text-align: center;
   font-size: 14px;
   color: var(--color-text-secondary);
+  margin-top: 20px;
 
   span {
     margin-right: 6px;

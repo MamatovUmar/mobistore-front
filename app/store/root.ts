@@ -11,9 +11,18 @@ export const useRootStore = defineStore('root', () => {
 
   const user = ref<IUser>();
 
-  const fetchUser = catcher(async () => {
-    if (!tokenCookie.value) return;
-    const { data } = await $api<IBaseResponse<IUser>>("/user/profile");
+  const fetchUser = catcher(async (token?: string) => {
+    if (token) {
+      tokenCookie.value = token;
+    }
+    const authToken = token || tokenCookie.value;
+    if (!authToken) return;
+    
+    const { data } = await $api<IBaseResponse<IUser>>("/user/profile", {
+      headers: {
+        Authorization: `Bearer ${authToken}`
+      }
+    });
     user.value = data;
   });
 

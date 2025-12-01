@@ -37,31 +37,33 @@ interface IFilterForm {
 <template>
   <div class="container">
     <div class="filters">
-      <el-form :model="form" label-position="top" size="large">
-        <div class="filters-grid">
-          <el-form-item label="Область" class="filter-item">
-            <RegionAutocomplete v-model="form.region" placeholder="Вся страна" />
-          </el-form-item>
+      <ClientOnly>
+        <el-form :model="form" label-position="top" size="large">
+          <div class="filters-grid">
+            <el-form-item label="Область" class="filter-item">
+              <RegionAutocomplete v-model="form.region" placeholder="Вся страна" />
+            </el-form-item>
 
-          <el-form-item label="Город" class="filter-item">
-            <CityAutocomplete v-model="form.city" :region-id="form.region" placeholder="Все города" />
-          </el-form-item>
+            <el-form-item label="Город" class="filter-item">
+              <CityAutocomplete v-model="form.city" :region-id="form.region" placeholder="Все города" />
+            </el-form-item>
 
-          <el-form-item label="Бренд" class="filter-item">
-            <BrandAutocomplete v-model="form.brand" placeholder="Все бренды" />
-          </el-form-item>
+            <el-form-item label="Бренд" class="filter-item">
+              <BrandAutocomplete v-model="form.brand" placeholder="Все бренды" />
+            </el-form-item>
 
-          <el-form-item label="Модель" class="filter-item">
-            <ModelAutocomplete v-model="form.model" :brand-id="form.brand" placeholder="Все модели" />
-          </el-form-item>
+            <el-form-item label="Модель" class="filter-item">
+              <ModelAutocomplete v-model="form.model" :brand-id="form.brand" placeholder="Все модели" />
+            </el-form-item>
 
-          <el-form-item label=" " class="filter-item filter-item--button">
-            <el-button type="primary" size="large" class="search-button" @click="handleSubmit">
-              Показать результаты
-            </el-button>
-          </el-form-item>
-        </div>
-      </el-form>
+            <el-form-item label=" " class="filter-item filter-item--button">
+              <el-button type="primary" size="large" class="search-button" @click="handleSubmit">
+                Показать результаты
+              </el-button>
+            </el-form-item>
+          </div>
+        </el-form>
+      </ClientOnly>
     </div>
   </div>
 </template>

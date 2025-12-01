@@ -125,7 +125,7 @@ const resetPassword = async () => {
         <p class="reset-subtitle">
           Ссылка для сброса пароля недействительна или устарела
         </p>
-        <NuxtLink to="/forgot-password">
+        <NuxtLink to="/auth/forgot-password">
           <el-button type="primary" size="large" class="submit-button">
             Запросить новую ссылку
           </el-button>
