@@ -52,13 +52,6 @@ const benefits = [
               Начать продажу
               <el-icon class="el-icon--right"><Right /></el-icon>
             </el-button>
-            
-            <div class="stats-mini">
-              <div class="avatars">
-                <span class="avatar" v-for="n in 3" :key="n"></span>
-              </div>
-              <p>+150 продаж сегодня</p>
-            </div>
           </div>
         </div>
 
@@ -225,38 +218,6 @@ const benefits = [
       transform: translateY(-2px);
       box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.5);
     }
-  }
-}
-
-.stats-mini {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-
-  .avatars {
-    display: flex;
-    
-    .avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: #334155;
-      border: 2px solid #0f172a;
-      margin-left: -10px;
-      
-      &:first-child {
-        margin-left: 0;
-        background: #475569;
-      }
-      &:nth-child(2) { background: #64748b; }
-      &:nth-child(3) { background: #94a3b8; }
-    }
-  }
-
-  p {
-    font-size: 14px;
-    color: #94a3b8;
-    font-weight: 500;
   }
 }
 

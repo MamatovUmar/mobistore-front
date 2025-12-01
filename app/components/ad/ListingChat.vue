@@ -181,7 +181,7 @@ watch(
           <div class="seller-avatar-wrapper">
             <el-avatar
               v-if="seller?.avatar"
-              :src="seller.avatar.url"
+              :src="seller.avatar"
               :size="48"
             />
             <el-avatar v-else :size="48" class="seller-avatar">

@@ -378,7 +378,7 @@ const getAdCover = (conversation: IConversation) => {
                 <el-avatar
                   v-if="counterpart?.avatar"
                   :size="44"
-                  :src="counterpart.avatar.url"
+                  :src="counterpart.avatar"
                 />
                 <el-avatar v-else :size="44" class="chat-user__fallback">
                   {{ getInitials(counterpart) }}

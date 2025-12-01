@@ -136,10 +136,6 @@ const login = async () => {
             <span class="social-icon">G</span>
             <span>Google</span>
           </button>
-          <button class="social-button telegram">
-            <span class="social-icon">T</span>
-            <span>Telegram</span>
-          </button>
         </div>
 
         <div class="register-prompt">
@@ -279,7 +275,6 @@ const login = async () => {
 
 .login-button {
   width: 100%;
-  height: 48px;
   font-size: 16px;
   font-weight: 600;
   border-radius: 10px;

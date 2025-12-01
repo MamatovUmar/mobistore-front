@@ -60,7 +60,7 @@ const goToSignup = () => {
             <div class="user-trigger">
               <el-avatar
                 v-if="rootStore.user?.avatar"
-                :src="rootStore.user.avatar.url"
+                :src="rootStore.user.avatar"
                 :size="40"
               />
               <el-avatar v-else :size="40" class="user-avatar">

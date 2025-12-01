@@ -1,12 +1,11 @@
 import type { IRegion, ICity } from "./place";
-import type { IImage } from "./index";
 export interface IUser {
   id: number;
   email: string;
   first_name: string;
   last_name: string;
   language_code: string | null;
-  avatar: IImage | null;
+  avatar: string | null;
   role: string;
   phone_number: string | null;
   telegram: string | null;
@@ -15,8 +14,8 @@ export interface IUser {
   show_contacts: boolean;
   region_id: number | null;
   city_id: number | null;
-  region?: IRegion;
-  city?: ICity;
+  region: IRegion | null;
+  city: ICity | null;
   favorites: number[];
 }
 

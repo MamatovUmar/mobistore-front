@@ -13,7 +13,7 @@ const hasAvatar = computed(() => !!user.value?.avatar);
 
 const profileImageUrl = computed(() => {
   if (user.value?.avatar) {
-    return user.value.avatar.url;
+    return user.value.avatar;
   }
   return "";
 });

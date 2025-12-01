@@ -23,7 +23,7 @@ const registrationYear = computed(() => {
 
     <nuxt-link :to="`/user/${seller.id}`" class="seller-info">
       <div class="user-avatar-wrapper">
-        <el-avatar v-if="seller?.avatar" :src="seller.avatar.url" :size="64" />
+        <el-avatar v-if="seller?.avatar" :src="seller.avatar" :size="64" />
         <el-avatar v-else :size="64" class="user-avatar">
           {{
             `${seller.first_name?.charAt(0)}${seller.last_name?.charAt(

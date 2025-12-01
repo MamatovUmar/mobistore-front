@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Edit, Lock } from "@element-plus/icons-vue";
+import { Edit } from "@element-plus/icons-vue";
 import { useRootStore } from "~/store/root";
 import type { FormInstance, FormRules } from "element-plus";
 import type { IUpdateProfilePayload } from "~/types/user";
@@ -7,7 +7,6 @@ import PhoneNumber from "~/components/form/PhoneNumber.vue";
 import TelegramLink from "~/components/form/TelegramLink.vue";
 
 const isEditingProfile = ref(false);
-const isChangingPassword = ref(false);
 const profileFormRef = ref<FormInstance>();
 const loading = ref(false);
 
@@ -270,60 +269,7 @@ const handleRegionSelect = () => {
           </div>
 
           <!-- Смена пароля -->
-          <div class="profile-section">
-            <div class="section-header">
-              <h2 class="section-title">Безопасность</h2>
-              <el-button
-                v-if="!isChangingPassword"
-                type="default"
-                :icon="Lock"
-                @click="isChangingPassword = true"
-              >
-                Изменить пароль
-              </el-button>
-            </div>
-
-            <div v-if="!isChangingPassword" class="password-placeholder">
-              <p class="placeholder-text">
-                Для изменения пароля нажмите кнопку "Изменить пароль"
-              </p>
-            </div>
-
-            <el-form v-else label-position="top" size="large">
-              <el-form-item label="Текущий пароль">
-                <el-input
-                  type="password"
-                  placeholder="Введите текущий пароль"
-                  show-password
-                />
-              </el-form-item>
-
-              <el-form-item label="Новый пароль">
-                <el-input
-                  type="password"
-                  placeholder="Введите новый пароль"
-                  show-password
-                />
-              </el-form-item>
-
-              <el-form-item label="Подтвердите новый пароль">
-                <el-input
-                  type="password"
-                  placeholder="Повторите новый пароль"
-                  show-password
-                />
-              </el-form-item>
-
-              <div class="form-actions">
-                <el-button @click="isChangingPassword = false">
-                  Отмена
-                </el-button>
-                <el-button type="primary" @click="isChangingPassword = false">
-                  Сохранить пароль
-                </el-button>
-              </div>
-            </el-form>
-          </div>
+          <AccountChangePassword />
         </div>
       </div>
     </div>
@@ -448,17 +394,5 @@ const handleRegionSelect = () => {
     }
   }
 
-  /* === PLACEHOLDER ПАРОЛЯ === */
-  .password-placeholder {
-    padding: 32px;
-    text-align: center;
-    background: var(--color-bg-secondary);
-    border-radius: 8px;
-  }
-
-  .placeholder-text {
-    color: var(--color-text-secondary);
-    font-size: 15px;
-  }
 }
 </style>
