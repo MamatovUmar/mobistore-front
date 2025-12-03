@@ -76,10 +76,6 @@ const handleMessage = () => {
   emit("open-chat");
 };
 
-const toggleFavorite = () => {
-  isFavorite.value = !isFavorite.value;
-};
-
 const publishListing = catcher(async () => {
   publishLoading.value = true;
   await changeStatus(listing.id, ListingStatus.ACTIVE);
@@ -103,6 +99,7 @@ const publishListing = catcher(async () => {
 
     <div class="listing-actions">
       <el-button
+        v-if="listing.user_id !== root.user?.id"
         size="large"
         type="primary"
         :icon="ChatDotRound"
@@ -111,6 +108,7 @@ const publishListing = catcher(async () => {
       <ContactsInfo :listing="listing" @contacts-shown="handleShowContacts" />
 
       <el-button
+        v-if="listing.user_id !== root.user?.id"
         size="large"
         :icon="favorites.includes(listing.id) ? StarFilled : Star"
         :type="favorites.includes(listing.id) ? 'warning' : 'default'"
@@ -174,7 +172,7 @@ const publishListing = catcher(async () => {
       </div>
       <div class="meta-item">
         <span class="meta-label">ID объявления</span>
-        <span class="meta-value">#SM-{{ listing.id }}</span>
+        <span class="meta-value">#MS-{{ listing.id }}</span>
       </div>
     </div>
 
