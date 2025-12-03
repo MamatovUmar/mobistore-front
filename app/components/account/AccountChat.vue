@@ -86,13 +86,13 @@ const loadConversations = async () => {
     }
 
     if (!selectedConversationId.value) {
-      selectedConversationId.value = conversations.value[0].id;
+      selectedConversationId.value = conversations.value[0]?.id ?? null;
       return;
     }
 
     const exists = conversations.value.some((conversation) => conversation.id === selectedConversationId.value);
     if (!exists) {
-      selectedConversationId.value = conversations.value[0].id;
+      selectedConversationId.value = conversations.value[0]?.id ?? null;
     }
   } catch {
     ElMessage.error("Не удалось загрузить переписки");
@@ -184,9 +184,10 @@ const getCounterpart = (conversation: IConversation): IUser | null => {
 
 const resetUnreadState = (conversationId: number) => {
   const index = conversations.value.findIndex((conversation) => conversation.id === conversationId);
-  if (index === -1 || !currentUserId.value) return;
+  const conversation = conversations.value[index];
+  if (index === -1 || !conversation || !currentUserId.value) return;
 
-  const updated = { ...conversations.value[index] };
+  const updated: IConversation = { ...conversation };
   if (updated.buyer_id === currentUserId.value) {
     updated.unread_for_buyer = 0;
   } else {
@@ -198,10 +199,11 @@ const resetUnreadState = (conversationId: number) => {
 
 const applyMessageMeta = (conversationId: number, message: IConversationMessage) => {
   const index = conversations.value.findIndex((conversation) => conversation.id === conversationId);
-  if (index === -1) return;
+  const conversation = conversations.value[index];
+  if (index === -1 || !conversation) return;
 
   const updated: IConversation = {
-    ...conversations.value[index],
+    ...conversation,
     last_message: message.content,
     last_message_at: message.created_at,
   };
@@ -279,10 +281,6 @@ const formatPrice = (price?: number, currency?: string) => {
   const formatted = new Intl.NumberFormat("ru-RU").format(price);
   return `${formatted} ${currency ?? ""}`.trim();
 };
-
-const getAdCover = (conversation: IConversation) => {
-  return conversation.ad?.images?.[0]?.url ?? "";
-};
 </script>
 
 <template>
@@ -337,7 +335,7 @@ const getAdCover = (conversation: IConversation) => {
                   <el-avatar
                     v-if="getCounterpart(conversation)?.avatar"
                     :size="48"
-                    :src="getCounterpart(conversation)?.avatar?.url"
+                    :src="getCounterpart(conversation)?.avatar ?? undefined"
                   />
                   <el-avatar v-else :size="48" class="conversation-avatar--fallback">
                     {{ getInitials(getCounterpart(conversation)) }}

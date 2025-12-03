@@ -8,11 +8,11 @@ import ModelAutocomplete from "@/components/autocompletes/ModelAutocomplete.vue"
 const router = useRouter();
 
 const form = reactive<IFilterForm>({
-  region: undefined,
-  city: undefined,
-  brand: undefined,
-  model: undefined,
-  condition: undefined,
+  regionId: undefined,
+  cityId: undefined,
+  brandId: undefined,
+  modelId: undefined,
+  state: undefined,
 });
 
 function handleSubmit() {
@@ -25,11 +25,11 @@ function handleSubmit() {
 
 
 interface IFilterForm {
-  region: number | undefined;
-  city: number | undefined;
-  brand: number | undefined;
-  model: number | undefined;
-  condition: number | undefined;
+  regionId: number | undefined;
+  cityId: number | undefined;
+  brandId: number | undefined;
+  modelId: number | undefined;
+  state: number | undefined;
 }
 
 </script>
@@ -41,19 +41,19 @@ interface IFilterForm {
         <el-form :model="form" label-position="top" size="large">
           <div class="filters-grid">
             <el-form-item label="Область" class="filter-item">
-              <RegionAutocomplete v-model="form.region" placeholder="Вся страна" />
+              <RegionAutocomplete v-model="form.regionId" placeholder="Вся страна" />
             </el-form-item>
 
             <el-form-item label="Город" class="filter-item">
-              <CityAutocomplete v-model="form.city" :region-id="form.region" placeholder="Все города" />
+              <CityAutocomplete v-model="form.cityId" :region-id="form.regionId" placeholder="Все города" />
             </el-form-item>
 
             <el-form-item label="Бренд" class="filter-item">
-              <BrandAutocomplete v-model="form.brand" placeholder="Все бренды" />
+              <BrandAutocomplete v-model="form.brandId" placeholder="Все бренды" />
             </el-form-item>
 
             <el-form-item label="Модель" class="filter-item">
-              <ModelAutocomplete v-model="form.model" :brand-id="form.brand" placeholder="Все модели" />
+              <ModelAutocomplete v-model="form.modelId" :brand-id="form.brandId" placeholder="Все модели" />
             </el-form-item>
 
             <el-form-item label=" " class="filter-item filter-item--button">

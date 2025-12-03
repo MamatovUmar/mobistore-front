@@ -76,7 +76,7 @@ const resetPassword = async () => {
     if (valid) {
       loading.value = true;
       try {
-        await $api("/reset-password", {
+        await $api("/auth/reset-password", {
           method: "POST",
           body: {
             email: form.email,

@@ -53,7 +53,7 @@ const login = async () => {
     if (valid) {
       loading.value = true;
       try {
-        const res = await $api<IAuthResponse>("/login", {
+        const res = await $api<IAuthResponse>("/auth/login", {
           method: "POST",
           body: form
         });
@@ -61,8 +61,9 @@ const login = async () => {
         rootStore.user = res.data?.user;
         tokenCookie.value = res.data?.token;
         navigateTo('/')
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        const message = error?.response?._data?.message || "Произошла ошибка";
+        ElMessage.error(message);
       } finally {
         loading.value = false;
       }

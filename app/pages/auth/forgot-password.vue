@@ -36,7 +36,7 @@ const sendResetLink = async () => {
     if (valid) {
       loading.value = true;
       try {
-        await $api("/forgot-password", {
+        await $api("/auth/forgot-password", {
           method: "POST",
           body: { email: form.email },
         });

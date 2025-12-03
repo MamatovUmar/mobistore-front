@@ -62,7 +62,7 @@ const register = async () => {
     if (valid) {
       loading.value = true;
       try {
-        const res = await $api<IAuthResponse>("/register", {
+        const res = await $api<IAuthResponse>("/auth/register", {
           method: "POST",
           body: form
         });
