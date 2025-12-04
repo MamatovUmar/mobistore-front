@@ -12,9 +12,8 @@ export default defineNuxtPlugin({
     if (tokenCookie.value) {
       try {
         await rootStore.fetchUser();
-      } catch (error) {
-        // Если токен невалидный, очищаем cookie
-        console.error("Failed to fetch user:", error);
+      } catch {
+        // Токен невалидный - очищаем cookie
         tokenCookie.value = null;
       }
     }

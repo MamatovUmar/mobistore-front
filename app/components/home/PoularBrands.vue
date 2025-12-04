@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ArrowRight } from "@element-plus/icons-vue";
 import type { IBrand } from "~/types/brand";
 import type { IBaseResponse } from "~/types";
 
@@ -81,7 +80,7 @@ const marqueeBrands = computed(() => {
             v-for="(brand, index) in marqueeBrands"
             :key="`${brand.name}-2-${index}`"
             class="brand-card glass-card"
-            @click="navigateTo(`/search?brand=${brand.id}`)"
+            @click="navigateTo(`/search?brandId=${brand.id}`)"
           >
             <div class="card-inner">
               <div class="logo-box">

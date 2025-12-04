@@ -37,6 +37,7 @@ import { Phone, Message, Location } from "@element-plus/icons-vue";
           <h4>Помощь</h4>
           <ul class="footer-links">
             <li><NuxtLink to="/rules">Правила безопасности</NuxtLink></li>
+            <li><NuxtLink to="/info/terms">Пользовательское соглашение</NuxtLink></li>
             <li><NuxtLink to="/faq">Частые вопросы</NuxtLink></li>
             <li><NuxtLink to="/support">Служба поддержки</NuxtLink></li>
           </ul>
