@@ -43,7 +43,7 @@ const generateSeoTitle = () => {
     seoTitle += ' (б/у)';
   }
   
-  seoTitle += ' | Smart Market';
+  seoTitle += ' | MobiStore';
   return seoTitle;
 };
 
@@ -101,7 +101,7 @@ const updateSeo = () => {
   description.value = generateSeoDescription();
   
   // Обновляем keywords на основе серверных данных
-  const kw = ['смартфоны Узбекистан', 'купить телефон', 'Smart Market'];
+  const kw = ['смартфоны Узбекистан', 'купить телефон', 'MobiStore'];
   
   if (currentFilters?.brand?.name) {
     kw.push(`${currentFilters.brand.name} смартфоны`, `${currentFilters.brand.name} телефон`);
@@ -196,9 +196,9 @@ watch(() => {
 });
 
 // Инициализируем SEO с дефолтными значениями
-title.value = 'Поиск смартфонов в Узбекистане | Smart Market';
+title.value = 'Поиск смартфонов в Узбекистане | MobiStore';
 description.value = 'Найдите лучшие смартфоны по выгодным ценам в Узбекистане. Большой выбор новых и б/у устройств.';
-keywords.value = 'смартфоны Узбекистан, купить телефон, Smart Market';
+keywords.value = 'смартфоны Узбекистан, купить телефон, MobiStore';
 
 // Обновляем SEO когда данные загрузятся с сервера
 watch(filters, () => {
