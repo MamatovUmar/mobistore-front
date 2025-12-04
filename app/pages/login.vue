@@ -85,7 +85,7 @@ const login = async () => {
       <div class="login-header">
         <div class="logo-section">
           <h1 class="login-title">Добро пожаловать</h1>
-          <p class="login-subtitle">Войдите в свой аккаунт SmartMarket</p>
+          <p class="login-subtitle">Войдите в свой аккаунт MobiStore</p>
         </div>
       </div>
 

@@ -22,7 +22,7 @@ const benefits = [
         <div class="promo-content">
           <div class="promo-badge">
             <span class="pulse"></span>
-            SmartMarket Pro
+            MobiStore Pro
           </div>
           
           <h2 class="promo-title">

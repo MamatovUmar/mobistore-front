@@ -100,7 +100,7 @@ const register = async () => {
       <div class="signup-header">
         <div class="logo-section">
           <h1 class="signup-title">Создать аккаунт</h1>
-          <p class="signup-subtitle">Присоединяйтесь к SmartMarket</p>
+          <p class="signup-subtitle">Присоединяйтесь к MobiStore</p>
         </div>
       </div>
 

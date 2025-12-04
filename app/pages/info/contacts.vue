@@ -98,7 +98,7 @@ const submitForm = async () => {
                   Позвонить сейчас
                 </a>
                 <a
-                  href="mailto:support@smartmarket.uz"
+                  href="mailto:support@mobistore.uz"
                   class="support-action email"
                 >
                   Написать на почту

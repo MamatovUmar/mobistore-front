@@ -40,7 +40,7 @@ const goToSignup = () => {
         <!-- Logo -->
         <NuxtLink to="/" class="logo-link">
           <div class="logo">
-            <img src="/logo.png" alt="SmartMarket">
+            <img src="/logo.png" alt="MobiStore">
           </div>
         </NuxtLink>
 

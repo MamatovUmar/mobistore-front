@@ -8,7 +8,7 @@ import { Phone, Message, Location } from "@element-plus/icons-vue";
       <div class="footer-content">
         <!-- Brand & Socials -->
         <div class="footer-column brand-column">
-          <h3 class="footer-logo">SmartMarket</h3>
+          <h3 class="footer-logo">MobiStore</h3>
           <p class="footer-description">
             Крупнейшая экосистема для покупки и продажи гаджетов в Узбекистане.
             Безопасность, скорость и комфорт в каждой сделке.
@@ -36,10 +36,9 @@ import { Phone, Message, Location } from "@element-plus/icons-vue";
         <div class="footer-column">
           <h4>Помощь</h4>
           <ul class="footer-links">
-            <li><NuxtLink to="/rules">Правила безопасности</NuxtLink></li>
+            <li><NuxtLink to="/info/privacy">Политика конфиденциальности</NuxtLink></li>
             <li><NuxtLink to="/info/terms">Пользовательское соглашение</NuxtLink></li>
-            <li><NuxtLink to="/faq">Частые вопросы</NuxtLink></li>
-            <li><NuxtLink to="/support">Служба поддержки</NuxtLink></li>
+            <li><NuxtLink to="/info/contacts">Контакты</NuxtLink></li>
           </ul>
         </div>
 
@@ -53,7 +52,7 @@ import { Phone, Message, Location } from "@element-plus/icons-vue";
             </li>
             <li>
               <el-icon><Message /></el-icon>
-              <span>info@smartmarket.uz</span>
+              <span>info@mobistore.uz</span>
             </li>
             <li>
               <el-icon><Location /></el-icon>
@@ -67,11 +66,7 @@ import { Phone, Message, Location } from "@element-plus/icons-vue";
 
       <!-- Bottom Section -->
       <div class="footer-bottom">
-        <p>&copy; 2025 SmartMarket. Все права защищены.</p>
-        <div class="legal-links">
-          <a href="#">Пользовательское соглашение</a>
-          <a href="#">Политика конфиденциальности</a>
-        </div>
+        <p>&copy; 2025 MobiStore. Все права защищены.</p>
       </div>
     </div>
   </footer>
@@ -212,7 +207,7 @@ import { Phone, Message, Location } from "@element-plus/icons-vue";
 }
 
 .footer-bottom {
-  padding: 32px 0;
+  padding: 10px 0;
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -215,7 +215,7 @@ useSeoMeta({
   ogTitle: () => title.value,
   ogDescription: () => description.value,
   ogType: 'website',
-  ogUrl: () => `https://smartmarket.uz${route.fullPath}`,
+  ogUrl: () => `https://mobistore.uz${route.fullPath}`,
   twitterCard: 'summary_large_image',
   twitterTitle: () => title.value,
   twitterDescription: () => description.value,
@@ -227,7 +227,7 @@ const jsonLd = computed(() => ({
   '@type': 'SearchResultsPage',
   name: title.value,
   description: description.value,
-  url: `https://smartmarket.uz${route.fullPath}`,
+  url: `https://mobistore.uz${route.fullPath}`,
   mainEntity: {
     '@type': 'ItemList',
     numberOfItems: ads.value.length,
