@@ -33,14 +33,8 @@ export default defineNuxtConfig({
   elementPlus: {
     importStyle: 'scss',
   },
-
-  vite: {
-    optimizeDeps: {
-      include: ['dayjs', 'dayjs/plugin/localeData', 'dayjs/plugin/customParseFormat']
-    },
-    ssr: {
-      noExternal: ['dayjs', 'element-plus']
-    }
+  alias: {
+    dayjs: 'dayjs'
   },
 
   // Экспериментальные функции для улучшения производительности
