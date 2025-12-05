@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { LocationInformation, Picture, StarFilled } from "@element-plus/icons-vue";
 import type { IListing } from "~/types/ads";
 import { formatCurrency } from "~/utils/formatters";
@@ -50,7 +50,7 @@ const postDate = "Сегодня";
       >
         <div v-if="!hasImage" class="placeholder">
           <el-icon :size="40" color="#cbd5e1"><Picture /></el-icon>
-          <span>Нет фото</span>
+          <span> Нет фото </span>
         </div>
         
         <!-- Gradient Overlay -->
