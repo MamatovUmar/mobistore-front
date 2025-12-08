@@ -21,7 +21,7 @@ const verifyEmail = async () => {
   }
 
   try {
-    await $api("/verify-email", {
+    await $api("/auth/verify-email", {
       method: "POST",
       body: {
         email: email as string,

@@ -7,38 +7,45 @@ import {
   Setting,
   HomeFilled,
 } from "@element-plus/icons-vue";
+import { useRootStore } from "~/store/root";
 
 defineProps<{
   collapsed: boolean;
 }>();
 
 const route = useRoute();
+const root = useRootStore();
 
 const menuItems = [
   {
     title: "Главная",
     icon: HomeFilled,
     path: "/admin",
+    roles: ["admin", "moderator"],
   },
   {
     title: "Пользователи",
     icon: User,
     path: "/admin/users",
+    roles: ["admin"],
   },
   {
     title: "Объявления",
     icon: Document,
     path: "/admin/listings",
+    roles: ["admin", "moderator"],
   },
   {
     title: "Логи",
     icon: DataLine,
     path: "/admin/logs",
+    roles: ["admin"],
   },
   {
     title: "Кеш",
     icon: Coin,
     path: "/admin/cache",
+    roles: ["admin"],
   },
 ];
 
@@ -51,7 +58,10 @@ const isActive = (path: string) => {
 </script>
 
 <template>
-  <aside class="admin-sidebar" :class="{ 'admin-sidebar--collapsed': collapsed }">
+  <aside
+    class="admin-sidebar"
+    :class="{ 'admin-sidebar--collapsed': collapsed }"
+  >
     <div class="sidebar-header">
       <div class="logo">
         <el-icon :size="28" color="#3b82f6">
@@ -63,34 +73,41 @@ const isActive = (path: string) => {
 
     <el-scrollbar class="sidebar-menu">
       <nav class="menu-nav">
-        <NuxtLink
-          v-for="item in menuItems"
-          :key="item.path"
-          :to="item.path"
-          class="menu-item"
-          :class="{ 'menu-item--active': isActive(item.path) }"
-        >
-          <el-icon :size="20">
-            <component :is="item.icon" />
-          </el-icon>
-          <span v-show="!collapsed" class="menu-text">{{ item.title }}</span>
-          <el-tooltip
-            v-if="collapsed"
-            :content="item.title"
-            placement="right"
-            :show-after="100"
+        <template v-for="item in menuItems" :key="item.path">
+          <NuxtLink
+            v-if="item.roles.includes(root.user?.role || '')"
+            :to="item.path"
+            class="menu-item"
+            :class="{ 'menu-item--active': isActive(item.path) }"
           >
-            <span class="menu-tooltip-trigger" />
-          </el-tooltip>
-        </NuxtLink>
+            <el-icon :size="20">
+              <component :is="item.icon" />
+            </el-icon>
+            <span v-show="!collapsed" class="menu-text">{{ item.title }}</span>
+            <el-tooltip
+              v-if="collapsed"
+              :content="item.title"
+              placement="right"
+              :show-after="100"
+            >
+              <span class="menu-tooltip-trigger" />
+            </el-tooltip>
+          </NuxtLink>
+        </template>
       </nav>
     </el-scrollbar>
 
     <div class="sidebar-footer">
       <NuxtLink to="/" class="back-link">
         <el-icon :size="18">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M19 11H7.83l4.88-4.88a1 1 0 0 0-1.42-1.42l-6.59 6.59a1 1 0 0 0 0 1.42l6.59 6.59a1 1 0 0 0 1.42-1.42L7.83 13H19a1 1 0 0 0 0-2z"/>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path
+              d="M19 11H7.83l4.88-4.88a1 1 0 0 0-1.42-1.42l-6.59 6.59a1 1 0 0 0 0 1.42l6.59 6.59a1 1 0 0 0 1.42-1.42L7.83 13H19a1 1 0 0 0 0-2z"
+            />
           </svg>
         </el-icon>
         <span v-show="!collapsed">На сайт</span>

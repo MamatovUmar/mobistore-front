@@ -1,6 +1,15 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
-import { MessageBox, Plus, User, Document, Star, SwitchButton, Lock } from "@element-plus/icons-vue";
+import {
+  MessageBox,
+  Plus,
+  User,
+  Document,
+  Star,
+  SwitchButton,
+  Lock,
+  Setting,
+} from "@element-plus/icons-vue";
 import { useRootStore } from "~/store/root";
 
 const rootStore = useRootStore();
@@ -14,11 +23,11 @@ const handleScroll = () => {
 };
 
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll);
+  window.addEventListener("scroll", handleScroll);
 });
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
+  window.removeEventListener("scroll", handleScroll);
 });
 
 const goToLogin = () => {
@@ -30,7 +39,6 @@ const goToSignup = () => {
   showAuthDialog.value = false;
   router.push("/signup");
 };
-
 </script>
 
 <template>
@@ -40,13 +48,18 @@ const goToSignup = () => {
         <!-- Logo -->
         <NuxtLink to="/" class="logo-link">
           <div class="logo">
-            <img src="/logo.png" alt="MobiStore">
+            <img src="/logo.png" alt="MobiStore" />
           </div>
         </NuxtLink>
 
         <!-- Actions -->
         <div class="header-actions">
-          <!-- Login Button or User Menu -->
+          <el-button
+            v-if="rootStore.isAdmin || rootStore.isModerator"
+            @click="navigateTo('/admin')"
+          >
+            Админка
+          </el-button>
           <el-button
             v-if="!rootStore.user"
             class="btn-login"
@@ -64,7 +77,11 @@ const goToSignup = () => {
                 :size="40"
               />
               <el-avatar v-else :size="40" class="user-avatar">
-                {{ `${rootStore.user.first_name?.charAt(0)}${rootStore.user.last_name?.charAt(0)}`.trim() }}
+                {{
+                  `${rootStore.user.first_name?.charAt(
+                    0
+                  )}${rootStore.user.last_name?.charAt(0)}`.trim()
+                }}
               </el-avatar>
             </div>
 
@@ -82,7 +99,9 @@ const goToSignup = () => {
                   <el-icon><Star /></el-icon>
                   <span>Избранное</span>
                 </el-dropdown-item>
-                <el-dropdown-item @click="router.push('/account/conversations')">
+                <el-dropdown-item
+                  @click="router.push('/account/conversations')"
+                >
                   <el-icon><MessageBox /></el-icon>
                   <span>Переписки</span>
                 </el-dropdown-item>
@@ -110,14 +129,19 @@ const goToSignup = () => {
         </div>
         <h3 class="dialog-title">Требуется авторизация</h3>
         <p class="dialog-text">
-          Для размещения объявлений необходимо войти в систему или создать новый аккаунт.
+          Для размещения объявлений необходимо войти в систему или создать новый
+          аккаунт.
         </p>
       </div>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="large" @click="showAuthDialog = false">Отмена</el-button>
+          <el-button size="large" @click="showAuthDialog = false"
+            >Отмена</el-button
+          >
           <el-button size="large" @click="goToSignup">Регистрация</el-button>
-          <el-button type="primary" size="large" @click="goToLogin">Войти</el-button>
+          <el-button type="primary" size="large" @click="goToLogin"
+            >Войти</el-button
+          >
         </div>
       </template>
     </el-dialog>
@@ -134,8 +158,7 @@ const goToSignup = () => {
 
   &.scrolled {
     background: rgba(255, 255, 255, 0.95);
-    box-shadow: 
-      0 1px 3px rgba(15, 23, 42, 0.05),
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05),
       0 4px 12px rgba(15, 23, 42, 0.08);
   }
 }
@@ -174,7 +197,7 @@ const goToSignup = () => {
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 20px;
 }
 
 .btn-create {
@@ -210,7 +233,7 @@ const goToSignup = () => {
 .btn-login {
   border-radius: 12px;
   font-weight: 600;
-  
+
   &:hover {
     transform: translateY(-2px);
   }

@@ -10,6 +10,8 @@ export default defineNuxtPlugin((nuxtApp) => {
     },
     async onResponseError({ response }) {
       if (response.status === 401) {
+        const token = useCookie('token');
+        token.value = undefined;
         await nuxtApp.runWithContext(() => navigateTo('/login'))
       }
     }

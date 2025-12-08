@@ -1,227 +1,334 @@
 <script setup lang="ts">
-import { Search, View, Edit, Delete, Check, Close } from "@element-plus/icons-vue";
+import { Refresh, Filter } from "@element-plus/icons-vue";
+import type { IListing, ListingStatus } from "@/types/ads";
+import type { IAdminAdsFilters } from "@/composables/useAdminAds";
+import { useRootStore } from "@/store/root";
 
 definePageMeta({
   layout: "admin",
 });
 
-const searchQuery = ref("");
-const selectedStatus = ref("");
-const currentPage = ref(1);
-const pageSize = ref(10);
+const root = useRootStore();
 
-const statusOptions = [
-  { label: "Все статусы", value: "" },
-  { label: "Активные", value: "active" },
-  { label: "На модерации", value: "pending" },
-  { label: "Отклонённые", value: "rejected" },
-  { label: "Архив", value: "archived" },
-];
+const {
+  loading,
+  ads,
+  pagination,
+  stats,
+  selectedAd,
+  fetchAds,
+  fetchStats,
+  fetchModerationAds,
+  fetchAdForReview,
+  approveAd,
+  rejectAd,
+  changeStatus,
+  deleteAd,
+  banUserAds,
+  refresh,
+} = useAdminAds();
 
-const listings = ref([
-  {
-    id: 1,
-    title: "iPhone 15 Pro Max 256GB",
-    price: 12500000,
-    seller: "Иван Петров",
-    status: "active",
-    views: 234,
-    createdAt: "2024-03-15",
-    image: "https://via.placeholder.com/60",
-  },
-  {
-    id: 2,
-    title: "Samsung Galaxy S24 Ultra",
-    price: 15800000,
-    seller: "Мария Сидорова",
-    status: "pending",
-    views: 0,
-    createdAt: "2024-03-15",
-    image: "https://via.placeholder.com/60",
-  },
-  {
-    id: 3,
-    title: "Xiaomi 14 Pro",
-    price: 8900000,
-    seller: "Алексей Козлов",
-    status: "active",
-    views: 156,
-    createdAt: "2024-03-14",
-    image: "https://via.placeholder.com/60",
-  },
-  {
-    id: 4,
-    title: "Google Pixel 8 Pro",
-    price: 11200000,
-    seller: "Елена Новикова",
-    status: "rejected",
-    views: 0,
-    createdAt: "2024-03-14",
-    image: "https://via.placeholder.com/60",
-  },
-  {
-    id: 5,
-    title: "OnePlus 12",
-    price: 9500000,
-    seller: "Дмитрий Волков",
-    status: "archived",
-    views: 89,
-    createdAt: "2024-03-13",
-    image: "https://via.placeholder.com/60",
-  },
-  {
-    id: 6,
-    title: "iPhone 14 Pro 128GB",
-    price: 9800000,
-    seller: "Анна Смирнова",
-    status: "pending",
-    views: 0,
-    createdAt: "2024-03-15",
-    image: "https://via.placeholder.com/60",
-  },
-]);
+// Role-based access
+const isAdmin = computed(() => root.user?.role === "admin");
 
-const getStatusType = (status: string) => {
-  const types: Record<string, string> = {
-    active: "success",
-    pending: "warning",
-    rejected: "danger",
-    archived: "info",
-  };
-  return types[status] || "info";
+// Filters
+const filters = reactive<IAdminAdsFilters>({
+  page: 1,
+  limit: 20,
+  status: undefined,
+  userId: undefined,
+  search: undefined,
+  sortBy: "created_at",
+  sortOrder: "desc",
+});
+
+const showFilters = ref(false);
+
+// Dialogs & Drawer state
+const drawerVisible = ref(false);
+const rejectDialogVisible = ref(false);
+const statusDialogVisible = ref(false);
+const actionLoading = ref(false);
+
+// Current ad for dialogs
+const currentAd = ref<IListing | null>(null);
+
+// Fetch data based on role
+const fetchData = async () => {
+  if (isAdmin.value) {
+    await fetchAds(filters);
+  } else {
+    await fetchModerationAds(filters);
+  }
 };
 
-const getStatusLabel = (status: string) => {
-  const labels: Record<string, string> = {
-    active: "Активно",
-    pending: "На модерации",
-    rejected: "Отклонено",
-    archived: "В архиве",
-  };
-  return labels[status] || status;
+// Handlers
+const handlePageChange = (page: number) => {
+  filters.page = page;
+  fetchData();
 };
 
-const formatPrice = (price: number) => {
-  return new Intl.NumberFormat("ru-RU").format(price) + " сум";
+const handleSizeChange = (size: number) => {
+  filters.limit = size;
+  filters.page = 1;
+  fetchData();
 };
 
-const handleView = (row: any) => {
-  console.log("View listing:", row);
+const applyFilters = () => {
+  filters.page = 1;
+  fetchData();
 };
 
-const handleEdit = (row: any) => {
-  console.log("Edit listing:", row);
+const resetFilters = () => {
+  filters.status = undefined;
+  filters.userId = undefined;
+  filters.search = undefined;
+  filters.sortBy = "created_at";
+  filters.sortOrder = "desc";
+  filters.page = 1;
+  fetchData();
 };
 
-const handleApprove = (row: any) => {
-  console.log("Approve listing:", row);
+const viewAd = async (ad: IListing) => {
+  await fetchAdForReview(ad.id);
+  drawerVisible.value = true;
 };
 
-const handleReject = (row: any) => {
-  console.log("Reject listing:", row);
+const handleApprove = async (ad: IListing) => {
+  try {
+    drawerVisible.value = false;
+    await ElMessageBox.confirm(
+      `Одобрить объявление "${ad.title}"?`,
+      "Подтверждение",
+      {
+        confirmButtonText: "Одобрить",
+        cancelButtonText: "Отмена",
+        type: "success",
+      }
+    );
+
+    actionLoading.value = true;
+    await approveAd(ad.id);
+    await refresh(filters, isAdmin.value);
+    if (isAdmin.value) await fetchStats();
+  } catch {
+    // Cancelled
+  } finally {
+    actionLoading.value = false;
+  }
 };
 
-const handleDelete = (row: any) => {
-  console.log("Delete listing:", row);
+const openRejectDialog = (ad: IListing) => {
+  currentAd.value = ad;
+  rejectDialogVisible.value = true;
 };
+
+const handleReject = async (reason: string) => {
+  if (!currentAd.value) return;
+
+  try {
+    actionLoading.value = true;
+    await rejectAd(currentAd.value.id, { reason });
+    rejectDialogVisible.value = false;
+    await refresh(filters, isAdmin.value);
+    if (isAdmin.value) await fetchStats();
+  } finally {
+    actionLoading.value = false;
+  }
+};
+
+const openStatusDialog = (ad: IListing) => {
+  currentAd.value = ad;
+  statusDialogVisible.value = true;
+};
+
+const handleStatusChange = async (status: ListingStatus, reason?: string) => {
+  if (!currentAd.value) return;
+
+  try {
+    actionLoading.value = true;
+    await changeStatus(currentAd.value.id, { status, reason });
+    statusDialogVisible.value = false;
+    await refresh(filters, isAdmin.value);
+  } finally {
+    actionLoading.value = false;
+  }
+};
+
+const handleEdit = (ad: IListing) => {
+  navigateTo(`/ads/${ad.alias}/edit`);
+};
+
+const handleDelete = async (ad: IListing) => {
+  try {
+    await ElMessageBox.confirm(
+      `Вы уверены, что хотите удалить объявление "${ad.title}"? Это действие необратимо.`,
+      "Удаление объявления",
+      {
+        confirmButtonText: "Удалить",
+        cancelButtonText: "Отмена",
+        type: "warning",
+      }
+    );
+
+    actionLoading.value = true;
+    await deleteAd(ad.id);
+    drawerVisible.value = false;
+    await fetchStats();
+  } catch {
+    // Cancelled
+  } finally {
+    actionLoading.value = false;
+  }
+};
+
+const handleBanUser = async (userId: number) => {
+  try {
+    await ElMessageBox.confirm(
+      `Заблокировать все объявления пользователя ID: ${userId}?`,
+      "Блокировка объявлений",
+      {
+        confirmButtonText: "Заблокировать",
+        cancelButtonText: "Отмена",
+        type: "warning",
+      }
+    );
+
+    actionLoading.value = true;
+    await banUserAds(userId);
+    await refresh(filters, isAdmin.value);
+  } catch {
+    // Cancelled
+  } finally {
+    actionLoading.value = false;
+  }
+};
+
+const handleRefresh = async () => {
+  await refresh(filters, isAdmin.value);
+  ElMessage.success("Данные обновлены");
+};
+
+// Initial fetch
+onMounted(() => {
+  refresh(filters, isAdmin.value);
+});
 </script>
 
 <template>
   <div class="admin-listings">
+    <!-- Stats (Admin only) -->
+    <AdminListingStats v-if="isAdmin" :stats="stats" />
+
+    <!-- Toolbar -->
     <div class="page-toolbar">
-      <div class="toolbar-filters">
-        <el-input
-          v-model="searchQuery"
-          placeholder="Поиск объявлений..."
-          :prefix-icon="Search"
-          class="search-input"
-          clearable
-        />
-        <el-select v-model="selectedStatus" placeholder="Статус" class="status-select">
-          <el-option
-            v-for="option in statusOptions"
-            :key="option.value"
-            :label="option.label"
-            :value="option.value"
-          />
-        </el-select>
+      <div class="toolbar-left">
+        <el-button
+          :icon="Filter"
+          :type="showFilters ? 'primary' : 'default'"
+          @click="showFilters = !showFilters"
+        >
+          Фильтры
+        </el-button>
+
+        <div class="active-filters">
+          <el-tag
+            v-if="filters.status"
+            closable
+            size="small"
+            @close="filters.status = undefined; applyFilters()"
+          >
+            Статус: {{ filters.status }}
+          </el-tag>
+          <el-tag
+            v-if="filters.search"
+            closable
+            size="small"
+            @close="filters.search = undefined; applyFilters()"
+          >
+            Поиск: {{ filters.search }}
+          </el-tag>
+          <el-tag
+            v-if="filters.userId"
+            closable
+            size="small"
+            @close="filters.userId = undefined; applyFilters()"
+          >
+            Пользователь: {{ filters.userId }}
+          </el-tag>
+        </div>
+      </div>
+
+      <div class="toolbar-right">
+        <el-button :icon="Refresh" :loading="loading" @click="handleRefresh">
+          Обновить
+        </el-button>
       </div>
     </div>
 
-    <el-card class="listings-table-card">
-      <el-table :data="listings" stripe style="width: 100%">
-        <el-table-column prop="id" label="ID" width="70" />
-        <el-table-column prop="title" label="Объявление" min-width="280">
-          <template #default="{ row }">
-            <div class="listing-cell">
-              <el-image
-                :src="row.image"
-                class="listing-image"
-                fit="cover"
-              >
-                <template #error>
-                  <div class="image-placeholder">
-                    <el-icon><View /></el-icon>
-                  </div>
-                </template>
-              </el-image>
-              <div class="listing-info">
-                <span class="listing-title">{{ row.title }}</span>
-                <span class="listing-price">{{ formatPrice(row.price) }}</span>
-              </div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="seller" label="Продавец" width="150" />
-        <el-table-column prop="status" label="Статус" width="130">
-          <template #default="{ row }">
-            <el-tag :type="getStatusType(row.status)" size="small">
-              {{ getStatusLabel(row.status) }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="views" label="Просмотры" width="100" align="center" />
-        <el-table-column prop="createdAt" label="Дата" width="110" />
-        <el-table-column label="Действия" width="180" fixed="right">
-          <template #default="{ row }">
-            <el-button-group>
-              <el-tooltip content="Просмотр" placement="top">
-                <el-button :icon="View" text @click="handleView(row)" />
-              </el-tooltip>
-              <el-tooltip v-if="row.status === 'pending'" content="Одобрить" placement="top">
-                <el-button :icon="Check" text type="success" @click="handleApprove(row)" />
-              </el-tooltip>
-              <el-tooltip v-if="row.status === 'pending'" content="Отклонить" placement="top">
-                <el-button :icon="Close" text type="warning" @click="handleReject(row)" />
-              </el-tooltip>
-              <el-tooltip content="Редактировать" placement="top">
-                <el-button :icon="Edit" text @click="handleEdit(row)" />
-              </el-tooltip>
-              <el-tooltip content="Удалить" placement="top">
-                <el-button :icon="Delete" text type="danger" @click="handleDelete(row)" />
-              </el-tooltip>
-            </el-button-group>
-          </template>
-        </el-table-column>
-      </el-table>
+    <!-- Filters -->
+    <AdminListingFilters
+      v-model="filters"
+      :visible="showFilters"
+      :is-admin="isAdmin"
+      @apply="applyFilters"
+      @reset="resetFilters"
+    />
 
-      <div class="table-pagination">
-        <el-pagination
-          v-model:current-page="currentPage"
-          v-model:page-size="pageSize"
-          :page-sizes="[10, 20, 50, 100]"
-          :total="200"
-          layout="total, sizes, prev, pager, next, jumper"
-          background
-        />
-      </div>
-    </el-card>
+    <!-- Table -->
+    <AdminListingTable
+      :ads="ads"
+      :pagination="pagination"
+      :loading="loading"
+      :page="filters.page ?? 1"
+      :limit="filters.limit ?? 20"
+      :is-admin="isAdmin"
+      @update:page="handlePageChange"
+      @update:limit="handleSizeChange"
+      @row-click="viewAd"
+      @approve="handleApprove"
+      @reject="openRejectDialog"
+      @edit="handleEdit"
+      @delete="handleDelete"
+      @status-change="openStatusDialog"
+    />
+
+    <!-- Detail Drawer -->
+    <AdminListingDetailDrawer
+      v-model="drawerVisible"
+      :ad="selectedAd"
+      :is-admin="isAdmin"
+      :loading="loading"
+      @approve="handleApprove"
+      @reject="openRejectDialog"
+      @edit="handleEdit"
+      @delete="handleDelete"
+      @status-change="openStatusDialog"
+      @ban-user="handleBanUser"
+    />
+
+    <!-- Reject Dialog -->
+    <AdminListingRejectDialog
+      v-model="rejectDialogVisible"
+      :ad="currentAd"
+      :loading="actionLoading"
+      @confirm="handleReject"
+    />
+
+    <!-- Status Dialog (Admin only) -->
+    <AdminListingStatusDialog
+      v-if="isAdmin"
+      v-model="statusDialogVisible"
+      :ad="currentAd"
+      :loading="actionLoading"
+      @confirm="handleStatusChange"
+    />
   </div>
 </template>
 
 <style lang="scss" scoped>
 .admin-listings {
-  max-width: 1400px;
+  max-width: 1600px;
 }
 
 .page-toolbar {
@@ -230,76 +337,25 @@ const handleDelete = (row: any) => {
   align-items: center;
   margin-bottom: 20px;
   gap: 16px;
-}
-
-.toolbar-filters {
-  display: flex;
-  gap: 12px;
   flex-wrap: wrap;
 }
 
-.search-input {
-  width: 320px;
-
-  @media (max-width: 600px) {
-    width: 100%;
-  }
-}
-
-.status-select {
-  width: 160px;
-}
-
-.listings-table-card {
-  border-radius: 12px;
-  border: none;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-}
-
-.listing-cell {
+.toolbar-left {
   display: flex;
-  align-items: center;
   gap: 12px;
-}
-
-.listing-image {
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
-  flex-shrink: 0;
-  background: var(--color-bg-secondary);
-}
-
-.image-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  color: var(--color-text-muted);
+  flex-wrap: wrap;
 }
 
-.listing-info {
+.toolbar-right {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  gap: 8px;
+  align-items: center;
 }
 
-.listing-title {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--color-text-primary);
-}
-
-.listing-price {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--color-primary);
-}
-
-.table-pagination {
+.active-filters {
   display: flex;
-  justify-content: flex-end;
-  padding-top: 20px;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 </style>

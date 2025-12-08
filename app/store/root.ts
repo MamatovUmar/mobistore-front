@@ -11,6 +11,9 @@ export const useRootStore = defineStore('root', () => {
 
   const user = ref<IUser>();
 
+  const isAdmin = computed(() => user.value?.role === 'admin');
+  const isModerator = computed(() => user.value?.role === 'moderator');
+
   const fetchUser = catcher(async (token?: string) => {
     if (token) {
       tokenCookie.value = token;
@@ -47,6 +50,8 @@ export const useRootStore = defineStore('root', () => {
     user,
     fetchUser,
     updateProfile,
-    logout
+    logout,
+    isAdmin,
+    isModerator
   }
 })
