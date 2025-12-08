@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Fold, Expand, Bell, User, SwitchButton } from "@element-plus/icons-vue";
 import { useRootStore } from "~/store/root";
+import type { UserRole } from "~/types/admin-staff";
 
 const props = defineProps<{
   collapsed: boolean;
@@ -11,6 +12,11 @@ const emit = defineEmits<{
 }>();
 
 const root = useRootStore();
+
+const role: Partial<Record<UserRole, string>> = {
+  admin: 'Администратор',
+  moderator: 'Модератор',
+};
 
 const getPageTitle = () => {
   const route = useRoute();
@@ -56,8 +62,8 @@ const handleCommand = (command: string) => {
             </el-icon>
           </el-avatar>
           <div v-if="root.user" class="user-details">
-            <span class="user-name">{{ root.user.name || 'Admin' }}</span>
-            <span class="user-role">Администратор</span>
+            <span class="user-name">{{ root.user.email }}</span>
+            <span class="user-role">{{ role[root.user.role] || root.user.role }}</span>
           </div>
         </div>
         <template #dropdown>

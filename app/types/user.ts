@@ -1,3 +1,4 @@
+import type { UserRole } from "./admin-staff";
 import type { IRegion, ICity } from "./place";
 export interface IUser {
   id: number;
@@ -6,7 +7,7 @@ export interface IUser {
   last_name: string;
   language_code: string | null;
   avatar: string | null;
-  role: string;
+  role: UserRole;
   phone_number: string | null;
   telegram: string | null;
   last_entered_at: string;
