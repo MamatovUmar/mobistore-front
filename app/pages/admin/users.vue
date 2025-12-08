@@ -1,180 +1,254 @@
 <script setup lang="ts">
-import { Search, Plus, Edit, Delete, View } from "@element-plus/icons-vue";
+import { Search, Filter, Refresh } from "@element-plus/icons-vue";
+import { useAdminUsers } from "@/composables/useAdminUsers";
+import type { IAdminUser, IAdminUserUpdatePayload } from "@/types/admin-user";
 
 definePageMeta({
   layout: "admin",
 });
 
-const searchQuery = ref("");
-const currentPage = ref(1);
-const pageSize = ref(10);
+const {
+  users,
+  pagination,
+  loading,
+  filters,
+  page,
+  limit,
+  fetchUsers,
+  fetchUserById,
+  updateUser,
+  generatePassword,
+  banUser,
+  unbanUser,
+  resetFilters,
+  applyFilters,
+} = useAdminUsers();
 
-const users = ref([
-  {
-    id: 1,
-    name: "Иван Петров",
-    email: "ivan@example.com",
-    phone: "+998 90 123 45 67",
-    role: "user",
-    status: "active",
-    createdAt: "2024-01-15",
-    listingsCount: 5,
-  },
-  {
-    id: 2,
-    name: "Мария Сидорова",
-    email: "maria@example.com",
-    phone: "+998 91 234 56 78",
-    role: "user",
-    status: "active",
-    createdAt: "2024-02-20",
-    listingsCount: 12,
-  },
-  {
-    id: 3,
-    name: "Алексей Козлов",
-    email: "alex@example.com",
-    phone: "+998 93 345 67 89",
-    role: "admin",
-    status: "active",
-    createdAt: "2024-01-05",
-    listingsCount: 0,
-  },
-  {
-    id: 4,
-    name: "Елена Новикова",
-    email: "elena@example.com",
-    phone: "+998 94 456 78 90",
-    role: "user",
-    status: "blocked",
-    createdAt: "2024-03-10",
-    listingsCount: 3,
-  },
-  {
-    id: 5,
-    name: "Дмитрий Волков",
-    email: "dmitry@example.com",
-    phone: "+998 95 567 89 01",
-    role: "user",
-    status: "inactive",
-    createdAt: "2024-02-28",
-    listingsCount: 8,
-  },
-]);
+// UI State
+const showFilters = ref(false);
+const detailDrawerVisible = ref(false);
+const editDrawerVisible = ref(false);
+const selectedUser = ref<IAdminUser | null>(null);
+const actionLoading = ref(false);
+const saveLoading = ref(false);
 
-const getStatusType = (status: string) => {
-  const types: Record<string, string> = {
-    active: "success",
-    blocked: "danger",
-    inactive: "info",
-  };
-  return types[status] || "info";
+// Fetch users on mount
+onMounted(() => {
+  fetchUsers();
+});
+
+// Watch for page/limit changes
+watch([page, limit], () => {
+  fetchUsers();
+});
+
+// Handlers
+const handleRowClick = async (user: IAdminUser) => {
+  selectedUser.value = user;
+  detailDrawerVisible.value = true;
+
+  // Fetch fresh user data
+  const freshUser = await fetchUserById(user.id);
+  if (freshUser) {
+    selectedUser.value = freshUser;
+  }
 };
 
-const getStatusLabel = (status: string) => {
-  const labels: Record<string, string> = {
-    active: "Активен",
-    blocked: "Заблокирован",
-    inactive: "Неактивен",
-  };
-  return labels[status] || status;
+const handleEdit = (user: IAdminUser) => {
+  selectedUser.value = user;
+  detailDrawerVisible.value = false;
+  editDrawerVisible.value = true;
 };
 
-const getRoleLabel = (role: string) => {
-  const labels: Record<string, string> = {
-    admin: "Админ",
-    user: "Пользователь",
-  };
-  return labels[role] || role;
+const handleSaveUser = async (payload: IAdminUserUpdatePayload) => {
+  if (!selectedUser.value) return;
+
+  saveLoading.value = true;
+  try {
+    await updateUser(selectedUser.value.id, payload);
+    ElMessage.success("Пользователь успешно обновлён");
+    editDrawerVisible.value = false;
+    fetchUsers();
+  } catch (err: any) {
+    ElMessage.error(err.message || "Ошибка при обновлении пользователя");
+  } finally {
+    saveLoading.value = false;
+  }
 };
 
-const handleEdit = (row: any) => {
-  console.log("Edit user:", row);
+const handleGeneratePassword = async (user: IAdminUser) => {
+  try {
+    await ElMessageBox.confirm(
+      `Сгенерировать новый пароль для пользователя ${user.email}? Новый пароль будет отправлен на email.`,
+      "Генерация пароля",
+      {
+        confirmButtonText: "Сгенерировать",
+        cancelButtonText: "Отмена",
+        type: "warning",
+      }
+    );
+
+    actionLoading.value = true;
+    const message = await generatePassword(user.id);
+    ElMessage.success(message);
+  } catch (err: any) {
+    if (err !== "cancel") {
+      ElMessage.error(err.message || "Ошибка при генерации пароля");
+    }
+  } finally {
+    actionLoading.value = false;
+  }
 };
 
-const handleDelete = (row: any) => {
-  console.log("Delete user:", row);
+const handleBan = async (user: IAdminUser) => {
+  try {
+    await ElMessageBox.confirm(
+      `Забанить пользователя ${user.email}? Все его активные объявления будут архивированы.`,
+      "Бан пользователя",
+      {
+        confirmButtonText: "Забанить",
+        cancelButtonText: "Отмена",
+        type: "warning",
+      }
+    );
+
+    actionLoading.value = true;
+    const result = await banUser(user.id);
+    ElMessage.success(`${result.message}. Архивировано объявлений: ${result.archivedAds}`);
+
+    // Update user in list
+    if (selectedUser.value?.id === user.id) {
+      selectedUser.value = { ...selectedUser.value, is_ban: true };
+    }
+    fetchUsers();
+  } catch (err: any) {
+    if (err !== "cancel") {
+      ElMessage.error(err.message || "Ошибка при бане пользователя");
+    }
+  } finally {
+    actionLoading.value = false;
+  }
 };
 
-const handleView = (row: any) => {
-  console.log("View user:", row);
+const handleUnban = async (user: IAdminUser) => {
+  try {
+    await ElMessageBox.confirm(
+      `Разбанить пользователя ${user.email}?`,
+      "Разбан пользователя",
+      {
+        confirmButtonText: "Разбанить",
+        cancelButtonText: "Отмена",
+        type: "info",
+      }
+    );
+
+    actionLoading.value = true;
+    const message = await unbanUser(user.id);
+    ElMessage.success(message);
+
+    // Update user in list
+    if (selectedUser.value?.id === user.id) {
+      selectedUser.value = { ...selectedUser.value, is_ban: false };
+    }
+    fetchUsers();
+  } catch (err: any) {
+    if (err !== "cancel") {
+      ElMessage.error(err.message || "Ошибка при разбане пользователя");
+    }
+  } finally {
+    actionLoading.value = false;
+  }
+};
+
+const handleResetFilters = () => {
+  resetFilters();
+  fetchUsers();
+};
+
+const handleRefresh = () => {
+  fetchUsers();
+};
+
+const handleSearch = () => {
+  page.value = 1;
+  fetchUsers();
 };
 </script>
 
 <template>
   <div class="admin-users">
-    <div class="page-toolbar">
-      <el-input
-        v-model="searchQuery"
-        placeholder="Поиск пользователей..."
-        :prefix-icon="Search"
-        class="search-input"
-        clearable
-      />
-      <el-button type="primary" :icon="Plus">
-        Добавить пользователя
-      </el-button>
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1 class="page-title">Пользователи</h1>
+      <p class="page-subtitle">Управление пользователями системы</p>
     </div>
 
-    <el-card class="users-table-card">
-      <el-table :data="users" stripe style="width: 100%">
-        <el-table-column prop="id" label="ID" width="70" />
-        <el-table-column prop="name" label="Имя" min-width="150">
-          <template #default="{ row }">
-            <div class="user-cell">
-              <el-avatar :size="32" class="user-avatar">
-                {{ row.name.charAt(0) }}
-              </el-avatar>
-              <span>{{ row.name }}</span>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="email" label="Email" min-width="180" />
-        <el-table-column prop="phone" label="Телефон" min-width="150" />
-        <el-table-column prop="role" label="Роль" width="120">
-          <template #default="{ row }">
-            <el-tag :type="row.role === 'admin' ? 'warning' : 'info'" size="small">
-              {{ getRoleLabel(row.role) }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="status" label="Статус" width="130">
-          <template #default="{ row }">
-            <el-tag :type="getStatusType(row.status)" size="small">
-              {{ getStatusLabel(row.status) }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="listingsCount" label="Объявления" width="110" align="center" />
-        <el-table-column prop="createdAt" label="Регистрация" width="120" />
-        <el-table-column label="Действия" width="150" fixed="right">
-          <template #default="{ row }">
-            <el-button-group>
-              <el-tooltip content="Просмотр" placement="top">
-                <el-button :icon="View" text @click="handleView(row)" />
-              </el-tooltip>
-              <el-tooltip content="Редактировать" placement="top">
-                <el-button :icon="Edit" text @click="handleEdit(row)" />
-              </el-tooltip>
-              <el-tooltip content="Удалить" placement="top">
-                <el-button :icon="Delete" text type="danger" @click="handleDelete(row)" />
-              </el-tooltip>
-            </el-button-group>
-          </template>
-        </el-table-column>
-      </el-table>
-
-      <div class="table-pagination">
-        <el-pagination
-          v-model:current-page="currentPage"
-          v-model:page-size="pageSize"
-          :page-sizes="[10, 20, 50, 100]"
-          :total="100"
-          layout="total, sizes, prev, pager, next, jumper"
-          background
+    <!-- Toolbar -->
+    <div class="page-toolbar">
+      <div class="toolbar-left">
+        <el-input
+          v-model="filters.search"
+          placeholder="Поиск по имени, email, телефону..."
+          :prefix-icon="Search"
+          class="search-input"
+          clearable
+          @keyup.enter="handleSearch"
+          @clear="handleSearch"
         />
+        <el-button
+          :icon="Filter"
+          :type="showFilters ? 'primary' : 'default'"
+          @click="showFilters = !showFilters"
+        >
+          Фильтры
+        </el-button>
       </div>
-    </el-card>
+      <div class="toolbar-right">
+        <el-button :icon="Refresh" @click="handleRefresh">
+          Обновить
+        </el-button>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <AdminUserFilters
+      v-model="filters"
+      :visible="showFilters"
+      @apply="applyFilters"
+      @reset="handleResetFilters"
+    />
+
+    <!-- Users Table -->
+    <AdminUserTable
+      :users="users"
+      :pagination="pagination"
+      :loading="loading"
+      :page="page"
+      :limit="limit"
+      @update:page="page = $event"
+      @update:limit="limit = $event"
+      @row-click="handleRowClick"
+      @edit="handleEdit"
+    />
+
+    <!-- Detail Drawer -->
+    <AdminUserDetailDrawer
+      v-model="detailDrawerVisible"
+      :user="selectedUser"
+      :action-loading="actionLoading"
+      @edit="handleEdit"
+      @generate-password="handleGeneratePassword"
+      @ban="handleBan"
+      @unban="handleUnban"
+    />
+
+    <!-- Edit Drawer -->
+    <AdminUserEditDrawer
+      v-model="editDrawerVisible"
+      :user="selectedUser"
+      :loading="saveLoading"
+      @save="handleSaveUser"
+    />
   </div>
 </template>
 
@@ -183,17 +257,43 @@ const handleView = (row: any) => {
   max-width: 1400px;
 }
 
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 4px 0;
+}
+
+.page-subtitle {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
 .page-toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
   gap: 16px;
+  flex-wrap: wrap;
+}
 
-  @media (max-width: 600px) {
-    flex-direction: column;
-    align-items: stretch;
-  }
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .search-input {
@@ -204,27 +304,24 @@ const handleView = (row: any) => {
   }
 }
 
-.users-table-card {
-  border-radius: 12px;
-  border: none;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-}
+@media (max-width: 600px) {
+  .page-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
-.user-cell {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+  .toolbar-left,
+  .toolbar-right {
+    width: 100%;
+    justify-content: stretch;
+  }
 
-.user-avatar {
-  background: var(--color-primary);
-  color: white;
-  flex-shrink: 0;
-}
+  .toolbar-left {
+    flex-direction: column;
+  }
 
-.table-pagination {
-  display: flex;
-  justify-content: flex-end;
-  padding-top: 20px;
+  .toolbar-right {
+    justify-content: flex-end;
+  }
 }
 </style>
