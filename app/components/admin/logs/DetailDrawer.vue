@@ -23,8 +23,10 @@ const statusOptions: { value: LogStatus; label: string }[] = [
   { value: "ignored", label: "Игнорирован" },
 ];
 
-const getTypeColor = (type: LogType) => {
-  const colors: Record<LogType, string> = {
+type TagType = "primary" | "success" | "warning" | "info" | "danger";
+
+const getTypeColor = (type: LogType): TagType => {
+  const colors: Record<LogType, TagType> = {
     error: "danger",
     warning: "warning",
     info: "primary",
@@ -43,8 +45,8 @@ const getTypeLabel = (type: LogType) => {
   return labels[type] || type;
 };
 
-const getStatusColor = (status: LogStatus) => {
-  const colors: Record<LogStatus, string> = {
+const getStatusColor = (status: LogStatus): TagType => {
+  const colors: Record<LogStatus, TagType> = {
     pending: "warning",
     reviewed: "primary",
     resolved: "success",
@@ -63,9 +65,9 @@ const getStatusLabel = (status: LogStatus) => {
   return labels[status] || status;
 };
 
-const getMethodColor = (method: string | null) => {
+const getMethodColor = (method: string | null): TagType => {
   if (!method) return "info";
-  const colors: Record<string, string> = {
+  const colors: Record<string, TagType> = {
     GET: "success",
     POST: "primary",
     PUT: "warning",
