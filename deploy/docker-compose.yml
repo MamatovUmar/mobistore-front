@@ -1,0 +1,22 @@
+services:
+  nuxt-dev:
+    container_name: mobistore_front_dev
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        NUXT_PUBLIC_API_URL: https://api-dev.mobistore.uz
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  nuxt-prod:
+    container_name: mobistore_front_prod
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        NUXT_PUBLIC_API_URL: https://api.mobistore.uz
+    ports:
+      - "3001:3000"
+    restart: unless-stopped

@@ -1,23 +1,23 @@
-
 export default defineNuxtPlugin((nuxtApp) => {
+  const config = useRuntimeConfig()
+  const tokenCookie = useCookie('token')
+
   const api = $fetch.create({
-    baseURL: useRuntimeConfig().public.apiUrl,
+    baseURL: config.public.apiUrl,
     onRequest({ options }) {
-      const token = useCookie('token').value;
+      const token = tokenCookie.value
       if (token) {
         options.headers.set('Authorization', `Bearer ${token}`)
       }
     },
     async onResponseError({ response }) {
       if (response.status === 401) {
-        const token = useCookie('token');
-        token.value = undefined;
+        tokenCookie.value = undefined
         await nuxtApp.runWithContext(() => navigateTo('/login'))
       }
     }
   })
 
-  // Expose to useNuxtApp().$api
   return {
     provide: {
       api

@@ -1,0 +1,38 @@
+name: Deploy Dev
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH (DEV)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script_stop: true
+          script: |
+            echo "🔄 Updating DEV environment..."
+
+            cd /var/www/mobistore/front
+            git reset --hard
+            git pull --rebase origin dev
+
+            cd deploy
+
+            docker compose stop nuxt-dev 2>/dev/null || true
+            docker compose rm -f nuxt-dev 2>/dev/null || true
+            docker compose up -d --build nuxt-dev
+
+            docker image prune -f
+
+            echo "✅ DEV Deploy complete!"

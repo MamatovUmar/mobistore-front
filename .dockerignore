@@ -1,0 +1,47 @@
+# Dependencies
+node_modules
+
+# Build outputs
+.output
+.nuxt
+.nitro
+.cache
+dist
+
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+.fleet
+.windsurf
+.claude
+
+# Logs
+*.log
+logs
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Documentation
+README.md
+*.md
+
+# Tests
+tests
+__tests__
+coverage

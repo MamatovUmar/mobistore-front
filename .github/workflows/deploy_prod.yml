@@ -1,0 +1,38 @@
+name: Deploy Prod
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH (PROD)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script_stop: true
+          script: |
+            echo "🚀 Updating PROD environment..."
+
+            cd /var/www/mobistore/front
+            git reset --hard
+            git pull --rebase origin main
+
+            cd deploy
+
+            docker compose stop nuxt-prod 2>/dev/null || true
+            docker compose rm -f nuxt-prod 2>/dev/null || true
+            docker compose up -d --build nuxt-prod
+
+            docker image prune -f
+
+            echo "🔥 PROD Deploy complete!"

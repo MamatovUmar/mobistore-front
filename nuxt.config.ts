@@ -12,7 +12,7 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     public: {
-      apiUrl: 'http://localhost:5050'
+      apiUrl: '' // переопределяется через NUXT_PUBLIC_API_URL
     }
   },
   // Конфигурация SSR
@@ -32,9 +32,6 @@ export default defineNuxtConfig({
   // Настройки Element Plus для SSR
   elementPlus: {
     importStyle: 'scss',
-  },
-  alias: {
-    dayjs: 'dayjs'
   },
 
   // Экспериментальные функции для улучшения производительности
