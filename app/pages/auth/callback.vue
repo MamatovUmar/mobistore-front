@@ -23,8 +23,10 @@ onMounted(async () => {
   }
 
   try {
+    console.log(token);
+    
     await rootStore.fetchUser(token);
-    navigateTo("/");
+    navigateTo("/", { external: true });
   } catch (e) {
     console.error(e);
     error.value = "Ошибка авторизации. Попробуйте снова.";
