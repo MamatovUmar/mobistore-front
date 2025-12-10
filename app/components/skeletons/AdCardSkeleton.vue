@@ -1,5 +1,5 @@
 <template>
-  <div class="ad-card-skeleton">
+  <div class="listing-card-skeleton">
     <div class="skeleton-image" />
     <div class="skeleton-content">
       <div class="skeleton-line skeleton-title" />
@@ -14,7 +14,7 @@
 </template>
 
 <style lang="scss" scoped>
-.ad-card-skeleton {
+.listing-card-skeleton {
   display: flex;
   flex-direction: column;
   height: 100%;

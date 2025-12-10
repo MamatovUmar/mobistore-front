@@ -1,5 +1,5 @@
 <template>
-  <div class="ad-row-skeleton">
+  <div class="listing-row-skeleton">
     <!-- Image Skeleton -->
     <div class="image-skeleton">
       <el-skeleton-item variant="image" style="width: 100%; height: 100%" />
@@ -31,7 +31,7 @@
 </template>
 
 <style lang="scss" scoped>
-.ad-row-skeleton {
+.listing-row-skeleton {
   display: flex;
   height: 140px;
   width: 100%;
@@ -71,7 +71,7 @@
 }
 
 @media (max-width: 768px) {
-  .ad-row-skeleton {
+  .listing-row-skeleton {
     height: auto;
     flex-direction: column;
   }

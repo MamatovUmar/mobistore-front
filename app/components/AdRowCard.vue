@@ -44,7 +44,7 @@ const postDate = computed(() => {
 </script>
 
 <template>
-  <NuxtLink class="ad-row-card" :to="`/${listing.alias}`">
+  <NuxtLink class="listing-row-card" :to="`/${listing.alias}`">
     <div class="card-glow" />
     
     <!-- Image Container -->
@@ -120,7 +120,7 @@ const postDate = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-.ad-row-card {
+.listing-row-card {
   position: relative;
   display: flex;
   background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
@@ -178,7 +178,7 @@ const postDate = computed(() => {
   }
 }
 
-.ad-row-card:hover .card-image :deep(img) {
+.listing-row-card:hover .card-image :deep(img) {
   transform: scale(1.05);
 }
 
@@ -324,7 +324,7 @@ const postDate = computed(() => {
 
 // Адаптивность
 @media (max-width: 768px) {
-  .ad-row-card {
+  .listing-row-card {
     height: auto;
     flex-direction: column;
   }

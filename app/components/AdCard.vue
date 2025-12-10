@@ -38,7 +38,7 @@ const postDate = "Сегодня";
 </script>
 
 <template>
-  <NuxtLink class="ad-card" :to="`/${listing.alias}`">
+  <NuxtLink class="listing-card" :to="`/${listing.alias}`">
     <div class="card-glow"></div>
     
     <!-- Image Container -->
@@ -98,7 +98,7 @@ const postDate = "Сегодня";
 </template>
 
 <style lang="scss" scoped>
-.ad-card {
+.listing-card {
   position: relative;
   display: flex;
   flex-direction: column;

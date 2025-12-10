@@ -351,7 +351,7 @@ const formatPrice = (price?: number, currency?: string) => {
                       {{ formatRelativeTime(conversation.last_message_at) }}
                     </span>
                   </div>
-                  <p v-if="conversation.ad" class="conversation-ad">
+                  <p v-if="conversation.ad" class="conversation-listing">
                     {{ conversation.ad.title }}
                   </p>
                   <p class="conversation-preview">
@@ -390,11 +390,11 @@ const formatPrice = (price?: number, currency?: string) => {
               <NuxtLink
                 v-if="selectedAd"
                 :to="`/${selectedAd.alias}`"
-                class="chat-ad"
+                class="chat-listing"
               >
-                <div class="chat-ad__info">
-                  <p class="chat-ad__title">{{ selectedAd.title }}</p>
-                  <p class="chat-ad__price">{{ formatPrice(selectedAd.price, selectedAd.currency) }}</p>
+                <div class="chat-listing__info">
+                  <p class="chat-listing__title">{{ selectedAd.title }}</p>
+                  <p class="chat-listing__price">{{ formatPrice(selectedAd.price, selectedAd.currency) }}</p>
                 </div>
               </NuxtLink>
             </div>
@@ -634,7 +634,7 @@ const formatPrice = (price?: number, currency?: string) => {
   white-space: nowrap;
 }
 
-.conversation-ad {
+.conversation-listing {
   margin: 4px 0;
   font-size: 13px;
   color: var(--color-text-secondary);
@@ -748,7 +748,7 @@ const formatPrice = (price?: number, currency?: string) => {
   }
 }
 
-.chat-ad {
+.chat-listing {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1111,7 +1111,7 @@ const formatPrice = (price?: number, currency?: string) => {
     }
   }
 
-  .chat-ad {
+  .chat-listing {
     width: 100%;
   }
 
