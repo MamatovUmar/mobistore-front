@@ -9,6 +9,9 @@ WORKDIR /app
 ARG NUXT_PUBLIC_API_URL
 ENV NUXT_PUBLIC_API_URL=${NUXT_PUBLIC_API_URL}
 
+# Ограничиваем память Node.js для предотвращения OOM
+ENV NODE_OPTIONS="--max-old-space-size=3072"
+
 # Копируем package files и yarn.lock для кэширования
 COPY package.json yarn.lock ./
 
