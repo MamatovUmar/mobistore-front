@@ -300,12 +300,16 @@ const recentActivity = ref([
   display: flex;
   flex-direction: column;
   gap: 12px;
+  button {
+    margin-left: 0;
+  }
 }
 
 .action-btn {
   justify-content: flex-start;
   height: 48px;
   font-weight: 500;
+  margin-left: 0;
 
   .el-icon {
     margin-right: 8px;

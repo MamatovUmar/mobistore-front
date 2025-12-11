@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import { User, Lock, ArrowLeft } from "@element-plus/icons-vue";
+import { User, Lock, ArrowLeft, CircleCheckFilled } from "@element-plus/icons-vue";
 import type { IAuthResponse } from "~/types/auth";
-import { useRootStore } from "~/store/root";
-import { useCookie } from "#app";
 
 definePageMeta({
   layout: "empty",
@@ -11,8 +9,6 @@ definePageMeta({
 });
 
 const { $api } = useNuxtApp();
-const rootStore = useRootStore();
-const tokenCookie = useCookie("token");
 
 const formRef = ref();
 
@@ -54,6 +50,7 @@ const rules = {
 };
 
 const loading = ref(false);
+const showSuccessDialog = ref(false);
 
 const register = async () => {
   if (!formRef.value) return;
@@ -62,19 +59,13 @@ const register = async () => {
     if (valid) {
       loading.value = true;
       try {
-        const res = await $api<IAuthResponse>("/auth/register", {
+        await $api<IAuthResponse>("/auth/register", {
           method: "POST",
           body: form
         });
 
-        rootStore.user = res.data?.user;
-        tokenCookie.value = res.data?.token;
-        ElMessage({
-          message: "Вы успешно зарегистрировались",
-          type: "success",
-        });
-        navigateTo('/')
-      } catch (error) {
+        showSuccessDialog.value = true;
+      } catch {
         ElMessage({
           message: "Произошла ошибка при регистрации",
           type: "error",
@@ -86,10 +77,38 @@ const register = async () => {
   });
 };
 
+const goToHome = () => {
+  navigateTo('/');
+};
+
 </script>
 
 <template>
   <div class="signup-page">
+    <el-dialog
+      v-model="showSuccessDialog"
+      :show-close="false"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      width="400px"
+      center
+      class="success-dialog"
+    >
+      <div class="success-content">
+        <el-icon class="success-icon" :size="64" color="#67c23a">
+          <CircleCheckFilled />
+        </el-icon>
+        <h3 class="success-title">Регистрация успешна!</h3>
+        <p class="success-message">
+          На ваш email отправлена ссылка для активации аккаунта.
+          Пожалуйста, проверьте почту и перейдите по ссылке для завершения регистрации.
+        </p>
+        <el-button type="primary" size="large" class="success-button" @click="goToHome">
+          Перейти на главную
+        </el-button>
+      </div>
+    </el-dialog>
+
     <div class="signup-card">
       <NuxtLink to="/" class="back-link">
         <el-icon :size="18">
@@ -340,6 +359,55 @@ const register = async () => {
 
   &:hover {
     color: var(--color-primary-hover);
+  }
+}
+
+.success-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.success-icon {
+  margin-bottom: 20px;
+}
+
+.success-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 16px 0;
+}
+
+.success-message {
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0 0 24px 0;
+}
+
+.success-button {
+  width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 10px;
+}
+</style>
+
+<style lang="scss">
+.success-dialog {
+  .el-dialog__header {
+    display: none;
+  }
+
+  .el-dialog__body {
+    padding: 30px;
+  }
+
+  .el-dialog {
+    border-radius: 16px;
   }
 }
 </style>
