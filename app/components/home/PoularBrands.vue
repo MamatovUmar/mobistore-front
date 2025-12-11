@@ -54,15 +54,6 @@ const marqueeBrands = computed(() => {
             @click="navigateTo(`/search?brandId=${brand.id}`)"
           >
             <div class="card-inner">
-              <div class="logo-box">
-                <img
-                  v-if="brand.logo"
-                  :src="brand.logo"
-                  :alt="brand.name"
-                  class="brand-logo"
-                />
-                <span v-else class="brand-text">{{ brand.name }}</span>
-              </div>
               <div class="brand-meta">
                 <span class="name">{{ brand.name }}</span>
                 <span class="count">{{ brand.ads_count }} объявлений</span>
@@ -83,15 +74,6 @@ const marqueeBrands = computed(() => {
             @click="navigateTo(`/search?brandId=${brand.id}`)"
           >
             <div class="card-inner">
-              <div class="logo-box">
-                <img
-                  v-if="brand.logo"
-                  :src="brand.logo"
-                  :alt="brand.name"
-                  class="brand-logo"
-                />
-                <span v-else class="brand-text">{{ brand.name }}</span>
-              </div>
               <div class="brand-meta">
                 <span class="name">{{ brand.name }}</span>
                 <span class="count">{{ brand.ads_count }} объявлений</span>
@@ -260,10 +242,10 @@ const marqueeBrands = computed(() => {
 
 .name {
   display: block;
-  font-size: 16px;
+  font-size: 24px;
   font-weight: 600;
   color: #fff;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
 }
 
 .count {
@@ -271,7 +253,11 @@ const marqueeBrands = computed(() => {
   font-size: 12px;
   color: #94a3b8;
 }
-
+.brand-card:hover {
+  .count {
+    color: #fff;
+  }
+}
 .glow-effect {
   position: absolute;
   inset: -1px;

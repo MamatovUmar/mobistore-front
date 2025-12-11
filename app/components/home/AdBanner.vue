@@ -21,7 +21,7 @@ const benefits = [
         <div class="promo-content">
           <div class="promo-badge">
             <span class="pulse"></span>
-            MobiStore Pro
+            MobiStore
           </div>
           
           <h2 class="promo-title">
