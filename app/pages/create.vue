@@ -11,8 +11,10 @@ import type { IListing, IListingForm } from "~/types/ads";
 import { ListingStatus, ImageFolder, EntityType } from "~/types/ads";
 import type { IBaseResponse } from "~/types/index";
 import type { IModel } from "~/types/model";
+import { useRootStore } from "~/store/root";
 
 const { $api } = useNuxtApp();
+const root = useRootStore();
 
 const loading = ref(false);
 const fileList = ref<any[]>([]);
@@ -39,9 +41,6 @@ const rules = reactive<FormRules<IListingForm & { images?: any }>>({
   brand_id: [{ required: true, message: "Выберите бренд", trigger: "change" }],
   model_id: [{ required: true, message: "Выберите модель", trigger: "change" }],
   price: [{ required: true, message: "Введите цену", trigger: "blur" }],
-  phone_number: [
-    { required: true, message: "Введите телефон", trigger: "blur" },
-  ],
   images: [{ validator: validateImages, trigger: "change" }],
   state: [{ required: true, message: "Выберите состояние", trigger: "change" }],
 });
@@ -151,6 +150,15 @@ const handleModelSelect = (model: IModel) => {
   console.log(model);
   colors.value = model.colors;
 };
+
+onMounted(() => {
+  if (root.user) {
+    form.phone_number = root.user.phone_number || "";
+    form.telegram_link = root.user.telegram || "";
+    form.show_phone = root.user.show_contacts || false;
+  }
+})
+
 </script>
 
 <template>
@@ -357,16 +365,16 @@ const handleModelSelect = (model: IModel) => {
                   <TelegramLink v-model="form.telegram_link" />
                 </el-form-item>
               </el-col>
+
+              <el-col :span="12">
+                <el-form-item>
+                  <el-checkbox v-model="form.show_phone" border label="Показывать контакты" />
+                </el-form-item>
+              </el-col>
             </el-row>
           </div>
 
           <el-row :gutter="20">
-            <!-- <el-col :span="10">
-              <el-button type="primary" plain style="width: 100%">
-                Сохранить в черновик
-              </el-button>
-            </el-col> -->
-
             <el-col :span="24">
               <el-button
                 type="primary"
