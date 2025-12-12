@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
-import { Monitor } from "@element-plus/icons-vue";
+import { Monitor, Menu } from "@element-plus/icons-vue";
 import { useRootStore } from "~/store/root";
 import HeaderNotifications from "./header/HeaderNotifications.vue";
 import HeaderChat from "./header/HeaderChat.vue";
 import HeaderUserMenu from "./header/HeaderUserMenu.vue";
 import HeaderAuthModal from "./header/HeaderAuthModal.vue";
+import HeaderMobileDrawer from "./header/HeaderMobileDrawer.vue";
 
 const rootStore = useRootStore();
 const router = useRouter();
 
 const showAuthDialog = ref(false);
+const showMobileDrawer = ref(false);
 const isScrolled = ref(false);
 
 const handleScroll = () => {
@@ -42,8 +44,8 @@ const goToLogin = () => {
           </div>
         </NuxtLink>
 
-        <!-- Actions -->
-        <div class="header-actions">
+        <!-- Desktop Actions -->
+        <div class="header-actions desktop-only">
           <el-tooltip
             content="Админ панель"
             placement="bottom"
@@ -74,11 +76,38 @@ const goToLogin = () => {
           <!-- User Menu -->
           <HeaderUserMenu v-else />
         </div>
+
+        <!-- Mobile Actions -->
+        <div class="header-actions mobile-only">
+          <template v-if="rootStore.user">
+            <HeaderNotifications />
+          </template>
+
+          <el-button
+            circle
+            class="action-btn burger-btn"
+            @click="showMobileDrawer = true"
+          >
+            <el-icon><Menu /></el-icon>
+          </el-button>
+        </div>
       </div>
     </div>
 
     <!-- Auth Dialog -->
     <HeaderAuthModal v-model="showAuthDialog" />
+
+    <!-- Mobile Drawer -->
+    <HeaderMobileDrawer
+      v-model="showMobileDrawer"
+      @login="goToLogin"
+      @signup="
+        () => {
+          showAuthDialog = true;
+          showMobileDrawer = false;
+        }
+      "
+    />
   </header>
 </template>
 
@@ -143,13 +172,6 @@ const goToLogin = () => {
   }
 }
 
-/* Mobile Responsive */
-@media (max-width: 768px) {
-  .header-content {
-    height: 64px;
-  }
-}
-
 .action-btn {
   width: 40px;
   height: 40px;
@@ -165,6 +187,29 @@ const goToLogin = () => {
 
   .el-icon {
     font-size: 18px;
+  }
+}
+
+.mobile-only {
+  display: none;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .header-content {
+    height: 64px;
+  }
+
+  .desktop-only {
+    display: none;
+  }
+
+  .mobile-only {
+    display: flex;
+  }
+
+  .logo img {
+    height: 32px;
   }
 }
 </style>
