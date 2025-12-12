@@ -1,16 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
-import {
-  MessageBox,
-  Plus,
-  User,
-  Document,
-  Star,
-  SwitchButton,
-  Lock,
-  Setting,
-} from "@element-plus/icons-vue";
+import { Monitor } from "@element-plus/icons-vue";
 import { useRootStore } from "~/store/root";
+import HeaderNotifications from "./header/HeaderNotifications.vue";
+import HeaderChat from "./header/HeaderChat.vue";
+import HeaderUserMenu from "./header/HeaderUserMenu.vue";
+import HeaderAuthModal from "./header/HeaderAuthModal.vue";
 
 const rootStore = useRootStore();
 const router = useRouter();
@@ -34,11 +29,6 @@ const goToLogin = () => {
   showAuthDialog.value = false;
   router.push("/login");
 };
-
-const goToSignup = () => {
-  showAuthDialog.value = false;
-  router.push("/signup");
-};
 </script>
 
 <template>
@@ -54,12 +44,24 @@ const goToSignup = () => {
 
         <!-- Actions -->
         <div class="header-actions">
-          <el-button
+          <el-tooltip
+            content="Админ панель"
+            placement="bottom"
             v-if="rootStore.isAdmin || rootStore.isModerator"
-            @click="navigateTo('/admin')"
           >
-            Админка
-          </el-button>
+            <el-button circle class="action-btn" @click="navigateTo('/admin')">
+              <el-icon><Monitor /></el-icon>
+            </el-button>
+          </el-tooltip>
+
+          <template v-if="rootStore.user">
+            <!-- Chat -->
+            <HeaderChat />
+
+            <!-- Notifications -->
+            <HeaderNotifications />
+          </template>
+
           <el-button
             v-if="!rootStore.user"
             class="btn-login"
@@ -69,82 +71,14 @@ const goToSignup = () => {
             Войти
           </el-button>
 
-          <el-dropdown v-else trigger="click" class="user-menu">
-            <div class="user-trigger">
-              <el-avatar
-                v-if="rootStore.user?.avatar"
-                :src="rootStore.user.avatar"
-                :size="40"
-              />
-              <el-avatar v-else :size="40" class="user-avatar">
-                {{
-                  `${rootStore.user.first_name?.charAt(
-                    0
-                  )}${rootStore.user.last_name?.charAt(0)}`.trim()
-                }}
-              </el-avatar>
-            </div>
-
-            <template #dropdown>
-              <el-dropdown-menu class="user-dropdown">
-                <el-dropdown-item @click="router.push('/account')">
-                  <el-icon><User /></el-icon>
-                  <span>Личные данные</span>
-                </el-dropdown-item>
-                <el-dropdown-item @click="router.push('/account/listings')">
-                  <el-icon><Document /></el-icon>
-                  <span>Мои объявления</span>
-                </el-dropdown-item>
-                <el-dropdown-item @click="router.push('/account/favorites')">
-                  <el-icon><Star /></el-icon>
-                  <span>Избранное</span>
-                </el-dropdown-item>
-                <el-dropdown-item
-                  @click="router.push('/account/conversations')"
-                >
-                  <el-icon><MessageBox /></el-icon>
-                  <span>Переписки</span>
-                </el-dropdown-item>
-                <el-dropdown-item divided @click="rootStore.logout()">
-                  <el-icon><SwitchButton /></el-icon>
-                  <span>Выйти</span>
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
+          <!-- User Menu -->
+          <HeaderUserMenu v-else />
         </div>
       </div>
     </div>
 
     <!-- Auth Dialog -->
-    <el-dialog
-      v-model="showAuthDialog"
-      width="450px"
-      align-center
-      :show-close="false"
-    >
-      <div class="auth-dialog">
-        <div class="dialog-icon">
-          <el-icon :size="48"><Lock /></el-icon>
-        </div>
-        <h3 class="dialog-title">Требуется авторизация</h3>
-        <p class="dialog-text">
-          Для размещения объявлений необходимо войти в систему или создать новый
-          аккаунт.
-        </p>
-      </div>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button size="large" @click="showAuthDialog = false"
-            >Отмена</el-button
-          >
-          <el-button size="large" @click="goToSignup">Регистрация</el-button>
-          <el-button type="primary" size="large" @click="goToLogin"
-            >Войти</el-button
-          >
-        </div>
-      </template>
-    </el-dialog>
+    <HeaderAuthModal v-model="showAuthDialog" />
   </header>
 </template>
 
@@ -200,36 +134,6 @@ const goToSignup = () => {
   gap: 20px;
 }
 
-.btn-create {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-  color: #fff;
-  border: none;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-
-  .btn-icon {
-    font-size: 18px;
-    font-weight: bold;
-  }
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
-}
-
 .btn-login {
   border-radius: 12px;
   font-weight: 600;
@@ -239,150 +143,28 @@ const goToSignup = () => {
   }
 }
 
-/* User Menu */
-.user-trigger {
-  cursor: pointer;
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: scale(1.05);
-  }
-}
-
-.user-avatar {
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);
-}
-
-:deep(.user-dropdown) {
-  min-width: 220px;
-  margin-top: 8px;
-  padding: 8px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15);
-
-  .el-dropdown-menu__item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-
-    .el-icon {
-      font-size: 18px;
-      color: #64748b;
-    }
-
-    span {
-      color: #0f172a;
-    }
-
-    &:hover {
-      background: #f8fafc;
-
-      .el-icon {
-        color: #3b82f6;
-      }
-
-      span {
-        color: #3b82f6;
-      }
-    }
-
-    &.is-divided {
-      border-top: 1px solid #f1f5f9;
-      margin-top: 4px;
-      padding-top: 12px;
-
-      .el-icon {
-        color: #ef4444;
-      }
-
-      span {
-        color: #ef4444;
-      }
-
-      &:hover {
-        background: rgba(239, 68, 68, 0.08);
-      }
-    }
-  }
-}
-
-/* Auth Dialog */
-.auth-dialog {
-  text-align: center;
-  padding: 20px 0;
-}
-
-.dialog-icon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 24px;
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
-}
-
-.dialog-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: #0f172a;
-  margin: 0 0 12px;
-}
-
-.dialog-text {
-  font-size: 15px;
-  line-height: 1.6;
-  color: #64748b;
-  margin: 0;
-}
-
-.dialog-footer {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-}
-
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .header-content {
     height: 64px;
   }
+}
 
-  .btn-create {
-    padding: 12px;
-    border-radius: 50%;
-    width: 44px;
-    height: 44px;
-    justify-content: center;
+.action-btn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  transition: all 0.2s ease;
 
-    .btn-text {
-      display: none;
-    }
+  &:hover {
+    color: #3b82f6;
+    border-color: #3b82f6;
+    background: #eff6ff;
   }
 
-  .logo-subtitle {
-    display: none;
-  }
-
-  .logo-title {
+  .el-icon {
     font-size: 18px;
-  }
-
-  .logo-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 14px;
   }
 }
 </style>
