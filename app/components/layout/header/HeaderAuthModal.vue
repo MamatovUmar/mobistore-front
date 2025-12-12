@@ -30,6 +30,7 @@ const goToSignup = () => {
     @update:model-value="(val) => emit('update:modelValue', val)"
     width="450px"
     align-center
+    append-to-body
     :show-close="false"
   >
     <div class="auth-dialog">
@@ -46,9 +47,9 @@ const goToSignup = () => {
       <div class="dialog-footer">
         <el-button size="large" @click="handleClose">Отмена</el-button>
         <el-button size="large" @click="goToSignup">Регистрация</el-button>
-        <el-button type="primary" size="large" @click="goToLogin"
-          >Войти</el-button
-        >
+        <el-button type="primary" size="large" @click="goToLogin">
+          Войти
+        </el-button>
       </div>
     </template>
   </el-dialog>

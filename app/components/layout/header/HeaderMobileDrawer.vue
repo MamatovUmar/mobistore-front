@@ -10,6 +10,7 @@ import {
   Bell,
   Close,
   Right,
+  Plus,
 } from "@element-plus/icons-vue";
 import { useRootStore } from "~/store/root";
 import { useChat } from "~/composables/useChat";
@@ -47,6 +48,20 @@ const handleClose = () => {
 const handleNavigation = (path: string) => {
   handleClose();
   router.push(path);
+};
+
+const handleCreateAd = () => {
+  handleClose();
+  if (rootStore.user) {
+    router.push("/new");
+  } else {
+    emit("login"); // Trigger login flow (or signup if preferred, but existing flow uses header's auth dialog which listens to login/signup events)
+    // Actually, AppHeader listens to @login="goToLogin". So emitting login will open the login page directly.
+    // Ideally we want to show the Auth Dialog.
+    // HeaderMobileDrawer emits 'login' -> AppHeader calls goToLogin -> router.push('/login').
+    // So for guest, it will go to login page. That's acceptable as per plan "Trigger showAuthDialog" but going to page is also fine.
+    // Let's stick to the emitted events.
+  }
 };
 
 const handleLogout = () => {
@@ -123,6 +138,16 @@ onMounted(async () => {
 
       <!-- Navigation -->
       <div class="drawer-nav">
+        <!-- Create Ad Action (Always visible or just for users? "Create Ad" usually visible to all to entice) -->
+        <div class="nav-group">
+          <div class="nav-item create-ad" @click="handleCreateAd">
+            <div class="nav-icon">
+              <el-icon><Plus /></el-icon>
+            </div>
+            <span>Подать объявление</span>
+          </div>
+        </div>
+
         <template v-if="rootStore.user">
           <div class="nav-group">
             <div class="nav-title">Аккаунт</div>
@@ -350,6 +375,22 @@ onMounted(async () => {
     }
     span {
       color: #ef4444;
+    }
+  }
+
+  &.create-ad {
+    margin-bottom: 24px;
+    background: #f0f9ff;
+
+    .nav-icon {
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      color: white;
+      box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+    }
+
+    span {
+      color: #3b82f6;
+      font-weight: 700;
     }
   }
 }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
-import { Monitor, Menu } from "@element-plus/icons-vue";
+import { Monitor, Menu, Plus } from "@element-plus/icons-vue";
 import { useRootStore } from "~/store/root";
 import HeaderNotifications from "./header/HeaderNotifications.vue";
 import HeaderChat from "./header/HeaderChat.vue";
@@ -31,6 +31,14 @@ const goToLogin = () => {
   showAuthDialog.value = false;
   router.push("/login");
 };
+
+const handleCreateAd = () => {
+  if (rootStore.user) {
+    router.push("/create");
+  } else {
+    showAuthDialog.value = true;
+  }
+};
 </script>
 
 <template>
@@ -46,6 +54,11 @@ const goToLogin = () => {
 
         <!-- Desktop Actions -->
         <div class="header-actions desktop-only">
+          <button class="btn-create" @click="handleCreateAd">
+            <el-icon class="btn-icon"><Plus /></el-icon>
+            <span class="btn-text">Подать объявление</span>
+          </button>
+
           <el-tooltip
             content="Админ панель"
             placement="bottom"
@@ -161,6 +174,37 @@ const goToLogin = () => {
   display: flex;
   align-items: center;
   gap: 20px;
+}
+
+.btn-create {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  margin-right: 12px;
+
+  .btn-icon {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 }
 
 .btn-login {
