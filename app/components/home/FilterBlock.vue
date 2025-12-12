@@ -23,7 +23,6 @@ function handleSubmit() {
   });
 }
 
-
 interface IFilterForm {
   regionId: number | undefined;
   cityId: number | undefined;
@@ -31,7 +30,6 @@ interface IFilterForm {
   modelId: number | undefined;
   state: number | undefined;
 }
-
 </script>
 
 <template>
@@ -41,23 +39,42 @@ interface IFilterForm {
         <el-form :model="form" label-position="top" size="large">
           <div class="filters-grid">
             <el-form-item label="Область" class="filter-item">
-              <RegionAutocomplete v-model="form.regionId" placeholder="Вся страна" />
+              <RegionAutocomplete
+                v-model="form.regionId"
+                placeholder="Вся страна"
+              />
             </el-form-item>
 
             <el-form-item label="Город" class="filter-item">
-              <CityAutocomplete v-model="form.cityId" :region-id="form.regionId" placeholder="Все города" />
+              <CityAutocomplete
+                v-model="form.cityId"
+                :region-id="form.regionId"
+                placeholder="Все города"
+              />
             </el-form-item>
 
             <el-form-item label="Бренд" class="filter-item">
-              <BrandAutocomplete v-model="form.brandId" placeholder="Все бренды" />
+              <BrandAutocomplete
+                v-model="form.brandId"
+                placeholder="Все бренды"
+              />
             </el-form-item>
 
             <el-form-item label="Модель" class="filter-item">
-              <ModelAutocomplete v-model="form.modelId" :brand-id="form.brandId" placeholder="Все модели" />
+              <ModelAutocomplete
+                v-model="form.modelId"
+                :brand-id="form.brandId"
+                placeholder="Все модели"
+              />
             </el-form-item>
 
             <el-form-item label=" " class="filter-item filter-item--button">
-              <el-button type="primary" size="large" class="search-button" @click="handleSubmit">
+              <el-button
+                type="primary"
+                size="large"
+                class="search-button"
+                @click="handleSubmit"
+              >
                 Показать результаты
               </el-button>
             </el-form-item>
@@ -73,7 +90,7 @@ interface IFilterForm {
   background: var(--color-bg-primary);
   padding: 32px;
   border-radius: 16px;
-  margin: -50px auto 48px;
+  margin: 50px auto 48px;
   max-width: 1200px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   border: 1px solid var(--color-border-light);
