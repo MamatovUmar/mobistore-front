@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import type { IListing } from '~/types/ads';
+import type { IListing } from "~/types/ads";
 
 const { listing } = defineProps<{
   listing: IListing;
 }>();
-
 </script>
 
 <template>
@@ -23,6 +22,7 @@ const { listing } = defineProps<{
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   margin-top: 20px;
+  word-break: break-all;
 }
 
 .section-title {
@@ -33,7 +33,8 @@ const { listing } = defineProps<{
   color: var(--color-text-primary);
 }
 
-.description-text, .description-text * {
+.description-text,
+.description-text * {
   color: var(--color-text-secondary) !important;
   font-size: 16px;
   line-height: 1.8;
