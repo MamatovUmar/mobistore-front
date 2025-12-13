@@ -34,9 +34,11 @@ const { data: listings } = await useAsyncData(
       <div class="section-header">
         <div class="header-content">
           <h2 class="section-title">Свежие объявления</h2>
-          <p class="section-subtitle">Самые актуальные предложения на рынке</p>
+          <div class="section-subtitle">
+            Самые актуальные предложения на рынке
+          </div>
         </div>
-        
+
         <NuxtLink to="/search" class="view-all-link">
           <span>Смотреть все</span>
           <el-icon><Right /></el-icon>
@@ -123,8 +125,14 @@ const { data: listings } = await useAsyncData(
   }
 
   .listings-grid {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Smaller cards on mobile */
-    gap: 16px;
+    grid-template-columns: repeat(2, 1fr); /* Force 2 columns on mobile */
+    gap: 12px;
+  }
+}
+
+@media (max-width: 375px) {
+  .listings-grid {
+    gap: 10px;
   }
 }
 </style>

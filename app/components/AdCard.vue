@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { LocationInformation, Picture, StarFilled } from "@element-plus/icons-vue";
+import {
+  LocationInformation,
+  Picture,
+  StarFilled,
+} from "@element-plus/icons-vue";
 import type { IListing } from "~/types/ads";
 import { formatCurrency } from "~/utils/formatters";
 import StatusTag from "~/components/ad/StatusTag.vue";
@@ -10,7 +14,7 @@ const props = defineProps<{
   listing: IListing;
 }>();
 
-const root = useRootStore()
+const root = useRootStore();
 const { addToFavorite, removeFavorite } = useFavorite();
 
 const image = computed(() => {
@@ -40,7 +44,7 @@ const postDate = "Сегодня";
 <template>
   <NuxtLink class="listing-card" :to="`/${listing.alias}`">
     <div class="card-glow"></div>
-    
+
     <!-- Image Container -->
     <div class="image-wrapper">
       <div
@@ -52,11 +56,11 @@ const postDate = "Сегодня";
           <el-icon :size="40" color="#cbd5e1"><Picture /></el-icon>
           <span> Нет фото </span>
         </div>
-        
+
         <!-- Gradient Overlay -->
         <div v-if="hasImage" class="image-overlay"></div>
       </div>
-      
+
       <!-- Status Badge -->
       <div class="top-badges">
         <StatusTag :state="listing.state" />
@@ -77,7 +81,7 @@ const postDate = "Сегодня";
       <!-- Brand & Date -->
       <div class="meta-row">
         <span class="brand">{{ listing.brand.name }}</span>
-        <span class="date">{{ postDate }}</span>
+        <span class="date mobile-hidden">{{ postDate }}</span>
       </div>
 
       <!-- Title -->
@@ -227,7 +231,7 @@ const postDate = "Сегодня";
     background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
     color: #fff;
     border-color: transparent;
-    
+
     &:hover {
       transform: scale(1.15);
       box-shadow: 0 8px 20px -4px rgba(245, 158, 11, 0.5);
@@ -324,15 +328,49 @@ const postDate = "Сегодня";
 
 @media (max-width: 768px) {
   .card-body {
-    padding: 16px;
+    padding: 12px;
+    gap: 8px;
   }
 
   .title {
-    font-size: 15px;
+    font-size: 14px;
+    min-height: 40px; /* Reduced min-height */
+    line-height: 1.35;
   }
 
   .price-tag {
-    font-size: 20px;
+    font-size: 17px;
+  }
+
+  .brand {
+    padding: 2px 6px;
+    font-size: 10px;
+  }
+
+  .location-row {
+    font-size: 12px;
+    padding-top: 8px;
+  }
+
+  .fav-button {
+    width: 32px;
+    height: 32px;
+    top: 8px;
+    right: 8px;
+
+    .el-icon {
+      font-size: 16px;
+    }
+  }
+
+  .top-badges {
+    top: 8px;
+    left: 8px;
+  }
+}
+.mobile-hidden {
+  @media (max-width: 768px) {
+    display: none;
   }
 }
 </style>

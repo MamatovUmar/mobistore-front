@@ -184,7 +184,7 @@ const handleCreateAd = () => {
   background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
   color: #fff;
   border: none;
-  border-radius: 12px;
+  border-radius: 6px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -208,7 +208,7 @@ const handleCreateAd = () => {
 }
 
 .btn-login {
-  border-radius: 12px;
+  border-radius: 6px;
   font-weight: 600;
 
   &:hover {
