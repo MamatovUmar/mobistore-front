@@ -14,7 +14,12 @@ const emit = defineEmits<{
   "update:visible": [value: boolean];
 }>();
 
-const { sendConversationMessage, setMessagesAsRead, createOrGetConversation, getConversationMessages } = useChat();
+const {
+  sendConversationMessage,
+  setMessagesAsRead,
+  createOrGetConversation,
+  getConversationMessages,
+} = useChat();
 const root = useRootStore();
 
 const messageInput = ref("");
@@ -86,7 +91,10 @@ const sendMessage = async () => {
   messageInput.value = "";
 
   try {
-    const newMessage = await sendConversationMessage(conversationId.value, messageText);
+    const newMessage = await sendConversationMessage(
+      conversationId.value,
+      messageText
+    );
     if (newMessage) {
       messages.value.push(newMessage);
     }
@@ -122,7 +130,10 @@ const handleKeydown = (event: KeyboardEvent) => {
 
 const loadConversation = async () => {
   try {
-    const conversation = await createOrGetConversation(props.listing.id, props.listing.user.id);
+    const conversation = await createOrGetConversation(
+      props.listing.id,
+      props.listing.user.id
+    );
     if (conversation) {
       conversationId.value = conversation.id;
     }
@@ -133,7 +144,7 @@ const loadConversation = async () => {
 
 const loadMessages = async () => {
   if (!conversationId.value) return;
-  
+
   isLoadingMessages.value = true;
   try {
     const msgs = await getConversationMessages(conversationId.value);
@@ -162,8 +173,6 @@ watch(
     }
   }
 );
-
-
 </script>
 
 <template>
@@ -171,7 +180,6 @@ watch(
     class="chat-drawer"
     :model-value="visible"
     direction="rtl"
-    size="500px"
     :show-close="true"
     @update:model-value="handleClose"
   >
@@ -179,11 +187,7 @@ watch(
       <div class="drawer-header">
         <div class="seller-info">
           <div class="seller-avatar-wrapper">
-            <el-avatar
-              v-if="seller?.avatar"
-              :src="seller.avatar"
-              :size="48"
-            />
+            <el-avatar v-if="seller?.avatar" :src="seller.avatar" :size="48" />
             <el-avatar v-else :size="48" class="seller-avatar">
               {{
                 `${seller.first_name?.charAt(0)}${seller.last_name?.charAt(
@@ -208,7 +212,12 @@ watch(
       <div ref="messagesContainer" class="messages-container">
         <!-- Скелетон лоадер -->
         <template v-if="isLoadingMessages">
-          <div v-for="i in 3" :key="`skeleton-${i}`" class="message-wrapper" :class="{ 'message-wrapper--user': i % 2 === 0 }">
+          <div
+            v-for="i in 3"
+            :key="`skeleton-${i}`"
+            class="message-wrapper"
+            :class="{ 'message-wrapper--user': i % 2 === 0 }"
+          >
             <div class="message-bubble skeleton-bubble">
               <el-skeleton :rows="1" animated style="width: 100%" />
             </div>
@@ -227,7 +236,11 @@ watch(
               <p class="message-text">{{ message.content }}</p>
               <span class="message-time">{{ message.time }}</span>
             </div>
-            <span v-if="message.sender === 'user'" class="message-status" :class="{ 'status-read': message.is_read }">
+            <span
+              v-if="message.sender === 'user'"
+              class="message-status"
+              :class="{ 'status-read': message.is_read }"
+            >
               <el-icon>
                 <Check />
               </el-icon>
@@ -237,7 +250,10 @@ watch(
       </div>
 
       <div class="message-input-area">
-        <div class="input-wrapper" :class="{ 'input-wrapper--focused': isInputFocused }">
+        <div
+          class="input-wrapper"
+          :class="{ 'input-wrapper--focused': isInputFocused }"
+        >
           <textarea
             ref="textareaRef"
             v-model="messageInput"
@@ -264,6 +280,13 @@ watch(
     </div>
   </el-drawer>
 </template>
+
+<style lang="scss">
+.chat-drawer {
+  width: 100% !important;
+  max-width: 500px !important;
+}
+</style>
 
 <style lang="scss" scoped>
 :deep(.el-drawer) {
@@ -525,7 +548,11 @@ watch(
     content: "";
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    background: radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.3) 0%,
+      transparent 70%
+    );
     opacity: 0;
     transition: opacity 0.3s;
   }
@@ -540,7 +567,8 @@ watch(
     background: linear-gradient(135deg, var(--color-primary) 0%, #5b8ff9 100%);
     color: white;
     cursor: pointer;
-    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4), 0 2px 4px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4),
+      0 2px 4px rgba(59, 130, 246, 0.2);
 
     &::before {
       opacity: 1;
@@ -548,7 +576,8 @@ watch(
 
     &:hover:not(:disabled) {
       transform: translateY(-3px) scale(1.08);
-      box-shadow: 0 12px 28px rgba(59, 130, 246, 0.5), 0 4px 8px rgba(59, 130, 246, 0.3);
+      box-shadow: 0 12px 28px rgba(59, 130, 246, 0.5),
+        0 4px 8px rgba(59, 130, 246, 0.3);
 
       &::after {
         opacity: 1;
@@ -561,7 +590,8 @@ watch(
 
     &:active:not(:disabled) {
       transform: translateY(-1px) scale(1.02);
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35), 0 2px 4px rgba(59, 130, 246, 0.2);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35),
+        0 2px 4px rgba(59, 130, 246, 0.2);
     }
   }
 
