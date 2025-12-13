@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { ListingStatus, type IListing, type IListingContacts } from "~/types/ads";
+import {
+  ListingStatus,
+  type IListing,
+  type IListingContacts,
+} from "~/types/ads";
 import {
   ChatDotRound,
   Phone,
   ChatLineRound,
   Star,
-  StarFilled
+  StarFilled,
 } from "@element-plus/icons-vue";
 import StatusTag from "~/components/ad/StatusTag.vue";
 import ContactsInfo from "~/components/ad/ContactsInfo.vue";
@@ -19,9 +23,10 @@ const emit = defineEmits<{
   "open-chat": [];
 }>();
 
-const root = useRootStore()
+const root = useRootStore();
 const { changeStatus, bumpAd, bumpLoading } = useAds();
-const { addToFavorite, addLoading, removeFavorite, removeLoading } = useFavorite();
+const { addToFavorite, addLoading, removeFavorite, removeLoading } =
+  useFavorite();
 
 // Состояние отображения контактов
 const showContacts = ref(false);
@@ -76,21 +81,26 @@ const handleMessage = () => {
   emit("open-chat");
 };
 
-const publishListing = catcher(async () => {
-  publishLoading.value = true;
-  await changeStatus(listing.id, ListingStatus.ACTIVE);
-  emit('update');
-  publishLoading.value = false;
-}, () => {
-  publishLoading.value = false;
-});
+const publishListing = catcher(
+  async () => {
+    publishLoading.value = true;
+    await changeStatus(listing.id, ListingStatus.ACTIVE);
+    emit("update");
+    publishLoading.value = false;
+  },
+  () => {
+    publishLoading.value = false;
+  }
+);
 </script>
 
 <template>
   <div class="info-section">
     <div class="listing-badges">
       <span class="listing-brand">{{ listing.brand.name }}</span>
-      <span v-if="listing.allow_trade_in" class="badge-trade">Возможен обмен</span>
+      <span v-if="listing.allow_trade_in" class="badge-trade"
+        >Возможен обмен</span
+      >
     </div>
 
     <h1 class="listing-title">{{ listing.title }}</h1>
@@ -113,7 +123,11 @@ const publishListing = catcher(async () => {
         :icon="favorites.includes(listing.id) ? StarFilled : Star"
         :type="favorites.includes(listing.id) ? 'warning' : 'default'"
         :loading="addLoading || removeLoading"
-        @click="favorites.includes(listing.id) ? removeFavorite(listing.id) : addToFavorite(listing.id)"
+        @click="
+          favorites.includes(listing.id)
+            ? removeFavorite(listing.id)
+            : addToFavorite(listing.id)
+        "
       />
     </div>
 
@@ -121,7 +135,10 @@ const publishListing = catcher(async () => {
     <transition name="contacts-slide">
       <div v-if="showContacts" class="contacts-compact">
         <div v-if="contacts?.phone_number" class="contact-compact">
-          <a :href="`tel:${contacts.phone_number}`" class="contact-compact-link">
+          <a
+            :href="`tel:${contacts.phone_number}`"
+            class="contact-compact-link"
+          >
             <el-icon><Phone /></el-icon>
             <span>{{ formattedPhone }}</span>
           </a>
@@ -384,6 +401,7 @@ const publishListing = catcher(async () => {
   justify-content: space-between;
   padding: 14px 0;
   border-bottom: 1px solid var(--color-border-light);
+  gap: 10px;
 }
 
 .meta-item:last-child {
@@ -399,5 +417,6 @@ const publishListing = catcher(async () => {
   font-weight: 600;
   color: var(--color-text-primary);
   font-size: 15px;
+  text-align: right;
 }
 </style>
