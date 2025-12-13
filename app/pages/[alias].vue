@@ -14,9 +14,13 @@ const route = useRoute();
 const { $api } = useNuxtApp();
 const root = useRootStore();
 
-const { data, error, pending: loading, refresh } = await useAsyncData(
-  `listing-${route.params.alias}`,
-  () => $api<IBaseResponse<IListing>>(`/ads/alias/${route.params.alias}`)
+const {
+  data,
+  error,
+  pending: loading,
+  refresh,
+} = await useAsyncData(`listing-${route.params.alias}`, () =>
+  $api<IBaseResponse<IListing>>(`/ads/alias/${route.params.alias}`)
 );
 
 const listing = computed(() => data.value?.data);
@@ -35,7 +39,6 @@ const handleUpdate = async () => {
 const openChat = () => {
   showChat.value = true;
 };
-
 </script>
 
 <template>
@@ -60,12 +63,20 @@ const openChat = () => {
             <CharacterSection :listing="listing" />
             <SellerSection :listing="listing" />
           </div>
-          <div v-if="listing"> 
-            <SidebarSection :listing="listing" @update="handleUpdate" @open-chat="openChat" />
+          <div v-if="listing">
+            <SidebarSection
+              :listing="listing"
+              @update="handleUpdate"
+              @open-chat="openChat"
+            />
           </div>
         </div>
 
-        <ListingChat v-if="root.user" v-model:visible="showChat" :listing="listing" />
+        <ListingChat
+          v-if="root.user"
+          v-model:visible="showChat"
+          :listing="listing"
+        />
         <NeedAuth v-else v-model="showChat" />
       </template>
 
@@ -79,7 +90,7 @@ const openChat = () => {
 <style lang="scss" scoped>
 .page {
   min-height: 60vh;
-  
+
   .loading-state,
   .error-state {
     padding: 40px 0;
@@ -88,19 +99,28 @@ const openChat = () => {
     align-items: center;
     justify-content: center;
   }
-  
+
   .breadcrumbs {
     padding: 20px 0;
   }
-  
+
   .listing-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 420px;
     gap: 20px;
     margin-bottom: 50px;
-    
+
     @media (max-width: 1024px) {
       grid-template-columns: 1fr;
+      grid-auto-flow: dense;
+
+      & > div:nth-child(1) {
+        order: 2;
+      }
+
+      & > div:nth-child(2) {
+        order: 1;
+      }
     }
   }
 }

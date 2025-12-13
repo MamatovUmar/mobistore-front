@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { IModel } from '~/types/model';
-import type { IBrand } from '~/types/brand';
+import type { IModel } from "~/types/model";
+import type { IBrand } from "~/types/brand";
 
 defineProps<{
   modelVisible: boolean;
@@ -10,16 +10,36 @@ defineProps<{
 
 const emit = defineEmits(["update:modelVisible"]);
 
+const isFull = ref(false);
+
 const handleClose = () => {
   emit("update:modelVisible", false);
 };
+
+onMounted(() => {
+  if (window.innerWidth < 768) {
+    isFull.value = true;
+  }
+  window.addEventListener("resize", () => {
+    if (window.innerWidth < 768) {
+      isFull.value = true;
+    } else {
+      isFull.value = false;
+    }
+  });
+});
+
+onUnmounted(() => {
+  window.removeEventListener("resize", () => {});
+});
 </script>
 
 <template>
   <el-dialog
     :model-value="modelVisible"
-    width="950px"
     :close-on-click-modal="true"
+    :fullscreen="isFull"
+    style="width: 100%; max-width: 800px"
     class="specs-dialog"
     @update:model-value="handleClose"
   >
@@ -138,12 +158,18 @@ const handleClose = () => {
         <h3 class="spec-group-title">Основная камера</h3>
         <div class="spec-row">
           <span class="spec-label">Тип</span>
-          <span class="spec-value">{{ modelData?.cameras?.mainCamera?.type }}</span>
+          <span class="spec-value">{{
+            modelData?.cameras?.mainCamera?.type
+          }}</span>
         </div>
         <div class="spec-row">
           <span class="spec-label">Камеры</span>
           <div class="spec-list">
-            <div v-for="(camera, index) in modelData?.cameras?.mainCamera?.cameraSpecs" :key="index">
+            <div
+              v-for="(camera, index) in modelData?.cameras?.mainCamera
+                ?.cameraSpecs"
+              :key="index"
+            >
               {{ camera }}
             </div>
           </div>
@@ -151,7 +177,11 @@ const handleClose = () => {
         <div class="spec-row">
           <span class="spec-label">Функции</span>
           <div class="spec-list">
-            <div v-for="(feature, index) in modelData?.cameras?.mainCamera?.features" :key="index">
+            <div
+              v-for="(feature, index) in modelData?.cameras?.mainCamera
+                ?.features"
+              :key="index"
+            >
               {{ feature }}
             </div>
           </div>
@@ -159,7 +189,10 @@ const handleClose = () => {
         <div class="spec-row">
           <span class="spec-label">Видео</span>
           <div class="spec-list">
-            <div v-for="(video, index) in modelData?.cameras?.mainCamera?.video" :key="index">
+            <div
+              v-for="(video, index) in modelData?.cameras?.mainCamera?.video"
+              :key="index"
+            >
               {{ video }}
             </div>
           </div>
@@ -171,12 +204,18 @@ const handleClose = () => {
         <h3 class="spec-group-title">Фронтальная камера</h3>
         <div class="spec-row">
           <span class="spec-label">Тип</span>
-          <span class="spec-value">{{ modelData?.cameras?.selfieCamera?.type }}</span>
+          <span class="spec-value">{{
+            modelData?.cameras?.selfieCamera?.type
+          }}</span>
         </div>
         <div class="spec-row">
           <span class="spec-label">Камеры</span>
           <div class="spec-list">
-            <div v-for="(camera, index) in modelData?.cameras?.selfieCamera?.cameraSpecs" :key="index">
+            <div
+              v-for="(camera, index) in modelData?.cameras?.selfieCamera
+                ?.cameraSpecs"
+              :key="index"
+            >
               {{ camera }}
             </div>
           </div>
@@ -184,7 +223,11 @@ const handleClose = () => {
         <div class="spec-row">
           <span class="spec-label">Функции</span>
           <div class="spec-list">
-            <div v-for="(feature, index) in modelData?.cameras?.selfieCamera?.features" :key="index">
+            <div
+              v-for="(feature, index) in modelData?.cameras?.selfieCamera
+                ?.features"
+              :key="index"
+            >
               {{ feature }}
             </div>
           </div>
@@ -192,7 +235,10 @@ const handleClose = () => {
         <div class="spec-row">
           <span class="spec-label">Видео</span>
           <div class="spec-list">
-            <div v-for="(video, index) in modelData?.cameras?.selfieCamera?.video" :key="index">
+            <div
+              v-for="(video, index) in modelData?.cameras?.selfieCamera?.video"
+              :key="index"
+            >
               {{ video }}
             </div>
           </div>
@@ -209,7 +255,10 @@ const handleClose = () => {
         <div class="spec-row">
           <span class="spec-label">Зарядка</span>
           <div class="spec-list">
-            <div v-for="(charging, index) in modelData?.battery?.charging" :key="index">
+            <div
+              v-for="(charging, index) in modelData?.battery?.charging"
+              :key="index"
+            >
               {{ charging }}
             </div>
           </div>
@@ -294,10 +343,21 @@ const handleClose = () => {
     </div>
 
     <template #footer>
-      <el-button @click="handleClose">Закрыть</el-button>
+      <div class="flex justify-end pl-16 pr-16 pb-16">
+        <el-button @click="handleClose">Закрыть</el-button>
+      </div>
     </template>
   </el-dialog>
 </template>
+
+<style lang="scss">
+.specs-dialog {
+  padding: 0 !important;
+  .el-dialog__body {
+    height: calc(100% - 182px) !important;
+  }
+}
+</style>
 
 <style lang="scss" scoped>
 :deep(.el-dialog) {
@@ -313,6 +373,7 @@ const handleClose = () => {
 
 :deep(.el-dialog__body) {
   padding: 0;
+  height: calc(100% - 200px);
 }
 
 :deep(.el-dialog__footer) {
@@ -359,6 +420,7 @@ const handleClose = () => {
   overflow-y: auto;
   padding: 20px;
   background: var(--color-bg-secondary);
+  height: -webkit-fill-available;
 
   /* Кастомный скроллбар */
   &::-webkit-scrollbar {
@@ -492,7 +554,7 @@ const handleClose = () => {
 
   .specs-modal {
     padding: 20px 16px;
-    max-height: 60vh;
+    max-height: 100%;
   }
 
   .spec-group {
