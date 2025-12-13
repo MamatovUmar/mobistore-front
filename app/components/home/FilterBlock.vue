@@ -4,6 +4,7 @@ import RegionAutocomplete from "@/components/autocompletes/RegionAutocomplete.vu
 import CityAutocomplete from "@/components/autocompletes/CityAutocomplete.vue";
 import BrandAutocomplete from "@/components/autocompletes/BrandAutocomplete.vue";
 import ModelAutocomplete from "@/components/autocompletes/ModelAutocomplete.vue";
+import HomeFilterSkeleton from "@/components/skeletons/HomeFilterSkeleton.vue";
 
 const router = useRouter();
 
@@ -80,6 +81,9 @@ interface IFilterForm {
             </el-form-item>
           </div>
         </el-form>
+        <template #fallback>
+          <HomeFilterSkeleton />
+        </template>
       </ClientOnly>
     </div>
   </div>
