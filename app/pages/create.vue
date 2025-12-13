@@ -157,8 +157,7 @@ onMounted(() => {
     form.telegram_link = root.user.telegram || "";
     form.show_phone = root.user.show_contacts || false;
   }
-})
-
+});
 </script>
 
 <template>
@@ -200,13 +199,13 @@ onMounted(() => {
             <h2 class="section-title">Характеристики и цена</h2>
 
             <el-row :gutter="20">
-              <el-col :span="12">
+              <el-col :xs="24" :sm="12">
                 <el-form-item label="Бренд" prop="brand_id">
                   <BrandAutocomplete v-model="form.brand_id" />
                 </el-form-item>
               </el-col>
 
-              <el-col :span="12">
+              <el-col :xs="24" :sm="12">
                 <el-form-item label="Модель" prop="model_id">
                   <ModelAutocomplete
                     v-model="form.model_id"
@@ -218,7 +217,7 @@ onMounted(() => {
             </el-row>
 
             <el-row :gutter="20">
-              <el-col :span="8">
+              <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item label="Память" prop="storage">
                   <el-select
                     v-model="form.storage"
@@ -234,7 +233,7 @@ onMounted(() => {
                 </el-form-item>
               </el-col>
 
-              <el-col :span="8">
+              <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item label="Оперативка" prop="ram">
                   <el-select
                     v-model="form.ram"
@@ -250,18 +249,31 @@ onMounted(() => {
                 </el-form-item>
               </el-col>
 
-              <el-col :span="8">
+              <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item label="Цвет">
-                  <el-input v-if="colors.length === 0" v-model="form.color" placeholder="Введите цвет" />
-                  <el-select v-else v-model="form.color" placeholder="Выберите цвет">
-                    <el-option v-for="color in colors" :key="color" :label="color" :value="color" />
+                  <el-input
+                    v-if="colors.length === 0"
+                    v-model="form.color"
+                    placeholder="Введите цвет"
+                  />
+                  <el-select
+                    v-else
+                    v-model="form.color"
+                    placeholder="Выберите цвет"
+                  >
+                    <el-option
+                      v-for="color in colors"
+                      :key="color"
+                      :label="color"
+                      :value="color"
+                    />
                   </el-select>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row :gutter="20">
-              <el-col :span="8">
+              <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item label="Состояние" prop="state">
                   <el-select
                     v-model="form.state"
@@ -274,7 +286,7 @@ onMounted(() => {
                 </el-form-item>
               </el-col>
 
-              <el-col :span="8">
+              <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item label="Цена" prop="price">
                   <el-input
                     type="number"
@@ -284,7 +296,7 @@ onMounted(() => {
                 </el-form-item>
               </el-col>
 
-              <el-col :span="8">
+              <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item label="Валюта">
                   <el-select
                     v-model="form.currency"
@@ -310,13 +322,13 @@ onMounted(() => {
             <h2 class="section-title">Местоположение и фото</h2>
 
             <el-row :gutter="20">
-              <el-col :span="12">
+              <el-col :xs="24" :sm="12">
                 <el-form-item label="Регион" prop="region_id">
                   <RegionAutocomplete v-model="form.region_id" />
                 </el-form-item>
               </el-col>
 
-              <el-col :span="12">
+              <el-col :xs="24" :sm="12">
                 <el-form-item label="Город" prop="city_id">
                   <CityAutocomplete
                     v-model="form.city_id"
@@ -354,21 +366,25 @@ onMounted(() => {
             <h2 class="section-title">Контакты</h2>
 
             <el-row :gutter="20">
-              <el-col :span="12">
+              <el-col :xs="24" :sm="12">
                 <el-form-item label="Телефон" prop="phone_number">
                   <PhoneNumber v-model="form.phone_number" />
                 </el-form-item>
               </el-col>
 
-              <el-col :span="12">
+              <el-col :xs="24" :sm="12">
                 <el-form-item label="Telegram">
                   <TelegramLink v-model="form.telegram_link" />
                 </el-form-item>
               </el-col>
 
-              <el-col :span="12">
+              <el-col :xs="24" :sm="12">
                 <el-form-item>
-                  <el-checkbox v-model="form.show_phone" border label="Показывать контакты" />
+                  <el-checkbox
+                    v-model="form.show_phone"
+                    border
+                    label="Показывать контакты"
+                  />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -488,8 +504,24 @@ onMounted(() => {
     width: 100%;
   }
 
-  :deep(.ql-editor *) {
-    font-family: inherit;
+  /* === RESPONSIVE === */
+  @media (max-width: 768px) {
+    .page-header {
+      margin-top: 24px;
+      margin-bottom: 20px;
+    }
+
+    .page-title {
+      font-size: 24px;
+    }
+
+    .form-section {
+      padding: 16px;
+    }
+
+    .container {
+      padding: 0 16px;
+    }
   }
 }
 </style>
