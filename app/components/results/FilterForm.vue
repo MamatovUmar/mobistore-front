@@ -5,14 +5,18 @@ import BrandAutocomplete from "@/components/autocompletes/BrandAutocomplete.vue"
 import ModelAutocomplete from "@/components/autocompletes/ModelAutocomplete.vue";
 import type { IAdsResponse, IResultFilterForm } from "~/types/ads";
 
-const props = defineProps<{ defaults?: IAdsResponse['filters'] }>()
+const props = defineProps<{ defaults?: IAdsResponse["filters"] }>();
 
 const route = useRoute();
 const router = useRouter();
 
 // Вычисляем min/max цены из props.defaults или query
-const minPrice = computed(() => props?.defaults?.minPrice || Number(route.query?.minPrice || 0))
-const maxPrice = computed(() => props?.defaults?.maxPrice || Number(route.query?.maxPrice || 50000000))
+const minPrice = computed(
+  () => props?.defaults?.minPrice || Number(route.query?.minPrice || 0)
+);
+const maxPrice = computed(
+  () => props?.defaults?.maxPrice || Number(route.query?.maxPrice || 50000000)
+);
 
 // Инициализируем фильтры сразу с данными из route.query для SSR
 const query = route.query as Record<string, any>;
@@ -27,15 +31,17 @@ const filters = reactive<IResultFilterForm>({
   priceRange: [minPrice.value, maxPrice.value],
   ram: query?.ram ? Number(query.ram) : undefined,
   storage: query?.storage ? Number(query.storage) : undefined,
-  allowTradeIn: query.allowTradeIn === 'true',
+  allowTradeIn: query.allowTradeIn === "true",
   sortBy: query?.sortBy || "updated_at",
   sortOrder: query?.sortOrder || "desc",
 });
 
 const formatPrice = (val: number | undefined) => {
   const value = val ?? 0;
-  return Math.round(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-}
+  return Math.round(value)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+};
 
 const resetFilters = () => {
   // Сбрасываем все значения фильтров
@@ -54,61 +60,76 @@ const resetFilters = () => {
 
 let timer: ReturnType<typeof setTimeout>;
 
-watch(filters, () => {
-  if (timer) clearTimeout(timer);
-  timer = setTimeout(() => {
-    // Формируем query параметры, исключая пустые значения
-    const query: Record<string, string> = {};
-    
-    if (filters.regionId) query.regionId = String(filters.regionId);
-    if (filters.cityId) query.cityId = String(filters.cityId);
-    if (filters.brandId) query.brandId = String(filters.brandId);
-    if (filters.modelId) query.modelId = String(filters.modelId);
-    if (filters.state) query.state = filters.state;
-    if (filters.ram) query.ram = String(filters.ram);
-    if (filters.storage) query.storage = String(filters.storage);
-    if (filters.allowTradeIn) query.allowTradeIn = 'true';
-    if (filters.sortBy) query.sortBy = filters.sortBy;
-    if (filters.sortOrder) query.sortOrder = filters.sortOrder;
-    if (filters.priceRange?.[0]) query.minPrice = String(filters.priceRange[0]);
-    if (filters.priceRange?.[1]) query.maxPrice = String(filters.priceRange[1]);
-    
-    router.replace({
-      path: '/search',
-      query
-    })
-  }, 500);
-}, { deep: true })
+watch(
+  filters,
+  () => {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => {
+      // Формируем query параметры, исключая пустые значения
+      const query: Record<string, string> = {};
 
-watch(() => filters.brandId, () => {
-  filters.modelId = undefined;
-})
+      if (filters.regionId) query.regionId = String(filters.regionId);
+      if (filters.cityId) query.cityId = String(filters.cityId);
+      if (filters.brandId) query.brandId = String(filters.brandId);
+      if (filters.modelId) query.modelId = String(filters.modelId);
+      if (filters.state) query.state = filters.state;
+      if (filters.ram) query.ram = String(filters.ram);
+      if (filters.storage) query.storage = String(filters.storage);
+      if (filters.allowTradeIn) query.allowTradeIn = "true";
+      if (filters.sortBy) query.sortBy = filters.sortBy;
+      if (filters.sortOrder) query.sortOrder = filters.sortOrder;
+      if (filters.priceRange?.[0])
+        query.minPrice = String(filters.priceRange[0]);
+      if (filters.priceRange?.[1])
+        query.maxPrice = String(filters.priceRange[1]);
 
-watch(() => filters.regionId, () => {
-  filters.cityId = undefined;
-})
+      router.replace({
+        path: "/search",
+        query,
+      });
+    }, 500);
+  },
+  { deep: true }
+);
+
+watch(
+  () => filters.brandId,
+  () => {
+    filters.modelId = undefined;
+  }
+);
+
+watch(
+  () => filters.regionId,
+  () => {
+    filters.cityId = undefined;
+  }
+);
 
 // Обновляем priceRange когда меняются minPrice/maxPrice из props
-watch([minPrice, maxPrice], ([newMin, newMax]) => {
-  if (newMin !== filters.priceRange[0] || newMax !== filters.priceRange[1]) {
-    filters.priceRange = [newMin, newMax];
-  }
-}, { immediate: true });
-
+watch(
+  [minPrice, maxPrice],
+  ([newMin, newMax]) => {
+    if (newMin !== filters.priceRange[0] || newMax !== filters.priceRange[1]) {
+      filters.priceRange = [newMin, newMax];
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
   <aside class="filter-sidebar">
     <div class="filter-header">
       <h3>Фильтры</h3>
-      <el-button link type="primary" @click="resetFilters">
-        Сбросить все
-      </el-button>
     </div>
 
     <el-form :model="filters" label-position="top" size="large">
       <el-form-item label="Область">
-        <RegionAutocompletes v-model="filters.regionId" :init-data="defaults?.region" />
+        <RegionAutocompletes
+          v-model="filters.regionId"
+          :init-data="defaults?.region"
+        />
       </el-form-item>
 
       <el-form-item label="Город">
@@ -120,7 +141,10 @@ watch([minPrice, maxPrice], ([newMin, newMax]) => {
       </el-form-item>
 
       <el-form-item label="Бренд">
-        <BrandAutocomplete v-model="filters.brandId" :init-data="defaults?.brand" />
+        <BrandAutocomplete
+          v-model="filters.brandId"
+          :init-data="defaults?.brand"
+        />
       </el-form-item>
 
       <el-form-item label="Модель">
@@ -174,7 +198,9 @@ watch([minPrice, maxPrice], ([newMin, newMax]) => {
           <div class="price-field">
             <span class="label">от</span>
             <div class="value-wrapper">
-              <span class="amount">{{ formatPrice(filters.priceRange[0]) }}</span>
+              <span class="amount">{{
+                formatPrice(filters.priceRange[0])
+              }}</span>
               <span class="currency">сум</span>
             </div>
           </div>
@@ -182,7 +208,9 @@ watch([minPrice, maxPrice], ([newMin, newMax]) => {
           <div class="price-field">
             <span class="label">до</span>
             <div class="value-wrapper">
-              <span class="amount">{{ formatPrice(filters.priceRange[1]) }}</span>
+              <span class="amount">{{
+                formatPrice(filters.priceRange[1])
+              }}</span>
               <span class="currency">сум</span>
             </div>
           </div>
@@ -197,6 +225,14 @@ watch([minPrice, maxPrice], ([newMin, newMax]) => {
           :show-tooltip="false"
         />
       </div>
+
+      <el-button
+        size="large"
+        @click="resetFilters"
+        class="mt-20 w-full mobile-clear"
+      >
+        Очистить фильтры
+      </el-button>
     </el-form>
   </aside>
 </template>
@@ -467,6 +503,19 @@ watch([minPrice, maxPrice], ([newMin, newMax]) => {
   }
 }
 
+@media (max-width: 900px) {
+  .filter-sidebar {
+    position: static;
+    max-height: none;
+    overflow-y: visible;
+    border: none;
+    padding: 0;
+  }
+  .filter-header {
+    display: none;
+  }
+}
+
 @media (max-width: 768px) {
   .filter-form {
     padding: 24px 0 40px;
@@ -497,10 +546,6 @@ watch([minPrice, maxPrice], ([newMin, newMax]) => {
 }
 
 @media (max-width: 480px) {
-  .filter-sidebar {
-    padding: 16px;
-  }
-
   .results-content {
     padding: 16px;
   }
