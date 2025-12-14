@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import type { IListing } from "~/types/ads";
-import { ArrowLeftBold, ArrowRightBold } from "@element-plus/icons-vue";
+import {
+  ArrowLeftBold,
+  ArrowRightBold,
+  Loading,
+  Picture,
+} from "@element-plus/icons-vue";
 
 const { listing } = defineProps<{
   listing: IListing;
@@ -61,13 +66,29 @@ onMounted(() => {
   <div v-if="hasImages" class="gallery-section">
     <div class="main-image-wrapper">
       <Transition name="fade" mode="out-in">
-        <div
-          :key="currentImageIndex"
-          class="main-image"
-          :style="{
-            backgroundImage: currentImage ? `url(${currentImage.url})` : 'none',
-          }"
-        >
+        <div :key="currentImageIndex" class="image-container">
+          <el-image
+            class="main-image"
+            :src="currentImage?.url"
+            :preview-src-list="listing.images.map((img) => img.url)"
+            :initial-index="currentImageIndex"
+            fit="cover"
+            loading="lazy"
+            :preview-teleported="true"
+            @close="isTransitioning = false"
+          >
+            <template #placeholder>
+              <div class="image-placeholder">
+                <el-icon class="is-loading"><Loading /></el-icon>
+              </div>
+            </template>
+            <template #error>
+              <div class="image-placeholder">
+                <el-icon :size="48" color="#cbd5e1"><Picture /></el-icon>
+              </div>
+            </template>
+          </el-image>
+
           <div v-if="listing.images.length > 1" class="image-counter">
             {{ currentImageIndex + 1 }} / {{ listing.images.length }}
           </div>
@@ -149,14 +170,7 @@ onMounted(() => {
 .main-image {
   width: 100%;
   height: 500px;
-  background: linear-gradient(
-    135deg,
-    #f3f4f6 0%,
-    var(--color-border-light) 100%
-  );
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  display: block;
   border-radius: 12px;
   position: relative;
 }
