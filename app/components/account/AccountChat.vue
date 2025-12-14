@@ -1,11 +1,22 @@
 <script setup lang="ts">
-import { Check, Position, Search } from "@element-plus/icons-vue";
+import {
+  Check,
+  Position,
+  Search,
+  ChatLineSquare,
+  Close,
+} from "@element-plus/icons-vue";
 import { useChat } from "~/composables/useChat";
 import type { IConversation, IConversationMessage } from "~/types/chat";
 import type { IUser } from "~/types/user";
 import { useRootStore } from "~/store/root";
 
-const { getAllConversations, getConversationMessages, sendConversationMessage, setMessagesAsRead } = useChat();
+const {
+  getAllConversations,
+  getConversationMessages,
+  sendConversationMessage,
+  setMessagesAsRead,
+} = useChat();
 const root = useRootStore();
 
 const conversations = ref<IConversation[]>([]);
@@ -20,15 +31,26 @@ const messageInput = ref("");
 const textareaRef = ref<HTMLTextAreaElement>();
 const messagesContainer = ref<HTMLDivElement>();
 const isInputFocused = ref(false);
+const isMobilePanelOpen = ref(false);
+
+const toggleMobilePanel = () => {
+  isMobilePanelOpen.value = !isMobilePanelOpen.value;
+};
 
 const currentUserId = computed(() => root.user?.id ?? null);
 
 const selectedConversation = computed(() => {
   if (!selectedConversationId.value) return null;
-  return conversations.value.find((conversation) => conversation.id === selectedConversationId.value) ?? null;
+  return (
+    conversations.value.find(
+      (conversation) => conversation.id === selectedConversationId.value
+    ) ?? null
+  );
 });
 
-const counterpart = computed(() => (selectedConversation.value ? getCounterpart(selectedConversation.value) : null));
+const counterpart = computed(() =>
+  selectedConversation.value ? getCounterpart(selectedConversation.value) : null
+);
 const selectedAd = computed(() => selectedConversation.value?.ad ?? null);
 
 const filteredConversations = computed(() => {
@@ -43,7 +65,9 @@ const filteredConversations = computed(() => {
 
   return sorted.filter((conversation) => {
     const companion = getCounterpart(conversation);
-    const name = `${companion?.first_name ?? ""} ${companion?.last_name ?? ""}`.trim().toLowerCase();
+    const name = `${companion?.first_name ?? ""} ${companion?.last_name ?? ""}`
+      .trim()
+      .toLowerCase();
     const adTitle = conversation.ad?.title?.toLowerCase() ?? "";
     return name.includes(query) || adTitle.includes(query);
   });
@@ -57,7 +81,9 @@ const formattedMessages = computed(() =>
   }))
 );
 
-const counterpartStatus = computed(() => getActivityStatus(counterpart.value?.last_entered_at));
+const counterpartStatus = computed(() =>
+  getActivityStatus(counterpart.value?.last_entered_at)
+);
 
 onMounted(() => {
   loadConversations();
@@ -90,7 +116,9 @@ const loadConversations = async () => {
       return;
     }
 
-    const exists = conversations.value.some((conversation) => conversation.id === selectedConversationId.value);
+    const exists = conversations.value.some(
+      (conversation) => conversation.id === selectedConversationId.value
+    );
     if (!exists) {
       selectedConversationId.value = conversations.value[0]?.id ?? null;
     }
@@ -120,12 +148,21 @@ const loadMessages = async (conversationId: number) => {
 };
 
 const handleSelectConversation = (conversation: IConversation) => {
-  if (selectedConversationId.value === conversation.id) return;
+  if (selectedConversationId.value === conversation.id) {
+    isMobilePanelOpen.value = false;
+    return;
+  }
   selectedConversationId.value = conversation.id;
+  isMobilePanelOpen.value = false;
 };
 
 const handleSendMessage = async () => {
-  if (!selectedConversationId.value || !messageInput.value.trim() || isSending.value) return;
+  if (
+    !selectedConversationId.value ||
+    !messageInput.value.trim() ||
+    isSending.value
+  )
+    return;
 
   const text = messageInput.value.trim();
   messageInput.value = "";
@@ -133,7 +170,10 @@ const handleSendMessage = async () => {
 
   isSending.value = true;
   try {
-    const newMessage = await sendConversationMessage(selectedConversationId.value, text);
+    const newMessage = await sendConversationMessage(
+      selectedConversationId.value,
+      text
+    );
     if (!newMessage) return;
 
     messages.value.push(newMessage);
@@ -179,11 +219,15 @@ const getCounterpart = (conversation: IConversation): IUser | null => {
   if (!userId) {
     return conversation.seller ?? conversation.buyer ?? null;
   }
-  return conversation.buyer_id === userId ? conversation.seller ?? null : conversation.buyer ?? null;
+  return conversation.buyer_id === userId
+    ? conversation.seller ?? null
+    : conversation.buyer ?? null;
 };
 
 const resetUnreadState = (conversationId: number) => {
-  const index = conversations.value.findIndex((conversation) => conversation.id === conversationId);
+  const index = conversations.value.findIndex(
+    (conversation) => conversation.id === conversationId
+  );
   const conversation = conversations.value[index];
   if (index === -1 || !conversation || !currentUserId.value) return;
 
@@ -197,8 +241,13 @@ const resetUnreadState = (conversationId: number) => {
   conversations.value[index] = updated;
 };
 
-const applyMessageMeta = (conversationId: number, message: IConversationMessage) => {
-  const index = conversations.value.findIndex((conversation) => conversation.id === conversationId);
+const applyMessageMeta = (
+  conversationId: number,
+  message: IConversationMessage
+) => {
+  const index = conversations.value.findIndex(
+    (conversation) => conversation.id === conversationId
+  );
   const conversation = conversations.value[index];
   if (index === -1 || !conversation) return;
 
@@ -266,14 +315,18 @@ const formatRelativeTime = (value?: string | null) => {
 
 const formatName = (user?: IUser | null) => {
   if (!user) return "Неизвестный пользователь";
-  return `${user.first_name ?? ""} ${user.last_name ?? ""}`.trim() || "Пользователь";
+  return (
+    `${user.first_name ?? ""} ${user.last_name ?? ""}`.trim() || "Пользователь"
+  );
 };
 
 const getInitials = (user?: IUser | null) => {
   if (!user) return "??";
   const first = user.first_name?.charAt(0) ?? "";
   const last = user.last_name?.charAt(0) ?? "";
-  return `${first}${last}`.trim() || user.email?.charAt(0)?.toUpperCase() || "П";
+  return (
+    `${first}${last}`.trim() || user.email?.charAt(0)?.toUpperCase() || "П"
+  );
 };
 
 const formatPrice = (price?: number, currency?: string) => {
@@ -287,12 +340,21 @@ const formatPrice = (price?: number, currency?: string) => {
   <section class="account-chat">
     <div class="chat-card">
       <div class="chat-grid">
-        <aside class="conversation-panel">
+        <aside
+          class="conversation-panel"
+          :class="{ 'is-open': isMobilePanelOpen }"
+        >
+          <!-- Mobile overlay -->
+          <div class="mobile-overlay" @click="isMobilePanelOpen = false" />
+
           <div class="panel-header">
             <div>
               <p class="panel-title">Переписки</p>
               <p class="panel-subtitle">Здесь собраны все ваши диалоги</p>
             </div>
+            <button class="panel-close-btn" @click="isMobilePanelOpen = false">
+              <el-icon><Close /></el-icon>
+            </button>
           </div>
 
           <div class="panel-search">
@@ -305,7 +367,7 @@ const formatPrice = (price?: number, currency?: string) => {
                 type="text"
                 class="search-input"
                 placeholder="Поиск по объявлению или имени"
-              >
+              />
             </div>
           </div>
 
@@ -316,10 +378,14 @@ const formatPrice = (price?: number, currency?: string) => {
               </div>
             </div>
 
-            <div v-else-if="!filteredConversations.length" class="conversation-empty">
+            <div
+              v-else-if="!filteredConversations.length"
+              class="conversation-empty"
+            >
               <p class="empty-title">Нет переписок</p>
               <p class="empty-text">
-                Начните общение на странице объявления — переписка появится здесь автоматически
+                Начните общение на странице объявления — переписка появится
+                здесь автоматически
               </p>
             </div>
 
@@ -328,7 +394,10 @@ const formatPrice = (price?: number, currency?: string) => {
                 v-for="conversation in filteredConversations"
                 :key="conversation.id"
                 class="conversation-item"
-                :class="{ 'conversation-item--active': selectedConversationId === conversation.id }"
+                :class="{
+                  'conversation-item--active':
+                    selectedConversationId === conversation.id,
+                }"
                 @click="handleSelectConversation(conversation)"
               >
                 <div class="conversation-avatar">
@@ -337,7 +406,11 @@ const formatPrice = (price?: number, currency?: string) => {
                     :size="48"
                     :src="getCounterpart(conversation)?.avatar ?? undefined"
                   />
-                  <el-avatar v-else :size="48" class="conversation-avatar--fallback">
+                  <el-avatar
+                    v-else
+                    :size="48"
+                    class="conversation-avatar--fallback"
+                  >
                     {{ getInitials(getCounterpart(conversation)) }}
                   </el-avatar>
                 </div>
@@ -360,7 +433,10 @@ const formatPrice = (price?: number, currency?: string) => {
                 </div>
 
                 <div class="conversation-meta">
-                  <span v-if="getUnreadCount(conversation)" class="unread-badge">
+                  <span
+                    v-if="getUnreadCount(conversation)"
+                    class="unread-badge"
+                  >
                     {{ getUnreadCount(conversation) }}
                   </span>
                 </div>
@@ -372,6 +448,11 @@ const formatPrice = (price?: number, currency?: string) => {
         <div class="chat-panel">
           <div v-if="selectedConversation" class="chat-window">
             <div class="chat-header">
+              <!-- Mobile toggle button -->
+              <button class="mobile-menu-btn" @click="toggleMobilePanel">
+                <el-icon><ChatLineSquare /></el-icon>
+              </button>
+
               <div class="chat-user">
                 <el-avatar
                   v-if="counterpart?.avatar"
@@ -394,14 +475,20 @@ const formatPrice = (price?: number, currency?: string) => {
               >
                 <div class="chat-listing__info">
                   <p class="chat-listing__title">{{ selectedAd.title }}</p>
-                  <p class="chat-listing__price">{{ formatPrice(selectedAd.price, selectedAd.currency) }}</p>
+                  <p class="chat-listing__price">
+                    {{ formatPrice(selectedAd.price, selectedAd.currency) }}
+                  </p>
                 </div>
               </NuxtLink>
             </div>
 
             <div ref="messagesContainer" class="messages-container">
               <template v-if="isMessagesLoading">
-                <div v-for="i in 3" :key="`message-skeleton-${i}`" class="message-row">
+                <div
+                  v-for="i in 3"
+                  :key="`message-skeleton-${i}`"
+                  class="message-row"
+                >
                   <div class="message-bubble message-bubble--skeleton">
                     <el-skeleton :rows="2" animated />
                   </div>
@@ -410,7 +497,9 @@ const formatPrice = (price?: number, currency?: string) => {
 
               <div v-else-if="!messages.length" class="messages-empty">
                 <p class="empty-title">Пока нет сообщений</p>
-                <p class="empty-text">Напишите что-нибудь, чтобы начать диалог</p>
+                <p class="empty-text">
+                  Напишите что-нибудь, чтобы начать диалог
+                </p>
               </div>
 
               <template v-else>
@@ -424,7 +513,11 @@ const formatPrice = (price?: number, currency?: string) => {
                     <p class="message-text">{{ message.content }}</p>
                     <span class="message-time">{{ message.time }}</span>
                   </div>
-                  <span v-if="message.isOwn" class="message-status" :class="{ 'status-read': message.is_read }">
+                  <span
+                    v-if="message.isOwn"
+                    class="message-status"
+                    :class="{ 'status-read': message.is_read }"
+                  >
                     <el-icon>
                       <Check />
                     </el-icon>
@@ -434,7 +527,10 @@ const formatPrice = (price?: number, currency?: string) => {
             </div>
 
             <div class="chat-input">
-              <div class="input-wrapper" :class="{ 'input-wrapper--focused': isInputFocused }">
+              <div
+                class="input-wrapper"
+                :class="{ 'input-wrapper--focused': isInputFocused }"
+              >
                 <textarea
                   ref="textareaRef"
                   v-model="messageInput"
@@ -449,7 +545,9 @@ const formatPrice = (price?: number, currency?: string) => {
                 />
                 <button
                   class="send-btn"
-                  :class="{ 'send-btn--active': messageInput.trim() && !isSending }"
+                  :class="{
+                    'send-btn--active': messageInput.trim() && !isSending,
+                  }"
                   :disabled="!messageInput.trim() || isSending"
                   @click="handleSendMessage"
                 >
@@ -464,8 +562,13 @@ const formatPrice = (price?: number, currency?: string) => {
           <div v-else class="chat-placeholder">
             <p class="placeholder-title">Выберите переписку</p>
             <p class="placeholder-text">
-              Слева отображаются все ваши диалоги. Нажмите на любой, чтобы посмотреть подробности и продолжить общение.
+              Слева отображаются все ваши диалоги. Нажмите на любой, чтобы
+              посмотреть подробности и продолжить общение.
             </p>
+            <button class="placeholder-btn" @click="toggleMobilePanel">
+              <el-icon><ChatLineSquare /></el-icon>
+              Открыть переписки
+            </button>
           </div>
         </div>
       </div>
@@ -501,11 +604,102 @@ const formatPrice = (price?: number, currency?: string) => {
   background: #f8fafc;
   display: flex;
   flex-direction: column;
+  position: relative;
+
+  .mobile-overlay {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 85%;
+    max-width: 340px;
+    height: 100vh;
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: none;
+
+    &.is-open {
+      transform: translateX(0);
+      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+
+      .mobile-overlay {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1;
+        animation: fadeIn 0.3s ease;
+      }
+    }
+  }
 }
 
 .panel-header {
   padding: 24px;
   border-bottom: 1px solid var(--color-border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  @media (max-width: 768px) {
+    padding: 16px 20px;
+  }
+}
+
+.panel-close-btn {
+  display: none;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--color-text-primary);
+  }
+
+  @media (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.mobile-menu-btn {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-border-light);
+  background: #fff;
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    background: #f8fafc;
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  @media (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .panel-title {
@@ -1001,7 +1195,11 @@ const formatPrice = (price?: number, currency?: string) => {
     content: "";
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    background: radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.3) 0%,
+      transparent 70%
+    );
     opacity: 0;
     transition: opacity 0.3s;
   }
@@ -1016,7 +1214,8 @@ const formatPrice = (price?: number, currency?: string) => {
     background: linear-gradient(135deg, var(--color-primary) 0%, #60a5fa 100%);
     color: white;
     cursor: pointer;
-    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4), 0 2px 4px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4),
+      0 2px 4px rgba(59, 130, 246, 0.2);
 
     &::before {
       opacity: 1;
@@ -1024,7 +1223,8 @@ const formatPrice = (price?: number, currency?: string) => {
 
     &:hover:not(:disabled) {
       transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 10px 20px rgba(59, 130, 246, 0.5), 0 4px 8px rgba(59, 130, 246, 0.3);
+      box-shadow: 0 10px 20px rgba(59, 130, 246, 0.5),
+        0 4px 8px rgba(59, 130, 246, 0.3);
 
       &::after {
         opacity: 1;
@@ -1037,7 +1237,8 @@ const formatPrice = (price?: number, currency?: string) => {
 
     &:active:not(:disabled) {
       transform: translateY(-1px) scale(1.02);
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35), 0 2px 4px rgba(59, 130, 246, 0.2);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35),
+        0 2px 4px rgba(59, 130, 246, 0.2);
     }
   }
 
@@ -1071,6 +1272,33 @@ const formatPrice = (price?: number, currency?: string) => {
   font-size: 15px;
 }
 
+.placeholder-btn {
+  display: none;
+  margin-top: 20px;
+  padding: 12px 24px;
+  background: var(--el-color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: var(--el-color-primary-dark-2);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  }
+
+  @media (max-width: 768px) {
+    display: inline-flex;
+  }
+}
+
 .messages-empty {
   text-align: center;
   padding: 40px 20px;
@@ -1094,12 +1322,16 @@ const formatPrice = (price?: number, currency?: string) => {
 
 @media (max-width: 768px) {
   .chat-header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 14px 20px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
   }
 
   .chat-user {
+    flex: 1;
+    min-width: 0;
     gap: 10px;
 
     &__name {
@@ -1113,11 +1345,7 @@ const formatPrice = (price?: number, currency?: string) => {
 
   .chat-listing {
     width: 100%;
-  }
-
-  .conversation-panel {
-    border-right: none;
-    border-bottom: 1px solid var(--color-border-light);
+    order: 3;
   }
 
   .message-bubble {
