@@ -74,10 +74,10 @@ const fetchAd = catcher(
   async () => {
     loadingData.value = true;
     const response = await $api<IBaseResponse<IListing>>(`/ads/${adId.value}`);
-    
+
     if (response?.status && response.data) {
       const ad = response.data;
-      
+
       // Заполняем форму данными
       form.title = ad.title;
       form.description = ad.description;
@@ -96,7 +96,7 @@ const fetchAd = catcher(
       form.telegram_link = ad.telegram_link || "";
       form.show_phone = ad.show_phone;
       form.status = ad.status;
-      
+
       // Загружаем существующие изображения
       if (ad.images && ad.images.length > 0) {
         existingImages.value = ad.images;
@@ -146,7 +146,7 @@ const updateListing = catcher(
         show_phone: form.show_phone,
       },
     });
-    
+
     if (response?.status) {
       // Загружаем новые изображения, если есть
       if (fileList.value.length > 0) {
@@ -205,10 +205,12 @@ const deleteImage = catcher(
       method: "DELETE",
     });
 
-    existingImages.value = existingImages.value.filter((img) => img.id !== imageId);
+    existingImages.value = existingImages.value.filter(
+      (img) => img.id !== imageId
+    );
     ElMessage.success("Изображение удалено");
     formRef.value?.validateField("images");
-    fetchAd()
+    fetchAd();
   },
   (e: any) => {
     const message = e?.response?._data?.message;
@@ -234,7 +236,7 @@ const handleModelSelect = (model: IModel) => {
 };
 
 // Загружаем данные при монтировании
-fetchAd()
+fetchAd();
 </script>
 
 <template>
@@ -278,13 +280,13 @@ fetchAd()
             <h2 class="section-title">Характеристики и цена</h2>
 
             <el-row :gutter="20">
-              <el-col :span="12">
+              <el-col :xs="24" :sm="12">
                 <el-form-item label="Бренд" prop="brand_id">
                   <BrandAutocomplete v-model="form.brand_id" />
                 </el-form-item>
               </el-col>
 
-              <el-col :span="12">
+              <el-col :xs="24" :sm="12">
                 <el-form-item label="Модель" prop="model_id">
                   <ModelAutocomplete
                     v-model="form.model_id"
@@ -296,7 +298,7 @@ fetchAd()
             </el-row>
 
             <el-row :gutter="20">
-              <el-col :span="8">
+              <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item label="Память" prop="storage">
                   <el-select
                     v-model="form.storage"
@@ -312,7 +314,7 @@ fetchAd()
                 </el-form-item>
               </el-col>
 
-              <el-col :span="8">
+              <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item label="Оперативка" prop="ram">
                   <el-select
                     v-model="form.ram"
@@ -328,18 +330,31 @@ fetchAd()
                 </el-form-item>
               </el-col>
 
-              <el-col :span="8">
+              <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item label="Цвет">
-                  <el-input v-if="colors.length === 0" v-model="form.color" placeholder="Введите цвет" />
-                  <el-select v-else v-model="form.color" placeholder="Выберите цвет">
-                    <el-option v-for="color in colors" :key="color" :label="color" :value="color" />
+                  <el-input
+                    v-if="colors.length === 0"
+                    v-model="form.color"
+                    placeholder="Введите цвет"
+                  />
+                  <el-select
+                    v-else
+                    v-model="form.color"
+                    placeholder="Выберите цвет"
+                  >
+                    <el-option
+                      v-for="color in colors"
+                      :key="color"
+                      :label="color"
+                      :value="color"
+                    />
                   </el-select>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row :gutter="20">
-              <el-col :span="8">
+              <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item label="Состояние" prop="state">
                   <el-select
                     v-model="form.state"
@@ -352,7 +367,7 @@ fetchAd()
                 </el-form-item>
               </el-col>
 
-              <el-col :span="8">
+              <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item label="Цена" prop="price">
                   <el-input
                     type="number"
@@ -362,7 +377,7 @@ fetchAd()
                 </el-form-item>
               </el-col>
 
-              <el-col :span="8">
+              <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item label="Валюта">
                   <el-select
                     v-model="form.currency"
@@ -387,13 +402,13 @@ fetchAd()
             <h2 class="section-title">Местоположение и фото</h2>
 
             <el-row :gutter="20">
-              <el-col :span="12">
+              <el-col :xs="24" :sm="12">
                 <el-form-item label="Регион" prop="region_id">
                   <RegionAutocomplete v-model="form.region_id" />
                 </el-form-item>
               </el-col>
 
-              <el-col :span="12">
+              <el-col :xs="24" :sm="12">
                 <el-form-item label="Город" prop="city_id">
                   <CityAutocomplete
                     v-model="form.city_id"
@@ -404,14 +419,17 @@ fetchAd()
             </el-row>
 
             <!-- Существующие изображения -->
-            <el-form-item v-if="existingImages.length > 0" label="Текущие фотографии">
+            <el-form-item
+              v-if="existingImages.length > 0"
+              label="Текущие фотографии"
+            >
               <div class="existing-images">
                 <div
                   v-for="image in existingImages"
                   :key="image.id"
                   class="existing-image"
                 >
-                  <img :src="image.url" :alt="image.file_name">
+                  <img :src="image.url" :alt="image.file_name" />
                   <el-button
                     type="danger"
                     :icon="Delete"
@@ -424,7 +442,10 @@ fetchAd()
               </div>
             </el-form-item>
 
-            <el-form-item label="Добавить новые фотографии (макс. 8)" prop="images">
+            <el-form-item
+              label="Добавить новые фотографии (макс. 8)"
+              prop="images"
+            >
               <el-upload
                 class="upload-demo"
                 drag
@@ -441,7 +462,8 @@ fetchAd()
                 </div>
                 <template #tip>
                   <div class="el-upload__tip">
-                    Поддерживаемые форматы: jpg, png (макс. {{ 8 - existingImages.length }} файлов)
+                    Поддерживаемые форматы: jpg, png (макс.
+                    {{ 8 - existingImages.length }} файлов)
                   </div>
                 </template>
               </el-upload>
@@ -452,13 +474,13 @@ fetchAd()
             <h2 class="section-title">Контакты</h2>
 
             <el-row :gutter="20">
-              <el-col :span="12">
+              <el-col :xs="24" :sm="12">
                 <el-form-item label="Телефон" prop="phone_number">
                   <PhoneNumber v-model="form.phone_number" />
                 </el-form-item>
               </el-col>
 
-              <el-col :span="12">
+              <el-col :xs="24" :sm="12">
                 <el-form-item label="Telegram">
                   <TelegramLink v-model="form.telegram_link" />
                 </el-form-item>
@@ -475,7 +497,7 @@ fetchAd()
           </div>
 
           <el-row :gutter="20">
-            <el-col :span="12">
+            <el-col :xs="24" :sm="12">
               <el-button
                 style="width: 100%"
                 @click="navigateTo('/account/listings')"
@@ -484,7 +506,7 @@ fetchAd()
               </el-button>
             </el-col>
 
-            <el-col :span="12">
+            <el-col :xs="24" :sm="12">
               <el-button
                 type="primary"
                 style="width: 100%"
@@ -628,6 +650,68 @@ fetchAd()
 
   :deep(.ql-editor *) {
     font-family: inherit;
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 768px) {
+    padding: 24px 0;
+
+    .page-header {
+      margin-bottom: 20px;
+    }
+
+    .page-title {
+      font-size: 24px;
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+    }
+
+    .form-section {
+      padding: 16px;
+      border-radius: 10px;
+    }
+
+    .section-title {
+      font-size: 16px;
+    }
+
+    .existing-images {
+      gap: 8px;
+    }
+
+    .existing-image {
+      width: 100px;
+      height: 100px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 16px 0;
+
+    .page-header {
+      margin-bottom: 16px;
+    }
+
+    .page-title {
+      font-size: 22px;
+    }
+
+    .form-section {
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .existing-image {
+      width: 80px;
+      height: 80px;
+    }
+
+    // Stack action buttons with gap
+    .el-row {
+      row-gap: 12px;
+    }
   }
 }
 </style>

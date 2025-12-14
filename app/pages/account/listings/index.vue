@@ -81,15 +81,35 @@ getMyListings();
           <div class="listings-section">
             <h2 class="section-title">Мои объявления</h2>
 
-            <!-- Табы для фильтрации -->
-            <el-tabs v-model="activeTab" class="listings-tabs">
-              <el-tab-pane
-                v-for="status in statuses"
-                :key="status.value"
-                :label="status.label"
-                :name="status.value"
-              />
-            </el-tabs>
+            <!-- Фильтр по статусу -->
+            <div class="status-filter">
+              <!-- Desktop: Кнопки-пилюли -->
+              <div class="filter-buttons">
+                <button
+                  v-for="status in statuses"
+                  :key="status.value"
+                  class="filter-btn"
+                  :class="{ active: activeTab === status.value }"
+                  @click="activeTab = status.value"
+                >
+                  {{ status.label }}
+                </button>
+              </div>
+
+              <!-- Mobile: Dropdown -->
+              <el-select
+                v-model="activeTab"
+                class="filter-select"
+                placeholder="Выберите статус"
+              >
+                <el-option
+                  v-for="status in statuses"
+                  :key="status.value"
+                  :label="status.label"
+                  :value="status.value"
+                />
+              </el-select>
+            </div>
 
             <!-- Список объявлений -->
             <div v-if="loading" class="listings-list">
@@ -140,14 +160,38 @@ getMyListings();
   min-height: 60vh;
   padding: 40px 0;
 
+  @media (max-width: 768px) {
+    padding: 20px 0;
+  }
+
+  @media (max-width: 480px) {
+    padding: 16px 0;
+  }
+
   .page-header {
     margin-bottom: 32px;
+
+    @media (max-width: 640px) {
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 480px) {
+      margin-bottom: 20px;
+    }
   }
 
   .page-title {
     font-size: 28px;
     font-weight: 700;
     color: var(--color-text-primary);
+
+    @media (max-width: 640px) {
+      font-size: 24px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 22px;
+    }
   }
 
   .account-layout {
@@ -156,8 +200,14 @@ getMyListings();
     gap: 24px;
     align-items: start;
 
+    @media (max-width: 968px) {
+      grid-template-columns: 240px 1fr;
+      gap: 20px;
+    }
+
     @media (max-width: 768px) {
       grid-template-columns: 1fr;
+      gap: 16px;
     }
   }
 
@@ -166,6 +216,10 @@ getMyListings();
     display: flex;
     flex-direction: column;
     gap: 24px;
+
+    @media (max-width: 640px) {
+      gap: 16px;
+    }
   }
 
   /* === СЕКЦИЯ ОБЪЯВЛЕНИЙ === */
@@ -177,6 +231,13 @@ getMyListings();
 
     @media (max-width: 768px) {
       padding: 20px;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 480px) {
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
     }
   }
 
@@ -190,6 +251,7 @@ getMyListings();
       flex-direction: column;
       align-items: flex-start;
       gap: 16px;
+      margin-bottom: 20px;
     }
   }
 
@@ -197,18 +259,111 @@ getMyListings();
     font-size: 20px;
     font-weight: 700;
     color: var(--color-text-primary);
+
+    @media (max-width: 640px) {
+      font-size: 18px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 17px;
+    }
   }
 
-  /* === ТАБЫ === */
-  .listings-tabs {
+  /* === ФИЛЬТР ПО СТАТУСУ === */
+  .status-filter {
     margin-bottom: 24px;
+
+    @media (max-width: 640px) {
+      margin-bottom: 16px;
+    }
+  }
+
+  .filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    @media (max-width: 640px) {
+      display: none;
+    }
+  }
+
+  .filter-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #4b5563;
+    background: #f3f4f6;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+
+    &:hover {
+      background: #e5e7eb;
+      color: #1f2937;
+    }
+
+    &.active {
+      background: var(--el-color-primary);
+      color: #fff;
+      border-color: var(--el-color-primary);
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      padding: 8px 14px;
+      font-size: 13px;
+    }
+  }
+
+  .filter-select {
+    display: none;
+    width: 100%;
+
+    @media (max-width: 640px) {
+      display: block;
+    }
+
+    :deep(.el-input__wrapper) {
+      border-radius: 10px;
+      padding: 4px 12px;
+      box-shadow: 0 0 0 1px #e5e7eb inset;
+
+      &:hover {
+        box-shadow: 0 0 0 1px var(--el-color-primary) inset;
+      }
+    }
+
+    :deep(.el-input__inner) {
+      font-weight: 500;
+    }
   }
 
   /* === СПИСОК ОБЪЯВЛЕНИЙ === */
   .listings-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    @media (max-width: 640px) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 520px) {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
   }
 
   /* === ПАГИНАЦИЯ === */
@@ -219,31 +374,76 @@ getMyListings();
     padding-top: 24px;
     border-top: 1px solid #e5e7eb;
 
+    @media (max-width: 640px) {
+      margin-top: 24px;
+      padding-top: 20px;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    @media (max-width: 480px) {
+      margin-top: 20px;
+      padding-top: 16px;
+    }
+
     :deep(.el-pagination) {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+
+      @media (max-width: 480px) {
+        gap: 4px;
+      }
+
       .btn-prev,
       .btn-next {
         background: #fff;
         border: 1px solid #e5e7eb;
         border-radius: 8px;
+        transition: all 0.2s ease;
+
+        @media (max-width: 480px) {
+          min-width: 32px;
+          height: 32px;
+          border-radius: 6px;
+        }
 
         &:hover:not(:disabled) {
           color: var(--el-color-primary);
           border-color: var(--el-color-primary);
+          transform: translateY(-1px);
         }
       }
 
       .el-pager {
+        @media (max-width: 480px) {
+          margin: 0 4px;
+        }
+
         li {
           border-radius: 8px;
           margin: 0 4px;
+          transition: all 0.2s ease;
+
+          @media (max-width: 480px) {
+            min-width: 32px;
+            height: 32px;
+            line-height: 32px;
+            margin: 0 2px;
+            border-radius: 6px;
+            font-size: 13px;
+          }
 
           &.is-active {
             background: var(--el-color-primary);
             color: #fff;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
           }
 
           &:hover:not(.is-active) {
             color: var(--el-color-primary);
+            background: rgba(59, 130, 246, 0.08);
           }
         }
       }
@@ -251,6 +451,14 @@ getMyListings();
       .el-pagination__total {
         color: #6b7280;
         font-weight: 500;
+
+        @media (max-width: 640px) {
+          order: 1;
+          width: 100%;
+          text-align: center;
+          margin-top: 8px;
+          font-size: 13px;
+        }
       }
     }
   }
@@ -263,18 +471,48 @@ getMyListings();
     justify-content: center;
     padding: 64px 32px;
     text-align: center;
+
+    @media (max-width: 640px) {
+      padding: 48px 24px;
+    }
+
+    @media (max-width: 480px) {
+      padding: 40px 20px;
+    }
   }
 
   .empty-icon {
     font-size: 64px;
     color: var(--color-text-muted);
     margin-bottom: 16px;
+    opacity: 0.6;
+
+    @media (max-width: 640px) {
+      font-size: 56px;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
   }
 
   .empty-text {
     font-size: 16px;
     color: var(--color-text-secondary);
     margin-bottom: 24px;
+    line-height: 1.5;
+
+    @media (max-width: 640px) {
+      font-size: 15px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
   }
 }
 </style>

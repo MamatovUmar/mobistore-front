@@ -30,11 +30,21 @@ const profileForm = ref<IUpdateProfilePayload>({
 const profileRules = reactive<FormRules<IUpdateProfilePayload>>({
   first_name: [
     { required: true, message: "Введите имя", trigger: "blur" },
-    { min: 2, max: 50, message: "Длина должна быть от 2 до 50 символов", trigger: "blur" },
+    {
+      min: 2,
+      max: 50,
+      message: "Длина должна быть от 2 до 50 символов",
+      trigger: "blur",
+    },
   ],
   last_name: [
     { required: true, message: "Введите фамилию", trigger: "blur" },
-    { min: 2, max: 50, message: "Длина должна быть от 2 до 50 символов", trigger: "blur" },
+    {
+      min: 2,
+      max: 50,
+      message: "Длина должна быть от 2 до 50 символов",
+      trigger: "blur",
+    },
   ],
   language_code: [
     { required: true, message: "Выберите язык", trigger: "change" },
@@ -88,7 +98,6 @@ const handleRegionSelect = () => {
   // Сброс города при изменении региона
   profileForm.value.city_id = undefined;
 };
-
 </script>
 
 <template>
@@ -121,7 +130,9 @@ const handleRegionSelect = () => {
             <div v-if="!isEditingProfile && user" class="profile-info">
               <div class="info-row">
                 <span class="info-label">Имя:</span>
-                <span class="info-value">{{ user.first_name }} {{ user.last_name }}</span>
+                <span class="info-value"
+                  >{{ user.first_name }} {{ user.last_name }}</span
+                >
               </div>
               <div class="info-row">
                 <span class="info-label">Email:</span>
@@ -129,7 +140,9 @@ const handleRegionSelect = () => {
               </div>
               <div class="info-row">
                 <span class="info-label">Телефон:</span>
-                <span class="info-value">{{ user.phone_number || 'Не указан' }}</span>
+                <span class="info-value">{{
+                  user.phone_number || "Не указан"
+                }}</span>
               </div>
               <div class="info-row">
                 <span class="info-label">Telegram:</span>
@@ -139,19 +152,27 @@ const handleRegionSelect = () => {
               </div>
               <div class="info-row">
                 <span class="info-label">Регион:</span>
-                <span class="info-value">{{ user.region?.name_ru || 'Не указан' }}</span>
+                <span class="info-value">{{
+                  user.region?.name_ru || "Не указан"
+                }}</span>
               </div>
               <div class="info-row">
                 <span class="info-label">Город:</span>
-                <span class="info-value">{{ user.city?.name_ru || 'Не указан' }}</span>
+                <span class="info-value">{{
+                  user.city?.name_ru || "Не указан"
+                }}</span>
               </div>
               <div class="info-row">
                 <span class="info-label">Показывать контакты:</span>
-                <span class="info-value">{{ user.show_contacts ? 'Да' : 'Нет' }}</span>
+                <span class="info-value">{{
+                  user.show_contacts ? "Да" : "Нет"
+                }}</span>
               </div>
               <div class="info-row">
                 <span class="info-label">Язык:</span>
-                <span class="info-value">{{ user.language_code === 'ru' ? 'Русский' : 'O\'zbekcha' }}</span>
+                <span class="info-value">{{
+                  user.language_code === "ru" ? "Русский" : "O'zbekcha"
+                }}</span>
               </div>
             </div>
 
@@ -164,7 +185,7 @@ const handleRegionSelect = () => {
               size="large"
             >
               <el-row :gutter="20">
-                <el-col :span="12">
+                <el-col :xs="24" :sm="12">
                   <el-form-item label="Имя" prop="first_name">
                     <el-input
                       v-model="profileForm.first_name"
@@ -172,7 +193,7 @@ const handleRegionSelect = () => {
                     />
                   </el-form-item>
                 </el-col>
-                <el-col :span="12">
+                <el-col :xs="24" :sm="12">
                   <el-form-item label="Фамилия" prop="last_name">
                     <el-input
                       v-model="profileForm.last_name"
@@ -183,7 +204,7 @@ const handleRegionSelect = () => {
               </el-row>
 
               <el-row :gutter="20">
-                <el-col :span="12">
+                <el-col :xs="24" :sm="12">
                   <el-form-item label="Email">
                     <el-input
                       :model-value="user?.email"
@@ -192,7 +213,7 @@ const handleRegionSelect = () => {
                     />
                   </el-form-item>
                 </el-col>
-                <el-col :span="12">
+                <el-col :xs="24" :sm="12">
                   <el-form-item label="Телефон" prop="phone_number">
                     <PhoneNumber
                       v-model="profileForm.phone_number"
@@ -203,7 +224,7 @@ const handleRegionSelect = () => {
               </el-row>
 
               <el-row :gutter="20">
-                <el-col :span="12">
+                <el-col :xs="24" :sm="12">
                   <el-form-item label="Telegram" prop="telegram">
                     <TelegramLink
                       v-model="profileForm.telegram"
@@ -211,7 +232,7 @@ const handleRegionSelect = () => {
                     />
                   </el-form-item>
                 </el-col>
-                <el-col :span="12">
+                <el-col :xs="24" :sm="12">
                   <el-form-item label="Язык" prop="language_code">
                     <el-select
                       v-model="profileForm.language_code"
@@ -225,7 +246,7 @@ const handleRegionSelect = () => {
               </el-row>
 
               <el-row :gutter="20">
-                <el-col :span="12">
+                <el-col :xs="24" :sm="12">
                   <el-form-item label="Регион" prop="region_id">
                     <AutocompletesRegionAutocomplete
                       v-model="profileForm.region_id"
@@ -234,7 +255,7 @@ const handleRegionSelect = () => {
                     />
                   </el-form-item>
                 </el-col>
-                <el-col :span="12">
+                <el-col :xs="24" :sm="12">
                   <el-form-item label="Город" prop="city_id">
                     <AutocompletesCityAutocomplete
                       v-model="profileForm.city_id"
@@ -280,6 +301,10 @@ const handleRegionSelect = () => {
 .page-account {
   min-height: 60vh;
   padding: 40px 0;
+
+  @media (max-width: 768px) {
+    padding: 20px 0;
+  }
 
   .page-header {
     margin-bottom: 32px;
@@ -393,6 +418,5 @@ const handleRegionSelect = () => {
       }
     }
   }
-
 }
 </style>
