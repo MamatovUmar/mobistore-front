@@ -1,82 +1,148 @@
 import type { IPagination } from ".";
 import type { IBrand } from "./brand";
 
+export interface IModelBattery {
+  type?: string;
+  capacity?: string;
+  charging?: string[];
+}
+
+export interface IModelPlatform {
+  os?: string;
+  cpu?: string;
+  chipset?: string;
+  gpu?: string;
+}
+
+export interface IModelNetwork {
+  "2g"?: string;
+  "3g"?: string;
+  "4g"?: string;
+  "5g"?: string;
+  speed?: string;
+  technology?: string;
+}
+
+export interface IModelDisplay {
+  size?: string;
+  type?: string;
+  protection?: string;
+  resolution?: string;
+}
+
+export interface IModelLaunch {
+  status?: string;
+  released?: string;
+  announced?: string;
+}
+
+export interface IModelBody {
+  sim?: string;
+  weight?: string;
+  dimensions?: string;
+  build?: string;
+}
+
+export interface IModelMemory {
+  cardSlot?: string;
+  internal?: string;
+  ram?: string;
+  storage?: string[];
+}
+
+export interface IModelSound {
+  audioJack?: string;
+  loudspeaker?: string;
+}
+
+export interface IModelComms {
+  usb?: string;
+  wlan?: string;
+  radio?: string;
+  bluetooth?: string;
+  positioning?: string;
+  nfc?: string;
+}
+
+export interface IModelFeatures {
+  browser?: string;
+  sensors?: string;
+}
+
+export interface IModelCameraSpecs {
+  type: string;
+  video?: string[];
+  features?: string[];
+  cameraSpecs?: string[];
+  main?: string;
+  ultrawide?: string;
+  telephoto?: string;
+}
+
+export interface IModelCameras {
+  mainCamera?: IModelCameraSpecs;
+  selfieCamera?: IModelCameraSpecs;
+  // Fallback for simple key-value pairs if needed based on response example
+  main?: string;
+  ultrawide?: string;
+  telephoto?: string;
+}
+
 export interface IModel {
   id: number;
   name: string;
   brand_id: number;
-  battery: {
-    type: string;
-    charging: string[];
-  };
-  platform: {
-    os?: string;
-    cpu?: string;
-    chipset?: string;
-    gpu?: string;
-  };
-  network: {
-    "2g"?: string;
-    "3g"?: string;
-    "4g"?: string;
-    "5g"?: string;
-    "speed"?: string;
-    technology: string;
-  };
-  display: {
-    size: string;
-    type: string;
-    protection: string;
-    resolution: string;
-  };
-  launch: {
-    status: string;
-    released: string;
-    announced: string;
-  };
-  body: {
-    sim: string;
-    weight: string;
-    dimensions: string;
-    build?: string;
-  };
-  memory: {
-    cardSlot: string;
-    internal: string;
-  };
-  sound: {
-    audioJack: string;
-    loudspeaker: string;
-  };
-  comms: {
-    usb: string;
-    wlan: string;
-    radio: string;
-    bluetooth: string;
-    positioning: string;
-    nfc: string;
-  };
-  features: {
-    browser: string;
-    sensors: string;
-  };
-  colors: string[];
-  cameras: {
-    mainCamera?: IModelCamera;
-    selfieCamera?: IModelCamera;
-  };
+  brand?: IBrand;
   image_url: string | null;
+  alias: string;
+
+  // Specs
+  battery?: IModelBattery;
+  platform?: IModelPlatform;
+  network?: IModelNetwork;
+  display?: IModelDisplay;
+  launch?: IModelLaunch;
+  body?: IModelBody;
+  memory?: IModelMemory;
+  sound?: IModelSound;
+  comms?: IModelComms;
+  features?: IModelFeatures;
+  colors?: string[];
+  cameras?: IModelCameras;
+
   created_at: string;
   updated_at: string;
-  brand: IBrand;
-  alias: string;
 }
 
-export interface IModelCamera {
-  type: string;
-  video: string[];
-  features: string[];
-  cameraSpecs: string[];
+export interface IModelCreatePayload {
+  name: string;
+  brand_id: number;
+  image_url?: string;
+  alias?: string;
+  battery?: IModelBattery;
+  platform?: IModelPlatform;
+  network?: IModelNetwork;
+  display?: IModelDisplay;
+  launch?: IModelLaunch;
+  body?: IModelBody;
+  memory?: IModelMemory;
+  sound?: IModelSound;
+  comms?: IModelComms;
+  features?: IModelFeatures;
+  colors?: string[];
+  cameras?: IModelCameras;
+}
+
+export interface IModelUpdatePayload extends Partial<IModelCreatePayload> {}
+
+export interface IModelImage {
+  id: number;
+  url: string;
+}
+
+export interface IModelImagesResponse {
+  images: IModelImage[];
+  count: number;
 }
 
 export interface IModelResponse {
