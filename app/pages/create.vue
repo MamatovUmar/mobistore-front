@@ -119,14 +119,10 @@ const saveImages = catcher(
     formData.append("entityType", EntityType.AD);
     formData.append("entityId", entityId.toString());
 
-    const response = await $api<IBaseResponse<any>>("/image/upload-multiple", {
+    await $api<IBaseResponse<any>>("/image/upload-multiple", {
       method: "POST",
       body: formData,
     });
-
-    if (response?.status) {
-      ElMessage.success("Изображения загружены успешно");
-    }
   },
   (e: any) => {
     ElMessage.error("Ошибка при загрузке изображений");

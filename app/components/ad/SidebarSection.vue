@@ -13,6 +13,7 @@ import {
 } from "@element-plus/icons-vue";
 import StatusTag from "~/components/ad/StatusTag.vue";
 import ContactsInfo from "~/components/ad/ContactsInfo.vue";
+import ComplaintButton from "~/components/ad/ComplaintButton.vue";
 import { useFavorite } from "#imports";
 import { useRootStore } from "~/store/root";
 
@@ -214,6 +215,11 @@ const publishListing = catcher(
     >
       Поднять в поиске
     </el-button>
+
+    <!-- Кнопка жалобы (только для посетителей) -->
+    <div v-if="listing.user_id !== root.user?.id" class="complaint-section">
+      <ComplaintButton :listing="listing" />
+    </div>
   </div>
 </template>
 
@@ -279,6 +285,7 @@ const publishListing = catcher(
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
+  gap: 10px;
   .el-button {
     flex: 1;
   }
@@ -418,5 +425,13 @@ const publishListing = catcher(
   color: var(--color-text-primary);
   font-size: 15px;
   text-align: right;
+}
+
+.complaint-section {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border-light);
+  display: flex;
+  justify-content: center;
 }
 </style>

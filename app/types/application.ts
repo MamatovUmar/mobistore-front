@@ -45,11 +45,14 @@ export const APPLICATION_STATUS_MAP: Record<
   rejected: { label: "Отклонена", type: "danger" },
 };
 
-export const APPLICATION_TYPE_MAP: Record<ApplicationType, string> = {
-  general: "Общий",
-  question: "Вопрос",
-  complaint: "Жалоба",
-  technical: "Тех. вопрос",
-  partnership: "Партнёрство",
-  other: "Другое",
+export const APPLICATION_TYPE_MAP: Record<
+  ApplicationType,
+  { label: string; type: "" | "success" | "warning" | "info" | "danger" }
+> = {
+  general: { label: "Общий", type: "info" },
+  question: { label: "Вопрос", type: "" },
+  complaint: { label: "Жалоба", type: "danger" },
+  technical: { label: "Тех. вопрос", type: "warning" },
+  partnership: { label: "Партнёрство", type: "success" },
+  other: { label: "Другое", type: "info" },
 };

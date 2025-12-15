@@ -64,9 +64,13 @@ const truncateText = (text: string, maxLength: number = 50) => {
       <el-table-column prop="id" label="ID" width="70" />
 
       <el-table-column prop="type" label="Тип" width="130">
-        <template #default="{ row }">
-          <el-tag size="small" effect="plain">
-            {{ APPLICATION_TYPE_MAP[row.type] || row.type }}
+        <template #default="{ row }: { row: IApplication }">
+          <el-tag
+            :type="APPLICATION_TYPE_MAP[row.type]?.type || 'info'"
+            size="small"
+            effect="plain"
+          >
+            {{ APPLICATION_TYPE_MAP[row.type]?.label || row.type }}
           </el-tag>
         </template>
       </el-table-column>

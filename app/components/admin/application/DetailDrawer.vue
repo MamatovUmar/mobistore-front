@@ -80,8 +80,14 @@ const getDeviceIcon = (deviceType: string) => {
               application.status
             }}
           </el-tag>
-          <el-tag size="large" effect="plain">
-            {{ APPLICATION_TYPE_MAP[application.type] || application.type }}
+          <el-tag
+            :type="APPLICATION_TYPE_MAP[application.type]?.type || 'info'"
+            size="large"
+            effect="plain"
+          >
+            {{
+              APPLICATION_TYPE_MAP[application.type]?.label || application.type
+            }}
           </el-tag>
         </div>
       </div>

@@ -59,6 +59,12 @@ const menuItems = [
     path: "/admin/applications",
     roles: ["admin", "moderator"],
   },
+  {
+    title: "Бренды",
+    icon: Document,
+    path: "/admin/brands",
+    roles: ["admin", "moderator"],
+  },
 ];
 
 const isActive = (path: string) => {
