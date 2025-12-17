@@ -7,6 +7,12 @@ definePageMeta({
   middleware: "guest",
 });
 
+useSeoMeta({
+  title: "Восстановление пароля — MobiStore",
+  description: "Забыли пароль? Восстановите доступ к аккаунту MobiStore. Введите email и получите ссылку для сброса пароля.",
+  robots: "noindex, nofollow",
+});
+
 const { $api } = useNuxtApp();
 
 const formRef = ref();

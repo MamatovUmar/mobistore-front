@@ -17,6 +17,11 @@ definePageMeta({
   layout: "admin",
 });
 
+useSeoMeta({
+  title: "Парсер — Админ MobiStore",
+  robots: "noindex, nofollow",
+});
+
 const {
   loading,
   records,

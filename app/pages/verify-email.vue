@@ -5,6 +5,11 @@ definePageMeta({
   layout: "empty",
 });
 
+useSeoMeta({
+  title: "Подтверждение email — MobiStore",
+  robots: "noindex, nofollow",
+});
+
 const { $api } = useNuxtApp();
 const route = useRoute();
 

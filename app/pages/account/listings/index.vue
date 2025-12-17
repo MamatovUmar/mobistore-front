@@ -6,6 +6,11 @@ import type { IListing, IAdsResponse } from "~/types/ads";
 import type { IBaseResponse, IPagination } from "~/types";
 import { ListingStatus } from "~/types/ads";
 
+useSeoMeta({
+  title: "Мои объявления — MobiStore",
+  robots: "noindex, nofollow",
+});
+
 const { $api } = useNuxtApp();
 
 const activeTab = ref("all");

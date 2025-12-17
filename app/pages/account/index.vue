@@ -6,6 +6,11 @@ import type { IUpdateProfilePayload } from "~/types/user";
 import PhoneNumber from "~/components/form/PhoneNumber.vue";
 import TelegramLink from "~/components/form/TelegramLink.vue";
 
+useSeoMeta({
+  title: "Мой профиль — MobiStore",
+  robots: "noindex, nofollow",
+});
+
 const isEditingProfile = ref(false);
 const profileFormRef = ref<FormInstance>();
 const loading = ref(false);

@@ -13,6 +13,13 @@ import type { IBaseResponse } from "~/types/index";
 import type { IModel } from "~/types/model";
 import { useRootStore } from "~/store/root";
 
+useSeoMeta({
+  title: "Подать объявление — MobiStore",
+  description: "Разместите бесплатное объявление о продаже смартфона на MobiStore. Быстрая продажа, тысячи покупателей, удобная форма размещения.",
+  ogTitle: "Подать объявление — MobiStore",
+  ogDescription: "Продайте свой смартфон быстро и выгодно на MobiStore",
+});
+
 const { $api } = useNuxtApp();
 const root = useRootStore();
 

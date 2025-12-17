@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { Star } from "@element-plus/icons-vue";
 
+useSeoMeta({
+  title: "Избранное — MobiStore",
+  robots: "noindex, nofollow",
+});
+
 const { getProfileFavorites, favorites } = useFavorite();
 
 getProfileFavorites();

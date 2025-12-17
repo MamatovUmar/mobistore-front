@@ -6,6 +6,11 @@ definePageMeta({
   layout: "admin",
 });
 
+useSeoMeta({
+  title: "Админ панель — MobiStore",
+  robots: "noindex, nofollow",
+});
+
 const stats = ref([
   {
     title: "Пользователи",

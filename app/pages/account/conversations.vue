@@ -1,5 +1,8 @@
 <script setup lang="ts">
-
+useSeoMeta({
+  title: "Сообщения — MobiStore",
+  robots: "noindex, nofollow",
+});
 </script>
 
 <template>

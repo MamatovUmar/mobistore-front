@@ -7,6 +7,11 @@ definePageMeta({
   layout: "admin",
 });
 
+useSeoMeta({
+  title: "Заявки — Админ MobiStore",
+  robots: "noindex, nofollow",
+});
+
 const {
   applications,
   pagination,

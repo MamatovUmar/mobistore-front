@@ -11,6 +11,11 @@ definePageMeta({
   layout: "admin",
 });
 
+useSeoMeta({
+  title: "Бренды — Админ MobiStore",
+  robots: "noindex, nofollow",
+});
+
 const {
   brands,
   pagination,

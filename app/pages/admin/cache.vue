@@ -5,6 +5,11 @@ definePageMeta({
   layout: "admin",
 });
 
+useSeoMeta({
+  title: "Кэш — Админ MobiStore",
+  robots: "noindex, nofollow",
+});
+
 const { loading, cacheKeys, cacheStats, refresh, clearByKey, clearAll, formatTTL } = useCache();
 
 const clearingKey = ref<string | null>(null);

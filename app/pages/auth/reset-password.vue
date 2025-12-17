@@ -6,6 +6,11 @@ definePageMeta({
   layout: "empty",
 });
 
+useSeoMeta({
+  title: "Сброс пароля — MobiStore",
+  robots: "noindex, nofollow",
+});
+
 const { $api } = useNuxtApp();
 const route = useRoute();
 

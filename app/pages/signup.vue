@@ -8,6 +8,14 @@ definePageMeta({
   middleware: "guest",
 });
 
+useSeoMeta({
+  title: "Регистрация — MobiStore",
+  description: "Создайте бесплатный аккаунт на MobiStore. Размещайте объявления о продаже смартфонов, сохраняйте избранное и общайтесь с продавцами.",
+  ogTitle: "Регистрация — MobiStore",
+  ogDescription: "Присоединяйтесь к MobiStore — крупнейшей площадке смартфонов в Узбекистане",
+  robots: "noindex, nofollow",
+});
+
 const { $api } = useNuxtApp();
 
 const formRef = ref();

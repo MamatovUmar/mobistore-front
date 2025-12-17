@@ -13,6 +13,11 @@ import type { IBaseResponse } from "~/types/index";
 import type { IModel } from "~/types/model";
 import EditListingSkeleton from "~/components/skeletons/EditListingSkeleton.vue";
 
+useSeoMeta({
+  title: "Редактирование объявления — MobiStore",
+  robots: "noindex, nofollow",
+});
+
 const { $api } = useNuxtApp();
 const route = useRoute();
 const adId = computed(() => Number(route.params.id));

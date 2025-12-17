@@ -2,6 +2,13 @@
 import { Phone } from "@element-plus/icons-vue";
 import type { FormInstance, FormRules } from "element-plus";
 
+useSeoMeta({
+  title: "Контакты — MobiStore",
+  description: "Свяжитесь с командой MobiStore. Служба поддержки, форма обратной связи, телефон и email для вопросов и предложений.",
+  ogTitle: "Контакты — MobiStore",
+  ogDescription: "Свяжитесь с нами любым удобным способом",
+});
+
 const { $api } = useNuxtApp();
 
 const formRef = ref<FormInstance>();

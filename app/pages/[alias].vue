@@ -26,6 +26,39 @@ const {
 const listing = computed(() => data.value?.data);
 const showChat = ref(false);
 
+const config = useRuntimeConfig();
+const siteUrl = config.public.siteUrl || 'https://mobistore.uz';
+
+useSeoMeta({
+  title: () => listing.value?.title 
+    ? `${listing.value.title} — Mobistore` 
+    : 'Объявление — Mobistore',
+  description: () => listing.value 
+    ? `${listing.value.brand?.name} ${listing.value.model?.name} за ${listing.value.price?.toLocaleString('ru-RU')} ${listing.value.currency}. ${listing.value.description?.slice(0, 150)}...`
+    : 'Объявление на Mobistore',
+  ogTitle: () => listing.value?.title || 'Объявление — Mobistore',
+  ogDescription: () => listing.value 
+    ? `${listing.value.brand?.name} ${listing.value.model?.name} • ${listing.value.price?.toLocaleString('ru-RU')} ${listing.value.currency} • ${listing.value.region?.name_ru}`
+    : 'Объявление на Mobistore',
+  ogImage: () => listing.value?.images?.[0]?.url || '/og-default.png',
+  ogUrl: () => `${siteUrl}/${listing.value?.alias}`,
+  ogType: 'website',
+  ogSiteName: 'Mobistore',
+  ogLocale: 'ru_RU',
+  twitterCard: 'summary_large_image',
+  twitterTitle: () => listing.value?.title || 'Объявление — Mobistore',
+  twitterDescription: () => listing.value 
+    ? `${listing.value.brand?.name} ${listing.value.model?.name} • ${listing.value.price?.toLocaleString('ru-RU')} ${listing.value.currency}`
+    : 'Объявление на Mobistore',
+  twitterImage: () => listing.value?.images?.[0]?.url || '/og-default.png',
+});
+
+useHead({
+  link: [
+    { rel: 'canonical', href: () => `${siteUrl}/${listing.value?.alias}` }
+  ]
+});
+
 if (error.value) {
   if (import.meta.client) {
     ElMessage.error("Ошибка при загрузке объявления");

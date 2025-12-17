@@ -19,6 +19,11 @@ definePageMeta({
   layout: "admin",
 });
 
+useSeoMeta({
+  title: "Модели — Админ MobiStore",
+  robots: "noindex, nofollow",
+});
+
 const {
   models,
   pagination,

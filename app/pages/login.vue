@@ -10,6 +10,14 @@ definePageMeta({
   middleware: "guest",
 });
 
+useSeoMeta({
+  title: "Вход в аккаунт — MobiStore",
+  description: "Войдите в свой аккаунт MobiStore для управления объявлениями, избранным и сообщениями. Быстрый вход через email или Google.",
+  ogTitle: "Вход в аккаунт — MobiStore",
+  ogDescription: "Войдите в свой аккаунт MobiStore",
+  robots: "noindex, nofollow",
+});
+
 const { $api } = useNuxtApp();
 const rootStore = useRootStore();
 const tokenCookie = useCookie("token");
