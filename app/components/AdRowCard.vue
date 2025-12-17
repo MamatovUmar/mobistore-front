@@ -19,6 +19,8 @@ const emit = defineEmits(["favoriteChanged"]);
 
 const { addToFavorite, removeFavorite } = useFavorite();
 const root = useRootStore();
+const { locale } = useI18n();
+const localePath = useLocalePath();
 
 const favorites = computed(() => root.user?.favorites || []);
 
@@ -42,16 +44,17 @@ const toggleFavorite = async (e: MouseEvent) => {
   emit("favoriteChanged");
 };
 
-// Format date (placeholder - replace with actual date from listing)
+// Format date based on current locale
 const postDate = computed(() => {
+  const localeMap: Record<string, string> = { ru: 'ru-RU', uz: 'uz-UZ' };
   return new Date(props.listing?.published_at ?? new Date()).toLocaleDateString(
-    "ru-RU"
+    localeMap[locale.value] || 'ru-RU'
   );
 });
 </script>
 
 <template>
-  <NuxtLink class="listing-row-card" :to="`/${listing.alias}`">
+  <NuxtLink class="listing-row-card" :to="localePath(`/${listing.alias}`)">
     <div class="card-glow" />
 
     <!-- Image Container -->

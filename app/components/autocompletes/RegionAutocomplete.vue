@@ -8,9 +8,7 @@ interface Props {
   initData?: IRegion;
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  placeholder: "Выберите регион",
-});
+const props = defineProps<Props>();
 
 const model = defineModel<number>();
 
@@ -19,6 +17,9 @@ const emit = defineEmits<{
 }>();
 
 const placesStore = usePlacesStore();
+const { locale, t } = useI18n();
+
+const computedPlaceholder = computed(() => props.placeholder ?? t("components.region.placeholder"));
 
 const handleChange = (value: number) => {
   const selectedRegion = placesStore.regions.find(r => r.id === value);
@@ -41,7 +42,7 @@ watch(() => props.initData, (newData) => {
 <template>
   <el-select
     v-model="model"
-    :placeholder="placeholder"
+    :placeholder="computedPlaceholder"
     :loading="placesStore.regionsLoading"
     filterable
     clearable
@@ -51,7 +52,7 @@ watch(() => props.initData, (newData) => {
     <el-option
       v-for="region in placesStore.regions"
       :key="region.id"
-      :label="region.name_ru"
+      :label="region[`name_${locale}`]"
       :value="region.id"
     />
   </el-select>

@@ -10,6 +10,8 @@ import { useRootStore } from "~/store/root";
 
 const rootStore = useRootStore();
 const router = useRouter();
+const { t } = useI18n();
+const localePath = useLocalePath();
 </script>
 
 <template>
@@ -31,25 +33,25 @@ const router = useRouter();
 
     <template #dropdown>
       <el-dropdown-menu class="user-dropdown">
-        <el-dropdown-item @click="router.push('/account')">
+        <el-dropdown-item @click="router.push(localePath('/account'))">
           <el-icon><User /></el-icon>
-          <span>Личные данные</span>
+          <span>{{ t('userMenu.profile') }}</span>
         </el-dropdown-item>
-        <el-dropdown-item @click="router.push('/account/listings')">
+        <el-dropdown-item @click="router.push(localePath('/account/listings'))">
           <el-icon><Document /></el-icon>
-          <span>Мои объявления</span>
+          <span>{{ t('userMenu.myListings') }}</span>
         </el-dropdown-item>
-        <el-dropdown-item @click="router.push('/account/favorites')">
+        <el-dropdown-item @click="router.push(localePath('/account/favorites'))">
           <el-icon><Star /></el-icon>
-          <span>Избранное</span>
+          <span>{{ t('userMenu.favorites') }}</span>
         </el-dropdown-item>
-        <el-dropdown-item @click="router.push('/account/conversations')">
+        <el-dropdown-item @click="router.push(localePath('/account/conversations'))">
           <el-icon><MessageBox /></el-icon>
-          <span>Переписки</span>
+          <span>{{ t('userMenu.conversations') }}</span>
         </el-dropdown-item>
         <el-dropdown-item divided @click="rootStore.logout()">
           <el-icon><SwitchButton /></el-icon>
-          <span>Выйти</span>
+          <span>{{ t('userMenu.logout') }}</span>
         </el-dropdown-item>
       </el-dropdown-menu>
     </template>

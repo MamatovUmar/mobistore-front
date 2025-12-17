@@ -27,6 +27,8 @@ const rootStore = useRootStore();
 const router = useRouter();
 const chatStore = useChat();
 const { unreadCount: unreadNotificationsCount } = useNotifications();
+const { t } = useI18n();
+const localePath = useLocalePath();
 
 const conversations = ref<IConversation[]>([]);
 
@@ -47,13 +49,13 @@ const handleClose = () => {
 
 const handleNavigation = (path: string) => {
   handleClose();
-  router.push(path);
+  router.push(localePath(path));
 };
 
 const handleCreateAd = () => {
   handleClose();
   if (rootStore.user) {
-    router.push("/new");
+    router.push(localePath("/create"));
   } else {
     emit("login"); // Trigger login flow (or signup if preferred, but existing flow uses header's auth dialog which listens to login/signup events)
     // Actually, AppHeader listens to @login="goToLogin". So emitting login will open the login page directly.
@@ -128,8 +130,8 @@ onMounted(async () => {
           </div>
         </div>
         <div class="guest-info" v-else>
-          <div class="welcome-text">Добро пожаловать!</div>
-          <div class="sub-text">Войдите или создайте аккаунт</div>
+          <div class="welcome-text">{{ t('mobileDrawer.welcome') }}</div>
+          <div class="sub-text">{{ t('mobileDrawer.subText') }}</div>
         </div>
         <el-button link class="close-btn" @click="handleClose">
           <el-icon><Close /></el-icon>
@@ -144,18 +146,18 @@ onMounted(async () => {
             <div class="nav-icon">
               <el-icon><Plus /></el-icon>
             </div>
-            <span>Подать объявление</span>
+            <span>{{ t('header.createAd') }}</span>
           </div>
         </div>
 
         <template v-if="rootStore.user">
           <div class="nav-group">
-            <div class="nav-title">Аккаунт</div>
+            <div class="nav-title">{{ t('mobileDrawer.account') }}</div>
             <div class="nav-item" @click="handleNavigation('/account')">
               <div class="nav-icon">
                 <el-icon><User /></el-icon>
               </div>
-              <span>Личные данные</span>
+              <span>{{ t('userMenu.profile') }}</span>
             </div>
             <div
               class="nav-item"
@@ -164,7 +166,7 @@ onMounted(async () => {
               <div class="nav-icon">
                 <el-icon><Document /></el-icon>
               </div>
-              <span>Мои объявления</span>
+              <span>{{ t('userMenu.myListings') }}</span>
             </div>
             <div
               class="nav-item"
@@ -173,7 +175,7 @@ onMounted(async () => {
               <div class="nav-icon">
                 <el-icon><Star /></el-icon>
               </div>
-              <span>Избранное</span>
+              <span>{{ t('userMenu.favorites') }}</span>
             </div>
             <div
               class="nav-item"
@@ -188,7 +190,7 @@ onMounted(async () => {
                   <el-icon><ChatDotRound /></el-icon>
                 </el-badge>
               </div>
-              <span>Сообщения</span>
+              <span>{{ t('userMenu.conversations') }}</span>
             </div>
           </div>
 
@@ -196,12 +198,12 @@ onMounted(async () => {
             class="nav-group"
             v-if="rootStore.isAdmin || rootStore.isModerator"
           >
-            <div class="nav-title">Администрирование</div>
+            <div class="nav-title">{{ t('mobileDrawer.admin') }}</div>
             <div class="nav-item" @click="handleNavigation('/admin')">
               <div class="nav-icon">
                 <el-icon><Monitor /></el-icon>
               </div>
-              <span>Админ панель</span>
+              <span>{{ t('header.adminPanel') }}</span>
             </div>
           </div>
 
@@ -210,7 +212,7 @@ onMounted(async () => {
               <div class="nav-icon">
                 <el-icon><SwitchButton /></el-icon>
               </div>
-              <span>Выйти</span>
+              <span>{{ t('userMenu.logout') }}</span>
             </div>
           </div>
         </template>
@@ -223,14 +225,14 @@ onMounted(async () => {
               class="w-full"
               @click="handleLogin"
             >
-              Войти
+              {{ t('header.login') }}
             </el-button>
             <el-button
               size="large"
               class="w-full mt-3 ml-0"
               @click="handleSignup"
             >
-              Регистрация
+              {{ t('mobileDrawer.signup') }}
             </el-button>
           </div>
         </template>

@@ -1,2 +1,214 @@
 {
+  "seo": {
+    "home": {
+      "title": "MobiStore - O'zbekistonda smartfonlarni sotib oling va soting | E'lonlar taxtasi",
+      "description": "O'zbekistondagi smartfonlar, planshetlar va mobil qurilmalar bo'yicha eng yirik e'lonlar taxtasi. Jismoniy shaxslar va do'konlardan minglab e'lonlar. Tezkor savdo, xavfsiz bitimlar. Bepul e'lon joylashtirish.",
+      "ogTitle": "MobiStore - O'zbekistonda smartfonlarni sotib oling va soting",
+      "ogDescription": "Minglab e'lonlar orasidan o'zingizga mos smartfonni toping. Mashhur brendlar: iPhone, Samsung, Xiaomi. Bepul e'lon joylashtirish.",
+      "twitterTitle": "MobiStore - O'zbekistonda smartfonlarni sotib oling va soting",
+      "twitterDescription": "O'zbekistondagi eng yirik smartfonlar e'lonlar taxtasi. Bepul joylashtirish, xavfsiz bitimlar."
+    }
+  },
+  "home": {
+    "hero": {
+      "smartphones": "Smartfonlar",
+      "profitable": "Foydali",
+      "fast": "Tez",
+      "badge": "O'zbekistonda №1 platforma",
+      "titleMain": "Texnologiyalar",
+      "titleGradient": "qo'lingizda",
+      "subtitle": "Smartfonlarni foydali sotib oling va soting. Minglab tekshirilgan e'lonlar, xavfsiz bitimlar va shahringizda qulay qidiruv.",
+      "stats": {
+        "ads": "E'lonlar",
+        "users": "Foydalanuvchilar",
+        "support": "Qo'llab-quvvatlash"
+      }
+    },
+    "filter": {
+      "region": "Viloyat",
+      "regionPlaceholder": "Butun mamlakat",
+      "city": "Shahar",
+      "cityPlaceholder": "Barcha shaharlar",
+      "brand": "Brend",
+      "brandPlaceholder": "Barcha brendlar",
+      "model": "Model",
+      "modelPlaceholder": "Barcha modellar",
+      "showResults": "Natijalarni ko'rsatish"
+    },
+    "latestAds": {
+      "title": "Yangi e'lonlar",
+      "subtitle": "Bozordagi eng dolzarb takliflar",
+      "viewAll": "Barchasini ko'rish"
+    },
+    "brands": {
+      "titleTop": "Top",
+      "titleBrands": "Brendlar",
+      "subtitle": "Millionlab foydalanuvchilar tanlovi",
+      "adsCount": "{count} ta e'lon"
+    },
+    "promo": {
+      "badge": "MobiStore",
+      "titleMain": "Eski gadjetni",
+      "titleGradient": "yangi imkoniyatlarga aylantiring",
+      "description": "Smartfoningiz javonda chang bosib yotmasin. Uni O'zbekistonning asosiy platformasida foydali soting.",
+      "benefits": {
+        "freeListing": "2 daqiqada bepul joylashtirish",
+        "realBuyers": "Minglab haqiqiy xaridorlar"
+      },
+      "startSelling": "Sotishni boshlash",
+      "profitable": "Foydali",
+      "fast": "Tez",
+      "sold": "Sotildi"
+    }
+  },
+  "header": {
+    "createAd": "E'lon berish",
+    "adminPanel": "Admin panel",
+    "login": "Kirish"
+  },
+  "footer": {
+    "description": "O'zbekistonda gadjetlarni sotib olish va sotish uchun eng yirik ekotizim. Har bir bitimda xavfsizlik, tezkorlik va qulaylik.",
+    "help": "Yordam",
+    "privacyPolicy": "Maxfiylik siyosati",
+    "termsOfService": "Foydalanuvchi shartnomasi",
+    "contacts": "Kontaktlar",
+    "location": "Toshkent, O'zbekiston",
+    "copyright": "© 2025 MobiStore. Barcha huquqlar himoyalangan."
+  },
+  "userMenu": {
+    "profile": "Shaxsiy ma'lumotlar",
+    "myListings": "Mening e'lonlarim",
+    "favorites": "Sevimlilar",
+    "conversations": "Xabarlar",
+    "logout": "Chiqish"
+  },
+  "adCard": {
+    "noPhoto": "Rasm yo'q",
+    "today": "Bugun"
+  },
+  "createListing": {
+    "title": "E'lon berish",
+    "subtitle": "Qurilmangiz haqidagi ma'lumotlarni to'ldiring",
+    "meta": {
+      "title": "E'lon berish — MobiStore",
+      "description": "MobiStore-da smartfon sotish haqida bepul e'lon bering. Tezkor sotuv, minglab xaridorlar, qulay joylashtirish shakli.",
+      "ogTitle": "E'lon berish — MobiStore",
+      "ogDescription": "Smartfoningizni MobiStore-da tez va foydali soting"
+    },
+    "sections": {
+      "main": "Asosiy ma'lumotlar",
+      "specsAndPrice": "Xususiyatlari va narxi",
+      "locationAndPhotos": "Joylashuv va rasmlar",
+      "contacts": "Kontaktlar"
+    },
+    "fields": {
+      "title": {
+        "label": "Sarlavha",
+        "placeholder": "Sarlavhani kiriting"
+      },
+      "description": {
+        "label": "Tavsif",
+        "placeholder": "Tavsifni kiriting"
+      },
+      "brand": {
+        "label": "Brend",
+        "placeholder": "Brend nomini kiriting"
+      },
+      "model": {
+        "label": "Model",
+        "placeholder": "Model nomini kiriting"
+      },
+      "memory": {
+        "label": "Xotira",
+        "placeholder": "Xotirani tanlang"
+      },
+      "ram": {
+        "label": "Operativ xotira",
+        "placeholder": "Operativ xotirani tanlang"
+      },
+      "color": {
+        "label": "Rang",
+        "placeholderInput": "Rangni kiriting",
+        "placeholderSelect": "Rangni tanlang"
+      },
+      "condition": {
+        "label": "Holati",
+        "placeholder": "Holatini tanlang",
+        "options": {
+          "new": "Yangi",
+          "restored": "Tiklangan",
+          "used": "B/U"
+        }
+      },
+      "price": {
+        "label": "Narxi",
+        "placeholder": "Narxni kiriting"
+      },
+      "currency": {
+        "label": "Valyuta",
+        "placeholder": "Valyutani tanlang"
+      },
+      "exchange": "Almashish mumkin",
+      "region": {
+        "label": "Viloyat",
+        "placeholder": "Viloyatni tanlang"
+      },
+      "city": {
+        "label": "Shahar",
+        "placeholder": "Shahar nomini kiriting"
+      },
+      "photos": {
+        "label": "Rasmlar (maks. 8 ta)",
+        "dragText": "Fayllarni bu yerga sudrab olib keling yoki",
+        "clickText": "yuklash uchun bosing",
+        "tip": "Qo'llab-quvvatlanadigan formatlar: jpg, png (maks. 8 ta rasm)"
+      },
+      "phone": {
+        "label": "Telefon"
+      },
+      "telegram": {
+        "label": "Telegram"
+      },
+      "showContacts": "Kontaktlarni ko'rsatish"
+    },
+    "buttons": {
+      "preview": "Oldindan ko'rish",
+      "publish": "E'lon qilish"
+    },
+    "validation": {
+      "required": "Barcha majburiy maydonlarni to'ldiring",
+      "images": "Kamida bitta rasm yuklang",
+      "title": "Sarlavhani kiriting",
+      "description": "Tavsifni kiriting",
+      "region": "Viloyatni tanlang",
+      "city": "Shaharni tanlang",
+      "brand": "Brendni tanlang",
+      "model": "Modelni tanlang",
+      "price": "Narxni kiriting",
+      "state": "Holatini tanlang",
+      "success": "E'lon muvaffaqiyatli yaratildi",
+      "imageUploadError": "Rasmlarni yuklashda xatolik yuz berdi"
+    }
+  },
+  "components": {
+    "brand": {
+      "placeholder": "Brend nomini kiriting"
+    },
+    "model": {
+      "placeholder": "Model nomini kiriting"
+    },
+    "region": {
+      "placeholder": "Viloyatni tanlang"
+    },
+    "city": {
+      "placeholder": "Shahar nomini kiriting"
+    }
+  },
+  "mobileDrawer": {
+    "welcome": "Xush kelibsiz!",
+    "subText": "Tizimga kiring yoki ro'yxatdan o'ting",
+    "account": "Hisob",
+    "admin": "Ma'muriyat",
+    "signup": "Ro'yxatdan o'tish"
+  }
 }

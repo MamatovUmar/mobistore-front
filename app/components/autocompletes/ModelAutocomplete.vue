@@ -9,9 +9,7 @@ interface Props {
   initData?: IModel;
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  placeholder: "Введите название модели",
-});
+const props = defineProps<Props>();
 
 const model = defineModel<number>();
 
@@ -20,6 +18,9 @@ const emit = defineEmits<{
 }>();
 
 const { $api } = useNuxtApp();
+const { t } = useI18n();
+
+const computedPlaceholder = computed(() => props.placeholder ?? t("components.model.placeholder"));
 
 const loading = ref(false);
 // Инициализируем список моделей с initData для SSR
@@ -88,7 +89,7 @@ watch(() => props.initData, (newData) => {
 <template>
   <el-select
     v-model="model"
-    :placeholder="placeholder"
+    :placeholder="computedPlaceholder"
     :loading="loading"
     :disabled="!brandId"
     filterable

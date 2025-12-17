@@ -7,10 +7,13 @@ import {
   Iphone,
 } from "@element-plus/icons-vue";
 
-const benefits = [
-  "Бесплатное размещение за 2 минуты",
-  "Тысячи реальных покупателей",
-];
+const { t } = useI18n();
+const localePath = useLocalePath();
+
+const benefits = computed(() => [
+  t('home.promo.benefits.freeListing'),
+  t('home.promo.benefits.realBuyers'),
+]);
 </script>
 
 <template>
@@ -21,17 +24,16 @@ const benefits = [
         <div class="promo-content">
           <div class="promo-badge">
             <span class="pulse"></span>
-            MobiStore
+            {{ t('home.promo.badge') }}
           </div>
-          
+
           <h2 class="promo-title">
-            Превратите старый гаджет в 
-            <span class="gradient-text">новые возможности</span>
+            {{ t('home.promo.titleMain') }}
+            <span class="gradient-text">{{ t('home.promo.titleGradient') }}</span>
           </h2>
-          
+
           <p class="promo-description">
-            Не дайте вашему смартфону пылиться на полке. Продайте его выгодно 
-            на главной площадке Узбекистана.
+            {{ t('home.promo.description') }}
           </p>
 
           <ul class="promo-benefits">
@@ -46,9 +48,9 @@ const benefits = [
               type="primary"
               size="large"
               class="main-btn"
-              @click="navigateTo('/create')"
+              @click="navigateTo(localePath('/create'))"
             >
-              Начать продажу
+              {{ t('home.promo.startSelling') }}
               <el-icon class="el-icon--right"><Right /></el-icon>
             </el-button>
           </div>
@@ -65,7 +67,7 @@ const benefits = [
                   <div class="line line-long"></div>
                 </div>
               </div>
-              <div class="status-badge">Продано</div>
+              <div class="status-badge">{{ t('home.promo.sold') }}</div>
             </div>
             <div class="card-image-placeholder">
               <el-icon><Iphone /></el-icon>
@@ -79,12 +81,12 @@ const benefits = [
           <!-- Floating Elements -->
           <div class="float-card float-1">
             <el-icon><Money /></el-icon>
-            <span>Выгодно</span>
+            <span>{{ t('home.promo.profitable') }}</span>
           </div>
-          
+
           <div class="float-card float-2">
             <el-icon><TrendCharts /></el-icon>
-            <span>Быстро</span>
+            <span>{{ t('home.promo.fast') }}</span>
           </div>
         </div>
       </div>

@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { Cellphone, Lightning, Wallet } from "@element-plus/icons-vue";
 
-const router = useRouter();
+const { t } = useI18n();
 </script>
 
 <template>
@@ -21,19 +20,19 @@ const router = useRouter();
           <div class="icon-box blue">
             <el-icon><Cellphone /></el-icon>
           </div>
-          <span>Смартфоны</span>
+          <span>{{ t('home.hero.smartphones') }}</span>
         </div>
         <div class="float-card card-2">
           <div class="icon-box purple">
             <el-icon><Wallet /></el-icon>
           </div>
-          <span>Выгодно</span>
+          <span>{{ t('home.hero.profitable') }}</span>
         </div>
         <div class="float-card card-3">
           <div class="icon-box orange">
             <el-icon><Lightning /></el-icon>
           </div>
-          <span>Быстро</span>
+          <span>{{ t('home.hero.fast') }}</span>
         </div>
       </div>
 
@@ -42,34 +41,33 @@ const router = useRouter();
         <div class="text-content">
           <div class="badge slide-up">
             <span class="badge-dot"></span>
-            Платформа №1 в Узбекистане
+            {{ t('home.hero.badge') }}
           </div>
 
           <h1 class="hero-title slide-up delay-1">
-            Технологии
-            <span class="gradient-text">в твоих руках</span>
+            {{ t('home.hero.titleMain') }}
+            <span class="gradient-text">{{ t('home.hero.titleGradient') }}</span>
           </h1>
 
           <p class="hero-subtitle slide-up delay-2">
-            Покупайте и продавайте смартфоны выгодно. Тысячи проверенных
-            объявлений, безопасные сделки и удобный поиск в вашем городе.
+            {{ t('home.hero.subtitle') }}
           </p>
 
           <!-- Quick Stats -->
           <div class="hero-stats slide-up delay-4" v-if="false">
             <div class="stat-item">
               <span class="stat-count">10k+</span>
-              <span class="stat-label">Объявлений</span>
+              <span class="stat-label">{{ t('home.hero.stats.ads') }}</span>
             </div>
             <div class="stat-separator"></div>
             <div class="stat-item">
               <span class="stat-count">5k+</span>
-              <span class="stat-label">Пользователей</span>
+              <span class="stat-label">{{ t('home.hero.stats.users') }}</span>
             </div>
             <div class="stat-separator"></div>
             <div class="stat-item">
               <span class="stat-count">24/7</span>
-              <span class="stat-label">Поддержка</span>
+              <span class="stat-label">{{ t('home.hero.stats.support') }}</span>
             </div>
           </div>
         </div>

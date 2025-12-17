@@ -16,6 +16,8 @@ const props = defineProps<{
 
 const root = useRootStore();
 const { addToFavorite, removeFavorite } = useFavorite();
+const { t } = useI18n();
+const localePath = useLocalePath();
 
 const image = computed(() => {
   if (props.listing.images.length > 0) {
@@ -38,11 +40,11 @@ const toggleFavorite = (e: MouseEvent) => {
 };
 
 // Format date (placeholder - replace with actual date from listing)
-const postDate = "Сегодня";
+const postDate = computed(() => t('adCard.today'));
 </script>
 
 <template>
-  <NuxtLink class="listing-card" :to="`/${listing.alias}`">
+  <NuxtLink class="listing-card" :to="localePath(`/${listing.alias}`)">
     <div class="card-glow"></div>
 
     <!-- Image Container -->
@@ -54,7 +56,7 @@ const postDate = "Сегодня";
       >
         <div v-if="!hasImage" class="placeholder">
           <el-icon :size="40" color="#cbd5e1"><Picture /></el-icon>
-          <span> Нет фото </span>
+          <span>{{ t('adCard.noPhoto') }}</span>
         </div>
 
         <!-- Gradient Overlay -->

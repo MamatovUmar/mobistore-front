@@ -11,6 +11,8 @@ import LanguageSwitcher from "./header/LanguageSwitcher.vue";
 
 const rootStore = useRootStore();
 const router = useRouter();
+const { t } = useI18n();
+const localePath = useLocalePath();
 
 const showAuthDialog = ref(false);
 const showMobileDrawer = ref(false);
@@ -30,12 +32,12 @@ onUnmounted(() => {
 
 const goToLogin = () => {
   showAuthDialog.value = false;
-  router.push("/login");
+  router.push(localePath('/login'));
 };
 
 const handleCreateAd = () => {
   if (rootStore.user) {
-    router.push("/create");
+    router.push(localePath('/create'));
   } else {
     showAuthDialog.value = true;
   }
@@ -47,7 +49,7 @@ const handleCreateAd = () => {
     <div class="header-container">
       <div class="header-content">
         <!-- Logo -->
-        <NuxtLink to="/" class="logo-link">
+        <NuxtLink :to="localePath('/')" class="logo-link">
           <div class="logo">
             <img src="/logo.png" alt="MobiStore" />
           </div>
@@ -57,17 +59,17 @@ const handleCreateAd = () => {
         <div class="header-actions desktop-only">
           <button class="btn-create" @click="handleCreateAd">
             <el-icon class="btn-icon"><Plus /></el-icon>
-            <span class="btn-text">Подать объявление</span>
+            <span class="btn-text">{{ t('header.createAd') }}</span>
           </button>
 
           <LanguageSwitcher />
 
           <el-tooltip
             v-if="rootStore.isAdmin || rootStore.isModerator"
-            content="Админ панель"
+            :content="t('header.adminPanel')"
             placement="bottom"
           >
-            <el-button circle class="action-btn" @click="navigateTo('/admin')">
+            <el-button circle class="action-btn" @click="navigateTo(localePath('/admin'))">
               <el-icon><Monitor /></el-icon>
             </el-button>
           </el-tooltip>
@@ -86,7 +88,7 @@ const handleCreateAd = () => {
             size="large"
             @click="goToLogin"
           >
-            Войти
+            {{ t('header.login') }}
           </el-button>
 
           <!-- User Menu -->

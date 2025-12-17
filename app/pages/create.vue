@@ -13,44 +13,91 @@ import type { IBaseResponse } from "~/types/index";
 import type { IModel } from "~/types/model";
 import { useRootStore } from "~/store/root";
 
-useSeoMeta({
-  title: "Подать объявление — MobiStore",
-  description: "Разместите бесплатное объявление о продаже смартфона на MobiStore. Быстрая продажа, тысячи покупателей, удобная форма размещения.",
-  ogTitle: "Подать объявление — MobiStore",
-  ogDescription: "Продайте свой смартфон быстро и выгодно на MobiStore",
-});
-
 const { $api } = useNuxtApp();
 const root = useRootStore();
+const { t } = useI18n();
+const localePath = useLocalePath();
 
 const loading = ref(false);
 const fileList = ref<any[]>([]);
 const formRef = ref<FormInstance>();
 const colors = ref<string[]>([]);
 
+useSeoMeta({
+  title: t("createListing.meta.title"),
+  description: t("createListing.meta.description"),
+  ogTitle: t("createListing.meta.ogTitle"),
+  ogDescription: t("createListing.meta.ogDescription"),
+});
+
 const validateImages = (rule: any, value: any, callback: any) => {
   if (fileList.value.length === 0) {
-    callback(new Error("Загрузите хотя бы одну фотографию"));
+    callback(new Error(t("createListing.validation.images")));
   } else {
     callback();
   }
 };
 
-const rules = reactive<FormRules<IListingForm & { images?: any }>>({
-  title: [{ required: true, message: "Введите название", trigger: "blur" }],
+
+const rules = computed<FormRules<IListingForm & { images?: any }>>(() => ({
+  title: [
+    {
+      required: true,
+      message: t("createListing.validation.title"),
+      trigger: "blur",
+    },
+  ],
   description: [
-    { required: true, message: "Введите описание", trigger: "blur" },
+    {
+      required: true,
+      message: t("createListing.validation.description"),
+      trigger: "blur",
+    },
   ],
   region_id: [
-    { required: true, message: "Выберите регион", trigger: "change" },
+    {
+      required: true,
+      message: t("createListing.validation.region"),
+      trigger: "change",
+    },
   ],
-  city_id: [{ required: true, message: "Выберите город", trigger: "change" }],
-  brand_id: [{ required: true, message: "Выберите бренд", trigger: "change" }],
-  model_id: [{ required: true, message: "Выберите модель", trigger: "change" }],
-  price: [{ required: true, message: "Введите цену", trigger: "blur" }],
+  city_id: [
+    {
+      required: true,
+      message: t("createListing.validation.city"),
+      trigger: "change",
+    },
+  ],
+  brand_id: [
+    {
+      required: true,
+      message: t("createListing.validation.brand"),
+      trigger: "change",
+    },
+  ],
+  model_id: [
+    {
+      required: true,
+      message: t("createListing.validation.model"),
+      trigger: "change",
+    },
+  ],
+  price: [
+    {
+      required: true,
+      message: t("createListing.validation.price"),
+      trigger: "blur",
+    },
+  ],
   images: [{ validator: validateImages, trigger: "change" }],
-  state: [{ required: true, message: "Выберите состояние", trigger: "change" }],
-});
+  state: [
+    {
+      required: true,
+      message: t("createListing.validation.state"),
+      trigger: "change",
+    },
+  ],
+}));
 
 const form = reactive<IListingForm & { images?: any }>({
   title: "",
@@ -80,7 +127,7 @@ const createListing = catcher(
     const isValid = await formRef.value.validate().catch(() => false);
 
     if (!isValid) {
-      ElMessage.error("Заполните все обязательные поля");
+      ElMessage.error(t("createListing.validation.required"));
       return;
     }
 
@@ -93,9 +140,9 @@ const createListing = catcher(
       },
     });
     if (response?.status) {
-      ElMessage.success("Объявление создано успешно");
+      ElMessage.success(t("createListing.validation.success"));
       await saveImages(response.data?.id);
-      navigateTo(`/${response.data?.alias}`);
+      navigateTo(localePath(`/${response.data?.alias}`));
     }
     loading.value = false;
   },
@@ -132,7 +179,7 @@ const saveImages = catcher(
     });
   },
   (e: any) => {
-    ElMessage.error("Ошибка при загрузке изображений");
+    ElMessage.error(t("createListing.validation.imageUploadError"));
     console.error("Upload error:", e);
   }
 );
@@ -167,8 +214,8 @@ onMounted(() => {
   <main class="page-create">
     <div class="container">
       <div class="page-header">
-        <h1 class="page-title">Подать объявление</h1>
-        <p class="page-subtitle">Заполните информацию о вашем устройстве</p>
+        <h1 class="page-title">{{ $t("createListing.title") }}</h1>
+        <p class="page-subtitle">{{ $t("createListing.subtitle") }}</p>
       </div>
 
       <div class="form-container">
@@ -180,39 +227,56 @@ onMounted(() => {
           size="large"
         >
           <div class="form-section">
-            <h2 class="section-title">Основная информация</h2>
+            <h2 class="section-title">
+              {{ $t("createListing.sections.main") }}
+            </h2>
 
-            <el-form-item label="Название" prop="title">
-              <el-input v-model="form.title" placeholder="Введите название" />
+            <el-form-item :label="$t('createListing.fields.title.label')" prop="title">
+              <el-input
+                v-model="form.title"
+                :placeholder="$t('createListing.fields.title.placeholder')"
+              />
             </el-form-item>
 
             <el-form-item
-              label="Описание"
+              :label="$t('createListing.fields.description.label')"
               prop="description"
               class="quill-form-item"
             >
               <RichTextEditor
                 v-model:content="form.description"
-                placeholder="Введите описание"
+                :placeholder="$t('createListing.fields.description.placeholder')"
               />
             </el-form-item>
           </div>
 
           <div class="form-section">
-            <h2 class="section-title">Характеристики и цена</h2>
+            <h2 class="section-title">
+              {{ $t("createListing.sections.specsAndPrice") }}
+            </h2>
 
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12">
-                <el-form-item label="Бренд" prop="brand_id">
-                  <BrandAutocomplete v-model="form.brand_id" />
+                <el-form-item
+                  :label="$t('createListing.fields.brand.label')"
+                  prop="brand_id"
+                >
+                  <BrandAutocomplete
+                    v-model="form.brand_id"
+                    :placeholder="$t('createListing.fields.brand.placeholder')"
+                  />
                 </el-form-item>
               </el-col>
 
               <el-col :xs="24" :sm="12">
-                <el-form-item label="Модель" prop="model_id">
+                <el-form-item
+                  :label="$t('createListing.fields.model.label')"
+                  prop="model_id"
+                >
                   <ModelAutocomplete
                     v-model="form.model_id"
                     :brand-id="form.brand_id"
+                    :placeholder="$t('createListing.fields.model.placeholder')"
                     @select="handleModelSelect"
                   />
                 </el-form-item>
@@ -221,10 +285,13 @@ onMounted(() => {
 
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item label="Память" prop="storage">
+                <el-form-item
+                  :label="$t('createListing.fields.memory.label')"
+                  prop="storage"
+                >
                   <el-select
                     v-model="form.storage"
-                    placeholder="Выберите память"
+                    :placeholder="$t('createListing.fields.memory.placeholder')"
                   >
                     <el-option
                       v-for="storage in [4, 8, 16, 32, 64, 128, 256, 512, 1024]"
@@ -237,10 +304,13 @@ onMounted(() => {
               </el-col>
 
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item label="Оперативка" prop="ram">
+                <el-form-item
+                  :label="$t('createListing.fields.ram.label')"
+                  prop="ram"
+                >
                   <el-select
                     v-model="form.ram"
-                    placeholder="Выберите оперативку"
+                    :placeholder="$t('createListing.fields.ram.placeholder')"
                   >
                     <el-option
                       v-for="ram in 36"
@@ -253,16 +323,16 @@ onMounted(() => {
               </el-col>
 
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item label="Цвет">
+                <el-form-item :label="$t('createListing.fields.color.label')">
                   <el-input
                     v-if="colors.length === 0"
                     v-model="form.color"
-                    placeholder="Введите цвет"
+                    :placeholder="$t('createListing.fields.color.placeholderInput')"
                   />
                   <el-select
                     v-else
                     v-model="form.color"
-                    placeholder="Выберите цвет"
+                    :placeholder="$t('createListing.fields.color.placeholderSelect')"
                   >
                     <el-option
                       v-for="color in colors"
@@ -277,33 +347,48 @@ onMounted(() => {
 
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item label="Состояние" prop="state">
+                <el-form-item
+                  :label="$t('createListing.fields.condition.label')"
+                  prop="state"
+                >
                   <el-select
                     v-model="form.state"
-                    placeholder="Выберите состояние"
+                    :placeholder="$t('createListing.fields.condition.placeholder')"
                   >
-                    <el-option label="Новый" value="new" />
-                    <el-option label="Восстановлен" value="restored" />
-                    <el-option label="Б/У" value="used" />
+                    <el-option
+                      :label="$t('createListing.fields.condition.options.new')"
+                      value="new"
+                    />
+                    <el-option
+                      :label="$t('createListing.fields.condition.options.restored')"
+                      value="restored"
+                    />
+                    <el-option
+                      :label="$t('createListing.fields.condition.options.used')"
+                      value="used"
+                    />
                   </el-select>
                 </el-form-item>
               </el-col>
 
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item label="Цена" prop="price">
+                <el-form-item
+                  :label="$t('createListing.fields.price.label')"
+                  prop="price"
+                >
                   <el-input
                     type="number"
                     v-model="form.price"
-                    placeholder="Введите цену"
+                    :placeholder="$t('createListing.fields.price.placeholder')"
                   />
                 </el-form-item>
               </el-col>
 
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item label="Валюта">
+                <el-form-item :label="$t('createListing.fields.currency.label')">
                   <el-select
                     v-model="form.currency"
-                    placeholder="Выберите валюту"
+                    :placeholder="$t('createListing.fields.currency.placeholder')"
                   >
                     <el-option label="UZS" value="UZS" />
                     <!-- <el-option label="USD" value="USD" /> -->
@@ -315,33 +400,48 @@ onMounted(() => {
             <el-form-item>
               <el-checkbox
                 v-model="form.allow_trade_in"
-                label="Возможен обмен"
+                :label="$t('createListing.fields.exchange')"
                 border
               />
             </el-form-item>
           </div>
 
           <div class="form-section">
-            <h2 class="section-title">Местоположение и фото</h2>
+            <h2 class="section-title">
+              {{ $t("createListing.sections.locationAndPhotos") }}
+            </h2>
 
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12">
-                <el-form-item label="Регион" prop="region_id">
-                  <RegionAutocomplete v-model="form.region_id" />
+                <el-form-item
+                  :label="$t('createListing.fields.region.label')"
+                  prop="region_id"
+                >
+                  <RegionAutocomplete
+                    v-model="form.region_id"
+                    :placeholder="$t('createListing.fields.region.placeholder')"
+                  />
                 </el-form-item>
               </el-col>
 
               <el-col :xs="24" :sm="12">
-                <el-form-item label="Город" prop="city_id">
+                <el-form-item
+                  :label="$t('createListing.fields.city.label')"
+                  prop="city_id"
+                >
                   <CityAutocomplete
                     v-model="form.city_id"
                     :region-id="form.region_id"
+                    :placeholder="$t('createListing.fields.city.placeholder')"
                   />
                 </el-form-item>
               </el-col>
             </el-row>
 
-            <el-form-item label="Фотографии (макс. 8)" prop="images">
+            <el-form-item
+              :label="$t('createListing.fields.photos.label')"
+              prop="images"
+            >
               <el-upload
                 class="upload-demo"
                 drag
@@ -354,11 +454,12 @@ onMounted(() => {
               >
                 <el-icon class="el-icon--upload"><upload-filled /></el-icon>
                 <div class="el-upload__text">
-                  Перетащите файлы сюда или <em>нажмите для загрузки</em>
+                  {{ $t("createListing.fields.photos.dragText") }}
+                  <em>{{ $t("createListing.fields.photos.clickText") }}</em>
                 </div>
                 <template #tip>
                   <div class="el-upload__tip">
-                    Поддерживаемые форматы: jpg, png (макс. 8 файлов)
+                    {{ $t("createListing.fields.photos.tip") }}
                   </div>
                 </template>
               </el-upload>
@@ -366,17 +467,22 @@ onMounted(() => {
           </div>
 
           <div class="form-section">
-            <h2 class="section-title">Контакты</h2>
+            <h2 class="section-title">
+              {{ $t("createListing.sections.contacts") }}
+            </h2>
 
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12">
-                <el-form-item label="Телефон" prop="phone_number">
+                <el-form-item
+                  :label="$t('createListing.fields.phone.label')"
+                  prop="phone_number"
+                >
                   <PhoneNumber v-model="form.phone_number" />
                 </el-form-item>
               </el-col>
 
               <el-col :xs="24" :sm="12">
-                <el-form-item label="Telegram">
+                <el-form-item :label="$t('createListing.fields.telegram.label')">
                   <TelegramLink v-model="form.telegram_link" />
                 </el-form-item>
               </el-col>
@@ -386,7 +492,7 @@ onMounted(() => {
                   <el-checkbox
                     v-model="form.show_phone"
                     border
-                    label="Показывать контакты"
+                    :label="$t('createListing.fields.showContacts')"
                   />
                 </el-form-item>
               </el-col>
@@ -401,7 +507,7 @@ onMounted(() => {
                 :loading="loading"
                 @click="createListing"
               >
-                Предварительный просмотр
+                {{ $t("createListing.buttons.preview") }}
               </el-button>
             </el-col>
           </el-row>

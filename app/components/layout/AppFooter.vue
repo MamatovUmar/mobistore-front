@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { Phone, Message, Location } from "@element-plus/icons-vue";
+
+const { t } = useI18n();
+const localePath = useLocalePath();
 </script>
 
 <template>
@@ -10,8 +13,7 @@ import { Phone, Message, Location } from "@element-plus/icons-vue";
         <div class="footer-column brand-column">
           <h3 class="footer-logo">MobiStore</h3>
           <p class="footer-description">
-            Крупнейшая экосистема для покупки и продажи гаджетов в Узбекистане.
-            Безопасность, скорость и комфорт в каждой сделке.
+            {{ t('footer.description') }}
           </p>
           <div class="social-links">
             <a href="#" class="social-icon" aria-label="Facebook">
@@ -34,17 +36,17 @@ import { Phone, Message, Location } from "@element-plus/icons-vue";
 
         <!-- Help Links -->
         <div class="footer-column">
-          <h4>Помощь</h4>
+          <h4>{{ t('footer.help') }}</h4>
           <ul class="footer-links">
-            <li><NuxtLink to="/info/privacy">Политика конфиденциальности</NuxtLink></li>
-            <li><NuxtLink to="/info/terms">Пользовательское соглашение</NuxtLink></li>
-            <li><NuxtLink to="/info/contacts">Контакты</NuxtLink></li>
+            <li><NuxtLink :to="localePath('/info/privacy')">{{ t('footer.privacyPolicy') }}</NuxtLink></li>
+            <li><NuxtLink :to="localePath('/info/terms')">{{ t('footer.termsOfService') }}</NuxtLink></li>
+            <li><NuxtLink :to="localePath('/info/contacts')">{{ t('footer.contacts') }}</NuxtLink></li>
           </ul>
         </div>
 
         <!-- Contacts -->
         <div class="footer-column">
-          <h4>Контакты</h4>
+          <h4>{{ t('footer.contacts') }}</h4>
           <ul class="contact-list">
             <li>
               <el-icon><Phone /></el-icon>
@@ -56,7 +58,7 @@ import { Phone, Message, Location } from "@element-plus/icons-vue";
             </li>
             <li>
               <el-icon><Location /></el-icon>
-              <span>Ташкент, Узбекистан</span>
+              <span>{{ t('footer.location') }}</span>
             </li>
           </ul>
         </div>
@@ -66,7 +68,7 @@ import { Phone, Message, Location } from "@element-plus/icons-vue";
 
       <!-- Bottom Section -->
       <div class="footer-bottom">
-        <p>&copy; 2025 MobiStore. Все права защищены.</p>
+        <p>{{ t('footer.copyright') }}</p>
       </div>
     </div>
   </footer>

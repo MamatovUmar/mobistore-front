@@ -7,6 +7,8 @@ import ModelAutocomplete from "@/components/autocompletes/ModelAutocomplete.vue"
 import HomeFilterSkeleton from "@/components/skeletons/HomeFilterSkeleton.vue";
 
 const router = useRouter();
+const { t } = useI18n();
+const localePath = useLocalePath();
 
 const form = reactive<IFilterForm>({
   regionId: undefined,
@@ -19,7 +21,7 @@ const form = reactive<IFilterForm>({
 function handleSubmit() {
   console.log(form);
   router.push({
-    path: "/search",
+    path: localePath("/search"),
     query: form,
   });
 }
@@ -39,33 +41,33 @@ interface IFilterForm {
       <ClientOnly>
         <el-form :model="form" label-position="top" size="large">
           <div class="filters-grid">
-            <el-form-item label="Область" class="filter-item">
+            <el-form-item :label="t('home.filter.region')" class="filter-item">
               <RegionAutocomplete
                 v-model="form.regionId"
-                placeholder="Вся страна"
+                :placeholder="t('home.filter.regionPlaceholder')"
               />
             </el-form-item>
 
-            <el-form-item label="Город" class="filter-item">
+            <el-form-item :label="t('home.filter.city')" class="filter-item">
               <CityAutocomplete
                 v-model="form.cityId"
                 :region-id="form.regionId"
-                placeholder="Все города"
+                :placeholder="t('home.filter.cityPlaceholder')"
               />
             </el-form-item>
 
-            <el-form-item label="Бренд" class="filter-item">
+            <el-form-item :label="t('home.filter.brand')" class="filter-item">
               <BrandAutocomplete
                 v-model="form.brandId"
-                placeholder="Все бренды"
+                :placeholder="t('home.filter.brandPlaceholder')"
               />
             </el-form-item>
 
-            <el-form-item label="Модель" class="filter-item">
+            <el-form-item :label="t('home.filter.model')" class="filter-item">
               <ModelAutocomplete
                 v-model="form.modelId"
                 :brand-id="form.brandId"
-                placeholder="Все модели"
+                :placeholder="t('home.filter.modelPlaceholder')"
               />
             </el-form-item>
 
@@ -76,7 +78,7 @@ interface IFilterForm {
                 class="search-button"
                 @click="handleSubmit"
               >
-                Показать результаты
+                {{ t('home.filter.showResults') }}
               </el-button>
             </el-form-item>
           </div>
