@@ -3,7 +3,6 @@ import type { IListing } from "~/types/ads";
 import {
   ArrowLeftBold,
   ArrowRightBold,
-  Loading,
   Picture,
 } from "@element-plus/icons-vue";
 
@@ -18,10 +17,13 @@ const currentImage = computed(
 );
 const thumbnailsContainer = ref<HTMLElement>();
 const isTransitioning = ref(false);
+const showViewer = ref(false);
+const imageLoaded = ref(false);
 
 const selectImage = (index: number) => {
   if (isTransitioning.value) return;
   isTransitioning.value = true;
+  imageLoaded.value = false;
   currentImageIndex.value = index;
   scrollToThumbnail(index);
   setTimeout(() => (isTransitioning.value = false), 300);
@@ -67,33 +69,35 @@ onMounted(() => {
     <div class="main-image-wrapper">
       <Transition name="fade" mode="out-in">
         <div :key="currentImageIndex" class="image-container">
-          <el-image
+          <NuxtImg
             class="main-image"
             :src="currentImage?.url"
-            :preview-src-list="listing.images.map((img) => img.url)"
-            :initial-index="currentImageIndex"
+            :alt="listing.title"
             fit="cover"
-            loading="lazy"
-            :preview-teleported="true"
-            @close="isTransitioning = false"
-          >
-            <template #placeholder>
-              <div class="image-placeholder">
-                <el-icon class="is-loading"><Loading /></el-icon>
-              </div>
-            </template>
-            <template #error>
-              <div class="image-placeholder">
-                <el-icon :size="48" color="#cbd5e1"><Picture /></el-icon>
-              </div>
-            </template>
-          </el-image>
+            :loading="currentImageIndex === 0 ? 'eager' : 'lazy'"
+            :fetchpriority="currentImageIndex === 0 ? 'high' : 'auto'"
+            :preload="currentImageIndex === 0"
+            @click="showViewer = true"
+            @load="imageLoaded = true"
+          />
+          <div v-if="!imageLoaded" class="image-placeholder">
+            <el-icon :size="48" color="#cbd5e1"><Picture /></el-icon>
+          </div>
 
           <div v-if="listing.images.length > 1" class="image-counter">
             {{ currentImageIndex + 1 }} / {{ listing.images.length }}
           </div>
         </div>
       </Transition>
+
+      <!-- Image Viewer -->
+      <el-image-viewer
+        v-if="showViewer"
+        :url-list="listing.images.map((img) => img.url)"
+        :initial-index="currentImageIndex"
+        teleported
+        @close="showViewer = false"
+      />
 
       <!-- Navigation Buttons -->
       <button
@@ -167,12 +171,27 @@ onMounted(() => {
   overflow: hidden;
 }
 
+.image-container {
+  position: relative;
+}
+
 .main-image {
   width: 100%;
   height: 500px;
   display: block;
   border-radius: 12px;
-  position: relative;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.image-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-secondary);
+  border-radius: 12px;
 }
 
 .image-badge {

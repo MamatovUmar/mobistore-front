@@ -25,6 +25,10 @@ export default defineNuxtConfig({
       viewport: 'width=device-width, initial-scale=1',
       meta: [
         { name: 'format-detection', content: 'telephone=no' }
+      ],
+      link: [
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
       ]
     }
   },
@@ -32,6 +36,22 @@ export default defineNuxtConfig({
   // Настройки Element Plus для SSR
   elementPlus: {
     importStyle: 'scss',
+  },
+
+  // Оптимизация шрифтов
+  fonts: {
+    families: [
+      {
+        name: 'Inter',
+        provider: 'google',
+        weights: [500, 600, 700, 800],
+        display: 'swap',
+      }
+    ],
+    defaults: {
+      weights: [500, 600, 700, 800],
+      preload: true,
+    }
   },
 
   // Экспериментальные функции для улучшения производительности
