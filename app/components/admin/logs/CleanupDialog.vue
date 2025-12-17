@@ -78,14 +78,14 @@ const handleClose = () => {
   <el-dialog v-model="visible" title="Очистка логов" width="450px" @close="handleClose">
     <el-form label-position="top">
       <el-form-item label="Удалить логи до даты" required>
-        <el-date-picker
+        <!-- <el-date-picker
           v-model="form.before_date"
           type="datetime"
           placeholder="Выберите дату"
           format="DD.MM.YYYY"
           value-format="YYYY-MM-DD"
           style="width: 100%"
-        />
+        /> -->
       </el-form-item>
       <el-form-item label="Тип (опционально)">
         <el-select v-model="form.type" placeholder="Все типы" clearable style="width: 100%">

@@ -284,6 +284,7 @@ const handleModelGenerated = () => {
         <BrandAutocomplete
           v-model="selectedBrandId"
           placeholder="Все бренды"
+          size="large"
           @update:model-value="handleSearch"
           style="width: 200px"
         />

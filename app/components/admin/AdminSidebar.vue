@@ -71,6 +71,12 @@ const menuItems = [
     path: "/admin/models",
     roles: ["admin", "moderator"],
   },
+  {
+    title: "AI Парсер",
+    icon: DataLine,
+    path: "/admin/parser",
+    roles: ["admin", "moderator"],
+  },
 ];
 
 const isActive = (path: string) => {

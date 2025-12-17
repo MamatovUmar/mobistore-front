@@ -44,11 +44,11 @@ const formatDate = (date: string) => {
         <div class="notifications-header">
           <span>Уведомления</span>
           <el-button
+            v-if="unreadNotificationsCount > 0"
             link
             type="primary"
             size="small"
             @click="markAllAsRead"
-            v-if="unreadNotificationsCount > 0"
           >
             Прочитать все
           </el-button>
@@ -95,6 +95,7 @@ const formatDate = (date: string) => {
 <style lang="scss" scoped>
 .action-btn {
   width: 40px;
+  min-width: 40px;
   height: 40px;
   border: 1px solid #e2e8f0;
   color: #64748b;

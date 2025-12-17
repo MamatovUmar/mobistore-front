@@ -112,7 +112,7 @@ const handleReset = () => {
           </div>
           <div class="filter-item">
             <label class="filter-label">Период</label>
-            <el-date-picker
+            <!-- <el-date-picker
               v-model="dateRange"
               type="daterange"
               range-separator="—"
@@ -121,7 +121,7 @@ const handleReset = () => {
               format="DD.MM.YYYY"
               value-format="YYYY-MM-DD"
               class="filter-date"
-            />
+            /> -->
           </div>
         </div>
         <div class="filters-actions">

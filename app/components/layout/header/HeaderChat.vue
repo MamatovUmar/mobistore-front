@@ -52,6 +52,7 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .action-btn {
   width: 40px;
+  min-width: 40px;
   height: 40px;
   border: 1px solid #e2e8f0;
   color: #64748b;

@@ -5,6 +5,7 @@ import type { IBaseResponse } from "~/types";
 
 interface Props {
   placeholder?: string;
+  size?: "large" | "small";
   initData?: IBrand;
 }
 
@@ -74,7 +75,7 @@ watch(() => props.initData, (newData) => {
     remote
     clearable
     :remote-method="remoteSearch"
-    size="large"
+    :size
     @change="handleChange"
     @focus="remoteSearch('')"
   >
