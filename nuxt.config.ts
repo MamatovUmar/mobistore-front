@@ -8,7 +8,8 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@nuxt/image',
     '@element-plus/nuxt',
-    '@pinia/nuxt'
+    '@pinia/nuxt',
+    '@nuxtjs/i18n'
   ],
   runtimeConfig: {
     public: {
@@ -17,6 +18,20 @@ export default defineNuxtConfig({
   },
   // Конфигурация SSR
   ssr: true,
+
+  i18n: {
+    defaultLocale: 'ru',
+    locales: [
+      { code: 'uz', language: 'uz-UZ', name: 'O`zbekcha', file: 'uz.json' },
+      { code: 'ru', language: 'ru-RU', name: 'Русский', file: 'ru.json' }
+    ],
+    strategy: 'prefix_except_default',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'locale'
+    },
+    baseUrl: 'https://mobistore.uz'
+  },
 
   // SEO и производительность
   app: {

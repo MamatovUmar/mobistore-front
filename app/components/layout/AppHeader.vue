@@ -7,6 +7,7 @@ import HeaderChat from "./header/HeaderChat.vue";
 import HeaderUserMenu from "./header/HeaderUserMenu.vue";
 import HeaderAuthModal from "./header/HeaderAuthModal.vue";
 import HeaderMobileDrawer from "./header/HeaderMobileDrawer.vue";
+import LanguageSwitcher from "./header/LanguageSwitcher.vue";
 
 const rootStore = useRootStore();
 const router = useRouter();
@@ -59,10 +60,12 @@ const handleCreateAd = () => {
             <span class="btn-text">Подать объявление</span>
           </button>
 
+          <LanguageSwitcher />
+
           <el-tooltip
+            v-if="rootStore.isAdmin || rootStore.isModerator"
             content="Админ панель"
             placement="bottom"
-            v-if="rootStore.isAdmin || rootStore.isModerator"
           >
             <el-button circle class="action-btn" @click="navigateTo('/admin')">
               <el-icon><Monitor /></el-icon>
