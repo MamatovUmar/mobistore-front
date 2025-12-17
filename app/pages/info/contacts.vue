@@ -105,7 +105,7 @@ const submitForm = async () => {
                   Позвонить сейчас
                 </a>
                 <a
-                  href="mailto:support@mobistore.uz"
+                  href="mailto:info@mobistore.uz"
                   class="support-action email"
                 >
                   Написать на почту
@@ -201,9 +201,25 @@ const submitForm = async () => {
   padding: 40px 0 80px;
   background: var(--color-bg-secondary);
 
+  @media (max-width: 768px) {
+    padding: 24px 0 60px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 16px 0 40px;
+  }
+
   .page-header {
     text-align: center;
     margin-bottom: 48px;
+
+    @media (max-width: 768px) {
+      margin-bottom: 32px;
+    }
+
+    @media (max-width: 480px) {
+      margin-bottom: 24px;
+    }
   }
 
   .page-title {
@@ -211,6 +227,15 @@ const submitForm = async () => {
     font-weight: 700;
     color: var(--color-text-primary);
     margin-bottom: 12px;
+
+    @media (max-width: 768px) {
+      font-size: 28px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
   }
 
   .page-subtitle {
@@ -218,6 +243,11 @@ const submitForm = async () => {
     color: var(--color-text-secondary);
     max-width: 600px;
     margin: 0 auto;
+
+    @media (max-width: 480px) {
+      font-size: 14px;
+      padding: 0 16px;
+    }
   }
 
   /* === LAYOUT === */
@@ -251,6 +281,11 @@ const submitForm = async () => {
     margin-bottom: 24px;
     padding-bottom: 20px;
     border-bottom: 2px solid var(--color-bg-secondary);
+
+    @media (max-width: 480px) {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+    }
   }
 
   .info-title {
@@ -258,12 +293,24 @@ const submitForm = async () => {
     font-weight: 700;
     color: var(--color-text-primary);
     margin-bottom: 8px;
+
+    @media (max-width: 768px) {
+      font-size: 22px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 20px;
+    }
   }
 
   .info-description {
     font-size: 14px;
     color: var(--color-text-secondary);
     margin: 0;
+
+    @media (max-width: 480px) {
+      font-size: 13px;
+    }
   }
 
   .support-highlight {
@@ -280,6 +327,18 @@ const submitForm = async () => {
     flex-direction: column;
     gap: 16px;
 
+    @media (max-width: 768px) {
+      padding: 20px;
+      margin-bottom: 24px;
+      border-radius: 12px;
+    }
+
+    @media (max-width: 480px) {
+      padding: 16px;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
     .support-status {
       display: inline-flex;
       align-items: center;
@@ -288,6 +347,10 @@ const submitForm = async () => {
       font-weight: 600;
       color: #047857;
 
+      @media (max-width: 480px) {
+        font-size: 12px;
+      }
+
       .status-dot {
         width: 8px;
         height: 8px;
@@ -295,6 +358,12 @@ const submitForm = async () => {
         background: #10b981;
         box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.2);
         display: inline-block;
+
+        @media (max-width: 480px) {
+          width: 6px;
+          height: 6px;
+          box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+        }
       }
     }
 
@@ -303,9 +372,21 @@ const submitForm = async () => {
       align-items: center;
       gap: 16px;
 
+      @media (max-width: 480px) {
+        gap: 12px;
+      }
+
       .el-icon {
         font-size: 32px;
         color: #047857;
+
+        @media (max-width: 768px) {
+          font-size: 28px;
+        }
+
+        @media (max-width: 480px) {
+          font-size: 24px;
+        }
       }
 
       .support-phone {
@@ -313,6 +394,18 @@ const submitForm = async () => {
         font-weight: 700;
         color: var(--color-text-primary);
         text-decoration: none;
+
+        @media (max-width: 768px) {
+          font-size: 26px;
+        }
+
+        @media (max-width: 480px) {
+          font-size: 22px;
+        }
+
+        @media (max-width: 360px) {
+          font-size: 18px;
+        }
       }
     }
 
@@ -321,12 +414,22 @@ const submitForm = async () => {
       font-size: 14px;
       color: var(--color-text-secondary);
       line-height: 1.5;
+
+      @media (max-width: 480px) {
+        font-size: 13px;
+        line-height: 1.4;
+      }
     }
 
     .support-actions {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
+
+      @media (max-width: 480px) {
+        gap: 8px;
+        flex-direction: column;
+      }
 
       .support-action {
         flex: 1;
@@ -337,6 +440,18 @@ const submitForm = async () => {
         font-weight: 600;
         text-decoration: none;
         transition: transform 0.2s, box-shadow 0.2s;
+
+        @media (max-width: 768px) {
+          min-width: 140px;
+          padding: 10px 14px;
+        }
+
+        @media (max-width: 480px) {
+          min-width: unset;
+          width: 100%;
+          padding: 12px 16px;
+          font-size: 14px;
+        }
 
         &.phone {
           background: #047857;
@@ -353,6 +468,16 @@ const submitForm = async () => {
         &:hover {
           transform: translateY(-2px);
           box-shadow: 0 15px 30px rgba(4, 120, 87, 0.2);
+        }
+
+        @media (max-width: 480px) {
+          &:hover {
+            transform: none;
+          }
+
+          &:active {
+            transform: scale(0.98);
+          }
         }
       }
     }
@@ -385,6 +510,15 @@ const submitForm = async () => {
       @media (max-width: 968px) {
         position: static;
       }
+
+      @media (max-width: 768px) {
+        padding: 24px;
+        border-radius: 12px;
+      }
+
+      @media (max-width: 480px) {
+        padding: 20px 16px;
+      }
     }
   }
 
@@ -393,12 +527,25 @@ const submitForm = async () => {
     font-weight: 700;
     color: var(--color-text-primary);
     margin-bottom: 8px;
+
+    @media (max-width: 768px) {
+      font-size: 22px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 20px;
+    }
   }
 
   .form-description {
     font-size: 15px;
     color: var(--color-text-secondary);
     margin-bottom: 24px;
+
+    @media (max-width: 480px) {
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
   }
 }
 </style>
