@@ -41,6 +41,6 @@ export default defineNuxtConfig({
 
   // Настройки рендеринга
   routeRules: {
-    '/': { prerender: true }, // Пререндер главной страницы
+    '/': { prerender: false },
   }
 })

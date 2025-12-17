@@ -3,6 +3,10 @@
 # ---------- BUILD STAGE ----------
 FROM node:22-slim AS builder
 
+RUN apt-get update && apt-get install -y \
+    libvips-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 # Build-time переменная для API URL

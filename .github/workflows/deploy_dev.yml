@@ -24,7 +24,7 @@ jobs:
             -d text="🚀 <b>Деплой запущен!</b>
 
           👤 <b>Разработчик:</b> ${{ github.actor }}
-          📦 <b>Проект:</b> sm-front
+          📦 <b>Проект:</b> MobiStore front
           🌿 <b>Ветка:</b> ${{ github.ref_name }}
 
           📝 <b>Комментарий к коммиту:</b>
@@ -33,6 +33,7 @@ jobs:
       - name: Deploy via SSH (DEV)
         uses: appleboy/ssh-action@v1.0.3
         with:
+          command_timeout: 15m
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
@@ -45,6 +46,9 @@ jobs:
             git pull --rebase origin dev
 
             cd deploy
+
+            export DOCKER_BUILDKIT=1
+            export COMPOSE_DOCKER_CLI_BUILD=1
 
             docker compose stop nuxt-dev 2>/dev/null || true
             docker compose rm -f nuxt-dev 2>/dev/null || true
@@ -64,7 +68,7 @@ jobs:
             -d parse_mode="HTML" \
             -d text="✅ <b>Деплой успешно завершен!</b>
 
-          📦 <b>Проект:</b> sm-front
+          📦 <b>Проект:</b> MobiStore front
           🌿 <b>Ветка:</b> ${{ github.ref_name }}
           🕒 <b>Время сборки:</b> ${DEPLOY_TIME}s
 
@@ -78,7 +82,7 @@ jobs:
             -d parse_mode="HTML" \
             -d text="❌ <b>Деплой завершился с ошибкой!</b>
 
-          📦 <b>Проект:</b> sm-front
+          📦 <b>Проект:</b> MobiStore front
           🌿 <b>Ветка:</b> ${{ github.ref_name }}
           👤 <b>Разработчик:</b> ${{ github.actor }}
 

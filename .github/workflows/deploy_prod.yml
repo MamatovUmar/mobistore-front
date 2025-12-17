@@ -13,9 +13,27 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Set deploy start time
+        run: echo "DEPLOY_START=$(date +%s)" >> $GITHUB_ENV
+
+      - name: Send Telegram notification (start)
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TG_DEPLOY_BOT_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TG_DEPLOY_CHAT_ID }}" \
+            -d parse_mode="HTML" \
+            -d text="🚀 <b>Деплой запущен!</b>
+
+          👤 <b>Разработчик:</b> ${{ github.actor }}
+          📦 <b>Проект:</b> MobiStore front
+          🌿 <b>Ветка:</b> ${{ github.ref_name }}
+
+          📝 <b>Комментарий к коммиту:</b>
+            - ${{ github.event.head_commit.message }}"
+
       - name: Deploy via SSH (PROD)
         uses: appleboy/ssh-action@v1.0.3
         with:
+          command_timeout: 15m
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
@@ -29,6 +47,9 @@ jobs:
 
             cd deploy
 
+            export DOCKER_BUILDKIT=1
+            export COMPOSE_DOCKER_CLI_BUILD=1
+
             docker compose stop nuxt-prod 2>/dev/null || true
             docker compose rm -f nuxt-prod 2>/dev/null || true
             docker compose up -d --build nuxt-prod
@@ -36,3 +57,33 @@ jobs:
             docker image prune -f
 
             echo "🔥 PROD Deploy complete!"
+        
+      - name: Send Telegram notification (success)
+        if: success()
+        run: |
+          DEPLOY_END=$(date +%s)
+          DEPLOY_TIME=$((DEPLOY_END - DEPLOY_START))
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TG_DEPLOY_BOT_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TG_DEPLOY_CHAT_ID }}" \
+            -d parse_mode="HTML" \
+            -d text="✅ <b>Деплой успешно завершен!</b>
+
+          📦 <b>Проект:</b> MobiStore front
+          🌿 <b>Ветка:</b> ${{ github.ref_name }}
+          🕒 <b>Время сборки:</b> ${DEPLOY_TIME}s
+
+          🚀 Приложение было успешно развернуто без ошибок."
+
+      - name: Send Telegram notification (failure)
+        if: failure()
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TG_DEPLOY_BOT_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TG_DEPLOY_CHAT_ID }}" \
+            -d parse_mode="HTML" \
+            -d text="❌ <b>Деплой завершился с ошибкой!</b>
+
+          📦 <b>Проект:</b> MobiStore front
+          🌿 <b>Ветка:</b> ${{ github.ref_name }}
+          👤 <b>Разработчик:</b> ${{ github.actor }}
+
+          ⚠️ Проверьте логи: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
