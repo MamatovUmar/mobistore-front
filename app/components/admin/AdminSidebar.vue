@@ -7,6 +7,10 @@ import {
   Setting,
   HomeFilled,
   MessageBox,
+  Memo,
+  Iphone,
+  Collection,
+  Calendar,
 } from "@element-plus/icons-vue";
 import { useRootStore } from "~/store/root";
 
@@ -38,7 +42,7 @@ const menuItems = [
   },
   {
     title: "Логи",
-    icon: DataLine,
+    icon: Memo,
     path: "/admin/logs",
     roles: ["admin"],
   },
@@ -62,19 +66,19 @@ const menuItems = [
   },
   {
     title: "Бренды",
-    icon: Coin,
+    icon: Collection,
     path: "/admin/brands",
     roles: ["admin", "moderator"],
   },
   {
     title: "Модели",
-    icon: Setting,
+    icon: Iphone,
     path: "/admin/models",
     roles: ["admin", "moderator"],
   },
   {
     title: "AI Парсер",
-    icon: DataLine,
+    icon: Calendar,
     path: "/admin/parser",
     roles: ["admin", "moderator"],
   },
