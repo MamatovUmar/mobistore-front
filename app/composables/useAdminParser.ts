@@ -37,6 +37,11 @@ export interface IParserCreatePayload {
   brand_id: number;
 }
 
+export interface IParserBulkPayload {
+  brand_id: number;
+  models: string[];
+}
+
 export interface IParserResponse {
   entries: IParserRecord[];
   pagination: IPagination;
@@ -149,6 +154,21 @@ export const useAdminParser = () => {
     }
   };
 
+  const createBulkRecords = async (payload: IParserBulkPayload): Promise<IParserRecord[] | null> => {
+    try {
+      const result = await $api<IBaseResponse<IParserRecord[]>>("/admin/parser/bulk", {
+        method: "POST",
+        body: payload,
+      });
+      ElMessage.success(result.message || `Добавлено ${payload.models.length} моделей в очередь`);
+      return result.data ?? null;
+    } catch (error) {
+      const message = getErrorMessage(error);
+      ElMessage.error(message);
+      return null;
+    }
+  };
+
   const refresh = async (filters: IParserFilters = {}) => {
     await Promise.all([fetchRecords(filters), fetchStats()]);
   };
@@ -162,6 +182,7 @@ export const useAdminParser = () => {
     fetchStats,
     fetchRecordById,
     createRecord,
+    createBulkRecords,
     retryRecord,
     deleteRecord,
     refresh,

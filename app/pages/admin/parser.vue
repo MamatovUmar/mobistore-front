@@ -29,6 +29,7 @@ const {
   stats,
   fetchRecords,
   createRecord,
+  createBulkRecords,
   retryRecord,
   deleteRecord,
   refresh,
@@ -50,6 +51,13 @@ const addForm = reactive({
   brand_id: undefined as number | undefined,
 });
 const addFormLoading = ref(false);
+
+const bulkDialogVisible = ref(false);
+const bulkForm = reactive({
+  brand_id: undefined as number | undefined,
+  models: [] as string[],
+});
+const bulkFormLoading = ref(false);
 
 const statusOptions: {
   value: ParserStatus;
@@ -165,7 +173,6 @@ const handleDelete = async (record: IParserRecord) => {
       "Подтверждение удаления",
       {
         confirmButtonText: "Удалить",
-        cancelButtonText: "Отмена",
         type: "warning",
       }
     );
@@ -173,6 +180,38 @@ const handleDelete = async (record: IParserRecord) => {
     await refresh(filters);
   } catch {
     // Cancelled
+  }
+};
+
+const openBulkDialog = () => {
+  bulkForm.brand_id = undefined;
+  bulkForm.models = [];
+  bulkDialogVisible.value = true;
+};
+
+const handleBulkAdd = async () => {
+  if (!bulkForm.brand_id) {
+    ElMessage.warning("Выберите бренд");
+    return;
+  }
+
+  if (bulkForm.models.length === 0) {
+    ElMessage.warning("Введите хотя бы одну модель");
+    return;
+  }
+
+  bulkFormLoading.value = true;
+  try {
+    const result = await createBulkRecords({
+      brand_id: bulkForm.brand_id,
+      models: bulkForm.models,
+    });
+    if (result) {
+      bulkDialogVisible.value = false;
+      await refresh(filters);
+    }
+  } finally {
+    bulkFormLoading.value = false;
   }
 };
 
@@ -251,6 +290,9 @@ onMounted(async () => {
         <el-button type="primary" :icon="Plus" @click="openAddDialog">
           Добавить модель
         </el-button>
+        <el-button type="success" :icon="Plus" @click="openBulkDialog">
+          Массовое добавление
+        </el-button>
       </div>
     </div>
 
@@ -326,6 +368,36 @@ onMounted(async () => {
           Отмена
         </el-button>
         <el-button type="primary" :loading="addFormLoading" @click="handleAdd">
+          Добавить
+        </el-button>
+      </template>
+    </el-dialog>
+
+    <el-dialog
+      v-model="bulkDialogVisible"
+      title="Массовое добавление моделей"
+      width="550px"
+    >
+      <el-form label-position="top" size="large">
+        <el-form-item label="Бренд" required>
+          <brand-autocomplete v-model="bulkForm.brand_id" />
+        </el-form-item>
+        <el-form-item label="Модели" required>
+          <el-input-tag
+            v-model="bulkForm.models"
+            placeholder="Введите модель и нажмите Enter"
+          />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button class="mr-15" @click="bulkDialogVisible = false">
+          Отмена
+        </el-button>
+        <el-button
+          type="primary"
+          :loading="bulkFormLoading"
+          @click="handleBulkAdd"
+        >
           Добавить
         </el-button>
       </template>
