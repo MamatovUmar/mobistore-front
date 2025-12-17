@@ -83,7 +83,7 @@ const router = useRouter();
   position: relative;
   background-color: #f8fafc;
   overflow: hidden;
-  min-height: 450px;
+  min-height: 460px;
   display: flex;
   align-items: center;
   .container {
@@ -309,7 +309,7 @@ const router = useRouter();
 }
 
 .card-3 {
-  bottom: 10%;
+  bottom: 15%;
   left: 5%;
   transform: rotate(3deg);
   animation-delay: -4s;
