@@ -197,8 +197,7 @@ const handleFileRemove = (file: any, fileListData: any[]) => {
 };
 
 const handleModelSelect = (model: IModel) => {
-  console.log(model);
-  colors.value = model.colors;
+  colors.value = model.colors || [];
 };
 
 onMounted(() => {

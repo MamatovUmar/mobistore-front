@@ -1,149 +1,16 @@
 <script setup lang="ts">
+const { t, rt } = useI18n();
+const i18n = useI18n();
+
+const getList = (key: string): string[] => (i18n as any).tm(key);
 
 const lastUpdated = "04.12.2025";
 
-const sections = [
-  {
-    title: "1. Определения",
-    paragraphs: [
-      "Сервис (MobiStore) — онлайн-площадка для размещения объявлений о продаже мобильных телефонов и аксессуаров.",
-      "Пользователь — физическое лицо, использующее Сервис.",
-      "Аккаунт — учётная запись, созданная Пользователем для публикации объявлений.",
-      "Объявление — информация о товаре, размещенная Пользователем.",
-      "Продавец — пользователь, который публикует объявления.",
-      "Покупатель — пользователь, который просматривает объявления и взаимодействует с продавцом.",
-      "Сообщения (чат) — система обмена сообщениями между покупателем и продавцом внутри Сервиса.",
-      "Запрещённые товары — товары, запрещённые законодательством и списком MobiStore.",
-    ],
-  },
-  {
-    title: "2. Общие положения",
-    paragraphs: [
-      "MobiStore является только платформой для размещения объявлений и не является продавцом, посредником или участником сделки.",
-      "Администрация не несёт ответственность за качество товаров, действия пользователей, достоверность информации и выполнение договорённостей.",
-      "Пользователь обязан соблюдать законодательство Республики Узбекистан.",
-      "Администрация имеет право скрывать, блокировать или удалять объявления, нарушающие Условия.",
-    ],
-  },
-  {
-    title: "3. Аккаунт и регистрация",
-    paragraphs: [
-      "Для публикации объявлений требуется регистрация через email и пароль.",
-      "Пользователь обязуется предоставлять достоверную информацию и не передавать данные доступа третьим лицам.",
-      "Удаление аккаунта временно не предусмотрено. При нарушении Условий администрация может ограничить доступ.",
-    ],
-  },
-  {
-    title: "4. Размещение объявлений",
-    paragraphs: [
-      "Размещая объявление, Пользователь подтверждает право на товар и достоверность информации.",
-    ],
-    list: [
-      "Бренд и модель должны соответствовать товару.",
-      "Цена указывается в суммах (UZS).",
-      "Запрещено оставлять контакты в описании.",
-      "Заголовок и описание не содержат спама, оскорблений и рекламы сторонних сайтов.",
-      "Каждый товар публикуется отдельным объявлением и должен относиться к категории \"мобильные телефоны и аксессуары\".",
-      "Администрация может отправить объявление на модерацию или отклонить его.",
-    ],
-  },
-  {
-    title: "5. Статусы объявлений",
-    list: [
-      "draft — черновик",
-      "active — опубликовано",
-      "sold — товар продан",
-      "archived — скрыто пользователем",
-      "moderation — проверяется",
-      "rejected — отклонено",
-    ],
-  },
-  {
-    title: "6. Изображения",
-    paragraphs: [
-      "Пользователь загружает только реальные фотографии товара.",
-      "Запрещены чужие изображения, водяные знаки других платформ, материалы 18+, сцены насилия и оскорбления.",
-      "Администрация вправе удалить изображения, нарушающие Условия.",
-    ],
-  },
-  {
-    title: "7. Чат между покупателем и продавцом",
-    paragraphs: [
-      "Сообщения используются только для обсуждения покупки.",
-      "Запрещено отправлять спам, мошеннические ссылки, оскорбления и запрещённые материалы.",
-      "Переписка может быть просмотрена модерацией при жалобе.",
-    ],
-  },
-  {
-    title: "8. Избранное",
-    paragraphs: [
-      "Пользователь может добавлять объявления в раздел \"Избранное\". Функция служит только для удобства и не создаёт обязательств.",
-    ],
-  },
-  {
-    title: "9. Запрещённые товары",
-    subLists: [
-      {
-        title: "Полностью запрещено",
-        items: [
-          "краденые и найденные телефоны",
-          "контрафактные устройства",
-          "устройства с изменёнными или стёртыми IMEI",
-          "телефоны, заблокированные под оператора",
-          "сим-карты, eSIM, аккаунты, сервисы взлома",
-          "товары, запрещённые законом РУз",
-        ],
-      },
-      {
-        title: "Условно запрещено (требует честного описания)",
-        items: [
-          "восстановленные телефоны — должны быть помечены как \"restored\"",
-          "поврежденные телефоны — необходимо указать все дефекты",
-        ],
-      },
-    ],
-  },
-  {
-    title: "10. Ответственность пользователя",
-    paragraphs: [
-      "Пользователь несет ответственность за объвления, товары и переписку.",
-      "Запрещено создавать дубликаты, вводить в заблуждение, выдавать подержанное за новое и использовать сервис для мошенничества.",
-      "При нарушениях администрация может удалить объявления, ограничить доступ к аккаунту или запретить новые публикации.",
-    ],
-  },
-  {
-    title: "11. Ограничение ответственности MobiStore",
-    list: [
-      "Сервис не отвечает за сделки между пользователями и любые финансовые потери.",
-      "MobiStore не несёт ответственность за ошибки пользователей, неработоспособность оборудования или отсутствие интернета.",
-      "Допускаются технические перерывы и обновления сервера.",
-    ],
-  },
-  {
-    title: "12. Жалобы",
-    paragraphs: [
-      "Пользователь может отправить жалобу через форму обратной связи. Администрация рассматривает жалобы и принимает меры по своему усмотрению.",
-    ],
-  },
-  {
-    title: "13. Изменения Условий",
-    paragraphs: [
-      "MobiStore может изменять Условия в любой момент. Новая редакция публикуется на сайте и вступает в силу с момента публикации.",
-    ],
-  },
-  {
-    title: "14. Применимое право",
-    paragraphs: [
-      "К отношениям сторон применяется законодательство Республики Узбекистан. Споры рассматриваются в судах РУз.",
-    ],
-  },
-];
-
 useSeoMeta({
-  title: "Условия использования сервиса MobiStore",
-  description: "Правила размещения объявлений, запреты и ответственность пользователей торговой площадки MobiStore.",
-  ogTitle: "Условия использования сервиса MobiStore",
-  ogDescription: "Правила размещения объявлений, запреты и ответственность пользователей торговой площадки MobiStore.",
+  title: () => t("terms.seo.title"),
+  description: () => t("terms.seo.description"),
+  ogTitle: () => t("terms.seo.title"),
+  ogDescription: () => t("terms.seo.description"),
 });
 </script>
 
@@ -151,51 +18,122 @@ useSeoMeta({
   <main class="terms-page">
     <div class="container">
       <section class="hero-card">
-        <p class="eyebrow">Условия использования</p>
-        <h1>Условия сервиса MobiStore</h1>
-        <p class="lead">
-          Настоящие правила регулируют публикацию объявлений, взаимодействие пользователей и ответственность сторон
-          на площадке MobiStore.
-        </p>
+        <p class="eyebrow">{{ t("terms.eyebrow") }}</p>
+        <h1>{{ t("terms.title") }}</h1>
+        <p class="lead">{{ t("terms.lead") }}</p>
         <div class="hero-meta">
-          <div class="badge">Дата последнего обновления: {{ lastUpdated }}</div>
-          <div class="summary">Используя сервис, вы подтверждаете согласие с Условиями.</div>
+          <div class="badge">{{ t("terms.lastUpdated", { date: lastUpdated }) }}</div>
+          <div class="summary">{{ t("terms.consent") }}</div>
         </div>
       </section>
 
       <section class="content-card">
-        <h2>Введение</h2>
-        <p class="intro-text">
-          Эти Условия регулируют порядок использования платформы MobiStore (mobistore.uz) на десктопе и в мобильных
-          браузерах. Пожалуйста, внимательно ознакомьтесь с ними перед публикацией объявлений и взаимодействием с
-          другими пользователями.
-        </p>
+        <h2>{{ t("terms.intro.title") }}</h2>
+        <p class="intro-text">{{ t("terms.intro.text") }}</p>
       </section>
 
-      <section
-        v-for="section in sections"
-        :key="section.title"
-        class="content-card"
-      >
-        <h3>{{ section.title }}</h3>
-        <p v-for="paragraph in section.paragraphs" :key="paragraph" class="paragraph">
-          {{ paragraph }}
-        </p>
+      <!-- 1. Определения -->
+      <section class="content-card">
+        <h3>{{ t("terms.sections.definitions.title") }}</h3>
+        <p v-for="(p, i) in getList('terms.sections.definitions.paragraphs')" :key="i" class="paragraph">{{ rt(p) }}</p>
+      </section>
 
-        <ul v-if="section.list" class="bullet-list">
-          <li v-for="item in section.list" :key="item">
-            {{ item }}
-          </li>
+      <!-- 2. Общие положения -->
+      <section class="content-card">
+        <h3>{{ t("terms.sections.general.title") }}</h3>
+        <p v-for="(p, i) in getList('terms.sections.general.paragraphs')" :key="i" class="paragraph">{{ rt(p) }}</p>
+      </section>
+
+      <!-- 3. Аккаунт и регистрация -->
+      <section class="content-card">
+        <h3>{{ t("terms.sections.account.title") }}</h3>
+        <p v-for="(p, i) in getList('terms.sections.account.paragraphs')" :key="i" class="paragraph">{{ rt(p) }}</p>
+      </section>
+
+      <!-- 4. Размещение объявлений -->
+      <section class="content-card">
+        <h3>{{ t("terms.sections.listings.title") }}</h3>
+        <p class="paragraph">{{ t("terms.sections.listings.intro") }}</p>
+        <ul class="bullet-list">
+          <li v-for="(item, i) in getList('terms.sections.listings.list')" :key="i">{{ rt(item) }}</li>
         </ul>
+      </section>
 
-        <div v-if="section.subLists" class="sub-lists">
-          <div v-for="sub in section.subLists" :key="sub.title" class="sub-list-card">
-            <h4>{{ sub.title }}</h4>
+      <!-- 5. Статусы объявлений -->
+      <section class="content-card">
+        <h3>{{ t("terms.sections.statuses.title") }}</h3>
+        <ul class="bullet-list">
+          <li v-for="(item, i) in getList('terms.sections.statuses.list')" :key="i">{{ rt(item) }}</li>
+        </ul>
+      </section>
+
+      <!-- 6. Изображения -->
+      <section class="content-card">
+        <h3>{{ t("terms.sections.images.title") }}</h3>
+        <p v-for="(p, i) in getList('terms.sections.images.paragraphs')" :key="i" class="paragraph">{{ rt(p) }}</p>
+      </section>
+
+      <!-- 7. Чат между покупателем и продавцом -->
+      <section class="content-card">
+        <h3>{{ t("terms.sections.chat.title") }}</h3>
+        <p v-for="(p, i) in getList('terms.sections.chat.paragraphs')" :key="i" class="paragraph">{{ rt(p) }}</p>
+      </section>
+
+      <!-- 8. Избранное -->
+      <section class="content-card">
+        <h3>{{ t("terms.sections.favorites.title") }}</h3>
+        <p v-for="(p, i) in getList('terms.sections.favorites.paragraphs')" :key="i" class="paragraph">{{ rt(p) }}</p>
+      </section>
+
+      <!-- 9. Запрещённые товары -->
+      <section class="content-card">
+        <h3>{{ t("terms.sections.prohibited.title") }}</h3>
+        <div class="sub-lists">
+          <div class="sub-list-card">
+            <h4>{{ t("terms.sections.prohibited.fullyProhibited.title") }}</h4>
             <ul class="bullet-list">
-              <li v-for="item in sub.items" :key="item">{{ item }}</li>
+              <li v-for="(item, i) in getList('terms.sections.prohibited.fullyProhibited.list')" :key="i">{{ rt(item) }}</li>
+            </ul>
+          </div>
+          <div class="sub-list-card">
+            <h4>{{ t("terms.sections.prohibited.conditionallyProhibited.title") }}</h4>
+            <ul class="bullet-list">
+              <li v-for="(item, i) in getList('terms.sections.prohibited.conditionallyProhibited.list')" :key="i">{{ rt(item) }}</li>
             </ul>
           </div>
         </div>
+      </section>
+
+      <!-- 10. Ответственность пользователя -->
+      <section class="content-card">
+        <h3>{{ t("terms.sections.responsibility.title") }}</h3>
+        <p v-for="(p, i) in getList('terms.sections.responsibility.paragraphs')" :key="i" class="paragraph">{{ rt(p) }}</p>
+      </section>
+
+      <!-- 11. Ограничение ответственности MobiStore -->
+      <section class="content-card">
+        <h3>{{ t("terms.sections.liability.title") }}</h3>
+        <ul class="bullet-list">
+          <li v-for="(item, i) in getList('terms.sections.liability.list')" :key="i">{{ rt(item) }}</li>
+        </ul>
+      </section>
+
+      <!-- 12. Жалобы -->
+      <section class="content-card">
+        <h3>{{ t("terms.sections.complaints.title") }}</h3>
+        <p v-for="(p, i) in getList('terms.sections.complaints.paragraphs')" :key="i" class="paragraph">{{ rt(p) }}</p>
+      </section>
+
+      <!-- 13. Изменения Условий -->
+      <section class="content-card">
+        <h3>{{ t("terms.sections.changes.title") }}</h3>
+        <p v-for="(p, i) in getList('terms.sections.changes.paragraphs')" :key="i" class="paragraph">{{ rt(p) }}</p>
+      </section>
+
+      <!-- 14. Применимое право -->
+      <section class="content-card">
+        <h3>{{ t("terms.sections.law.title") }}</h3>
+        <p v-for="(p, i) in getList('terms.sections.law.paragraphs')" :key="i" class="paragraph">{{ rt(p) }}</p>
       </section>
     </div>
   </main>

@@ -874,5 +874,325 @@
       "success": "Xabar muvaffaqiyatli yuborildi!",
       "error": "Xabarni yuborishda xatolik"
     }
+  },
+  "privacy": {
+    "seo": {
+      "title": "MobiStore maxfiylik siyosati",
+      "description": "MobiStore sizning shaxsiy ma'lumotlaringizni qanday to'plashi, ishlatishi va himoya qilishini bilib oling."
+    },
+    "eyebrow": "Maxfiylik siyosati",
+    "title": "MobiStore maxfiylik siyosati",
+    "lead": "Ushbu Maxfiylik siyosati MobiStore sayti va MobiStore mobil ilovasidan foydalanuvchilarning shaxsiy ma'lumotlarini qayta ishlash va himoya qilish tartibini belgilaydi.",
+    "lastUpdated": "Oxirgi yangilanish sanasi: {date}",
+    "consent": "Sayt yoki Ilovadan foydalanib, siz ushbu Siyosatga roziligingizni tasdiqlaysiz.",
+    "feedbackForm": "Aloqa shakli",
+    "sections": {
+      "definitions": {
+        "title": "1. Ta'riflar",
+        "paragraphs": [
+          "«Ma'muriyat», «biz», «MobiStore» — MobiStore platformasini boshqaruvchi jamoa.",
+          "«Foydalanuvchi» — sayt yoki ilovadan foydalanuvchi shaxs.",
+          "«Shaxsiy ma'lumotlar» — foydalanuvchini aniqlash imkonini beruvchi har qanday ma'lumot."
+        ]
+      },
+      "dataCollection": {
+        "title": "2. Qanday ma'lumotlarni to'playmiz",
+        "userProvided": {
+          "title": "2.1. Foydalanuvchi tomonidan taqdim etilgan ma'lumotlar",
+          "intro": "Ro'yxatdan o'tish, avtorizatsiya va xizmatdan foydalanishda:",
+          "list": [
+            "foydalanuvchi nomi;",
+            "email;",
+            "parol (shifrlangan holda);",
+            "Google ID — Google OAuth orqali avtorizatsiyada;",
+            "Telegram ma'lumotlari (agar kelajakda Telegram WebApp orqali avtorizatsiya yoqilsa);",
+            "telefon raqami (agar e'londa ko'rsatilgan bo'lsa);",
+            "Telegram havolasi;",
+            "avatar;",
+            "afzal ko'rilgan interfeys tili."
+          ]
+        },
+        "automatic": {
+          "title": "2.2. Avtomatik to'planadigan ma'lumotlar",
+          "intro": "Saytga tashrif buyurganda:",
+          "list": [
+            "IP-manzil;",
+            "brauzer va qurilma ma'lumotlari;",
+            "cookies;",
+            "tashriflar sanasi va vaqti;",
+            "harakatlar statistikasi (e'lonlarni ko'rish, bosishlar va h.k.)."
+          ]
+        },
+        "listings": {
+          "title": "2.3. E'lonlar bilan bog'liq ma'lumotlar",
+          "intro": "E'lon yaratishda:",
+          "list": [
+            "tovar rasmlari;",
+            "qurilma tavsifi va xususiyatlari;",
+            "viloyat va shahar;",
+            "brend va model;",
+            "narx va valyuta;",
+            "qurilma holati;",
+            "sotuvchi kontakt ma'lumotlari."
+          ]
+        },
+        "chat": {
+          "title": "2.4. Yozishmalar ma'lumotlari",
+          "intro": "O'rnatilgan chatdan foydalanishda:",
+          "list": [
+            "xaridorlar va sotuvchilar o'rtasidagi xabarlar;",
+            "yuborish va qabul qilish vaqti;",
+            "suhbat ishtirokchilari IDsi."
+          ]
+        },
+        "feedback": {
+          "title": "2.5. Aloqa shakli ma'lumotlari",
+          "intro": "/info/contacts sahifasi orqali foydalanuvchi quyidagilarni yuborishi mumkin:",
+          "list": [
+            "ism;",
+            "email yoki telefon raqami;",
+            "murojaat matni;",
+            "ilovalar (agar shakl ruxsat bersa);",
+            "texnik ma'lumotlar (IP, yuborish vaqti, brauzer — spamdan himoya uchun)."
+          ],
+          "note": "Bu ma'lumotlar faqat foydalanuvchi murojaatiga javob berish uchun ishlatiladi."
+        }
+      },
+      "dataUsage": {
+        "title": "3. Ma'lumotlarni qanday ishlatamiz",
+        "intro": "Biz ma'lumotlarni quyidagilar uchun qayta ishlaymiz:",
+        "list": [
+          "foydalanuvchilarni ro'yxatdan o'tkazish va avtorizatsiya qilish;",
+          "sotuvchi profili va kontakt ma'lumotlarini ko'rsatish;",
+          "e'lonlarni yaratish, nashr qilish, tahrirlash va o'chirish;",
+          "chat ishlashi;",
+          "foydalanuvchilar bilan ularning murojaatlari bo'yicha bog'lanish (/info/contacts orqali ham);",
+          "xizmat bildirishnomalarini yuborish;",
+          "tahlil va xizmat ishini yaxshilash;",
+          "spam, firibgarlik va qoidalar buzilishidan himoya qilish."
+        ]
+      },
+      "thirdParty": {
+        "title": "4. Ma'lumotlarni uchinchi shaxslarga uzatish",
+        "intro": "Biz shaxsiy ma'lumotlarni uchinchi shaxslarga uzatmaymiz va sotmaymiz, quyidagi holatlar bundan mustasno:",
+        "list": [
+          "Google — Google OAuth orqali avtorizatsiyada;",
+          "Telegram — WebApp avtorizatsiyasi faollashtirilganda;",
+          "Timeweb pochta xizmati — tasdiqlash xatlarini yuborish uchun;",
+          "Xosting-provayderlar — sayt ishlashi va fayllarni saqlashni ta'minlash uchun;",
+          "Davlat organlari — qonuniy talab mavjud bo'lganda."
+        ],
+        "note": "Biz foydalanuvchilar ma'lumotlarini tijorat maqsadlarida ishlatmaymiz va reklama kompaniyalariga uzatmaymiz."
+      },
+      "cookies": {
+        "title": "5. Cookies va tahlil",
+        "intro": "Biz cookies-dan quyidagilar uchun foydalanamiz:",
+        "list": [
+          "foydalanuvchi sozlamalarini saqlash;",
+          "avtorizatsiyani qo'llab-quvvatlash;",
+          "sayt tashriflarini tahlil qilish;",
+          "firibgarlik harakatlaridan himoya qilish."
+        ],
+        "note": "Foydalanuvchi brauzerda cookies-ni o'chirishi mumkin, lekin xizmatning ba'zi funksiyalari noto'g'ri ishlashi mumkin."
+      },
+      "security": {
+        "title": "6. Ma'lumotlarni saqlash va himoya qilish",
+        "intro": "Biz zamonaviy texnik xavfsizlik choralarini qo'llaymiz:",
+        "list": [
+          "parollarni shifrlash (bcrypt);",
+          "xavfsiz HTTPS ulanishi;",
+          "parol tanlash va DDOS dan himoya (rate limiting);",
+          "ma'lumotlarni himoyalangan serverlarda saqlash;",
+          "ma'lumotlar bazasiga kirishni nazorat qilish;",
+          "shubhali faoliyatni muntazam monitoring qilish."
+        ]
+      },
+      "retention": {
+        "title": "7. Ma'lumotlarni saqlash muddati",
+        "paragraphs": [
+          "Biz shaxsiy ma'lumotlarni foydalanuvchi xizmatdan foydalanishni davom ettirguncha yoki qonunchilik belgilagan muddatlar davomida saqlaymiz.",
+          "Foydalanuvchi tomonidan akkauntni o'chirish hozircha mavjud emas, lekin kelajakdagi yangilanishlarda paydo bo'ladi."
+        ]
+      },
+      "rights": {
+        "title": "8. Foydalanuvchi huquqlari",
+        "intro": "Foydalanuvchi quyidagi huquqlarga ega:",
+        "list": [
+          "qanday ma'lumotlar to'planayotgani haqida ma'lumot olish;",
+          "ma'lumotlarni tuzatishni so'rash;",
+          "o'z kontakt ma'lumotlaridan foydalanishni cheklash;",
+          "xabarlar yuborishdan voz kechish;",
+          "/info/contacts aloqa shakli orqali shikoyat va savollar yuborish."
+        ]
+      },
+      "children": {
+        "title": "9. Bolalar ma'lumotlari",
+        "paragraphs": [
+          "Biz 16 yoshdan kichik bolalarning ma'lumotlarini to'plamaymiz.",
+          "Agar voyaga yetmagan shaxsning ma'lumotlari xato uzatilgan bo'lsa — bizga xabar bering va biz ularni o'chiramiz."
+        ]
+      },
+      "updates": {
+        "title": "10. Siyosat yangilanishlari",
+        "paragraphs": [
+          "Biz Maxfiylik siyosatini yangilashimiz mumkin.",
+          "Dolzarb versiya doimo saytda mavjud."
+        ]
+      },
+      "contact": {
+        "title": "11. Kontaktlar",
+        "paragraphs": [
+          "Maxfiylik va shaxsiy ma'lumotlarni qayta ishlash bilan bog'liq har qanday savol bo'yicha foydalanuvchi aloqa shakli orqali murojaat qilishi mumkin."
+        ],
+        "note": "Bu usul murojaatlar uchun asosiy va ustuvor hisoblanadi."
+      }
+    }
+  },
+  "terms": {
+    "seo": {
+      "title": "MobiStore xizmatidan foydalanish shartlari",
+      "description": "MobiStore savdo platformasi foydalanuvchilarining e'lon joylashtirish qoidalari, taqiqlar va javobgarligi."
+    },
+    "eyebrow": "Foydalanish shartlari",
+    "title": "MobiStore xizmati shartlari",
+    "lead": "Ushbu qoidalar MobiStore platformasida e'lonlar nashr qilish, foydalanuvchilar o'zaro munosabatlari va tomonlar javobgarligini tartibga soladi.",
+    "lastUpdated": "Oxirgi yangilanish sanasi: {date}",
+    "consent": "Xizmatdan foydalanib, siz Shartlarga roziligingizni tasdiqlaysiz.",
+    "intro": {
+      "title": "Kirish",
+      "text": "Ushbu Shartlar MobiStore (mobistore.uz) platformasidan kompyuter va mobil brauzerlarda foydalanish tartibini tartibga soladi. Iltimos, e'lonlar joylashtirish va boshqa foydalanuvchilar bilan muloqot qilishdan oldin ularni diqqat bilan o'qib chiqing."
+    },
+    "sections": {
+      "definitions": {
+        "title": "1. Ta'riflar",
+        "paragraphs": [
+          "Xizmat (MobiStore) — mobil telefonlar va aksessuarlarni sotish bo'yicha e'lonlar joylashtirish uchun onlayn-platforma.",
+          "Foydalanuvchi — Xizmatdan foydalanuvchi jismoniy shaxs.",
+          "Akkaunt — Foydalanuvchi tomonidan e'lonlar nashr qilish uchun yaratilgan hisob yozuvi.",
+          "E'lon — Foydalanuvchi tomonidan joylashtirilgan tovar haqida ma'lumot.",
+          "Sotuvchi — e'lonlar nashr qiluvchi foydalanuvchi.",
+          "Xaridor — e'lonlarni ko'ruvchi va sotuvchi bilan muloqot qiluvchi foydalanuvchi.",
+          "Xabarlar (chat) — Xizmat ichida xaridor va sotuvchi o'rtasida xabar almashish tizimi.",
+          "Taqiqlangan tovarlar — qonunchilik va MobiStore ro'yxati bilan taqiqlangan tovarlar."
+        ]
+      },
+      "general": {
+        "title": "2. Umumiy qoidalar",
+        "paragraphs": [
+          "MobiStore faqat e'lonlar joylashtirish uchun platforma bo'lib, sotuvchi, vositachi yoki bitim ishtirokchisi emas.",
+          "Ma'muriyat tovarlar sifati, foydalanuvchilar harakatlari, ma'lumotlar ishonchliligi va kelishuvlar bajarilishi uchun javobgar emas.",
+          "Foydalanuvchi O'zbekiston Respublikasi qonunchiligiga rioya qilishi shart.",
+          "Ma'muriyat Shartlarni buzuvchi e'lonlarni yashirish, bloklash yoki o'chirish huquqiga ega."
+        ]
+      },
+      "account": {
+        "title": "3. Akkaunt va ro'yxatdan o'tish",
+        "paragraphs": [
+          "E'lonlar nashr qilish uchun email va parol orqali ro'yxatdan o'tish talab qilinadi.",
+          "Foydalanuvchi ishonchli ma'lumotlar taqdim etishga va kirish ma'lumotlarini uchinchi shaxslarga uzatmaslikka majbur.",
+          "Akkauntni o'chirish hozircha ko'zda tutilmagan. Shartlar buzilganda ma'muriyat kirishni cheklashi mumkin."
+        ]
+      },
+      "listings": {
+        "title": "4. E'lonlar joylashtirish",
+        "intro": "E'lon joylashtirib, Foydalanuvchi tovarga bo'lgan huquqini va ma'lumotlar ishonchliligini tasdiqlaydi.",
+        "list": [
+          "Brend va model tovarga mos kelishi kerak.",
+          "Narx so'mlarda (UZS) ko'rsatiladi.",
+          "Tavsifda kontaktlar qoldirish taqiqlangan.",
+          "Sarlavha va tavsifda spam, haqorat va boshqa saytlar reklamasi bo'lmasligi kerak.",
+          "Har bir tovar alohida e'lon sifatida nashr qilinadi va \"mobil telefonlar va aksessuarlar\" kategoriyasiga tegishli bo'lishi kerak.",
+          "Ma'muriyat e'lonni moderatsiyaga yuborishi yoki rad etishi mumkin."
+        ]
+      },
+      "statuses": {
+        "title": "5. E'lon statuslari",
+        "list": [
+          "draft — qoralama",
+          "active — nashr qilingan",
+          "sold — tovar sotilgan",
+          "archived — foydalanuvchi tomonidan yashirilgan",
+          "moderation — tekshirilmoqda",
+          "rejected — rad etilgan"
+        ]
+      },
+      "images": {
+        "title": "6. Rasmlar",
+        "paragraphs": [
+          "Foydalanuvchi faqat tovarning haqiqiy rasmlarini yuklaydi.",
+          "Boshqalarning rasmlari, boshqa platformalar suv belgilari, 18+ materiallar, zo'ravonlik sahnalari va haqoratlar taqiqlangan.",
+          "Ma'muriyat Shartlarni buzuvchi rasmlarni o'chirish huquqiga ega."
+        ]
+      },
+      "chat": {
+        "title": "7. Xaridor va sotuvchi o'rtasidagi chat",
+        "paragraphs": [
+          "Xabarlar faqat xarid muhokamasi uchun ishlatiladi.",
+          "Spam, firibgarlik havolalari, haqoratlar va taqiqlangan materiallar yuborish taqiqlangan.",
+          "Shikoyat bo'lganda yozishmalar moderatsiya tomonidan ko'rib chiqilishi mumkin."
+        ]
+      },
+      "favorites": {
+        "title": "8. Sevimlilar",
+        "paragraphs": [
+          "Foydalanuvchi e'lonlarni \"Sevimlilar\" bo'limiga qo'shishi mumkin. Funksiya faqat qulaylik uchun xizmat qiladi va majburiyatlar yaratmaydi."
+        ]
+      },
+      "prohibited": {
+        "title": "9. Taqiqlangan tovarlar",
+        "fullyProhibited": {
+          "title": "To'liq taqiqlangan",
+          "list": [
+            "o'g'irlangan va topilgan telefonlar",
+            "qalbaki qurilmalar",
+            "o'zgartirilgan yoki o'chirilgan IMEI li qurilmalar",
+            "operator ostida bloklangan telefonlar",
+            "sim-kartalar, eSIM, akkauntlar, buzish xizmatlari",
+            "O'zR qonuni bilan taqiqlangan tovarlar"
+          ]
+        },
+        "conditionallyProhibited": {
+          "title": "Shartli taqiqlangan (halol tavsif talab qiladi)",
+          "list": [
+            "tiklangan telefonlar — \"restored\" deb belgilanishi kerak",
+            "shikastlangan telefonlar — barcha nuqsonlarni ko'rsatish kerak"
+          ]
+        }
+      },
+      "responsibility": {
+        "title": "10. Foydalanuvchi javobgarligi",
+        "paragraphs": [
+          "Foydalanuvchi e'lonlar, tovarlar va yozishmalar uchun javobgar.",
+          "Dublikatlar yaratish, chalg'itish, ishlatilganni yangi deb ko'rsatish va xizmatni firibgarlik uchun ishlatish taqiqlangan.",
+          "Buzilishlar bo'lganda ma'muriyat e'lonlarni o'chirishi, akkauntga kirishni cheklashi yoki yangi nashrlarni taqiqlashi mumkin."
+        ]
+      },
+      "liability": {
+        "title": "11. MobiStore javobgarligini cheklash",
+        "list": [
+          "Xizmat foydalanuvchilar o'rtasidagi bitimlar va har qanday moliyaviy yo'qotishlar uchun javobgar emas.",
+          "MobiStore foydalanuvchilar xatolari, uskunaning ishlamasligi yoki internet yo'qligi uchun javobgar emas.",
+          "Texnik tanaffuslar va server yangilanishlariga ruxsat beriladi."
+        ]
+      },
+      "complaints": {
+        "title": "12. Shikoyatlar",
+        "paragraphs": [
+          "Foydalanuvchi aloqa shakli orqali shikoyat yuborishi mumkin. Ma'muriyat shikoyatlarni ko'rib chiqadi va o'z ixtiyoriga ko'ra choralar ko'radi."
+        ]
+      },
+      "changes": {
+        "title": "13. Shartlar o'zgarishlari",
+        "paragraphs": [
+          "MobiStore Shartlarni istalgan vaqtda o'zgartirishi mumkin. Yangi tahrir saytda nashr qilinadi va nashr qilingan paytdan kuchga kiradi."
+        ]
+      },
+      "law": {
+        "title": "14. Qo'llaniladigan huquq",
+        "paragraphs": [
+          "Tomonlar munosabatlariga O'zbekiston Respublikasi qonunchiligi qo'llaniladi. Nizolar O'zR sudlarida ko'rib chiqiladi."
+        ]
+      }
+    }
   }
 }
