@@ -823,5 +823,56 @@
         "imageDeleteError": "Rasmni o'chirishda xatolik"
       }
     }
+  },
+  "contacts": {
+    "seo": {
+      "title": "Kontaktlar — MobiStore",
+      "description": "MobiStore jamoasi bilan bog'laning. Qo'llab-quvvatlash xizmati, aloqa shakli, telefon va email savollar va takliflar uchun.",
+      "ogTitle": "Kontaktlar — MobiStore",
+      "ogDescription": "Biz bilan qulay usulda bog'laning"
+    },
+    "title": "Kontaktlar",
+    "subtitle": "Biz bilan qulay usulda bog'laning yoki aloqa shaklini to'ldiring",
+    "info": {
+      "title": "Bizning kontaktlar",
+      "description": "Biz sizga yordam berishdan doimo xursandmiz. Biz bilan qulay usulda bog'laning"
+    },
+    "support": {
+      "online": "Qo'llab-quvvatlash xizmati onlayn",
+      "workingHours": "Har kuni 09:00 dan 23:00 gacha ishlaymiz (GMT+5). O'rtacha 5 daqiqada javob beramiz.",
+      "callNow": "Hozir qo'ng'iroq qilish",
+      "writeEmail": "Pochtaga yozish"
+    },
+    "form": {
+      "title": "Aloqa shakli",
+      "description": "Quyidagi shaklni to'ldiring va biz siz bilan tez orada bog'lanamiz",
+      "name": "Ismingiz",
+      "namePlaceholder": "Ismingizni kiriting",
+      "email": "Email",
+      "emailPlaceholder": "example{'@'}mail.com",
+      "phone": "Telefon",
+      "phonePlaceholder": "+998 90 123 45 67",
+      "topic": "Murojaat mavzusi",
+      "topicPlaceholder": "Mavzuni tanlang",
+      "message": "Xabar",
+      "messagePlaceholder": "Muammo yoki savolingizni tasvirlab bering",
+      "submit": "Xabarni yuborish",
+      "topics": {
+        "question": "Umumiy savol",
+        "technical": "Texnik yordam",
+        "partnership": "Hamkorlik taklifi",
+        "complaint": "Shikoyat",
+        "other": "Boshqa"
+      }
+    },
+    "validation": {
+      "name": "Ismingizni kiriting",
+      "topic": "Murojaat mavzusini tanlang",
+      "message": "Xabarni kiriting"
+    },
+    "messages": {
+      "success": "Xabar muvaffaqiyatli yuborildi!",
+      "error": "Xabarni yuborishda xatolik"
+    }
   }
 }
