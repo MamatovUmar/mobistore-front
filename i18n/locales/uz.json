@@ -593,5 +593,235 @@
       "daysAgo": "{days} kun avval"
     },
     "showContacts": "Kontaktlarni ko'rsatish"
+  },
+  "account": {
+    "title": "Mening akkauntim",
+    "meta": {
+      "profile": "Mening profilim — MobiStore",
+      "favorites": "Sevimlilar — MobiStore",
+      "conversations": "Xabarlar — MobiStore",
+      "myListings": "Mening e'lonlarim — MobiStore",
+      "editListing": "E'lonni tahrirlash — MobiStore"
+    },
+    "sidebar": {
+      "personalData": "Shaxsiy ma'lumotlar",
+      "myListings": "Mening e'lonlarim",
+      "favorites": "Sevimlilar",
+      "conversations": "Yozishmalar",
+      "logout": "Chiqish"
+    },
+    "profile": {
+      "title": "Shaxsiy ma'lumotlar",
+      "edit": "Tahrirlash",
+      "save": "Saqlash",
+      "cancel": "Bekor qilish",
+      "fields": {
+        "name": "Ism",
+        "lastName": "Familiya",
+        "email": "Email",
+        "phone": "Telefon",
+        "telegram": "Telegram",
+        "region": "Viloyat",
+        "city": "Shahar",
+        "showContacts": "Kontaktlarni ko'rsatish",
+        "language": "Til"
+      },
+      "placeholders": {
+        "name": "Ismingizni kiriting",
+        "lastName": "Familiyangizni kiriting",
+        "phone": "+998 90 123 45 67",
+        "telegram": "{'@'}username",
+        "region": "Viloyatni tanlang",
+        "city": "Shaharni tanlang",
+        "language": "Tilni tanlang"
+      },
+      "validation": {
+        "nameRequired": "Ismingizni kiriting",
+        "lastNameRequired": "Familiyangizni kiriting",
+        "nameLength": "Uzunlik 2 dan 50 gacha belgi bo'lishi kerak",
+        "languageRequired": "Tilni tanlang"
+      },
+      "values": {
+        "notSpecified": "Ko'rsatilmagan",
+        "yes": "Ha",
+        "no": "Yo'q",
+        "russian": "Русский",
+        "uzbek": "O'zbekcha"
+      }
+    },
+    "security": {
+      "title": "Xavfsizlik",
+      "changePassword": "Parolni o'zgartirish",
+      "hint": "Parolni o'zgartirish uchun \"Parolni o'zgartirish\" tugmasini bosing",
+      "fields": {
+        "currentPassword": "Joriy parol",
+        "newPassword": "Yangi parol",
+        "confirmPassword": "Yangi parolni tasdiqlang"
+      },
+      "placeholders": {
+        "currentPassword": "Joriy parolni kiriting",
+        "newPassword": "Yangi parolni kiriting",
+        "confirmPassword": "Yangi parolni takrorlang"
+      },
+      "validation": {
+        "currentRequired": "Joriy parolni kiriting",
+        "newRequired": "Yangi parolni kiriting",
+        "confirmRequired": "Yangi parolni tasdiqlang",
+        "minLength": "Parol kamida 6 belgidan iborat bo'lishi kerak",
+        "mismatch": "Parollar mos kelmadi"
+      },
+      "messages": {
+        "success": "Parol muvaffaqiyatli o'zgartirildi",
+        "error": "Parolni o'zgartirib bo'lmadi. Joriy parolni tekshiring"
+      },
+      "savePassword": "Parolni saqlash"
+    },
+    "favorites": {
+      "title": "Sevimli e'lonlar",
+      "count": "{count} ta e'lon",
+      "empty": {
+        "title": "Sizda hali sevimli e'lonlar yo'q",
+        "text": "Yoqtirgan e'lonlarni sevimlilarga qo'shing, ularni yo'qotmang",
+        "button": "E'lonlarga o'tish"
+      }
+    },
+    "conversations": {
+      "title": "Yozishmalar",
+      "subtitle": "Bu yerda barcha suhbatlaringiz to'plangan",
+      "search": "E'lon yoki ism bo'yicha qidirish",
+      "noConversations": {
+        "title": "Yozishmalar yo'q",
+        "text": "E'lon sahifasida muloqotni boshlang — yozishma bu yerda avtomatik paydo bo'ladi"
+      },
+      "noMessages": {
+        "title": "Hozircha xabarlar yo'q",
+        "text": "Suhbatni boshlash uchun biror narsa yozing"
+      },
+      "placeholder": {
+        "title": "Yozishmani tanlang",
+        "text": "Chap tomonda barcha suhbatlaringiz ko'rsatilgan. Tafsilotlarni ko'rish va muloqotni davom ettirish uchun istalganiga bosing.",
+        "button": "Yozishmalarni ochish"
+      },
+      "input": "Xabar yozing...",
+      "noMessagesYet": "Hozircha xabarlar yo'q",
+      "unknownUser": "Noma'lum foydalanuvchi",
+      "defaultUser": "Foydalanuvchi",
+      "unknownStatus": "Holat noma'lum",
+      "online": "Tarmoqda",
+      "wasMinutes": "{min}d avval saytda",
+      "wasHours": "{hours}s avval saytda",
+      "wasYesterday": "Kecha saytda",
+      "wasDays": "{days}k avval saytda",
+      "wasDate": "{date} saytda",
+      "justNow": "Hozirgina",
+      "errors": {
+        "loadConversations": "Yozishmalarni yuklab bo'lmadi",
+        "loadMessages": "Xabarlarni yuklab bo'lmadi",
+        "sendMessage": "Xabarni yuborib bo'lmadi"
+      }
+    },
+    "listings": {
+      "title": "Mening e'lonlarim",
+      "statuses": {
+        "all": "Barchasi",
+        "active": "Faol",
+        "draft": "Qoralamalar",
+        "archived": "Arxiv",
+        "moderation": "Moderatsiyada",
+        "rejected": "Rad etilgan"
+      },
+      "selectStatus": "Statusni tanlang",
+      "empty": {
+        "title": "Sizda hali e'lonlar yo'q",
+        "button": "Birinchi e'lonni yaratish"
+      },
+      "card": {
+        "view": "Ko'rish",
+        "edit": "Tahrirlash",
+        "activate": "Faollashtirish",
+        "sold": "Sotildi",
+        "toArchive": "Arxivga",
+        "views": "Ko'rishlar",
+        "inFavorites": "Sevimlilarda",
+        "gb": "GB"
+      }
+    },
+    "editListing": {
+      "title": "E'lonni tahrirlash",
+      "subtitle": "Qurilmangiz haqidagi ma'lumotlarni o'zgartiring",
+      "sections": {
+        "main": "Asosiy ma'lumotlar",
+        "specsAndPrice": "Xususiyatlari va narxi",
+        "locationAndPhotos": "Joylashuv va rasmlar",
+        "contacts": "Kontaktlar"
+      },
+      "fields": {
+        "title": "Sarlavha",
+        "description": "Tavsif",
+        "brand": "Brend",
+        "model": "Model",
+        "memory": "Xotira",
+        "ram": "Operativ xotira",
+        "color": "Rang",
+        "condition": "Holati",
+        "price": "Narxi",
+        "currency": "Valyuta",
+        "region": "Viloyat",
+        "city": "Shahar",
+        "currentPhotos": "Joriy rasmlar",
+        "addPhotos": "Yangi rasmlar qo'shish (maks. 8)",
+        "phone": "Telefon",
+        "telegram": "Telegram"
+      },
+      "placeholders": {
+        "title": "Sarlavhani kiriting",
+        "description": "Tavsifni kiriting",
+        "memory": "Xotirani tanlang",
+        "ram": "Operativ xotirani tanlang",
+        "colorInput": "Rangni kiriting",
+        "colorSelect": "Rangni tanlang",
+        "condition": "Holatini tanlang",
+        "price": "Narxni kiriting",
+        "currency": "Valyutani tanlang"
+      },
+      "conditions": {
+        "new": "Yangi",
+        "restored": "Tiklangan",
+        "used": "B/U"
+      },
+      "checkboxes": {
+        "exchange": "Almashish mumkin",
+        "showContacts": "Kontaktlarni e'londa ko'rsatish"
+      },
+      "validation": {
+        "title": "Sarlavhani kiriting",
+        "description": "Tavsifni kiriting",
+        "region": "Viloyatni tanlang",
+        "city": "Shaharni tanlang",
+        "brand": "Brendni tanlang",
+        "model": "Modelni tanlang",
+        "price": "Narxni kiriting",
+        "condition": "Holatini tanlang",
+        "images": "Kamida bitta rasm yuklang",
+        "required": "Barcha majburiy maydonlarni to'ldiring"
+      },
+      "upload": {
+        "dragText": "Fayllarni bu yerga sudrab olib keling yoki",
+        "clickText": "yuklash uchun bosing",
+        "tip": "Qo'llab-quvvatlanadigan formatlar: jpg, png (maks. {count} ta fayl)"
+      },
+      "buttons": {
+        "cancel": "Bekor qilish",
+        "save": "O'zgarishlarni saqlash"
+      },
+      "messages": {
+        "loadError": "E'lonni yuklashda xatolik",
+        "updateSuccess": "E'lon muvaffaqiyatli yangilandi",
+        "imageUploadSuccess": "Rasmlar muvaffaqiyatli yuklandi",
+        "imageUploadError": "Rasmlarni yuklashda xatolik",
+        "imageDeleteSuccess": "Rasm o'chirildi",
+        "imageDeleteError": "Rasmni o'chirishda xatolik"
+      }
+    }
   }
 }

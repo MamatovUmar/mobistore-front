@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { Star } from "@element-plus/icons-vue";
 
+const { t } = useI18n();
+const localePath = useLocalePath();
+
 useSeoMeta({
-  title: "Избранное — MobiStore",
+  title: () => t("account.meta.favorites"),
   robots: "noindex, nofollow",
 });
 
@@ -15,7 +18,7 @@ getProfileFavorites();
   <main class="page-account">
     <div class="container">
       <div class="page-header">
-        <h1 class="page-title">Мой аккаунт</h1>
+        <h1 class="page-title">{{ $t("account.title") }}</h1>
       </div>
 
       <div class="account-layout">
@@ -27,9 +30,9 @@ getProfileFavorites();
           <div class="favorites-section">
             <div class="section-header">
               <div>
-                <h2 class="section-title">Избранные объявления</h2>
+                <h2 class="section-title">{{ $t("account.favorites.title") }}</h2>
                 <p class="section-subtitle">
-                  {{ favorites.length }} объявлений
+                  {{ $t("account.favorites.count", { count: favorites.length }) }}
                 </p>
               </div>
             </div>
@@ -47,13 +50,12 @@ getProfileFavorites();
             <!-- Пустое состояние -->
             <div v-if="favorites.length === 0" class="empty-state">
               <el-icon class="empty-icon"><Star /></el-icon>
-              <p class="empty-text">У вас пока нет избранных объявлений</p>
+              <p class="empty-text">{{ $t("account.favorites.empty.title") }}</p>
               <p class="empty-description">
-                Добавляйте понравившиеся объявления в избранное, чтобы не
-                потерять их
+                {{ $t("account.favorites.empty.text") }}
               </p>
-              <el-button type="primary" @click="$router.push('/search')">
-                Перейти к объявлениям
+              <el-button type="primary" @click="$router.push(localePath('/search'))">
+                {{ $t("account.favorites.empty.button") }}
               </el-button>
             </div>
           </div>

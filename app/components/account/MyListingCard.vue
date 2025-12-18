@@ -10,6 +10,9 @@ import {
 import type { IListing } from "~/types/ads";
 import { ListingStatus } from "~/types/ads";
 
+const { t, locale } = useI18n();
+const localePath = useLocalePath();
+
 const props = defineProps<{
   listing: IListing;
 }>();
@@ -25,10 +28,10 @@ const { getStatusLabel, getStatusType, getStateLabel, changeStatus } = useAds();
 const handleMenuAction = async (action: string) => {
   switch (action) {
     case "view":
-      navigateTo(`/${props.listing.alias}`);
+      navigateTo(localePath(`/${props.listing.alias}`));
       break;
     case "edit":
-      navigateTo(`/account/listings/edit/${props.listing.id}`);
+      navigateTo(localePath(`/account/listings/edit/${props.listing.id}`));
       break;
     default:
       await changeStatus(props.listing.id, action as ListingStatus);
@@ -40,7 +43,7 @@ const handleMenuAction = async (action: string) => {
 const formatDate = (dateString: string | null) => {
   if (!dateString) return "—";
   const date = new Date(dateString);
-  return new Intl.DateTimeFormat("ru-RU", {
+  return new Intl.DateTimeFormat(locale.value === "uz" ? "uz-UZ" : "ru-RU", {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -50,13 +53,17 @@ const formatDate = (dateString: string | null) => {
 const getImageUrl = (listing: IListing) => {
   return listing.images?.[0]?.url || "/no-image.png";
 };
+
+const getLocalizedCity = computed(() => {
+  return locale.value === "uz" ? props.listing.city.name_uz : props.listing.city.name_ru;
+});
 </script>
 
 <template>
   <div class="listing-card">
     <!-- Image Section -->
     <div class="listing-image">
-      <nuxt-link :to="`/${listing.alias}`" class="image-link">
+      <nuxt-link :to="localePath(`/${listing.alias}`)" class="image-link">
         <img :src="getImageUrl(listing)" :alt="listing.title" />
       </nuxt-link>
       <el-tag
@@ -83,26 +90,26 @@ const getImageUrl = (listing: IListing) => {
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item command="view">Посмотреть</el-dropdown-item>
-            <el-dropdown-item command="edit">Изменить</el-dropdown-item>
+            <el-dropdown-item command="view">{{ $t("account.listings.card.view") }}</el-dropdown-item>
+            <el-dropdown-item command="edit">{{ $t("account.listings.card.edit") }}</el-dropdown-item>
             <el-dropdown-item
               v-if="listing.status !== ListingStatus.ACTIVE"
               command="active"
               divided
             >
-              Активировать
+              {{ $t("account.listings.card.activate") }}
             </el-dropdown-item>
             <el-dropdown-item
               v-if="listing.status !== ListingStatus.SOLD"
               command="sold"
             >
-              Продано
+              {{ $t("account.listings.card.sold") }}
             </el-dropdown-item>
             <el-dropdown-item
               v-if="listing.status !== ListingStatus.ARCHIVED"
               command="archived"
             >
-              В архив
+              {{ $t("account.listings.card.toArchive") }}
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -119,7 +126,7 @@ const getImageUrl = (listing: IListing) => {
       </div>
 
       <!-- Title -->
-      <nuxt-link :to="`/${listing.alias}`" class="listing-title">
+      <nuxt-link :to="localePath(`/${listing.alias}`)" class="listing-title">
         {{ listing.title }}
       </nuxt-link>
 
@@ -129,7 +136,7 @@ const getImageUrl = (listing: IListing) => {
         <span class="tag-item">{{ listing.model.name }}</span>
         <span class="tag-item">{{ getStateLabel(listing.state) }}</span>
         <span v-if="listing.storage" class="tag-item"
-          >{{ listing.storage }} ГБ</span
+          >{{ listing.storage }} {{ $t("account.listings.card.gb") }}</span
         >
       </div>
 
@@ -137,7 +144,7 @@ const getImageUrl = (listing: IListing) => {
       <div class="listing-meta">
         <div class="meta-item location">
           <el-icon><Location /></el-icon>
-          <span>{{ listing.city.name_ru }}</span>
+          <span>{{ getLocalizedCity }}</span>
         </div>
         <div class="meta-item date">
           <el-icon><Clock /></el-icon>
@@ -149,11 +156,11 @@ const getImageUrl = (listing: IListing) => {
 
       <!-- Stats Row -->
       <div class="listing-stats">
-        <div class="stat-item" title="Просмотры">
+        <div class="stat-item" :title="$t('account.listings.card.views')">
           <el-icon><View /></el-icon>
           <span>{{ listing.views_count }}</span>
         </div>
-        <div class="stat-item" title="В избранном">
+        <div class="stat-item" :title="$t('account.listings.card.inFavorites')">
           <el-icon><Star /></el-icon>
           <span>{{ listing.favorites_count }}</span>
         </div>

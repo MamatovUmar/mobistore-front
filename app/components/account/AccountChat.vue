@@ -11,6 +11,9 @@ import type { IConversation, IConversationMessage } from "~/types/chat";
 import type { IUser } from "~/types/user";
 import { useRootStore } from "~/store/root";
 
+const { t, locale } = useI18n();
+const localePath = useLocalePath();
+
 const {
   getAllConversations,
   getConversationMessages,
@@ -123,7 +126,7 @@ const loadConversations = async () => {
       selectedConversationId.value = conversations.value[0]?.id ?? null;
     }
   } catch {
-    ElMessage.error("Не удалось загрузить переписки");
+    ElMessage.error(t("account.conversations.errors.loadConversations"));
   } finally {
     conversationsLoading.value = false;
   }
@@ -141,7 +144,7 @@ const loadMessages = async (conversationId: number) => {
       scrollToBottom();
     });
   } catch {
-    ElMessage.error("Не удалось загрузить сообщения");
+    ElMessage.error(t("account.conversations.errors.loadMessages"));
   } finally {
     isMessagesLoading.value = false;
   }
@@ -185,7 +188,7 @@ const handleSendMessage = async () => {
   } catch {
     messageInput.value = text;
     autoResize();
-    ElMessage.error("Не удалось отправить сообщение");
+    ElMessage.error(t("account.conversations.errors.sendMessage"));
   } finally {
     isSending.value = false;
   }
@@ -277,7 +280,7 @@ const getUnreadCount = (conversation: IConversation) => {
 };
 
 const getActivityStatus = (lastActive?: string | null) => {
-  if (!lastActive) return "Статус неизвестен";
+  if (!lastActive) return t("account.conversations.unknownStatus");
 
   const lastActivity = new Date(lastActive);
   const now = new Date();
@@ -286,13 +289,13 @@ const getActivityStatus = (lastActive?: string | null) => {
   const diffHours = Math.floor(diffMs / 3600000);
   const diffDays = Math.floor(diffMs / 86400000);
 
-  if (diffMins < 5) return "В сети";
-  if (diffMins < 60) return `Был(а) ${diffMins}м назад`;
-  if (diffHours < 24) return `Был(а) ${diffHours}ч назад`;
-  if (diffDays === 1) return "Был(а) вчера";
-  if (diffDays < 7) return `Был(а) ${diffDays}д назад`;
+  if (diffMins < 5) return t("account.conversations.online");
+  if (diffMins < 60) return t("account.conversations.wasMinutes", { min: diffMins });
+  if (diffHours < 24) return t("account.conversations.wasHours", { hours: diffHours });
+  if (diffDays === 1) return t("account.conversations.wasYesterday");
+  if (diffDays < 7) return t("account.conversations.wasDays", { days: diffDays });
 
-  return `Был(а) ${lastActivity.toLocaleDateString("ru-RU")}`;
+  return t("account.conversations.wasDate", { date: lastActivity.toLocaleDateString(locale.value === "uz" ? "uz-UZ" : "ru-RU") });
 };
 
 const formatRelativeTime = (value?: string | null) => {
@@ -304,19 +307,19 @@ const formatRelativeTime = (value?: string | null) => {
   const hours = Math.floor(diff / 3600000);
   const days = Math.floor(diff / 86400000);
 
-  if (mins < 1) return "Только что";
-  if (mins < 60) return `${mins}м назад`;
-  if (hours < 24) return `${hours}ч назад`;
-  if (days === 1) return "Вчера";
-  if (days < 7) return `${days}д назад`;
+  if (mins < 1) return t("account.conversations.justNow");
+  if (mins < 60) return t("chat.ago.minutes", { count: mins }).replace("{count}", String(mins));
+  if (hours < 24) return t("chat.ago.hours", { count: hours }).replace("{count}", String(hours));
+  if (days === 1) return t("chat.yesterday");
+  if (days < 7) return t("chat.ago.days", { count: days }).replace("{count}", String(days));
 
-  return date.toLocaleDateString("ru-RU");
+  return date.toLocaleDateString(locale.value === "uz" ? "uz-UZ" : "ru-RU");
 };
 
 const formatName = (user?: IUser | null) => {
-  if (!user) return "Неизвестный пользователь";
+  if (!user) return t("account.conversations.unknownUser");
   return (
-    `${user.first_name ?? ""} ${user.last_name ?? ""}`.trim() || "Пользователь"
+    `${user.first_name ?? ""} ${user.last_name ?? ""}`.trim() || t("account.conversations.defaultUser")
   );
 };
 
@@ -349,8 +352,8 @@ const formatPrice = (price?: number, currency?: string) => {
 
           <div class="panel-header">
             <div>
-              <p class="panel-title">Переписки</p>
-              <p class="panel-subtitle">Здесь собраны все ваши диалоги</p>
+              <p class="panel-title">{{ $t("account.conversations.title") }}</p>
+              <p class="panel-subtitle">{{ $t("account.conversations.subtitle") }}</p>
             </div>
             <button class="panel-close-btn" @click="isMobilePanelOpen = false">
               <el-icon><Close /></el-icon>
@@ -366,7 +369,7 @@ const formatPrice = (price?: number, currency?: string) => {
                 v-model="searchTerm"
                 type="text"
                 class="search-input"
-                placeholder="Поиск по объявлению или имени"
+                :placeholder="$t('account.conversations.search')"
               />
             </div>
           </div>
@@ -382,10 +385,9 @@ const formatPrice = (price?: number, currency?: string) => {
               v-else-if="!filteredConversations.length"
               class="conversation-empty"
             >
-              <p class="empty-title">Нет переписок</p>
+              <p class="empty-title">{{ $t("account.conversations.noConversations.title") }}</p>
               <p class="empty-text">
-                Начните общение на странице объявления — переписка появится
-                здесь автоматически
+                {{ $t("account.conversations.noConversations.text") }}
               </p>
             </div>
 
@@ -428,7 +430,7 @@ const formatPrice = (price?: number, currency?: string) => {
                     {{ conversation.ad.title }}
                   </p>
                   <p class="conversation-preview">
-                    {{ conversation.last_message || "Сообщений пока нет" }}
+                    {{ conversation.last_message || $t("account.conversations.noMessagesYet") }}
                   </p>
                 </div>
 
@@ -470,7 +472,7 @@ const formatPrice = (price?: number, currency?: string) => {
 
               <NuxtLink
                 v-if="selectedAd"
-                :to="`/${selectedAd.alias}`"
+                :to="localePath(`/${selectedAd.alias}`)"
                 class="chat-listing"
               >
                 <div class="chat-listing__info">
@@ -496,9 +498,9 @@ const formatPrice = (price?: number, currency?: string) => {
               </template>
 
               <div v-else-if="!messages.length" class="messages-empty">
-                <p class="empty-title">Пока нет сообщений</p>
+                <p class="empty-title">{{ $t("account.conversations.noMessages.title") }}</p>
                 <p class="empty-text">
-                  Напишите что-нибудь, чтобы начать диалог
+                  {{ $t("account.conversations.noMessages.text") }}
                 </p>
               </div>
 
@@ -535,7 +537,7 @@ const formatPrice = (price?: number, currency?: string) => {
                   ref="textareaRef"
                   v-model="messageInput"
                   class="message-input"
-                  placeholder="Напишите сообщение..."
+                  :placeholder="$t('account.conversations.input')"
                   rows="1"
                   :disabled="!selectedConversationId"
                   @input="autoResize"
@@ -560,14 +562,13 @@ const formatPrice = (price?: number, currency?: string) => {
           </div>
 
           <div v-else class="chat-placeholder">
-            <p class="placeholder-title">Выберите переписку</p>
+            <p class="placeholder-title">{{ $t("account.conversations.placeholder.title") }}</p>
             <p class="placeholder-text">
-              Слева отображаются все ваши диалоги. Нажмите на любой, чтобы
-              посмотреть подробности и продолжить общение.
+              {{ $t("account.conversations.placeholder.text") }}
             </p>
             <button class="placeholder-btn" @click="toggleMobilePanel">
               <el-icon><ChatLineSquare /></el-icon>
-              Открыть переписки
+              {{ $t("account.conversations.placeholder.button") }}
             </button>
           </div>
         </div>

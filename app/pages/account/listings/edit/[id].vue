@@ -13,8 +13,11 @@ import type { IBaseResponse } from "~/types/index";
 import type { IModel } from "~/types/model";
 import EditListingSkeleton from "~/components/skeletons/EditListingSkeleton.vue";
 
+const { t } = useI18n();
+const localePath = useLocalePath();
+
 useSeoMeta({
-  title: "Редактирование объявления — MobiStore",
+  title: () => t("account.meta.editListing"),
   robots: "noindex, nofollow",
 });
 
@@ -31,27 +34,27 @@ const colors = ref<string[]>([]);
 
 const validateImages = (rule: any, value: any, callback: any) => {
   if (fileList.value.length === 0 && existingImages.value.length === 0) {
-    callback(new Error("Загрузите хотя бы одну фотографию"));
+    callback(new Error(t("account.editListing.validation.images")));
   } else {
     callback();
   }
 };
 
-const rules = reactive<FormRules<IListingForm & { images?: any }>>({
-  title: [{ required: true, message: "Введите название", trigger: "blur" }],
+const rules = computed<FormRules<IListingForm & { images?: any }>>(() => ({
+  title: [{ required: true, message: t("account.editListing.validation.title"), trigger: "blur" }],
   description: [
-    { required: true, message: "Введите описание", trigger: "blur" },
+    { required: true, message: t("account.editListing.validation.description"), trigger: "blur" },
   ],
   region_id: [
-    { required: true, message: "Выберите регион", trigger: "change" },
+    { required: true, message: t("account.editListing.validation.region"), trigger: "change" },
   ],
-  city_id: [{ required: true, message: "Выберите город", trigger: "change" }],
-  brand_id: [{ required: true, message: "Выберите бренд", trigger: "change" }],
-  model_id: [{ required: true, message: "Выберите модель", trigger: "change" }],
-  price: [{ required: true, message: "Введите цену", trigger: "blur" }],
+  city_id: [{ required: true, message: t("account.editListing.validation.city"), trigger: "change" }],
+  brand_id: [{ required: true, message: t("account.editListing.validation.brand"), trigger: "change" }],
+  model_id: [{ required: true, message: t("account.editListing.validation.model"), trigger: "change" }],
+  price: [{ required: true, message: t("account.editListing.validation.price"), trigger: "blur" }],
   images: [{ validator: validateImages, trigger: "change" }],
-  state: [{ required: true, message: "Выберите состояние", trigger: "change" }],
-});
+  state: [{ required: true, message: t("account.editListing.validation.condition"), trigger: "change" }],
+}));
 
 const form = reactive<IListingForm & { images?: any }>({
   title: "",
@@ -111,7 +114,7 @@ const fetchAd = catcher(
   },
   (e: any) => {
     loadingData.value = false;
-    ElMessage.error("Ошибка при загрузке объявления");
+    ElMessage.error(t("account.editListing.messages.loadError"));
     console.error("Fetch error:", e);
   }
 );
@@ -124,7 +127,7 @@ const updateListing = catcher(
     const isValid = await formRef.value.validate().catch(() => false);
 
     if (!isValid) {
-      ElMessage.error("Заполните все обязательные поля");
+      ElMessage.error(t("account.editListing.validation.required"));
       return;
     }
 
@@ -157,8 +160,8 @@ const updateListing = catcher(
       if (fileList.value.length > 0) {
         await saveImages(adId.value);
       }
-      ElMessage.success("Объявление обновлено успешно");
-      navigateTo(`/account/listings`);
+      ElMessage.success(t("account.editListing.messages.updateSuccess"));
+      navigateTo(localePath("/account/listings"));
     }
     loading.value = false;
   },
@@ -194,11 +197,11 @@ const saveImages = catcher(
     });
 
     if (response?.status) {
-      ElMessage.success("Изображения загружены успешно");
+      ElMessage.success(t("account.editListing.messages.imageUploadSuccess"));
     }
   },
   (e: any) => {
-    ElMessage.error("Ошибка при загрузке изображений");
+    ElMessage.error(t("account.editListing.messages.imageUploadError"));
     console.error("Upload error:", e);
   }
 );
@@ -213,13 +216,13 @@ const deleteImage = catcher(
     existingImages.value = existingImages.value.filter(
       (img) => img.id !== imageId
     );
-    ElMessage.success("Изображение удалено");
+    ElMessage.success(t("account.editListing.messages.imageDeleteSuccess"));
     formRef.value?.validateField("images");
     fetchAd();
   },
   (e: any) => {
     const message = e?.response?._data?.message;
-    ElMessage.error(message || "Ошибка при удалении изображения");
+    ElMessage.error(message || t("account.editListing.messages.imageDeleteError"));
     console.error("Delete error:", e);
   }
 );
@@ -248,8 +251,8 @@ fetchAd();
   <main class="edit-listing">
     <div class="container">
       <div class="page-header">
-        <h1 class="page-title">Редактировать объявление</h1>
-        <p class="page-subtitle">Измените информацию о вашем устройстве</p>
+        <h1 class="page-title">{{ $t("account.editListing.title") }}</h1>
+        <p class="page-subtitle">{{ $t("account.editListing.subtitle") }}</p>
       </div>
 
       <EditListingSkeleton v-if="loadingData" />
@@ -263,36 +266,36 @@ fetchAd();
           size="large"
         >
           <div class="form-section">
-            <h2 class="section-title">Основная информация</h2>
+            <h2 class="section-title">{{ $t("account.editListing.sections.main") }}</h2>
 
-            <el-form-item label="Название" prop="title">
-              <el-input v-model="form.title" placeholder="Введите название" />
+            <el-form-item :label="$t('account.editListing.fields.title')" prop="title">
+              <el-input v-model="form.title" :placeholder="$t('account.editListing.placeholders.title')" />
             </el-form-item>
 
             <el-form-item
-              label="Описание"
+              :label="$t('account.editListing.fields.description')"
               prop="description"
               class="quill-form-item"
             >
               <RichTextEditor
                 v-model:content="form.description"
-                placeholder="Введите описание"
+                :placeholder="$t('account.editListing.placeholders.description')"
               />
             </el-form-item>
           </div>
 
           <div class="form-section">
-            <h2 class="section-title">Характеристики и цена</h2>
+            <h2 class="section-title">{{ $t("account.editListing.sections.specsAndPrice") }}</h2>
 
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12">
-                <el-form-item label="Бренд" prop="brand_id">
+                <el-form-item :label="$t('account.editListing.fields.brand')" prop="brand_id">
                   <BrandAutocomplete v-model="form.brand_id" />
                 </el-form-item>
               </el-col>
 
               <el-col :xs="24" :sm="12">
-                <el-form-item label="Модель" prop="model_id">
+                <el-form-item :label="$t('account.editListing.fields.model')" prop="model_id">
                   <ModelAutocomplete
                     v-model="form.model_id"
                     :brand-id="form.brand_id"
@@ -304,10 +307,10 @@ fetchAd();
 
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item label="Память" prop="storage">
+                <el-form-item :label="$t('account.editListing.fields.memory')" prop="storage">
                   <el-select
                     v-model="form.storage"
-                    placeholder="Выберите память"
+                    :placeholder="$t('account.editListing.placeholders.memory')"
                   >
                     <el-option
                       v-for="storage in [4, 8, 16, 32, 64, 128, 256, 512, 1024]"
@@ -320,10 +323,10 @@ fetchAd();
               </el-col>
 
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item label="Оперативка" prop="ram">
+                <el-form-item :label="$t('account.editListing.fields.ram')" prop="ram">
                   <el-select
                     v-model="form.ram"
-                    placeholder="Выберите оперативку"
+                    :placeholder="$t('account.editListing.placeholders.ram')"
                   >
                     <el-option
                       v-for="ram in 36"
@@ -336,16 +339,16 @@ fetchAd();
               </el-col>
 
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item label="Цвет">
+                <el-form-item :label="$t('account.editListing.fields.color')">
                   <el-input
                     v-if="colors.length === 0"
                     v-model="form.color"
-                    placeholder="Введите цвет"
+                    :placeholder="$t('account.editListing.placeholders.colorInput')"
                   />
                   <el-select
                     v-else
                     v-model="form.color"
-                    placeholder="Выберите цвет"
+                    :placeholder="$t('account.editListing.placeholders.colorSelect')"
                   >
                     <el-option
                       v-for="color in colors"
@@ -360,33 +363,33 @@ fetchAd();
 
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item label="Состояние" prop="state">
+                <el-form-item :label="$t('account.editListing.fields.condition')" prop="state">
                   <el-select
                     v-model="form.state"
-                    placeholder="Выберите состояние"
+                    :placeholder="$t('account.editListing.placeholders.condition')"
                   >
-                    <el-option label="Новый" value="new" />
-                    <el-option label="Восстановлен" value="restored" />
-                    <el-option label="Б/У" value="used" />
+                    <el-option :label="$t('account.editListing.conditions.new')" value="new" />
+                    <el-option :label="$t('account.editListing.conditions.restored')" value="restored" />
+                    <el-option :label="$t('account.editListing.conditions.used')" value="used" />
                   </el-select>
                 </el-form-item>
               </el-col>
 
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item label="Цена" prop="price">
+                <el-form-item :label="$t('account.editListing.fields.price')" prop="price">
                   <el-input
                     type="number"
                     v-model="form.price"
-                    placeholder="Введите цену"
+                    :placeholder="$t('account.editListing.placeholders.price')"
                   />
                 </el-form-item>
               </el-col>
 
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item label="Валюта">
+                <el-form-item :label="$t('account.editListing.fields.currency')">
                   <el-select
                     v-model="form.currency"
-                    placeholder="Выберите валюту"
+                    :placeholder="$t('account.editListing.placeholders.currency')"
                   >
                     <el-option label="UZS" value="UZS" />
                   </el-select>
@@ -397,24 +400,24 @@ fetchAd();
             <el-form-item>
               <el-checkbox
                 v-model="form.allow_trade_in"
-                label="Возможен обмен"
+                :label="$t('account.editListing.checkboxes.exchange')"
                 border
               />
             </el-form-item>
           </div>
 
           <div class="form-section">
-            <h2 class="section-title">Местоположение и фото</h2>
+            <h2 class="section-title">{{ $t("account.editListing.sections.locationAndPhotos") }}</h2>
 
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12">
-                <el-form-item label="Регион" prop="region_id">
+                <el-form-item :label="$t('account.editListing.fields.region')" prop="region_id">
                   <RegionAutocomplete v-model="form.region_id" />
                 </el-form-item>
               </el-col>
 
               <el-col :xs="24" :sm="12">
-                <el-form-item label="Город" prop="city_id">
+                <el-form-item :label="$t('account.editListing.fields.city')" prop="city_id">
                   <CityAutocomplete
                     v-model="form.city_id"
                     :region-id="form.region_id"
@@ -426,7 +429,7 @@ fetchAd();
             <!-- Существующие изображения -->
             <el-form-item
               v-if="existingImages.length > 0"
-              label="Текущие фотографии"
+              :label="$t('account.editListing.fields.currentPhotos')"
             >
               <div class="existing-images">
                 <div
@@ -448,7 +451,7 @@ fetchAd();
             </el-form-item>
 
             <el-form-item
-              label="Добавить новые фотографии (макс. 8)"
+              :label="$t('account.editListing.fields.addPhotos')"
               prop="images"
             >
               <el-upload
@@ -463,12 +466,11 @@ fetchAd();
               >
                 <el-icon class="el-icon--upload"><upload-filled /></el-icon>
                 <div class="el-upload__text">
-                  Перетащите файлы сюда или <em>нажмите для загрузки</em>
+                  {{ $t("account.editListing.upload.dragText") }} <em>{{ $t("account.editListing.upload.clickText") }}</em>
                 </div>
                 <template #tip>
                   <div class="el-upload__tip">
-                    Поддерживаемые форматы: jpg, png (макс.
-                    {{ 8 - existingImages.length }} файлов)
+                    {{ $t("account.editListing.upload.tip", { count: 8 - existingImages.length }) }}
                   </div>
                 </template>
               </el-upload>
@@ -476,17 +478,17 @@ fetchAd();
           </div>
 
           <div class="form-section">
-            <h2 class="section-title">Контакты</h2>
+            <h2 class="section-title">{{ $t("account.editListing.sections.contacts") }}</h2>
 
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12">
-                <el-form-item label="Телефон" prop="phone_number">
+                <el-form-item :label="$t('account.editListing.fields.phone')" prop="phone_number">
                   <PhoneNumber v-model="form.phone_number" />
                 </el-form-item>
               </el-col>
 
               <el-col :xs="24" :sm="12">
-                <el-form-item label="Telegram">
+                <el-form-item :label="$t('account.editListing.fields.telegram')">
                   <TelegramLink v-model="form.telegram_link" />
                 </el-form-item>
               </el-col>
@@ -495,7 +497,7 @@ fetchAd();
             <el-form-item>
               <el-checkbox
                 v-model="form.show_phone"
-                label="Показывать контакты в объявлении"
+                :label="$t('account.editListing.checkboxes.showContacts')"
                 border
               />
             </el-form-item>
@@ -505,9 +507,9 @@ fetchAd();
             <el-col :xs="24" :sm="12">
               <el-button
                 style="width: 100%"
-                @click="navigateTo('/account/listings')"
+                @click="navigateTo(localePath('/account/listings'))"
               >
-                Отмена
+                {{ $t("account.editListing.buttons.cancel") }}
               </el-button>
             </el-col>
 
@@ -518,7 +520,7 @@ fetchAd();
                 :loading="loading"
                 @click="updateListing"
               >
-                Сохранить изменения
+                {{ $t("account.editListing.buttons.save") }}
               </el-button>
             </el-col>
           </el-row>

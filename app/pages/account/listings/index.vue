@@ -6,8 +6,11 @@ import type { IListing, IAdsResponse } from "~/types/ads";
 import type { IBaseResponse, IPagination } from "~/types";
 import { ListingStatus } from "~/types/ads";
 
+const { t } = useI18n();
+const localePath = useLocalePath();
+
 useSeoMeta({
-  title: "Мои объявления — MobiStore",
+  title: () => t("account.meta.myListings"),
   robots: "noindex, nofollow",
 });
 
@@ -28,14 +31,14 @@ const params = reactive({
   limit: 5,
 });
 
-const statuses = [
-  { value: "all", label: "Все" },
-  { value: ListingStatus.ACTIVE, label: "Активные" },
-  { value: ListingStatus.DRAFT, label: "Черновики" },
-  { value: ListingStatus.ARCHIVED, label: "Архив" },
-  { value: ListingStatus.MODERATION, label: "На модерации" },
-  { value: ListingStatus.REJECTED, label: "Отклонено" },
-];
+const statuses = computed(() => [
+  { value: "all", label: t("account.listings.statuses.all") },
+  { value: ListingStatus.ACTIVE, label: t("account.listings.statuses.active") },
+  { value: ListingStatus.DRAFT, label: t("account.listings.statuses.draft") },
+  { value: ListingStatus.ARCHIVED, label: t("account.listings.statuses.archived") },
+  { value: ListingStatus.MODERATION, label: t("account.listings.statuses.moderation") },
+  { value: ListingStatus.REJECTED, label: t("account.listings.statuses.rejected") },
+]);
 
 const getMyListings = catcher(
   async () => {
@@ -74,7 +77,7 @@ getMyListings();
   <main class="page-account">
     <div class="container">
       <div class="page-header">
-        <h1 class="page-title">Мой аккаунт</h1>
+        <h1 class="page-title">{{ $t("account.title") }}</h1>
       </div>
 
       <div class="account-layout">
@@ -84,7 +87,7 @@ getMyListings();
         <!-- Основной контент -->
         <div class="account-content">
           <div class="listings-section">
-            <h2 class="section-title">Мои объявления</h2>
+            <h2 class="section-title">{{ $t("account.listings.title") }}</h2>
 
             <!-- Фильтр по статусу -->
             <div class="status-filter">
@@ -105,7 +108,7 @@ getMyListings();
               <el-select
                 v-model="activeTab"
                 class="filter-select"
-                placeholder="Выберите статус"
+                :placeholder="$t('account.listings.selectStatus')"
               >
                 <el-option
                   v-for="status in statuses"
@@ -147,9 +150,9 @@ getMyListings();
               <!-- Пустое состояние -->
               <div v-if="listings.length === 0" class="empty-state">
                 <el-icon class="empty-icon"><Document /></el-icon>
-                <p class="empty-text">У вас пока нет объявлений</p>
-                <el-button type="primary" @click="$router.push('/create')">
-                  Создать первое объявление
+                <p class="empty-text">{{ $t("account.listings.empty.title") }}</p>
+                <el-button type="primary" @click="$router.push(localePath('/create'))">
+                  {{ $t("account.listings.empty.button") }}
                 </el-button>
               </div>
             </template>

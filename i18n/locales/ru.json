@@ -593,5 +593,235 @@
       "daysAgo": "{days} дн. назад"
     },
     "showContacts": "Показать контакты"
+  },
+  "account": {
+    "title": "Мой аккаунт",
+    "meta": {
+      "profile": "Мой профиль — MobiStore",
+      "favorites": "Избранное — MobiStore",
+      "conversations": "Сообщения — MobiStore",
+      "myListings": "Мои объявления — MobiStore",
+      "editListing": "Редактирование объявления — MobiStore"
+    },
+    "sidebar": {
+      "personalData": "Личные данные",
+      "myListings": "Мои объявления",
+      "favorites": "Избранные",
+      "conversations": "Переписки",
+      "logout": "Выйти"
+    },
+    "profile": {
+      "title": "Личные данные",
+      "edit": "Редактировать",
+      "save": "Сохранить",
+      "cancel": "Отмена",
+      "fields": {
+        "name": "Имя",
+        "lastName": "Фамилия",
+        "email": "Email",
+        "phone": "Телефон",
+        "telegram": "Telegram",
+        "region": "Регион",
+        "city": "Город",
+        "showContacts": "Показывать контакты",
+        "language": "Язык"
+      },
+      "placeholders": {
+        "name": "Введите имя",
+        "lastName": "Введите фамилию",
+        "phone": "+998 90 123 45 67",
+        "telegram": "{'@'}username",
+        "region": "Выберите регион",
+        "city": "Выберите город",
+        "language": "Выберите язык"
+      },
+      "validation": {
+        "nameRequired": "Введите имя",
+        "lastNameRequired": "Введите фамилию",
+        "nameLength": "Длина должна быть от 2 до 50 символов",
+        "languageRequired": "Выберите язык"
+      },
+      "values": {
+        "notSpecified": "Не указан",
+        "yes": "Да",
+        "no": "Нет",
+        "russian": "Русский",
+        "uzbek": "O'zbekcha"
+      }
+    },
+    "security": {
+      "title": "Безопасность",
+      "changePassword": "Изменить пароль",
+      "hint": "Для изменения пароля нажмите кнопку \"Изменить пароль\"",
+      "fields": {
+        "currentPassword": "Текущий пароль",
+        "newPassword": "Новый пароль",
+        "confirmPassword": "Подтвердите новый пароль"
+      },
+      "placeholders": {
+        "currentPassword": "Введите текущий пароль",
+        "newPassword": "Введите новый пароль",
+        "confirmPassword": "Повторите новый пароль"
+      },
+      "validation": {
+        "currentRequired": "Введите текущий пароль",
+        "newRequired": "Введите новый пароль",
+        "confirmRequired": "Подтвердите новый пароль",
+        "minLength": "Пароль должен содержать минимум 6 символов",
+        "mismatch": "Пароли не совпадают"
+      },
+      "messages": {
+        "success": "Пароль успешно изменён",
+        "error": "Не удалось изменить пароль. Проверьте текущий пароль"
+      },
+      "savePassword": "Сохранить пароль"
+    },
+    "favorites": {
+      "title": "Избранные объявления",
+      "count": "{count} объявлений",
+      "empty": {
+        "title": "У вас пока нет избранных объявлений",
+        "text": "Добавляйте понравившиеся объявления в избранное, чтобы не потерять их",
+        "button": "Перейти к объявлениям"
+      }
+    },
+    "conversations": {
+      "title": "Переписки",
+      "subtitle": "Здесь собраны все ваши диалоги",
+      "search": "Поиск по объявлению или имени",
+      "noConversations": {
+        "title": "Нет переписок",
+        "text": "Начните общение на странице объявления — переписка появится здесь автоматически"
+      },
+      "noMessages": {
+        "title": "Пока нет сообщений",
+        "text": "Напишите что-нибудь, чтобы начать диалог"
+      },
+      "placeholder": {
+        "title": "Выберите переписку",
+        "text": "Слева отображаются все ваши диалоги. Нажмите на любой, чтобы посмотреть подробности и продолжить общение.",
+        "button": "Открыть переписки"
+      },
+      "input": "Напишите сообщение...",
+      "noMessagesYet": "Сообщений пока нет",
+      "unknownUser": "Неизвестный пользователь",
+      "defaultUser": "Пользователь",
+      "unknownStatus": "Статус неизвестен",
+      "online": "В сети",
+      "wasMinutes": "Был(а) {min}м назад",
+      "wasHours": "Был(а) {hours}ч назад",
+      "wasYesterday": "Был(а) вчера",
+      "wasDays": "Был(а) {days}д назад",
+      "wasDate": "Был(а) {date}",
+      "justNow": "Только что",
+      "errors": {
+        "loadConversations": "Не удалось загрузить переписки",
+        "loadMessages": "Не удалось загрузить сообщения",
+        "sendMessage": "Не удалось отправить сообщение"
+      }
+    },
+    "listings": {
+      "title": "Мои объявления",
+      "statuses": {
+        "all": "Все",
+        "active": "Активные",
+        "draft": "Черновики",
+        "archived": "Архив",
+        "moderation": "На модерации",
+        "rejected": "Отклонено"
+      },
+      "selectStatus": "Выберите статус",
+      "empty": {
+        "title": "У вас пока нет объявлений",
+        "button": "Создать первое объявление"
+      },
+      "card": {
+        "view": "Посмотреть",
+        "edit": "Изменить",
+        "activate": "Активировать",
+        "sold": "Продано",
+        "toArchive": "В архив",
+        "views": "Просмотры",
+        "inFavorites": "В избранном",
+        "gb": "ГБ"
+      }
+    },
+    "editListing": {
+      "title": "Редактировать объявление",
+      "subtitle": "Измените информацию о вашем устройстве",
+      "sections": {
+        "main": "Основная информация",
+        "specsAndPrice": "Характеристики и цена",
+        "locationAndPhotos": "Местоположение и фото",
+        "contacts": "Контакты"
+      },
+      "fields": {
+        "title": "Название",
+        "description": "Описание",
+        "brand": "Бренд",
+        "model": "Модель",
+        "memory": "Память",
+        "ram": "Оперативка",
+        "color": "Цвет",
+        "condition": "Состояние",
+        "price": "Цена",
+        "currency": "Валюта",
+        "region": "Регион",
+        "city": "Город",
+        "currentPhotos": "Текущие фотографии",
+        "addPhotos": "Добавить новые фотографии (макс. 8)",
+        "phone": "Телефон",
+        "telegram": "Telegram"
+      },
+      "placeholders": {
+        "title": "Введите название",
+        "description": "Введите описание",
+        "memory": "Выберите память",
+        "ram": "Выберите оперативку",
+        "colorInput": "Введите цвет",
+        "colorSelect": "Выберите цвет",
+        "condition": "Выберите состояние",
+        "price": "Введите цену",
+        "currency": "Выберите валюту"
+      },
+      "conditions": {
+        "new": "Новый",
+        "restored": "Восстановлен",
+        "used": "Б/У"
+      },
+      "checkboxes": {
+        "exchange": "Возможен обмен",
+        "showContacts": "Показывать контакты в объявлении"
+      },
+      "validation": {
+        "title": "Введите название",
+        "description": "Введите описание",
+        "region": "Выберите регион",
+        "city": "Выберите город",
+        "brand": "Выберите бренд",
+        "model": "Выберите модель",
+        "price": "Введите цену",
+        "condition": "Выберите состояние",
+        "images": "Загрузите хотя бы одну фотографию",
+        "required": "Заполните все обязательные поля"
+      },
+      "upload": {
+        "dragText": "Перетащите файлы сюда или",
+        "clickText": "нажмите для загрузки",
+        "tip": "Поддерживаемые форматы: jpg, png (макс. {count} файлов)"
+      },
+      "buttons": {
+        "cancel": "Отмена",
+        "save": "Сохранить изменения"
+      },
+      "messages": {
+        "loadError": "Ошибка при загрузке объявления",
+        "updateSuccess": "Объявление обновлено успешно",
+        "imageUploadSuccess": "Изображения загружены успешно",
+        "imageUploadError": "Ошибка при загрузке изображений",
+        "imageDeleteSuccess": "Изображение удалено",
+        "imageDeleteError": "Ошибка при удалении изображения"
+      }
+    }
   }
 }
