@@ -7,6 +7,8 @@ import type { IUserContacts } from "~/components/user/UserProfileCard.vue";
 
 const { $api } = useNuxtApp();
 const route = useRoute();
+const { t, locale } = useI18n();
+const localePath = useLocalePath();
 
 const userId = computed(() => route.params.user_id as string);
 
@@ -20,6 +22,7 @@ const listingsParams = reactive({
 });
 
 const { data: userResponse, pending: userPending } = await useAsyncData(
+  `user-${userId.value}`,
   () => $api<IBaseResponse<IUser>>(`/user/profile/${userId.value}`),
   {
     watch: [userId],
@@ -29,17 +32,18 @@ const { data: userResponse, pending: userPending } = await useAsyncData(
 const user = computed(() => userResponse.value?.data || null);
 
 const userLocation = computed(() => {
-  const region = user.value?.region?.name_ru;
-  const city = user.value?.city?.name_ru;
+  const region = user.value?.region?.[`name_${locale.value}`] || user.value?.region?.name_ru;
+  const city = user.value?.city?.[`name_${locale.value}`] || user.value?.city?.name_ru;
   return [region, city].filter(Boolean).join(", ") || null;
 });
 
 const userName = computed(() => {
-  if (!user.value) return "Пользователь";
-  return `${user.value.first_name} ${user.value.last_name}`.trim() || "Пользователь";
+  if (!user.value) return t("userPage.defaultName");
+  return `${user.value.first_name} ${user.value.last_name}`.trim() || t("userPage.defaultName");
 });
 
 const { data: listingsResponse, pending: listingsPending } = await useAsyncData(
+  `user-listings-${userId.value}-${listingsParams.page}`,
   () =>
     $api<IBaseResponse<IAdsResponse>>(`/ads/user/${userId.value}`, {
       params: { page: listingsParams.page, limit: listingsParams.limit },
@@ -95,13 +99,13 @@ const seoDescription = computed(() => {
   const name = userName.value;
   const location = userLocation.value ? ` — ${userLocation.value}` : "";
   const total = listingsPagination.value.total;
-  const adsText = total ? `Объявлений: ${total}` : "Личный профиль и контакты.";
-  return `Профиль ${name}${location} на MobiStore. ${adsText}`;
+  const adsText = total ? t('userPage.seo.adsCount', { count: total }) : t("userPage.seo.defaultProfile");
+  return t('userPage.seo.description', { name, location, adsText });
 });
 
 useSeoMeta({
-  title: () => `${userName.value} — профиль и объявления | MobiStore`,
-  ogTitle: () => `${userName.value} — профиль и объявления | MobiStore`,
+  title: () => t('userPage.seo.title', { name: userName.value }),
+  ogTitle: () => t('userPage.seo.title', { name: userName.value }),
   description: () => seoDescription.value,
   ogDescription: () => seoDescription.value,
 });
@@ -152,10 +156,10 @@ useSeoMeta({
         <!-- Пользователь не найден -->
         <div v-if="!user" class="not-found">
           <el-icon class="not-found-icon"><Document /></el-icon>
-          <h2>Пользователь не найден</h2>
-          <p>Возможно, аккаунт был удалён или ссылка недействительна</p>
-          <el-button type="primary" @click="$router.push('/')">
-            На главную
+          <h2>{{ t('userPage.notFound.title') }}</h2>
+          <p>{{ t('userPage.notFound.text') }}</p>
+          <el-button type="primary" @click="$router.push(localePath('/'))">
+            {{ t('userPage.notFound.button') }}
           </el-button>
         </div>
 
@@ -176,7 +180,7 @@ useSeoMeta({
           <div class="main-content">
             <div class="section-header">
               <h2 class="section-title">
-                Объявления пользователя
+                {{ t('userPage.listings.title') }}
                 <span v-if="listingsPagination.total" class="count">{{ listingsPagination.total }}</span>
               </h2>
 
@@ -225,7 +229,7 @@ useSeoMeta({
             <!-- Пустое состояние -->
             <div v-if="listings.length === 0" class="empty-state">
               <el-icon class="empty-icon"><Document /></el-icon>
-              <p class="empty-text">У пользователя пока нет объявлений</p>
+              <p class="empty-text">{{ t('userPage.emptyListings') }}</p>
             </div>
           </div>
         </div>

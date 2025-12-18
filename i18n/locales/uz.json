@@ -565,5 +565,33 @@
     "adId": "E'lon IDsi",
     "publish": "Chop etish",
     "bump": "Qidiruvda ko'tarish"
+  },
+  "userPage": {
+    "defaultName": "Foydalanuvchi",
+    "seo": {
+      "adsCount": "E'lonlar: {count}",
+      "defaultProfile": "Shaxsiy profil va kontaktlar.",
+      "title": "{name} — profil va e'lonlar | MobiStore",
+      "description": "{name}{location} ning MobiStore'dagi profili. {adsText}"
+    },
+    "notFound": {
+      "title": "Foydalanuvchi topilmadi",
+      "text": "Akkount o'chirilgan bo'lishi yoki havola noto'g'ri bo'lishi mumkin",
+      "button": "Bosh sahifaga"
+    },
+    "listings": {
+      "title": "Foydalanuvchi e'lonlari"
+    },
+    "emptyListings": "Foydalanuvchida hozircha e'lonlar yo'q"
+  },
+  "userProfile": {
+    "defaultName": "Foydalanuvchi",
+    "memberSince": "Saytda {date} dan beri",
+    "lastSeen": {
+      "today": "Bugun",
+      "yesterday": "Kecha",
+      "daysAgo": "{days} kun avval"
+    },
+    "showContacts": "Kontaktlarni ko'rsatish"
   }
 }

@@ -565,5 +565,33 @@
     "adId": "ID объявления",
     "publish": "Опубликовать",
     "bump": "Поднять в поиске"
+  },
+  "userPage": {
+    "defaultName": "Пользователь",
+    "seo": {
+      "adsCount": "Объявлений: {count}",
+      "defaultProfile": "Личный профиль и контакты.",
+      "title": "{name} — профиль и объявления | MobiStore",
+      "description": "Профиль {name}{location} на MobiStore. {adsText}"
+    },
+    "notFound": {
+      "title": "Пользователь не найден",
+      "text": "Возможно, аккаунт был удалён или ссылка недействительна",
+      "button": "На главную"
+    },
+    "listings": {
+      "title": "Объявления пользователя"
+    },
+    "emptyListings": "У пользователя пока нет объявлений"
+  },
+  "userProfile": {
+    "defaultName": "Пользователь",
+    "memberSince": "На сайте с {date}",
+    "lastSeen": {
+      "today": "Сегодня",
+      "yesterday": "Вчера",
+      "daysAgo": "{days} дн. назад"
+    },
+    "showContacts": "Показать контакты"
   }
 }

@@ -10,7 +10,7 @@ const handleLocaleChange = (code: 'uz' | 'ru') => {
 
 <template>
   <el-dropdown trigger="click" @command="handleLocaleChange">
-    <button class="lang-btn">
+    <button class="lang-btn" size="large">
       <span class="lang-code">{{ locale.toUpperCase() }}</span>
       <el-icon class="lang-arrow"><ArrowDown /></el-icon>
     </button>

@@ -24,6 +24,8 @@ const emit = defineEmits<{
   (e: "show-contacts"): void;
 }>();
 
+const { t, locale } = useI18n();
+
 const avatarUrl = computed(() => props.user.avatar || "/no-image.png");
 
 const telegramUsername = computed(() => {
@@ -32,18 +34,18 @@ const telegramUsername = computed(() => {
 });
 
 const fullName = computed(() => {
-  return `${props.user.first_name} ${props.user.last_name}`.trim() || "Пользователь";
+  return `${props.user.first_name} ${props.user.last_name}`.trim() || t("userProfile.defaultName");
 });
 
 const userLocation = computed(() => {
   const parts = [];
-  if (props.user.region?.name_ru) parts.push(props.user.region.name_ru);
-  if (props.user.city?.name_ru) parts.push(props.user.city.name_ru);
+  if (props.user.region?.[`name_${locale.value}`] || props.user.region?.name_ru) parts.push(props.user.region[`name_${locale.value}`] || props.user.region.name_ru);
+  if (props.user.city?.[`name_${locale.value}`] || props.user.city?.name_ru) parts.push(props.user.city[`name_${locale.value}`] || props.user.city.name_ru);
   return parts.join(", ") || null;
 });
 
 const memberSince = computed(() => {
-  return new Date(props.user.created_at).toLocaleDateString("ru-RU", {
+  return new Date(props.user.created_at).toLocaleDateString('ru-RU', {
     year: "numeric",
     month: "long",
   });
@@ -55,10 +57,11 @@ const lastSeen = computed(() => {
   const diff = now.getTime() - date.getTime();
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-  if (days === 0) return "Сегодня";
-  if (days === 1) return "Вчера";
-  if (days < 7) return `${days} дн. назад`;
-  return date.toLocaleDateString("ru-RU");
+  if (days === 0) return t("userProfile.lastSeen.today");
+  if (days === 1) return t("userProfile.lastSeen.yesterday");
+  if (days < 7) return t("userProfile.lastSeen.daysAgo", { days });
+  
+  return date.toLocaleDateString('ru-RU');
 });
 
 const hasContacts = computed(() => {
@@ -80,10 +83,10 @@ const hasContacts = computed(() => {
         <h1 class="user-name">{{ fullName }}</h1>
         <p class="member-since">
           <el-icon><Calendar /></el-icon>
-          На сайте с {{ memberSince }}
+          {{ t('userProfile.memberSince', { date: memberSince }) }}
         </p>
         <div class="last-seen-row">
-          <span>Был(а) в сети: {{ lastSeen }}</span>
+          <span>{{ lastSeen }}</span>
         </div>
       </div>
     </div>
@@ -106,7 +109,7 @@ const hasContacts = computed(() => {
         :icon="Phone"
         @click="emit('show-contacts')"
       >
-        Показать контакты
+        {{ t('userProfile.showContacts') }}
       </el-button>
 
       <!-- Контактная информация -->
