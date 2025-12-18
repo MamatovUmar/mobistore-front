@@ -10,11 +10,14 @@ definePageMeta({
   middleware: "guest",
 });
 
+const { t } = useI18n();
+const localePath = useLocalePath();
+
 useSeoMeta({
-  title: "Вход в аккаунт — MobiStore",
-  description: "Войдите в свой аккаунт MobiStore для управления объявлениями, избранным и сообщениями. Быстрый вход через email или Google.",
-  ogTitle: "Вход в аккаунт — MobiStore",
-  ogDescription: "Войдите в свой аккаунт MobiStore",
+  title: t("auth.login.metaTitle"),
+  description: t("auth.login.metaDesc"),
+  ogTitle: t("auth.login.metaTitle"),
+  ogDescription: t("auth.login.metaDesc"),
   robots: "noindex, nofollow",
 });
 
@@ -29,28 +32,28 @@ const form = reactive({
   password: "",
 });
 
-const rules = {
+const rules = computed(() => ({
   email: [
     {
       required: true,
       type: "email" as const,
-      message: "Пожалуйста, введите корректный email",
+      message: t("auth.common.validation.email"),
       trigger: ["blur", "change"],
     },
   ],
   password: [
     {
       required: true,
-      message: "Пожалуйста, введите пароль",
+      message: t("auth.common.validation.password"),
       trigger: "blur",
     },
     {
       min: 6,
-      message: "Пароль должен содержать минимум 6 символов",
+      message: t("auth.common.validation.passwordMin"),
       trigger: ["blur", "change"],
     },
   ],
-};
+}));
 
 const loading = ref(false);
 
@@ -68,9 +71,9 @@ const login = async () => {
 
         rootStore.user = res.data?.user;
         tokenCookie.value = res.data?.token;
-        navigateTo('/')
+        navigateTo(localePath('/'))
       } catch (error: any) {
-        const message = error?.response?._data?.message || "Произошла ошибка";
+        const message = error?.response?._data?.message || t("auth.login.error");
         ElMessage.error(message);
       } finally {
         loading.value = false;
@@ -84,7 +87,7 @@ const login = async () => {
 <template>
   <div class="login-page">
     <div class="login-card">
-      <NuxtLink to="/" class="back-link">
+      <NuxtLink :to="localePath('/')" class="back-link">
         <el-icon :size="18">
           <ArrowLeft />
         </el-icon>
@@ -92,29 +95,29 @@ const login = async () => {
 
       <div class="login-header">
         <div class="logo-section">
-          <h1 class="login-title">Добро пожаловать</h1>
-          <p class="login-subtitle">Войдите в свой аккаунт MobiStore</p>
+          <h1 class="login-title">{{ t('auth.login.title') }}</h1>
+          <p class="login-subtitle">{{ t('auth.login.subtitle') }}</p>
         </div>
       </div>
 
       <div class="login-form">
         <el-form ref="formRef" :model="form" :rules="rules" @submit.prevent="login">
           <el-form-item prop="email">
-            <label class="form-label">Email</label>
+            <label class="form-label">{{ t('auth.common.email') }}</label>
             <el-input
               v-model="form.email"
-              placeholder="Введите ваш email"
+              :placeholder="t('auth.common.emailPlaceholder')"
               size="large"
               :prefix-icon="User"
             />
           </el-form-item>
 
           <el-form-item prop="password">
-            <label class="form-label">Пароль</label>
+            <label class="form-label">{{ t('auth.common.password') }}</label>
             <el-input
               v-model="form.password"
               type="password"
-              placeholder="Введите пароль"
+              :placeholder="t('auth.common.passwordPlaceholder')"
               size="large"
               :prefix-icon="Lock"
               show-password
@@ -122,8 +125,8 @@ const login = async () => {
           </el-form-item>
 
           <div class="form-options">
-            <NuxtLink to="/auth/forgot-password" class="forgot-link">
-              Забыли пароль?
+            <NuxtLink :to="localePath('/auth/forgot-password')" class="forgot-link">
+              {{ t('auth.login.forgotPassword') }}
             </NuxtLink>
           </div>
 
@@ -134,20 +137,20 @@ const login = async () => {
             :loading="loading"
             native-type="submit"
           >
-            Войти
+            {{ t('auth.common.login') }}
           </el-button>
         </el-form>
 
         <div class="divider">
-          <span>или войдите с помощью</span>
+          <span>{{ t('auth.common.orLoginWith') }}</span>
         </div>
 
         <AuthGoogleButton />
 
         <div class="register-prompt">
-          <span>Нет аккаунта?</span>
-          <NuxtLink to="/signup" class="register-link">
-            Зарегистрироваться
+          <span>{{ t('auth.common.noAccount') }}</span>
+          <NuxtLink :to="localePath('/signup')" class="register-link">
+            {{ t('auth.common.signup') }}
           </NuxtLink>
         </div>
       </div>

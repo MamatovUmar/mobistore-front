@@ -9,6 +9,8 @@ definePageMeta({
 const route = useRoute();
 const rootStore = useRootStore();
 const tokenCookie = useCookie("token");
+const { t } = useI18n();
+const localePath = useLocalePath();
 
 const loading = ref(true);
 const error = ref<string | null>(null);
@@ -17,7 +19,7 @@ onMounted(async () => {
   const token = route.query.token as string;
 
   if (!token) {
-    error.value = "Токен авторизации не найден";
+    error.value = t("auth.callback.errorToken");
     loading.value = false;
     return;
   }
@@ -26,10 +28,10 @@ onMounted(async () => {
     console.log(token);
     
     await rootStore.fetchUser(token);
-    navigateTo("/", { external: true });
+    navigateTo(localePath("/"), { external: true });
   } catch (e) {
     console.error(e);
-    error.value = "Ошибка авторизации. Попробуйте снова.";
+    error.value = t("auth.callback.errorGeneric");
     tokenCookie.value = undefined;
     loading.value = false;
   }
@@ -45,8 +47,8 @@ onMounted(async () => {
             <Loading />
           </el-icon>
         </div>
-        <h2 class="callback-title">Выполняется вход...</h2>
-        <p class="callback-text">Пожалуйста, подождите</p>
+        <h2 class="callback-title">{{ t('auth.callback.loadingTitle') }}</h2>
+        <p class="callback-text">{{ t('auth.common.loading') }}</p>
       </template>
 
       <template v-else-if="error">
@@ -55,11 +57,11 @@ onMounted(async () => {
             <CircleCloseFilled />
           </el-icon>
         </div>
-        <h2 class="callback-title error">Ошибка</h2>
+        <h2 class="callback-title error">{{ t('auth.callback.errorTitle') }}</h2>
         <p class="callback-text">{{ error }}</p>
-        <NuxtLink to="/login" class="back-button">
+        <NuxtLink :to="localePath('/login')" class="back-button">
           <el-button type="primary" size="large">
-            Вернуться к входу
+            {{ t('auth.common.backToLogin') }}
           </el-button>
         </NuxtLink>
       </template>

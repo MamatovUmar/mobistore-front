@@ -5,6 +5,7 @@ import type { IListing } from "~/types/ads";
 const { listing } = defineProps<{ listing: IListing }>();
 
 const { $api } = useNuxtApp();
+const { t } = useI18n();
 
 // Состояние модального окна
 const visible = ref(false);
@@ -21,88 +22,88 @@ interface ComplaintOption {
   children?: ComplaintOption[];
 }
 
-const complaintCategories: ComplaintOption[] = [
+const complaintCategories = computed<ComplaintOption[]>(() => [
   {
-    label: "Неверная информация о продавце",
-    description: "Ложные контактные данные или профиль",
+    label: t('complaint.categories.sellerInfo.label'),
+    description: t('complaint.categories.sellerInfo.desc'),
     children: [
-      { label: "Неверные контактные данные" },
-      { label: "Фейковый профиль" },
+      { label: t('complaint.categories.sellerInfo.children.contacts') },
+      { label: t('complaint.categories.sellerInfo.children.fakeProfile') },
     ],
   },
   {
-    label: "Проблема с товаром или услугой",
-    description: "Запрещённый или контрафактный товар",
+    label: t('complaint.categories.itemProblem.label'),
+    description: t('complaint.categories.itemProblem.desc'),
     children: [
       {
-        label: "Запрещённый товар",
-        description: "Оружие, наркотики, запрещённые устройства",
+        label: t('complaint.categories.itemProblem.children.forbidden'),
+        description: t('complaint.categories.itemProblem.children.forbiddenDesc'),
       },
       {
-        label: "Контрафактный товар",
-        description: "Поддельные устройства, подделки брендов",
+        label: t('complaint.categories.itemProblem.children.counterfeit'),
+        description: t('complaint.categories.itemProblem.children.counterfeitDesc'),
       },
-      { label: "Украденный товар", description: "Украденное устройство" },
+      { label: t('complaint.categories.itemProblem.children.stolen'), description: t('complaint.categories.itemProblem.children.stolenDesc') },
     ],
   },
   {
-    label: "Вводящее в заблуждение объявление",
-    description: "Недостоверная или противоречивая информация",
+    label: t('complaint.categories.misleading.label'),
+    description: t('complaint.categories.misleading.desc'),
     children: [
-      { label: "Неверно указана категория" },
-      { label: "Неверно указана цена" },
+      { label: t('complaint.categories.misleading.children.category') },
+      { label: t('complaint.categories.misleading.children.price') },
       {
-        label: "Фотография и описание не совпадают",
-        description: "Противоречивая информация в объявлении",
+        label: t('complaint.categories.misleading.children.mismatch'),
+        description: t('complaint.categories.misleading.children.mismatchDesc'),
       },
-      { label: "Неверно указано местоположение" },
-      { label: "Товар уже продан" },
+      { label: t('complaint.categories.misleading.children.location') },
+      { label: t('complaint.categories.misleading.children.sold') },
       {
-        label: "Объявление дублируется",
-        description: "Такое объявление уже существует",
+        label: t('complaint.categories.misleading.children.duplicate'),
+        description: t('complaint.categories.misleading.children.duplicateDesc'),
       },
-      { label: "Спам" },
+      { label: t('complaint.categories.misleading.children.spam') },
       {
-        label: "Ничего не продаётся",
-        description: "Пользователь хочет приобрести, а не продать",
+        label: t('complaint.categories.misleading.children.notSelling'),
+        description: t('complaint.categories.misleading.children.notSellingDesc'),
       },
     ],
   },
   {
-    label: "Мошенничество",
-    description: "Кто-то совершил или пытается совершить мошенничество",
+    label: t('complaint.categories.fraud.label'),
+    description: t('complaint.categories.fraud.desc'),
     children: [
-      { label: "Я стал(а) жертвой мошенников" },
-      { label: "Я подозреваю мошенничество" },
+      { label: t('complaint.categories.fraud.children.victim') },
+      { label: t('complaint.categories.fraud.children.suspect') },
     ],
   },
   {
-    label: "Жестокость, дискриминация, оскорбления",
-    description: "Вредоносное или порочащее содержание",
+    label: t('complaint.categories.abuse.label'),
+    description: t('complaint.categories.abuse.desc'),
     children: [
-      { label: "Оскорбительное содержание" },
-      { label: "Дискриминация" },
-      { label: "Призывы к насилию" },
+      { label: t('complaint.categories.abuse.children.offensive') },
+      { label: t('complaint.categories.abuse.children.discrimination') },
+      { label: t('complaint.categories.abuse.children.violence') },
     ],
   },
-];
+]);
 
 // Вычисляемые значения для текущего отображения
 const currentTitle = computed(() => {
-  if (currentLevel.value === 0) return "Жалоба";
+  if (currentLevel.value === 0) return t('complaint.title');
   if (currentLevel.value === 1 && selectedCategory.value) {
     return selectedCategory.value;
   }
   if (currentLevel.value === 2 && selectedSubcategory.value) {
     return selectedSubcategory.value;
   }
-  return "Жалоба";
+  return t('complaint.title');
 });
 
 const currentOptions = computed(() => {
-  if (currentLevel.value === 0) return complaintCategories;
+  if (currentLevel.value === 0) return complaintCategories.value;
   if (currentLevel.value === 1 && selectedCategory.value) {
-    const category = complaintCategories.find(
+    const category = complaintCategories.value.find(
       (c) => c.label === selectedCategory.value
     );
     return category?.children || [];
@@ -191,12 +192,10 @@ ID: #MS-${listing.id}
       },
     });
 
-    ElMessage.success(
-      "Жалоба успешно отправлена! Мы рассмотрим её в ближайшее время."
-    );
+    ElMessage.success(t('complaint.success'));
     closeModal();
   } catch {
-    ElMessage.error("Ошибка при отправке жалобы. Попробуйте позже.");
+    ElMessage.error(t('complaint.error'));
   } finally {
     isLoading.value = false;
   }
@@ -206,7 +205,7 @@ ID: #MS-${listing.id}
 <template>
   <div class="complaint-button-wrapper">
     <el-button text type="danger" size="small" :icon="Flag" @click="openModal">
-      Пожаловаться
+      {{ t('complaint.button') }}
     </el-button>
 
     <!-- Модальное окно жалобы -->
@@ -234,7 +233,7 @@ ID: #MS-${listing.id}
               <div class="complaint-options">
                 <div v-if="isLoading" class="complaint-loading">
                   <el-icon class="is-loading"><ArrowRight /></el-icon>
-                  <span>Отправка жалобы...</span>
+                  <span>{{ t('complaint.loading') }}</span>
                 </div>
 
                 <template v-else>

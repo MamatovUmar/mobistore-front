@@ -8,11 +8,14 @@ definePageMeta({
   middleware: "guest",
 });
 
+const { t } = useI18n();
+const localePath = useLocalePath();
+
 useSeoMeta({
-  title: "Регистрация — MobiStore",
-  description: "Создайте бесплатный аккаунт на MobiStore. Размещайте объявления о продаже смартфонов, сохраняйте избранное и общайтесь с продавцами.",
-  ogTitle: "Регистрация — MobiStore",
-  ogDescription: "Присоединяйтесь к MobiStore — крупнейшей площадке смартфонов в Узбекистане",
+  title: t("auth.signup.metaTitle"),
+  description: t("auth.signup.metaDesc"),
+  ogTitle: t("auth.signup.metaTitle"),
+  ogDescription: t("auth.signup.metaDesc"),
   robots: "noindex, nofollow",
 });
 
@@ -27,35 +30,35 @@ const form = reactive({
   last_name: "",
 });
 
-const rules = {
+const rules = computed(() => ({
   email: [
     {
       required: true,
       type: "email" as const,
-      message: "Пожалуйста, введите корректный email",
+      message: t("auth.common.validation.email"),
       trigger: ["blur", "change"],
     },
   ],
   password: [
     {
       required: true,
-      message: "Пожалуйста, введите пароль",
+      message: t("auth.common.validation.password"),
       trigger: "blur",
     },
     {
       min: 6,
-      message: "Пароль должен содержать минимум 6 символов",
+      message: t("auth.common.validation.passwordMin"),
       trigger: ["blur", "change"],
     },
   ],
   first_name: [
     {
       required: true,
-      message: "Пожалуйста, введите имя",
+      message: t("auth.common.validation.name"),
       trigger: "blur",
     },
   ]
-};
+}));
 
 const loading = ref(false);
 const showSuccessDialog = ref(false);
@@ -75,7 +78,7 @@ const register = async () => {
         showSuccessDialog.value = true;
       } catch {
         ElMessage({
-          message: "Произошла ошибка при регистрации",
+          message: t("auth.signup.error"),
           type: "error",
         });
       } finally {
@@ -86,7 +89,7 @@ const register = async () => {
 };
 
 const goToHome = () => {
-  navigateTo('/');
+  navigateTo(localePath('/'));
 };
 
 </script>
@@ -106,19 +109,18 @@ const goToHome = () => {
         <el-icon class="success-icon" :size="64" color="#67c23a">
           <CircleCheckFilled />
         </el-icon>
-        <h3 class="success-title">Регистрация успешна!</h3>
+        <h3 class="success-title">{{ t('auth.signup.successTitle') }}</h3>
         <p class="success-message">
-          На ваш email отправлена ссылка для активации аккаунта.
-          Пожалуйста, проверьте почту и перейдите по ссылке для завершения регистрации.
+          {{ t('auth.signup.successMessage') }}
         </p>
         <el-button type="primary" size="large" class="success-button" @click="goToHome">
-          Перейти на главную
+          {{ t('auth.common.goToHome') }}
         </el-button>
       </div>
     </el-dialog>
 
     <div class="signup-card">
-      <NuxtLink to="/" class="back-link">
+      <NuxtLink :to="localePath('/')" class="back-link">
         <el-icon :size="18">
           <ArrowLeft />
         </el-icon>
@@ -126,8 +128,8 @@ const goToHome = () => {
 
       <div class="signup-header">
         <div class="logo-section">
-          <h1 class="signup-title">Создать аккаунт</h1>
-          <p class="signup-subtitle">Присоединяйтесь к MobiStore</p>
+          <h1 class="signup-title">{{ t('auth.signup.title') }}</h1>
+          <p class="signup-subtitle">{{ t('auth.signup.subtitle') }}</p>
         </div>
       </div>
 
@@ -135,40 +137,40 @@ const goToHome = () => {
         <el-form ref="formRef" :model="form" :rules="rules" @submit.prevent="register">
           <div class="name-row">
             <el-form-item prop="first_name">
-              <label class="form-label">Имя</label>
+              <label class="form-label">{{ t('auth.signup.firstName') }}</label>
               <el-input
                 v-model="form.first_name"
-                placeholder="Введите имя"
+                :placeholder="t('auth.signup.firstNamePlaceholder')"
                 size="large"
               />
             </el-form-item>
 
             <el-form-item>
-              <label class="form-label">Фамилия</label>
+              <label class="form-label">{{ t('auth.signup.lastName') }}</label>
               <el-input
                 v-model="form.last_name"
-                placeholder="Введите фамилию"
+                :placeholder="t('auth.signup.lastNamePlaceholder')"
                 size="large"
               />
             </el-form-item>
           </div>
 
           <el-form-item prop="email">
-            <label class="form-label">Email</label>
+            <label class="form-label">{{ t('auth.common.email') }}</label>
             <el-input
               v-model="form.email"
-              placeholder="Введите ваш email"
+              :placeholder="t('auth.common.emailPlaceholder')"
               size="large"
               :prefix-icon="User"
             />
           </el-form-item>
 
           <el-form-item prop="password">
-            <label class="form-label">Пароль</label>
+            <label class="form-label">{{ t('auth.common.password') }}</label>
             <el-input
               v-model="form.password"
               type="password"
-              placeholder="Введите пароль"
+              :placeholder="t('auth.common.passwordPlaceholder')"
               size="large"
               :prefix-icon="Lock"
               show-password
@@ -182,20 +184,20 @@ const goToHome = () => {
             :loading="loading"
             native-type="submit"
           >
-            Зарегистрироваться
+            {{ t('auth.common.signup') }}
           </el-button>
         </el-form>
 
         <div class="divider">
-          <span>или зарегистрируйтесь с помощью</span>
+          <span>{{ t('auth.common.orSignupWith') }}</span>
         </div>
 
         <AuthGoogleButton />
 
         <div class="login-prompt">
-          <span>Уже есть аккаунт?</span>
-          <NuxtLink to="/login" class="login-link">
-            Войти
+          <span>{{ t('auth.common.hasAccount') }}</span>
+          <NuxtLink :to="localePath('/login')" class="login-link">
+            {{ t('auth.common.login') }}
           </NuxtLink>
         </div>
       </div>

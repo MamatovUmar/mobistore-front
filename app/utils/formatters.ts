@@ -4,8 +4,10 @@ export function formatCurrency(
   value: number,
   currency: ICurrency = "UZS"
 ): string {
+  const { t } = useI18n();
+
   if (!value || isNaN(value)) {
-    return "0 сум";
+    return "0 " + t('formatters.currency.uzs');
   }
 
   // Округляем до целого числа
@@ -18,7 +20,7 @@ export function formatCurrency(
 
   // Добавляем валюту
   const currencyMap: Record<ICurrency, string> = {
-    UZS: "сум",
+    UZS: t('formatters.currency.uzs'),
     USD: "$",
   };
 
@@ -33,7 +35,9 @@ export function formatCurrency(
 }
 
 export function lastActivity(date: string | null | undefined) {
-  if (!date) return "Не в сети";
+  const { t } = useI18n();
+  
+  if (!date) return t('formatters.activity.offline');
 
   const lastActivity = new Date(date);
   const now = new Date();
@@ -42,11 +46,11 @@ export function lastActivity(date: string | null | undefined) {
   const diffHours = Math.floor(diffMs / 3600000);
   const diffDays = Math.floor(diffMs / 86400000);
 
-  if (diffMins < 5) return "В сети";
-  if (diffMins < 60) return `Был(а) ${diffMins} мин. назад`;
-  if (diffHours < 24) return `Был(а) ${diffHours} ч. назад`;
-  if (diffDays === 1) return "Был(а) вчера";
-  if (diffDays < 7) return `Был(а) ${diffDays} дн. назад`;
+  if (diffMins < 5) return t('formatters.activity.online');
+  if (diffMins < 60) return `${t('formatters.activity.was')} ${diffMins} ${t('formatters.activity.minutesAgo')}`;
+  if (diffHours < 24) return `${t('formatters.activity.was')} ${diffHours} ${t('formatters.activity.hoursAgo')}`;
+  if (diffDays === 1) return `${t('formatters.activity.was')} ${t('formatters.activity.yesterday')}`;
+  if (diffDays < 7) return `${t('formatters.activity.was')} ${diffDays} ${t('formatters.activity.daysAgo')}`;
 
-  return `Был(а) ${lastActivity.toLocaleDateString("ru-RU")}`;
+  return `${t('formatters.activity.was')} ${lastActivity.toLocaleDateString('ru-RU')}`;
 }

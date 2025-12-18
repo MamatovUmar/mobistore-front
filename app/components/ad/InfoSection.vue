@@ -4,11 +4,13 @@ import type { IListing } from "~/types/ads";
 const { listing } = defineProps<{
   listing: IListing;
 }>();
+
+const { t } = useI18n();
 </script>
 
 <template>
   <div class="description-section">
-    <h2 class="section-title">Описание</h2>
+    <h2 class="section-title">{{ t('listingDetails.description') }}</h2>
     <ClientOnly>
       <p class="description-text" v-html="listing.description"></p>
     </ClientOnly>

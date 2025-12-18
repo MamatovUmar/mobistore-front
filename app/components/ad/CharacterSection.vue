@@ -7,6 +7,8 @@ const { listing } = defineProps<{
   listing: IListing;
 }>();
 
+const { t } = useI18n();
+
 // Пример данных модели - в реальном приложении придут из API
 const modelData = computed(() => listing.model);
 
@@ -30,40 +32,40 @@ const memoryValue = computed(() => {
 });
 
 // Основные характеристики для отображения на странице
-const mainSpecs = [
+const mainSpecs = computed(() => [
   {
-    label: "Процессор",
+    label: t("listingDetails.specs.processor"),
     value: modelData.value?.platform?.chipset || "—",
   },
   {
-    label: "Операционная система",
+    label: t("listingDetails.specs.os"),
     value: modelData.value?.platform?.os || "—",
   },
   {
-    label: "Память",
+    label: t("listingDetails.specs.memory"),
     value: memoryValue.value,
   },
   {
-    label: "Экран",
+    label: t("listingDetails.specs.screen"),
     value: modelData.value?.display?.size || "—",
   },
   {
-    label: "Тип экрана",
+    label: t("listingDetails.specs.screenType"),
     value: modelData.value?.display?.type || "—",
   },
   {
-    label: "Батарея",
+    label: t("listingDetails.specs.battery"),
     value: modelData.value?.battery?.type || "—",
   },
-];
+]);
 </script>
 
 <template>
   <div v-if="listing" class="specs-section">
     <div class="specs-header">
-      <h2 class="section-title">Характеристики</h2>
+      <h2 class="section-title">{{ t('listingDetails.characteristics') }}</h2>
       <el-button type="info" plain @click="openModelSpecs">
-        Полные характеристики модели
+        {{ t('listingDetails.fullCharacteristics') }}
       </el-button>
     </div>
 

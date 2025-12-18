@@ -7,9 +7,12 @@ definePageMeta({
   middleware: "guest",
 });
 
+const { t } = useI18n();
+const localePath = useLocalePath();
+
 useSeoMeta({
-  title: "Восстановление пароля — MobiStore",
-  description: "Забыли пароль? Восстановите доступ к аккаунту MobiStore. Введите email и получите ссылку для сброса пароля.",
+  title: t("auth.forgot.metaTitle"),
+  description: t("auth.forgot.metaDesc"),
   robots: "noindex, nofollow",
 });
 
@@ -22,16 +25,16 @@ const form = reactive({
   email: "",
 });
 
-const rules = {
+const rules = computed(() => ({
   email: [
     {
       required: true,
       type: "email" as const,
-      message: "Пожалуйста, введите корректный email",
+      message: t("auth.common.validation.email"),
       trigger: ["blur", "change"],
     },
   ],
-};
+}));
 
 const loading = ref(false);
 
@@ -49,12 +52,12 @@ const sendResetLink = async () => {
 
         emailSent.value = true;
         ElMessage({
-          message: "Ссылка для восстановления пароля отправлена на вашу почту",
+          message: t("auth.forgot.successMessage"),
           type: "success",
         });
       } catch {
         ElMessage({
-          message: "Не удалось отправить письмо. Проверьте email и попробуйте снова",
+          message: t("auth.forgot.errorMessage"),
           type: "error",
         });
       } finally {
@@ -68,7 +71,7 @@ const sendResetLink = async () => {
 <template>
   <div class="forgot-page">
     <div class="forgot-card">
-      <NuxtLink to="/login" class="back-link">
+      <NuxtLink :to="localePath('/login')" class="back-link">
         <el-icon :size="18">
           <ArrowLeft />
         </el-icon>
@@ -81,11 +84,11 @@ const sendResetLink = async () => {
               <Message />
             </el-icon>
           </div>
-          <h1 class="forgot-title">Забыли пароль?</h1>
+          <h1 class="forgot-title">{{ t('auth.forgot.title') }}</h1>
           <p class="forgot-subtitle">
             {{ emailSent 
-              ? 'Проверьте свою почту' 
-              : 'Введите email, и мы отправим ссылку для восстановления' 
+              ? t('auth.forgot.subtitleSent') 
+              : t('auth.forgot.subtitleDefault') 
             }}
           </p>
         </div>
@@ -94,10 +97,10 @@ const sendResetLink = async () => {
       <div v-if="!emailSent" class="forgot-form">
         <el-form ref="formRef" :model="form" :rules="rules" @submit.prevent="sendResetLink">
           <el-form-item prop="email">
-            <label class="form-label">Email</label>
+            <label class="form-label">{{ t('auth.common.email') }}</label>
             <el-input
               v-model="form.email"
-              placeholder="Введите ваш email"
+              :placeholder="t('auth.common.emailPlaceholder')"
               size="large"
               :prefix-icon="Message"
             />
@@ -110,7 +113,7 @@ const sendResetLink = async () => {
             :loading="loading"
             native-type="submit"
           >
-            Отправить ссылку
+            {{ t('auth.forgot.sendLink') }}
           </el-button>
         </el-form>
       </div>
@@ -124,8 +127,8 @@ const sendResetLink = async () => {
           </el-icon>
         </div>
         <p class="success-text">
-          Мы отправили письмо на <strong>{{ form.email }}</strong>. 
-          Перейдите по ссылке в письме для сброса пароля.
+          {{ t('auth.forgot.successText1') }} <strong>{{ form.email }}</strong>. 
+          {{ t('auth.forgot.successText2') }}
         </p>
         <el-button
           type="primary"
@@ -133,14 +136,14 @@ const sendResetLink = async () => {
           class="submit-button"
           @click="emailSent = false"
         >
-          Отправить повторно
+          {{ t('auth.forgot.sendAgain') }}
         </el-button>
       </div>
 
       <div class="login-prompt">
-        <span>Вспомнили пароль?</span>
-        <NuxtLink to="/login" class="login-link">
-          Войти
+        <span>{{ t('auth.forgot.remembered') }}</span>
+        <NuxtLink :to="localePath('/login')" class="login-link">
+          {{ t('auth.common.login') }}
         </NuxtLink>
       </div>
     </div>

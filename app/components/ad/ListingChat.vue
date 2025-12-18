@@ -21,6 +21,7 @@ const {
   getConversationMessages,
 } = useChat();
 const root = useRootStore();
+const { t, locale } = useI18n();
 
 const messageInput = ref("");
 const isInputFocused = ref(false);
@@ -33,24 +34,7 @@ const messagesContainer = ref<HTMLElement>();
 
 const seller = computed(() => props.listing.user);
 
-const sellerActivityStatus = computed(() => {
-  if (!seller.value?.last_entered_at) return "Не в сети";
-
-  const lastActivity = new Date(seller.value.last_entered_at);
-  const now = new Date();
-  const diffMs = now.getTime() - lastActivity.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMs / 3600000);
-  const diffDays = Math.floor(diffMs / 86400000);
-
-  if (diffMins < 5) return "В сети";
-  if (diffMins < 60) return `Был(а) ${diffMins}м назад`;
-  if (diffHours < 24) return `Был(а) ${diffHours}ч назад`;
-  if (diffDays === 1) return "Был(а) вчера";
-  if (diffDays < 7) return `Был(а) ${diffDays}д назад`;
-
-  return `Был(а) ${lastActivity.toLocaleDateString("ru-RU")}`;
-});
+const sellerActivityStatus = computed(() => lastActivity(seller.value?.last_entered_at));
 
 const formattedMessages = computed(() => {
   return messages.value.map((msg) => ({
@@ -67,13 +51,14 @@ const formatTime = (date: Date): string => {
   const hours = Math.floor(diff / 3600000);
   const days = Math.floor(diff / 86400000);
 
-  if (mins < 1) return "Только что";
-  if (mins < 60) return `${mins}м назад`;
-  if (hours < 24) return `${hours}ч назад`;
-  if (days === 1) return "Вчера";
-  if (days < 7) return `${days}д назад`;
+  if (mins < 1) return t('chat.justNow');
+  if (mins < 60) return `${mins}${t('chat.ago.minutes')}`;
+  if (hours < 24) return `${hours}${t('chat.ago.hours')}`;
+  if (days === 1) return t('chat.yesterday');
+  if (days < 7) return `${days}${t('chat.ago.days')}`;
 
-  return date.toLocaleDateString("ru-RU");
+  const localeMap: Record<string, string> = { ru: 'ru-RU', uz: 'uz-UZ' };
+  return date.toLocaleDateString(localeMap[locale.value] || 'ru-RU');
 };
 
 const autoResize = () => {
@@ -258,7 +243,7 @@ watch(
             ref="textareaRef"
             v-model="messageInput"
             class="message-input"
-            placeholder="Напишите сообщение..."
+            :placeholder="t('chat.placeholder')"
             rows="1"
             @input="autoResize"
             @keydown="handleKeydown"

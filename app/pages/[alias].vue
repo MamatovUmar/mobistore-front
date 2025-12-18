@@ -13,6 +13,8 @@ import { useRootStore } from "~/store/root";
 const route = useRoute();
 const { $api } = useNuxtApp();
 const root = useRootStore();
+const { t, locale } = useI18n();
+const localePath = useLocalePath();
 
 const {
   data,
@@ -32,24 +34,24 @@ const siteUrl = config.public.siteUrl || 'https://mobistore.uz';
 useSeoMeta({
   title: () => listing.value?.title 
     ? `${listing.value.title} — Mobistore` 
-    : 'Объявление — Mobistore',
+    : t("listing.seo.defaultTitle"),
   description: () => listing.value 
     ? `${listing.value.brand?.name} ${listing.value.model?.name} за ${listing.value.price?.toLocaleString('ru-RU')} ${listing.value.currency}. ${listing.value.description?.slice(0, 150)}...`
-    : 'Объявление на Mobistore',
-  ogTitle: () => listing.value?.title || 'Объявление — Mobistore',
+    : t("listing.seo.defaultDesc"),
+  ogTitle: () => listing.value?.title || t("listing.seo.defaultTitle"),
   ogDescription: () => listing.value 
-    ? `${listing.value.brand?.name} ${listing.value.model?.name} • ${listing.value.price?.toLocaleString('ru-RU')} ${listing.value.currency} • ${listing.value.region?.name_ru}`
-    : 'Объявление на Mobistore',
+    ? `${listing.value.brand?.name} ${listing.value.model?.name} • ${listing.value.price?.toLocaleString('ru-RU')} ${listing.value.currency} • ${listing.value.region?.[`name_${locale.value}`] || listing.value.region.name_ru}`
+    : t("listing.seo.defaultDesc"),
   ogImage: () => listing.value?.images?.[0]?.url || '/og-default.png',
   ogUrl: () => `${siteUrl}/${listing.value?.alias}`,
   ogType: 'website',
   ogSiteName: 'Mobistore',
-  ogLocale: 'ru_RU',
+  ogLocale: () => locale.value === 'ru' ? 'ru_RU' : 'uz_UZ',
   twitterCard: 'summary_large_image',
-  twitterTitle: () => listing.value?.title || 'Объявление — Mobistore',
+  twitterTitle: () => listing.value?.title || t("listing.seo.defaultTitle"),
   twitterDescription: () => listing.value 
     ? `${listing.value.brand?.name} ${listing.value.model?.name} • ${listing.value.price?.toLocaleString('ru-RU')} ${listing.value.currency}`
-    : 'Объявление на Mobistore',
+    : t("listing.seo.defaultDesc"),
   twitterImage: () => listing.value?.images?.[0]?.url || '/og-default.png',
 });
 
@@ -61,7 +63,7 @@ useHead({
 
 if (error.value) {
   if (import.meta.client) {
-    ElMessage.error("Ошибка при загрузке объявления");
+    ElMessage.error(t("listing.loadError"));
   }
 }
 
@@ -84,7 +86,7 @@ const openChat = () => {
       <template v-else-if="listing">
         <div class="breadcrumbs">
           <el-breadcrumb>
-            <el-breadcrumb-item to="/">Главная</el-breadcrumb-item>
+            <el-breadcrumb-item :to="localePath('/')">{{ t('search.breadcrumbs.home') }}</el-breadcrumb-item>
             <el-breadcrumb-item>{{ listing?.title }}</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
@@ -114,7 +116,7 @@ const openChat = () => {
       </template>
 
       <div v-else class="error-state">
-        <el-empty description="Объявление не найдено" />
+        <el-empty :description="t('listing.notFound')" />
       </div>
     </div>
   </main>

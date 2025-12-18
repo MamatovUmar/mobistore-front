@@ -25,6 +25,7 @@ const emit = defineEmits<{
 }>();
 
 const root = useRootStore();
+const { t, locale } = useI18n();
 const { changeStatus, bumpAd, bumpLoading } = useAds();
 const { addToFavorite, addLoading, removeFavorite, removeLoading } =
   useFavorite();
@@ -44,8 +45,9 @@ const formattedPrice = computed(() => {
 
 // Форматирование даты
 const formattedDate = computed(() => {
-  if (!listing.published_at) return "Не опубликовано";
-  return new Date(listing.published_at).toLocaleDateString("ru-RU", {
+  if (!listing.published_at) return t('listingSidebar.notPublished');
+  const localeMap: Record<string, string> = { ru: 'ru-RU', uz: 'uz-UZ' };
+  return new Date(listing.published_at).toLocaleDateString(localeMap[locale.value] || 'ru-RU', {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -99,9 +101,9 @@ const publishListing = catcher(
   <div class="info-section">
     <div class="listing-badges">
       <span class="listing-brand">{{ listing.brand.name }}</span>
-      <span v-if="listing.allow_trade_in" class="badge-trade"
-        >Возможен обмен</span
-      >
+      <span v-if="listing.allow_trade_in" class="badge-trade">
+        {{ t('listingSidebar.exchange') }}
+      </span>
     </div>
 
     <h1 class="listing-title">{{ listing.title }}</h1>
@@ -161,35 +163,35 @@ const publishListing = catcher(
 
     <div class="listing-meta">
       <div class="meta-item">
-        <span class="meta-label">Состояние</span>
+        <span class="meta-label">{{ t('listingSidebar.state') }}</span>
         <span class="meta-value">
           <StatusTag :state="listing.state" />
         </span>
       </div>
       <div v-if="listing.color" class="meta-item">
-        <span class="meta-label">Цвет</span>
+        <span class="meta-label">{{ t('listingSidebar.color') }}</span>
         <span class="meta-value">{{ listing.color }}</span>
       </div>
       <div v-if="memoryInfo" class="meta-item">
-        <span class="meta-label">Память</span>
+        <span class="meta-label">{{ t('listingSidebar.memory') }}</span>
         <span class="meta-value">{{ memoryInfo }}</span>
       </div>
       <div class="meta-item">
-        <span class="meta-label">Локация</span>
+        <span class="meta-label">{{ t('listingSidebar.location') }}</span>
         <span class="meta-value"
-          >{{ listing.city.name_ru }}, {{ listing.region.name_ru }}</span
+          >{{ listing.city[`name_${locale}`] || listing.city.name_ru }}, {{ listing.region[`name_${locale}`] || listing.region.name_ru }}</span
         >
       </div>
       <div class="meta-item">
-        <span class="meta-label">Дата публикации</span>
+        <span class="meta-label">{{ t('listingSidebar.publishDate') }}</span>
         <span class="meta-value">{{ formattedDate }}</span>
       </div>
       <div class="meta-item">
-        <span class="meta-label">Просмотры</span>
-        <span class="meta-value">{{ listing.views_count }} просмотров</span>
+        <span class="meta-label">{{ t('listingSidebar.views') }}</span>
+        <span class="meta-value">{{ listing.views_count }} {{ t('listingSidebar.viewsCount') }}</span>
       </div>
       <div class="meta-item">
-        <span class="meta-label">ID объявления</span>
+        <span class="meta-label">{{ t('listingSidebar.adId') }}</span>
         <span class="meta-value">#MS-{{ listing.id }}</span>
       </div>
     </div>
@@ -202,7 +204,7 @@ const publishListing = catcher(
       size="large"
       @click="publishListing"
     >
-      Опубликовать
+      {{ t('listingSidebar.publish') }}
     </el-button>
 
     <el-button
@@ -213,7 +215,7 @@ const publishListing = catcher(
       size="large"
       @click="bumpAd(listing.id)"
     >
-      Поднять в поиске
+      {{ t('listingSidebar.bump') }}
     </el-button>
 
     <!-- Кнопка жалобы (только для посетителей) -->

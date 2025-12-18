@@ -284,5 +284,286 @@
     "addError": "Sevimlilarga qo'shishda xatolik",
     "removeSuccess": "Sevimlilardan o'chirildi",
     "removeError": "Sevimlilardan o'chirishda xatolik"
+  },
+  "auth": {
+    "common": {
+      "email": "Email",
+      "emailPlaceholder": "Emailingizni kiriting",
+      "password": "Parol",
+      "passwordPlaceholder": "Parolni kiriting",
+      "orLoginWith": "yoki orqali kiring",
+      "orSignupWith": "yoki orqali ro'yxatdan o'ting",
+      "hasAccount": "Akkountingiz bormi?",
+      "noAccount": "Akkountingiz yo'qmi?",
+      "login": "Kirish",
+      "signup": "Ro'yxatdan o'tish",
+      "submit": "Yuborish",
+      "save": "Saqlash",
+      "backToLogin": "Kirish sahifasiga qaytish",
+      "goToHome": "Bosh sahifaga o'tish",
+      "error": "Xatolik",
+      "loading": "Iltimos, kuting...",
+      "validation": {
+        "email": "Iltimos, to'g'ri email kiriting",
+        "password": "Iltimos, parolni kiriting",
+        "passwordMin": "Parol kamida 6 belgidan iborat bo'lishi kerak",
+        "name": "Iltimos, ismingizni kiriting",
+        "passwordsMismatch": "Parollar mos kelmadi",
+        "confirmPassword": "Iltimos, parolni tasdiqlang"
+      }
+    },
+    "login": {
+      "title": "Xush kelibsiz",
+      "subtitle": "MobiStore akkountingizga kiring",
+      "metaTitle": "Akkountga kirish — MobiStore",
+      "metaDesc": "MobiStore akkountingizga kiring va e'lonlar, sevimlilar va xabarlarni boshqaring. Email yoki Google orqali tezkor kirish.",
+      "forgotPassword": "Parolni unutdingizmi?",
+      "error": "Xatolik yuz berdi"
+    },
+    "signup": {
+      "title": "Akkount yaratish",
+      "subtitle": "MobiStore-ga qo'shiling",
+      "metaTitle": "Ro'yxatdan o'tish — MobiStore",
+      "metaDesc": "MobiStore-da bepul akkount yarating. Smartfon sotish bo'yicha e'lonlar joylashtiring, sevimlilarni saqlang va sotuvchilar bilan muloqot qiling.",
+      "firstName": "Ism",
+      "firstNamePlaceholder": "Ismingizni kiriting",
+      "lastName": "Familiya",
+      "lastNamePlaceholder": "Familiyangizni kiriting",
+      "successTitle": "Ro'yxatdan o'tish muvaffaqiyatli!",
+      "successMessage": "Emailingizga akkountni faollashtirish uchun havola yuborildi. Iltimos, pochtangizni tekshiring va ro'yxatdan o'tishni yakunlash uchun havolaga o'ting.",
+      "error": "Ro'yxatdan o'tishda xatolik yuz berdi"
+    },
+    "verify": {
+      "metaTitle": "Emailni tasdiqlash — MobiStore",
+      "title": "Emailni tasdiqlash",
+      "successTitle": "Email tasdiqlandi!",
+      "successMessage": "Sizning emailingiz muvaffaqiyatli tasdiqlandi. Kirish sahifasiga yo'naltirilmoqda...",
+      "errorTitle": "Tasdiqlash xatoligi",
+      "errorLink": "Tasdiqlash havolasi noto'g'ri",
+      "errorGeneric": "Emailni tasdiqlashda xatolik",
+      "goToLogin": "Kirishga o'tish"
+    },
+    "callback": {
+      "loadingTitle": "Kirilmoqda...",
+      "errorTitle": "Xatolik",
+      "errorToken": "Avtorizatsiya tokeni topilmadi",
+      "errorGeneric": "Avtorizatsiya xatoligi. Qaytadan urinib ko'ring."
+    },
+    "forgot": {
+      "metaTitle": "Parolni tiklash — MobiStore",
+      "metaDesc": "Parolni unutdingizmi? MobiStore akkountiga kirishni tiklang. Emailni kiriting va parolni o'zgartirish uchun havola oling.",
+      "title": "Parolni unutdingizmi?",
+      "subtitleDefault": "Emailni kiriting va biz tiklash uchun havola yuboramiz",
+      "subtitleSent": "Pochtangizni tekshiring",
+      "sendLink": "Havolani yuborish",
+      "sendAgain": "Qayta yuborish",
+      "successText1": "Biz xatni",
+      "successText2": "ga yubordik. Parolni tiklash uchun xatdagi havolaga o'ting.",
+      "remembered": "Parolni esladingizmi?",
+      "successMessage": "Parolni tiklash havolasi pochtangizga yuborildi",
+      "errorMessage": "Xatni yuborib bo'lmadi. Emailni tekshiring va qayta urinib ko'ring"
+    },
+    "reset": {
+      "metaTitle": "Parolni o'zgartirish — MobiStore",
+      "invalidTitle": "Yaroqsiz havola",
+      "invalidSubtitle": "Parolni tiklash havolasi yaroqsiz yoki eskirgan",
+      "requestNew": "Yangi havola so'rash",
+      "successTitle": "Parol o'zgartirildi!",
+      "successSubtitle": "Parolingiz muvaffaqiyatli o'zgartirildi. Endi yangi parol bilan kirishingiz mumkin.",
+      "loginAction": "Akkountga kirish",
+      "formTitle": "Yangi parol",
+      "formSubtitle": "Akkountingiz uchun yangi parol kiriting",
+      "newPassword": "Yangi parol",
+      "newPasswordPlaceholder": "Yangi parolni kiriting",
+      "confirmPassword": "Parolni tasdiqlang",
+      "confirmPasswordPlaceholder": "Parolni takrorlang",
+      "save": "Parolni saqlash",
+      "successMessage": "Parol muvaffaqiyatli o'zgartirildi",
+      "errorMessage": "Parolni o'zgartirib bo'lmadi. Havolani qayta so'rab ko'ring"
+    },
+    "modal": {
+      "title": "Avtorizatsiya talab qilinadi",
+      "text": "E'lon joylashtirish uchun tizimga kirish yoki yangi akkount yaratish kerak.",
+      "cancel": "Bekor qilish",
+      "later": "Keyinroq"
+    },
+    "needAuth": {
+      "title": "Bu amal uchun avtorizatsiya kerak",
+      "text": "Xizmatning barcha imkoniyatlaridan foydalanishni davom ettirish uchun iltimos, avtorizatsiyadan o'ting."
+    }
+  },
+  "telegram": {
+    "notSpecified": "Ko'rsatilmagan"
+  },
+  "listing": {
+    "notFound": "E'lon topilmadi",
+    "loadError": "E'lonni yuklashda xatolik yuz berdi",
+    "seo": {
+      "defaultTitle": "E'lon — Mobistore",
+      "defaultDesc": "Mobistore'dagi e'lon"
+    }
+  },
+  "formatters": {
+    "currency": {
+      "uzs": "so'm"
+    },
+    "activity": {
+      "offline": "Tarmoqda emas",
+      "online": "Tarmoqda",
+      "was": "saytda",
+      "minutesAgo": "daqiqa avval",
+      "hoursAgo": "soat avval",
+      "daysAgo": "kun avval",
+      "yesterday": "kecha"
+    }
+  },
+  "listingDetails": {
+    "description": "Tavsif",
+    "characteristics": "Xususiyatlari",
+    "fullCharacteristics": "Modelning to'liq xususiyatlari",
+    "close": "Yopish",
+    "seller": "Sotuvchi",
+    "onSiteSince": "Saytda {year} yildan beri",
+    "specs": {
+      "processor": "Protsessor",
+      "os": "Operatsion tizim",
+      "memory": "Xotira",
+      "screen": "Ekran",
+      "screenType": "Ekran turi",
+      "battery": "Batareya",
+      "general": "Umumiy ma'lumot",
+      "model": "Model",
+      "brand": "Brend",
+      "announceDate": "E'lon qilingan sana",
+      "releaseDate": "Chiqarilgan sana",
+      "colors": "Mavjud ranglar",
+      "body": "Korpus",
+      "dimensions": "O'lchamlari",
+      "weight": "Vazni",
+      "materials": "Materiallar",
+      "sim": "SIM",
+      "display": "Displey",
+      "type": "Turi",
+      "size": "O'lchami",
+      "resolution": "Ruxsati",
+      "protection": "Himoya",
+      "platform": "Platforma",
+      "chipset": "Chipset",
+      "cpu": "Protsessor",
+      "gpu": "Grafik protsessor",
+      "cardSlot": "Karta uchun slot",
+      "internal": "Ichki xotira",
+      "mainCamera": "Asosiy kamera",
+      "cameras": "Kameralar",
+      "features": "Funksiyalar",
+      "video": "Video",
+      "selfieCamera": "Old kamera",
+      "charging": "Quvvatlash",
+      "comms": "Aloqa va kommunikatsiyalar",
+      "wifi": "Wi-Fi",
+      "bluetooth": "Bluetooth",
+      "gps": "GPS",
+      "nfc": "NFC",
+      "radio": "Radio",
+      "usb": "USB",
+      "network": "Tarmoq",
+      "tech": "Texnologiyalar",
+      "bands2g": "2G diapazonlari",
+      "bands3g": "3G diapazonlari",
+      "bands4g": "4G diapazonlari",
+      "bands5g": "5G diapazonlari",
+      "speed": "Tezlik",
+      "sensors": "Sensorlar va funksiyalar",
+      "sensorsLabel": "Sensorlar",
+      "sound": "Ovoz",
+      "loudspeaker": "Karnay"
+    }
+  },
+  "chat": {
+    "placeholder": "Xabar yozing...",
+    "justNow": "Hozirgina",
+    "yesterday": "Kecha",
+    "ago": {
+      "minutes": "daqiqa avval",
+      "hours": "soat avval",
+      "days": "kun avval"
+    }
+  },
+  "complaint": {
+    "button": "Shikoyat qilish",
+    "title": "Shikoyat",
+    "loading": "Shikoyat yuborilmoqda...",
+    "success": "Shikoyat muvaffaqiyatli yuborildi! Uni tez orada ko'rib chiqamiz.",
+    "error": "Shikoyat yuborishda xatolik. Keyinroq urinib ko'ring.",
+    "categories": {
+      "sellerInfo": {
+        "label": "Sotuvchi haqida noto'g'ri ma'lumot",
+        "desc": "Yolg'on aloqa ma'lumotlari yoki profil",
+        "children": {
+          "contacts": "Noto'g'ri aloqa ma'lumotlari",
+          "fakeProfile": "Soxta profil"
+        }
+      },
+      "itemProblem": {
+        "label": "Mahsulot yoki xizmat bilan bog'liq muammo",
+        "desc": "Taqiqlangan yoki qalbaki mahsulot",
+        "children": {
+          "forbidden": "Taqiqlangan mahsulot",
+          "forbiddenDesc": "Qurol, giyohvand moddalar, taqiqlangan qurilmalar",
+          "counterfeit": "Qalbaki mahsulot",
+          "counterfeitDesc": "Qalbaki qurilmalar, brendlarning soxta nusxalari",
+          "stolen": "O'g'irlangan mahsulot",
+          "stolenDesc": "O'g'irlangan qurilma"
+        }
+      },
+      "misleading": {
+        "label": "Chalg'ituvchi e'lon",
+        "desc": "Ishonchsiz yoki ziddiyatli ma'lumotlar",
+        "children": {
+          "category": "Kategoriya noto'g'ri ko'rsatilgan",
+          "price": "Narx noto'g'ri ko'rsatilgan",
+          "mismatch": "Rasm va tavsif mos kelmaydi",
+          "mismatchDesc": "E'londagi ziddiyatli ma'lumotlar",
+          "location": "Joylashuv noto'g'ri ko'rsatilgan",
+          "sold": "Mahsulot allaqachon sotilgan",
+          "duplicate": "E'lon takrorlanmoqda",
+          "duplicateDesc": "Bunday e'lon allaqachon mavjud",
+          "spam": "Spam",
+          "notSelling": "Hech narsa sotilmayapti",
+          "notSellingDesc": "Foydalanuvchi sotmoqchi emas, balki sotib olmoqchi"
+        }
+      },
+      "fraud": {
+        "label": "Firibgarlik",
+        "desc": "Kimdir firibgarlik qilgan yoki qilishga urinmoqda",
+        "children": {
+          "victim": "Men firibgarlik qurboni bo'ldim",
+          "suspect": "Men firibgarlikdan shubhadaman"
+        }
+      },
+      "abuse": {
+        "label": "Zo'ravonlik, kamsitish, haqorat",
+        "desc": "Zararli yoki haqoratli tarkib",
+        "children": {
+          "offensive": "Haqoratli tarkib",
+          "discrimination": "Kamsitish",
+          "violence": "Zo'ravonlikka chaqiruvlar"
+        }
+      }
+    }
+  },
+  "listingSidebar": {
+    "notPublished": "Chop etilmagan",
+    "exchange": "Almashish mumkin",
+    "state": "Holati",
+    "color": "Rangi",
+    "memory": "Xotira",
+    "location": "Joylashuvi",
+    "publishDate": "Chop etilgan sana",
+    "views": "Ko'rishlar",
+    "viewsCount": "marta ko'rildi",
+    "adId": "E'lon IDsi",
+    "publish": "Chop etish",
+    "bump": "Qidiruvda ko'tarish"
   }
 }

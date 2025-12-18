@@ -8,6 +8,8 @@ const props = defineProps<{
 const emit = defineEmits(["update:modelValue"]);
 
 const router = useRouter();
+const { t } = useI18n();
+const localePath = useLocalePath();
 
 const handleClose = () => {
   emit("update:modelValue", false);
@@ -15,12 +17,12 @@ const handleClose = () => {
 
 const goToLogin = () => {
   handleClose();
-  router.push("/login");
+  router.push(localePath("/login"));
 };
 
 const goToSignup = () => {
   handleClose();
-  router.push("/signup");
+  router.push(localePath("/signup"));
 };
 </script>
 
@@ -37,18 +39,17 @@ const goToSignup = () => {
       <div class="dialog-icon">
         <el-icon :size="48"><Lock /></el-icon>
       </div>
-      <h3 class="dialog-title">Требуется авторизация</h3>
+      <h3 class="dialog-title">{{ t('auth.modal.title') }}</h3>
       <p class="dialog-text">
-        Для размещения объявлений необходимо войти в систему или создать новый
-        аккаунт.
+        {{ t('auth.modal.text') }}
       </p>
     </div>
     <template #footer>
       <div class="dialog-footer">
-        <el-button size="large" @click="handleClose">Отмена</el-button>
-        <el-button size="large" @click="goToSignup">Регистрация</el-button>
+        <el-button size="large" @click="handleClose">{{ t('auth.modal.cancel') }}</el-button>
+        <el-button size="large" @click="goToSignup">{{ t('auth.common.signup') }}</el-button>
         <el-button type="primary" size="large" @click="goToLogin">
-          Войти
+          {{ t('auth.common.login') }}
         </el-button>
       </div>
     </template>

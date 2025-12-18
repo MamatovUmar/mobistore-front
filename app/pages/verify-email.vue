@@ -5,8 +5,11 @@ definePageMeta({
   layout: "empty",
 });
 
+const { t } = useI18n();
+const localePath = useLocalePath();
+
 useSeoMeta({
-  title: "Подтверждение email — MobiStore",
+  title: t("auth.verify.metaTitle"),
   robots: "noindex, nofollow",
 });
 
@@ -21,7 +24,7 @@ const verifyEmail = async () => {
 
   if (!email || !code) {
     status.value = "error";
-    errorMessage.value = "Неверная ссылка для верификации";
+    errorMessage.value = t("auth.verify.errorLink");
     return;
   }
 
@@ -37,12 +40,12 @@ const verifyEmail = async () => {
     status.value = "success";
 
     setTimeout(() => {
-      navigateTo("/login");
+      navigateTo(localePath("/login"));
     }, 2000);
   } catch (error: any) {
     status.value = "error";
     errorMessage.value =
-      error?.data?.message || "Ошибка при верификации email";
+      error?.data?.message || t("auth.verify.errorGeneric");
   }
 };
 
@@ -61,8 +64,8 @@ onMounted(() => {
             <Loading />
           </el-icon>
         </div>
-        <h1 class="verify-title">Подтверждение email</h1>
-        <p class="verify-text">Пожалуйста, подождите...</p>
+        <h1 class="verify-title">{{ t('auth.verify.title') }}</h1>
+        <p class="verify-text">{{ t('auth.common.loading') }}</p>
       </div>
 
       <!-- Success state -->
@@ -72,9 +75,9 @@ onMounted(() => {
             <CircleCheck />
           </el-icon>
         </div>
-        <h1 class="verify-title">Email подтверждён!</h1>
+        <h1 class="verify-title">{{ t('auth.verify.successTitle') }}</h1>
         <p class="verify-text">
-          Ваш email успешно подтверждён. Перенаправляем на страницу входа...
+          {{ t('auth.verify.successMessage') }}
         </p>
       </div>
 
@@ -85,10 +88,10 @@ onMounted(() => {
             <CircleClose />
           </el-icon>
         </div>
-        <h1 class="verify-title">Ошибка верификации</h1>
+        <h1 class="verify-title">{{ t('auth.verify.errorTitle') }}</h1>
         <p class="verify-text">{{ errorMessage }}</p>
-        <NuxtLink to="/login" class="back-button">
-          <el-button type="primary" size="large"> Перейти к входу </el-button>
+        <NuxtLink :to="localePath('/login')" class="back-button">
+          <el-button type="primary" size="large"> {{ t('auth.verify.goToLogin') }} </el-button>
         </NuxtLink>
       </div>
     </div>

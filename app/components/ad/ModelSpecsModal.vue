@@ -9,6 +9,7 @@ defineProps<{
 }>();
 
 const emit = defineEmits(["update:modelVisible"]);
+const { t } = useI18n();
 
 const isFull = ref(false);
 
@@ -54,116 +55,116 @@ onUnmounted(() => {
     <div class="specs-modal">
       <!-- Общая информация -->
       <div class="spec-group">
-        <h3 class="spec-group-title">Общая информация</h3>
+        <h3 class="spec-group-title">{{ t('listingDetails.specs.general') }}</h3>
         <div class="spec-row">
-          <span class="spec-label">Модель</span>
+          <span class="spec-label">{{ t('listingDetails.specs.model') }}</span>
           <span class="spec-value">{{ modelData.name }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">Бренд</span>
+          <span class="spec-label">{{ t('listingDetails.specs.brand') }}</span>
           <span class="spec-value">{{ brand.name }}</span>
         </div>
         <div v-if="modelData?.launch?.announced" class="spec-row">
-          <span class="spec-label">Дата анонса</span>
+          <span class="spec-label">{{ t('listingDetails.specs.announceDate') }}</span>
           <span class="spec-value">{{ modelData?.launch?.announced }}</span>
         </div>
         <div v-if="modelData?.launch?.released" class="spec-row">
-          <span class="spec-label">Дата выхода</span>
+          <span class="spec-label">{{ t('listingDetails.specs.releaseDate') }}</span>
           <span class="spec-value">{{ modelData?.launch?.released }}</span>
         </div>
         <div v-if="modelData?.colors?.length" class="spec-row">
-          <span class="spec-label">Доступные цвета</span>
+          <span class="spec-label">{{ t('listingDetails.specs.colors') }}</span>
           <span class="spec-value">{{ modelData?.colors?.join(", ") }}</span>
         </div>
       </div>
 
       <!-- Корпус -->
       <div v-if="modelData.body" class="spec-group">
-        <h3 class="spec-group-title">Корпус</h3>
+        <h3 class="spec-group-title">{{ t('listingDetails.specs.body') }}</h3>
         <div class="spec-row">
-          <span class="spec-label">Размеры</span>
+          <span class="spec-label">{{ t('listingDetails.specs.dimensions') }}</span>
           <span class="spec-value">{{ modelData.body.dimensions }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">Вес</span>
+          <span class="spec-label">{{ t('listingDetails.specs.weight') }}</span>
           <span class="spec-value">{{ modelData.body.weight }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">Материалы</span>
+          <span class="spec-label">{{ t('listingDetails.specs.materials') }}</span>
           <span class="spec-value">{{ modelData?.body?.build }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">SIM</span>
+          <span class="spec-label">{{ t('listingDetails.specs.sim') }}</span>
           <span class="spec-value">{{ modelData.body.sim }}</span>
         </div>
       </div>
 
       <!-- Дисплей -->
       <div class="spec-group" v-if="modelData.display">
-        <h3 class="spec-group-title">Дисплей</h3>
+        <h3 class="spec-group-title">{{ t('listingDetails.specs.display') }}</h3>
         <div class="spec-row">
-          <span class="spec-label">Тип</span>
+          <span class="spec-label">{{ t('listingDetails.specs.type') }}</span>
           <span class="spec-value">{{ modelData.display.type }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">Размер</span>
+          <span class="spec-label">{{ t('listingDetails.specs.size') }}</span>
           <span class="spec-value">{{ modelData.display.size }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">Разрешение</span>
+          <span class="spec-label">{{ t('listingDetails.specs.resolution') }}</span>
           <span class="spec-value">{{ modelData.display.resolution }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">Защита</span>
+          <span class="spec-label">{{ t('listingDetails.specs.protection') }}</span>
           <span class="spec-value">{{ modelData.display.protection }}</span>
         </div>
       </div>
 
       <!-- Платформа -->
       <div v-if="modelData?.platform" class="spec-group">
-        <h3 class="spec-group-title">Платформа</h3>
+        <h3 class="spec-group-title">{{ t('listingDetails.specs.platform') }}</h3>
         <div class="spec-row">
-          <span class="spec-label">Операционная система</span>
+          <span class="spec-label">{{ t('listingDetails.specs.os') }}</span>
           <span class="spec-value">{{ modelData?.platform?.os }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">Чипсет</span>
+          <span class="spec-label">{{ t('listingDetails.specs.chipset') }}</span>
           <span class="spec-value">{{ modelData?.platform?.chipset }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">Процессор</span>
+          <span class="spec-label">{{ t('listingDetails.specs.cpu') }}</span>
           <span class="spec-value">{{ modelData?.platform?.cpu }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">Графический процессор</span>
+          <span class="spec-label">{{ t('listingDetails.specs.gpu') }}</span>
           <span class="spec-value">{{ modelData?.platform?.gpu }}</span>
         </div>
       </div>
 
       <!-- Память -->
       <div v-if="modelData?.memory" class="spec-group">
-        <h3 class="spec-group-title">Память</h3>
+        <h3 class="spec-group-title">{{ t('listingDetails.specs.memory') }}</h3>
         <div class="spec-row">
-          <span class="spec-label">Слот для карты</span>
+          <span class="spec-label">{{ t('listingDetails.specs.cardSlot') }}</span>
           <span class="spec-value">{{ modelData?.memory?.cardSlot }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">Встроенная память</span>
+          <span class="spec-label">{{ t('listingDetails.specs.internal') }}</span>
           <span class="spec-value">{{ modelData?.memory?.internal }}</span>
         </div>
       </div>
 
       <!-- Основная камера -->
       <div v-if="modelData?.cameras?.mainCamera" class="spec-group">
-        <h3 class="spec-group-title">Основная камера</h3>
+        <h3 class="spec-group-title">{{ t('listingDetails.specs.mainCamera') }}</h3>
         <div class="spec-row">
-          <span class="spec-label">Тип</span>
+          <span class="spec-label">{{ t('listingDetails.specs.type') }}</span>
           <span class="spec-value">{{
             modelData?.cameras?.mainCamera?.type
           }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">Камеры</span>
+          <span class="spec-label">{{ t('listingDetails.specs.cameras') }}</span>
           <div class="spec-list">
             <div
               v-for="(camera, index) in modelData?.cameras?.mainCamera
@@ -175,7 +176,7 @@ onUnmounted(() => {
           </div>
         </div>
         <div class="spec-row">
-          <span class="spec-label">Функции</span>
+          <span class="spec-label">{{ t('listingDetails.specs.features') }}</span>
           <div class="spec-list">
             <div
               v-for="(feature, index) in modelData?.cameras?.mainCamera
@@ -187,7 +188,7 @@ onUnmounted(() => {
           </div>
         </div>
         <div class="spec-row">
-          <span class="spec-label">Видео</span>
+          <span class="spec-label">{{ t('listingDetails.specs.video') }}</span>
           <div class="spec-list">
             <div
               v-for="(video, index) in modelData?.cameras?.mainCamera?.video"
@@ -201,15 +202,15 @@ onUnmounted(() => {
 
       <!-- Фронтальная камера -->
       <div v-if="modelData?.cameras?.selfieCamera" class="spec-group">
-        <h3 class="spec-group-title">Фронтальная камера</h3>
+        <h3 class="spec-group-title">{{ t('listingDetails.specs.selfieCamera') }}</h3>
         <div class="spec-row">
-          <span class="spec-label">Тип</span>
+          <span class="spec-label">{{ t('listingDetails.specs.type') }}</span>
           <span class="spec-value">{{
             modelData?.cameras?.selfieCamera?.type
           }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">Камеры</span>
+          <span class="spec-label">{{ t('listingDetails.specs.cameras') }}</span>
           <div class="spec-list">
             <div
               v-for="(camera, index) in modelData?.cameras?.selfieCamera
@@ -221,7 +222,7 @@ onUnmounted(() => {
           </div>
         </div>
         <div class="spec-row">
-          <span class="spec-label">Функции</span>
+          <span class="spec-label">{{ t('listingDetails.specs.features') }}</span>
           <div class="spec-list">
             <div
               v-for="(feature, index) in modelData?.cameras?.selfieCamera
@@ -233,7 +234,7 @@ onUnmounted(() => {
           </div>
         </div>
         <div class="spec-row">
-          <span class="spec-label">Видео</span>
+          <span class="spec-label">{{ t('listingDetails.specs.video') }}</span>
           <div class="spec-list">
             <div
               v-for="(video, index) in modelData?.cameras?.selfieCamera?.video"
@@ -247,13 +248,13 @@ onUnmounted(() => {
 
       <!-- Батарея -->
       <div v-if="modelData?.battery" class="spec-group">
-        <h3 class="spec-group-title">Батарея</h3>
+        <h3 class="spec-group-title">{{ t('listingDetails.specs.battery') }}</h3>
         <div class="spec-row">
-          <span class="spec-label">Тип</span>
+          <span class="spec-label">{{ t('listingDetails.specs.type') }}</span>
           <span class="spec-value">{{ modelData?.battery?.type }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">Зарядка</span>
+          <span class="spec-label">{{ t('listingDetails.specs.charging') }}</span>
           <div class="spec-list">
             <div
               v-for="(charging, index) in modelData?.battery?.charging"
@@ -267,76 +268,76 @@ onUnmounted(() => {
 
       <!-- Связь -->
       <div v-if="modelData?.comms" class="spec-group">
-        <h3 class="spec-group-title">Связь и коммуникации</h3>
+        <h3 class="spec-group-title">{{ t('listingDetails.specs.comms') }}</h3>
         <div class="spec-row">
-          <span class="spec-label">Wi-Fi</span>
+          <span class="spec-label">{{ t('listingDetails.specs.wifi') }}</span>
           <span class="spec-value">{{ modelData?.comms?.wlan }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">Bluetooth</span>
+          <span class="spec-label">{{ t('listingDetails.specs.bluetooth') }}</span>
           <span class="spec-value">{{ modelData?.comms?.bluetooth }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">GPS</span>
+          <span class="spec-label">{{ t('listingDetails.specs.gps') }}</span>
           <span class="spec-value">{{ modelData?.comms?.positioning }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">NFC</span>
+          <span class="spec-label">{{ t('listingDetails.specs.nfc') }}</span>
           <span class="spec-value">{{ modelData?.comms?.nfc }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">Радио</span>
+          <span class="spec-label">{{ t('listingDetails.specs.radio') }}</span>
           <span class="spec-value">{{ modelData?.comms?.radio }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">USB</span>
+          <span class="spec-label">{{ t('listingDetails.specs.usb') }}</span>
           <span class="spec-value">{{ modelData?.comms?.usb }}</span>
         </div>
       </div>
 
       <!-- Сеть -->
       <div v-if="modelData?.network" class="spec-group">
-        <h3 class="spec-group-title">Сеть</h3>
+        <h3 class="spec-group-title">{{ t('listingDetails.specs.network') }}</h3>
         <div class="spec-row">
-          <span class="spec-label">Технологии</span>
+          <span class="spec-label">{{ t('listingDetails.specs.tech') }}</span>
           <span class="spec-value">{{ modelData?.network?.technology }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">2G диапазоны</span>
+          <span class="spec-label">{{ t('listingDetails.specs.bands2g') }}</span>
           <span class="spec-value">{{ modelData?.network?.["2g"] }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">3G диапазоны</span>
+          <span class="spec-label">{{ t('listingDetails.specs.bands3g') }}</span>
           <span class="spec-value">{{ modelData?.network?.["3g"] }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">4G диапазоны</span>
+          <span class="spec-label">{{ t('listingDetails.specs.bands4g') }}</span>
           <span class="spec-value">{{ modelData?.network?.["4g"] }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">5G диапазоны</span>
+          <span class="spec-label">{{ t('listingDetails.specs.bands5g') }}</span>
           <span class="spec-value">{{ modelData?.network?.["5g"] }}</span>
         </div>
         <div class="spec-row">
-          <span class="spec-label">Скорость</span>
+          <span class="spec-label">{{ t('listingDetails.specs.speed') }}</span>
           <span class="spec-value">{{ modelData?.network?.speed }}</span>
         </div>
       </div>
 
       <!-- Сенсоры -->
       <div v-if="modelData?.features" class="spec-group">
-        <h3 class="spec-group-title">Сенсоры и функции</h3>
+        <h3 class="spec-group-title">{{ t('listingDetails.specs.sensors') }}</h3>
         <div class="spec-row">
-          <span class="spec-label">Сенсоры</span>
+          <span class="spec-label">{{ t('listingDetails.specs.sensorsLabel') }}</span>
           <span class="spec-value">{{ modelData?.features?.sensors }}</span>
         </div>
       </div>
 
       <!-- Звук -->
       <div v-if="modelData?.sound" class="spec-group">
-        <h3 class="spec-group-title">Звук</h3>
+        <h3 class="spec-group-title">{{ t('listingDetails.specs.sound') }}</h3>
         <div class="spec-row">
-          <span class="spec-label">Громкоговоритель</span>
+          <span class="spec-label">{{ t('listingDetails.specs.loudspeaker') }}</span>
           <span class="spec-value">{{ modelData?.sound?.loudspeaker }}</span>
         </div>
       </div>
@@ -344,7 +345,7 @@ onUnmounted(() => {
 
     <template #footer>
       <div class="flex justify-end pl-16 pr-16 pb-16">
-        <el-button @click="handleClose">Закрыть</el-button>
+        <el-button @click="handleClose">{{ t('listingDetails.close') }}</el-button>
       </div>
     </template>
   </el-dialog>
