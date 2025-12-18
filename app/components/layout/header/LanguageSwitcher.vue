@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ArrowDown } from "@element-plus/icons-vue";
-
 const { locale, locales, setLocale } = useI18n();
 
 const handleLocaleChange = (code: 'uz' | 'ru') => {
@@ -10,9 +8,8 @@ const handleLocaleChange = (code: 'uz' | 'ru') => {
 
 <template>
   <el-dropdown trigger="click" @command="handleLocaleChange">
-    <button class="lang-btn" size="large">
+    <button class="lang-btn">
       <span class="lang-code">{{ locale.toUpperCase() }}</span>
-      <el-icon class="lang-arrow"><ArrowDown /></el-icon>
     </button>
     <template #dropdown>
       <el-dropdown-menu>
@@ -33,11 +30,13 @@ const handleLocaleChange = (code: 'uz' | 'ru') => {
 .lang-btn {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 8px 12px;
+  justify-content: center;
+  border-radius: 40px;
+  height: 40px;
+  width: 40px;
+  min-width: 40px;
   background: transparent;
   border: 1px solid #e2e8f0;
-  border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
   color: #64748b;
@@ -53,11 +52,6 @@ const handleLocaleChange = (code: 'uz' | 'ru') => {
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.5px;
-}
-
-.lang-arrow {
-  font-size: 12px;
-  transition: transform 0.2s ease;
 }
 
 :deep(.el-dropdown-menu__item) {
