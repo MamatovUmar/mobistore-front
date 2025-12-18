@@ -104,7 +104,7 @@ const postDate = computed(() => {
         <div class="meta-info">
           <div class="location-row">
             <el-icon class="location-icon"><LocationInformation /></el-icon>
-            <span>{{ listing.region.name_ru }}</span>
+            <span>{{ listing.region[`name_${locale}`] || listing.region.name_ru }}</span>
           </div>
           <span class="separator">•</span>
           <span class="date">{{ postDate }}</span>

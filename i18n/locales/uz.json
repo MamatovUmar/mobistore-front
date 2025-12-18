@@ -210,5 +210,79 @@
     "account": "Hisob",
     "admin": "Ma'muriyat",
     "signup": "Ro'yxatdan o'tish"
+  },
+  "search": {
+    "title": "Smartfonlar qidiruvi",
+    "description": "O'zbekistonda eng yaxshi smartfonlarni qulay narxlarda toping.",
+    "breadcrumbs": {
+      "home": "Bosh sahifa",
+      "results": "Qidiruv natijalari"
+    },
+    "filters": {
+      "title": "Filtrlar",
+      "region": "Viloyat",
+      "city": "Shahar",
+      "brand": "Brend",
+      "model": "Model",
+      "state": "Holati",
+      "ram": "Operativ xotira (RAM)",
+      "storage": "Ichki xotira",
+      "tradeIn": "Almashish mumkin",
+      "price": {
+        "from": "dan",
+        "to": "gacha",
+        "currency": "so'm"
+      },
+      "clear": "Filtrlarni tozalash",
+      "placeholders": {
+        "all": "Barchasi",
+        "any": "Istalgan hajm"
+      },
+      "states": {
+        "new": "Yangi",
+        "used": "Foydalanilgan",
+        "restored": "Tiklangan"
+      }
+    },
+    "noResults": {
+      "title": "Hech narsa topilmadi",
+      "text": "Qidiruv parametrlarini o'zgartirib ko'ring yoki filtrlarni tozalang"
+    },
+    "seo": {
+      "new": "yangi",
+      "used": "foydalanilgan",
+      "in": "",
+      "buy": "Sotib olish",
+      "phones": "smartfonlar",
+      "priceFrom": "dan",
+      "priceTo": "gacha",
+      "defaultTitle": "O'zbekistonda smartfonlar qidiruvi | MobiStore",
+      "defaultDesc": "O'zbekistonda eng yaxshi smartfonlarni qulay narxlarda toping. Yangi va foydalanilgan qurilmalarning katta tanlovi."
+    }
+  },
+  "ads": {
+    "status": {
+      "active": "Faol",
+      "draft": "Qoralama",
+      "archived": "Arxivlangan",
+      "sold": "Sotilgan",
+      "moderation": "Moderatsiyada",
+      "rejected": "Rad etilgan"
+    },
+    "state": {
+      "new": "Yangi",
+      "used": "Foydalanilgan",
+      "restored": "Tiklangan"
+    },
+    "actions": {
+      "changeStatusError": "Statusni o'zgartirib bo'lmadi",
+      "bumpError": "E'lonni ko'tarib bo'lmadi"
+    }
+  },
+  "favorites": {
+    "addSuccess": "Sevimlilarga qo'shildi",
+    "addError": "Sevimlilarga qo'shishda xatolik",
+    "removeSuccess": "Sevimlilardan o'chirildi",
+    "removeError": "Sevimlilardan o'chirishda xatolik"
   }
 }

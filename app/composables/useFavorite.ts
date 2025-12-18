@@ -6,6 +6,7 @@ import type { IListing } from "~/types/ads";
 export const useFavorite = () => {
   const { $api } = useNuxtApp();
   const root = useRootStore()
+  const { t } = useI18n();
 
   const addLoading = ref(false);
   const removeLoading = ref(false);
@@ -20,11 +21,11 @@ export const useFavorite = () => {
         body: { adId },
       });
       root.fetchUser();
-      ElMessage.success("Добавлено в избранное");
+      ElMessage.success(t("favorites.addSuccess"));
       addLoading.value = false;
     },
     () => {
-      ElMessage.error("Не удалось добавить в избранное");
+      ElMessage.error(t("favorites.addError"));
       addLoading.value = false;
     }
   );
@@ -36,11 +37,11 @@ export const useFavorite = () => {
         method: "DELETE",
       });
       root.fetchUser();
-      ElMessage.success("Удалено из избранного");
+      ElMessage.success(t("favorites.removeSuccess"));
       removeLoading.value = false;
     },
     () => {
-      ElMessage.error("Не удалось удалить из избранного");
+      ElMessage.error(t("favorites.removeError"));
       removeLoading.value = false;
     }
   );

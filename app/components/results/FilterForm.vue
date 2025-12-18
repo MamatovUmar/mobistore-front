@@ -9,6 +9,8 @@ const props = defineProps<{ defaults?: IAdsResponse["filters"] }>();
 
 const route = useRoute();
 const router = useRouter();
+const { t } = useI18n();
+const localePath = useLocalePath();
 
 // Вычисляем min/max цены из props.defaults или query
 const minPrice = computed(
@@ -84,7 +86,7 @@ watch(
         query.maxPrice = String(filters.priceRange[1]);
 
       router.replace({
-        path: "/search",
+        path: localePath("/search"),
         query,
       });
     }, 500);
@@ -121,18 +123,18 @@ watch(
 <template>
   <aside class="filter-sidebar">
     <div class="filter-header">
-      <h3>Фильтры</h3>
+      <h3>{{ t('search.filters.title') }}</h3>
     </div>
 
     <el-form :model="filters" label-position="top" size="large">
-      <el-form-item label="Область">
+      <el-form-item :label="t('search.filters.region')">
         <RegionAutocompletes
           v-model="filters.regionId"
           :init-data="defaults?.region"
         />
       </el-form-item>
 
-      <el-form-item label="Город">
+      <el-form-item :label="t('search.filters.city')">
         <CityAutocompletes
           v-model="filters.cityId"
           :region-id="filters.regionId"
@@ -140,14 +142,14 @@ watch(
         />
       </el-form-item>
 
-      <el-form-item label="Бренд">
+      <el-form-item :label="t('search.filters.brand')">
         <BrandAutocomplete
           v-model="filters.brandId"
           :init-data="defaults?.brand"
         />
       </el-form-item>
 
-      <el-form-item label="Модель">
+      <el-form-item :label="t('search.filters.model')">
         <ModelAutocomplete
           v-model="filters.modelId"
           :brand-id="filters.brandId"
@@ -155,16 +157,16 @@ watch(
         />
       </el-form-item>
 
-      <el-form-item label="Состояние">
-        <el-select v-model="filters.state" placeholder="Все" clearable>
-          <el-option label="Новый" value="new" />
-          <el-option label="Б/У" value="used" />
-          <el-option label="Восстановленный" value="restored" />
+      <el-form-item :label="t('search.filters.state')">
+        <el-select v-model="filters.state" :placeholder="t('search.filters.placeholders.all')" clearable>
+          <el-option :label="t('search.filters.states.new')" value="new" />
+          <el-option :label="t('search.filters.states.used')" value="used" />
+          <el-option :label="t('search.filters.states.restored')" value="restored" />
         </el-select>
       </el-form-item>
 
-      <el-form-item label="Оперативная память (RAM)">
-        <el-select v-model="filters.ram" placeholder="Любой объем" clearable>
+      <el-form-item :label="t('search.filters.ram')">
+        <el-select v-model="filters.ram" :placeholder="t('search.filters.placeholders.any')" clearable>
           <el-option
             v-for="ram in 36"
             :key="ram"
@@ -174,10 +176,10 @@ watch(
         </el-select>
       </el-form-item>
 
-      <el-form-item label="Встроенная память">
+      <el-form-item :label="t('search.filters.storage')">
         <el-select
           v-model="filters.storage"
-          placeholder="Любой объем"
+          :placeholder="t('search.filters.placeholders.any')"
           clearable
         >
           <el-option
@@ -190,28 +192,28 @@ watch(
       </el-form-item>
 
       <el-checkbox v-model="filters.allowTradeIn" size="large">
-        Возможен бартер
+        {{ t('search.filters.tradeIn') }}
       </el-checkbox>
 
       <div class="price-slider mt-20">
         <div class="price-range-compact">
           <div class="price-field">
-            <span class="label">от</span>
+            <span class="label">{{ t('search.filters.price.from') }}</span>
             <div class="value-wrapper">
               <span class="amount">{{
                 formatPrice(filters.priceRange[0])
               }}</span>
-              <span class="currency">сум</span>
+              <span class="currency">{{ t('search.filters.price.currency') }}</span>
             </div>
           </div>
           <div class="divider" />
           <div class="price-field">
-            <span class="label">до</span>
+            <span class="label">{{ t('search.filters.price.to') }}</span>
             <div class="value-wrapper">
               <span class="amount">{{
                 formatPrice(filters.priceRange[1])
               }}</span>
-              <span class="currency">сум</span>
+              <span class="currency">{{ t('search.filters.price.currency') }}</span>
             </div>
           </div>
         </div>
@@ -231,7 +233,7 @@ watch(
         @click="resetFilters"
         class="mt-20 w-full mobile-clear"
       >
-        Очистить фильтры
+        {{ t('search.filters.clear') }}
       </el-button>
     </el-form>
   </aside>

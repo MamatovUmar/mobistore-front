@@ -16,7 +16,7 @@ const props = defineProps<{
 
 const root = useRootStore();
 const { addToFavorite, removeFavorite } = useFavorite();
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const localePath = useLocalePath();
 
 const image = computed(() => {
@@ -97,7 +97,7 @@ const postDate = computed(() => t('adCard.today'));
       <!-- Location -->
       <div class="location-row">
         <el-icon class="location-icon"><LocationInformation /></el-icon>
-        <span>{{ listing.region.name_ru }}</span>
+        <span>{{ listing.region[`name_${locale}`] || listing.region.name_ru }}</span>
       </div>
     </div>
   </NuxtLink>

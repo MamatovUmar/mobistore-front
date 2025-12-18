@@ -12,6 +12,8 @@ import { Search, Filter } from "@element-plus/icons-vue";
 
 const route = useRoute();
 const { $api } = useNuxtApp();
+const { t } = useI18n();
+const localePath = useLocalePath();
 
 const showMobileFilters = ref(false);
 
@@ -24,27 +26,29 @@ const pageParams = reactive({
   limit: 12,
 });
 
+const { locale } = useI18n();
+
 // Функция для генерации SEO заголовка на основе серверных данных
 const generateSeoTitle = () => {
   const query = route.query;
   const currentFilters = filters.value;
 
-  let seoTitle = "Поиск смартфонов";
+  let seoTitle = t("search.title");
 
   if (currentFilters?.brand?.name) {
     seoTitle += ` ${currentFilters.brand.name}`;
   }
 
-  if (currentFilters?.region?.name_ru) {
-    seoTitle += ` в ${currentFilters.region.name_ru}`;
-  } else if (currentFilters?.city?.name_ru) {
-    seoTitle += ` в ${currentFilters.city.name_ru}`;
+  if (currentFilters?.region) {
+    seoTitle += ` ${t('search.seo.in')} ${currentFilters.region[`name_${locale.value}`] || currentFilters.region.name_ru}`;
+  } else if (currentFilters?.city) {
+    seoTitle += ` ${t('search.seo.in')} ${currentFilters.city[`name_${locale.value}`] || currentFilters.city.name_ru}`;
   }
 
   if (query.state === "new") {
-    seoTitle += " (новые)";
+    seoTitle += ` (${t('search.seo.new')})`;
   } else if (query.state === "used") {
-    seoTitle += " (б/у)";
+    seoTitle += ` (${t('search.seo.used')})`;
   }
 
   seoTitle += " | MobiStore";
@@ -56,15 +60,15 @@ const generateSeoDescription = () => {
   const query = route.query;
   const currentFilters = filters.value;
 
-  let desc = "Найдите ";
+  let desc = t("search.seo.buy") + " ";
 
   if (query.state === "new") {
-    desc += "новые ";
+    desc += t("search.seo.new") + " ";
   } else if (query.state === "used") {
-    desc += "б/у ";
+    desc += t("search.seo.used") + " ";
   }
 
-  desc += "смартфоны";
+  desc += t("search.seo.phones");
 
   if (currentFilters?.brand?.name) {
     desc += ` ${currentFilters.brand.name}`;
@@ -74,10 +78,10 @@ const generateSeoDescription = () => {
     desc += ` ${currentFilters.model.name}`;
   }
 
-  if (currentFilters?.region?.name_ru) {
-    desc += ` в ${currentFilters.region.name_ru}`;
-  } else if (currentFilters?.city?.name_ru) {
-    desc += ` в ${currentFilters.city.name_ru}`;
+  if (currentFilters?.region) {
+    desc += ` ${t('search.seo.in')} ${currentFilters.region[`name_${locale.value}`] || currentFilters.region.name_ru}`;
+  } else if (currentFilters?.city) {
+    desc += ` ${t('search.seo.in')} ${currentFilters.city[`name_${locale.value}`] || currentFilters.city.name_ru}`;
   }
 
   if (query.minPrice || query.maxPrice) {
@@ -88,15 +92,15 @@ const generateSeoDescription = () => {
       ? Number(query.maxPrice).toLocaleString("ru-RU")
       : "";
     if (min && max) {
-      desc += ` по цене от ${min} до ${max} сум`;
+      desc += ` ${t('search.filters.price.from')} ${min} ${t('search.filters.price.to')} ${max} ${t('search.filters.price.currency')}`;
     } else if (min) {
-      desc += ` от ${min} сум`;
+      desc += ` ${t('search.filters.price.from')} ${min} ${t('search.filters.price.currency')}`;
     } else if (max) {
-      desc += ` до ${max} сум`;
+      desc += ` ${t('search.filters.price.to')} ${max} ${t('search.filters.price.currency')}`;
     }
   }
 
-  desc += ". Большой выбор с гарантией и доставкой по всему Узбекистану.";
+  desc += ". " + t("search.seo.defaultDesc");
   return desc;
 };
 
@@ -109,39 +113,39 @@ const updateSeo = () => {
   description.value = generateSeoDescription();
 
   // Обновляем keywords на основе серверных данных
-  const kw = ["смартфоны Узбекистан", "купить телефон", "MobiStore"];
+  const kw = [t("search.seo.phones") + " Uzbekistan", t("search.seo.buy"), "MobiStore"];
 
   if (currentFilters?.brand?.name) {
     kw.push(
-      `${currentFilters.brand.name} смартфоны`,
-      `${currentFilters.brand.name} телефон`
+      `${currentFilters.brand.name} ${t('search.seo.phones')}`,
+      `${currentFilters.brand.name} phone`
     );
   }
 
   if (currentFilters?.model?.name) {
     kw.push(
       `${currentFilters.model.name}`,
-      `купить ${currentFilters.model.name}`
+      `${t('search.seo.buy')} ${currentFilters.model.name}`
     );
   }
 
   if (query.state === "new") {
-    kw.push("новые смартфоны", "новые телефоны");
+    kw.push(`${t('search.seo.new')} ${t('search.seo.phones')}`);
   } else if (query.state === "used") {
-    kw.push("б/у смартфоны", "вторичные телефоны");
+    kw.push(`${t('search.seo.used')} ${t('search.seo.phones')}`);
   }
 
-  if (currentFilters?.region?.name_ru) {
+  if (currentFilters?.region) {
+     const regionName = currentFilters.region[`name_${locale.value}`] || currentFilters.region.name_ru;
     kw.push(
-      `смартфоны ${currentFilters.region.name_ru}`,
-      `телефоны ${currentFilters.region.name_ru}`
+      `${t('search.seo.phones')} ${regionName}`
     );
   }
 
-  if (currentFilters?.city?.name_ru) {
+  if (currentFilters?.city) {
+    const cityName = currentFilters.city[`name_${locale.value}`] || currentFilters.city.name_ru;
     kw.push(
-      `смартфоны ${currentFilters.city.name_ru}`,
-      `телефоны ${currentFilters.city.name_ru}`
+      `${t('search.seo.phones')} ${cityName}`
     );
   }
 
@@ -223,14 +227,13 @@ watch(
 );
 
 // Инициализируем SEO с дефолтными значениями
-title.value = "Поиск смартфонов в Узбекистане | MobiStore";
-description.value =
-  "Найдите лучшие смартфоны по выгодным ценам в Узбекистане. Большой выбор новых и б/у устройств.";
-keywords.value = "смартфоны Узбекистан, купить телефон, MobiStore";
+title.value = t("search.seo.defaultTitle");
+description.value = t("search.seo.defaultDesc");
+keywords.value = "smartphones Uzbekistan, buy phone, MobiStore";
 
 // Обновляем SEO когда данные загрузятся с сервера
 watch(
-  filters,
+  [filters, () => locale.value],
   () => {
     if (filters.value) {
       updateSeo();
@@ -303,12 +306,12 @@ definePageMeta({
       <div class="container">
         <el-breadcrumb>
           <el-breadcrumb-item
-            to="/"
+            :to="localePath('/')"
             itemprop="itemListElement"
             itemscope
             itemtype="https://schema.org/ListItem"
           >
-            <span itemprop="name">Главная</span>
+            <span itemprop="name">{{ t('search.breadcrumbs.home') }}</span>
             <meta itemprop="position" content="1" />
           </el-breadcrumb-item>
           <el-breadcrumb-item
@@ -316,7 +319,7 @@ definePageMeta({
             itemscope
             itemtype="https://schema.org/ListItem"
           >
-            <span itemprop="name">Результаты поиска</span>
+            <span itemprop="name">{{ t('search.breadcrumbs.results') }}</span>
             <meta itemprop="position" content="2" />
           </el-breadcrumb-item>
         </el-breadcrumb>
@@ -329,7 +332,7 @@ definePageMeta({
           <aside
             class="filters-section"
             role="complementary"
-            aria-label="Фильтры поиска"
+            :aria-label="t('search.filters.title')"
           >
             <ClientOnly>
               <FilterForm :defaults="filters" />
@@ -342,7 +345,7 @@ definePageMeta({
           <section
             class="results-section"
             role="main"
-            aria-label="Результаты поиска"
+            :aria-label="t('search.breadcrumbs.results')"
           >
             <!-- Скелетоны при загрузке -->
             <div v-if="loading" class="results-grid">
@@ -389,9 +392,9 @@ definePageMeta({
                 <div class="no-results-icon">
                   <el-icon size="60"><Search /></el-icon>
                 </div>
-                <h2 class="no-results-title">Ничего не найдено</h2>
+                <h2 class="no-results-title">{{ t('search.noResults.title') }}</h2>
                 <p class="no-results-text">
-                  Попробуйте изменить параметры поиска или сбросить фильтры
+                  {{ t('search.noResults.text') }}
                 </p>
               </div>
             </div>
@@ -403,14 +406,14 @@ definePageMeta({
     <!-- Мобильная кнопка фильтров -->
     <div class="mobile-filter-btn" @click="showMobileFilters = true">
       <el-icon><Filter /></el-icon>
-      <span>Фильтры</span>
+      <span>{{ t('search.filters.title') }}</span>
     </div>
 
     <!-- Мобильное меню фильтров -->
     <client-only>
       <el-drawer
         v-model="showMobileFilters"
-        title="Фильтры"
+        :title="t('search.filters.title')"
         direction="rtl"
         size="320px"
         class="filter-drawer"
