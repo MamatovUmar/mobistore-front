@@ -52,300 +52,307 @@ onUnmounted(() => {
       </div>
     </template>
 
-    <div class="specs-modal">
-      <!-- Общая информация -->
-      <div class="spec-group">
-        <h3 class="spec-group-title">{{ t('listingDetails.specs.general') }}</h3>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.model') }}</span>
-          <span class="spec-value">{{ modelData.name }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.brand') }}</span>
-          <span class="spec-value">{{ brand.name }}</span>
-        </div>
-        <div v-if="modelData?.launch?.announced" class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.announceDate') }}</span>
-          <span class="spec-value">{{ modelData?.launch?.announced }}</span>
-        </div>
-        <div v-if="modelData?.launch?.released" class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.releaseDate') }}</span>
-          <span class="spec-value">{{ modelData?.launch?.released }}</span>
-        </div>
-        <div v-if="modelData?.colors?.length" class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.colors') }}</span>
-          <span class="spec-value">{{ modelData?.colors?.join(", ") }}</span>
-        </div>
-      </div>
+    <div id="specs-list">
+      <table cellspacing="0" style="max-height: 111px">
+        <tbody>
+          <tr class="tr-hover">
+            <th rowspan="15" scope="row">Network</th>
+            <td class="ttl"><a href="network-bands.php3">Technology</a></td>
+            <td class="nfo">
+              <a href="#" class="link-network-detail" data-spec="nettech"
+                >GSM / HSPA / LTE</a
+              >
+            </td>
+          </tr>
+          <tr class="tr-toggle">
+            <td class="ttl"><a href="network-bands.php3">2G bands</a></td>
+            <td class="nfo" data-spec="net2g">GSM 900 / 1800</td>
+          </tr>
+          <tr class="tr-toggle">
+            <td class="ttl"><a href="network-bands.php3">3G bands</a></td>
+            <td class="nfo" data-spec="net3g">
+              HSDPA 850 / 900 / 1700(AWS) / 1900 / 2100
+            </td>
+          </tr>
+          <tr class="tr-toggle">
+            <td class="ttl"><a href="network-bands.php3">4G bands</a></td>
+            <td class="nfo" data-spec="net4g">LTE</td>
+          </tr>
+          <tr class="tr-toggle">
+            <td class="ttl"><a href="glossary.php3?term=3g">Speed</a></td>
+            <td class="nfo" data-spec="speed">HSPA, LTE</td>
+          </tr>
+        </tbody>
+      </table>
 
-      <!-- Корпус -->
-      <div v-if="modelData.body" class="spec-group">
-        <h3 class="spec-group-title">{{ t('listingDetails.specs.body') }}</h3>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.dimensions') }}</span>
-          <span class="spec-value">{{ modelData.body.dimensions }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.weight') }}</span>
-          <span class="spec-value">{{ modelData.body.weight }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.materials') }}</span>
-          <span class="spec-value">{{ modelData?.body?.build }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.sim') }}</span>
-          <span class="spec-value">{{ modelData.body.sim }}</span>
-        </div>
-      </div>
+      <table cellspacing="0">
+        <tbody>
+          <tr>
+            <th rowspan="2" scope="row">Launch</th>
+            <td class="ttl">
+              <a href="glossary.php3?term=phone-life-cycle">Announced</a>
+            </td>
+            <td class="nfo" data-spec="year">2023, May 18</td>
+          </tr>
+          <tr>
+            <td class="ttl">
+              <a href="glossary.php3?term=phone-life-cycle">Status</a>
+            </td>
+            <td class="nfo" data-spec="status">
+              Available. Released 2023, June
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-      <!-- Дисплей -->
-      <div class="spec-group" v-if="modelData.display">
-        <h3 class="spec-group-title">{{ t('listingDetails.specs.display') }}</h3>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.type') }}</span>
-          <span class="spec-value">{{ modelData.display.type }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.size') }}</span>
-          <span class="spec-value">{{ modelData.display.size }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.resolution') }}</span>
-          <span class="spec-value">{{ modelData.display.resolution }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.protection') }}</span>
-          <span class="spec-value">{{ modelData.display.protection }}</span>
-        </div>
-      </div>
+      <table cellspacing="0">
+        <tbody>
+          <tr>
+            <th rowspan="6" scope="row">Body</th>
+            <td class="ttl">
+              <a href="#" onclick="helpW('h_dimens.htm');">Dimensions</a>
+            </td>
+            <td class="nfo" data-spec="dimensions">
+              121.5 x 50 x 14.4 mm (4.78 x 1.97 x 0.57 in)
+            </td>
+          </tr>
+          <tr>
+            <td class="ttl">
+              <a href="#" onclick="helpW('h_weight.htm');">Weight</a>
+            </td>
+            <td class="nfo" data-spec="weight">94.5 g (3.35 oz)</td>
+          </tr>
+          <tr>
+            <td class="ttl"><a href="glossary.php3?term=sim">SIM</a></td>
+            <td class="nfo" data-spec="sim">
+              · Nano-SIM
+              <hr class="line" />
+              · Nano-SIM + Nano-SIM
+            </td>
+          </tr>
+          <tr>
+            <td class="ttl">&nbsp;</td>
+            <td class="nfo" data-spec="bodyother">
+              Flashlight
+              <hr class="line" />
+              Splash resistant
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-      <!-- Платформа -->
-      <div v-if="modelData?.platform" class="spec-group">
-        <h3 class="spec-group-title">{{ t('listingDetails.specs.platform') }}</h3>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.os') }}</span>
-          <span class="spec-value">{{ modelData?.platform?.os }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.chipset') }}</span>
-          <span class="spec-value">{{ modelData?.platform?.chipset }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.cpu') }}</span>
-          <span class="spec-value">{{ modelData?.platform?.cpu }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.gpu') }}</span>
-          <span class="spec-value">{{ modelData?.platform?.gpu }}</span>
-        </div>
-      </div>
+      <table cellspacing="0">
+        <tbody>
+          <tr>
+            <th rowspan="5" scope="row">Display</th>
+            <td class="ttl">
+              <a href="glossary.php3?term=display-type">Type</a>
+            </td>
+            <td class="nfo" data-spec="displaytype">TFT LCD, 65K colors</td>
+          </tr>
+          <tr>
+            <td class="ttl">
+              <a href="#" onclick="helpW('h_dsize.htm');">Size</a>
+            </td>
+            <td class="nfo" data-spec="displaysize">
+              1.8 inches, 10.0 cm<sup>2</sup> (~16.5% screen-to-body ratio)
+            </td>
+          </tr>
+          <tr>
+            <td class="ttl">
+              <a href="glossary.php3?term=resolution">Resolution</a>
+            </td>
+            <td class="nfo" data-spec="displayresolution">
+              120 x 160 pixels, 4:3 ratio (~111 ppi density)
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-      <!-- Память -->
-      <div v-if="modelData?.memory" class="spec-group">
-        <h3 class="spec-group-title">{{ t('listingDetails.specs.memory') }}</h3>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.cardSlot') }}</span>
-          <span class="spec-value">{{ modelData?.memory?.cardSlot }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.internal') }}</span>
-          <span class="spec-value">{{ modelData?.memory?.internal }}</span>
-        </div>
-      </div>
+      <table cellspacing="0">
+        <tbody>
+          <tr>
+            <th rowspan="5" scope="row">Memory</th>
+            <td class="ttl">
+              <a href="glossary.php3?term=memory-card-slot">Card slot</a>
+            </td>
 
-      <!-- Основная камера -->
-      <div v-if="modelData?.cameras?.mainCamera" class="spec-group">
-        <h3 class="spec-group-title">{{ t('listingDetails.specs.mainCamera') }}</h3>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.type') }}</span>
-          <span class="spec-value">{{
-            modelData?.cameras?.mainCamera?.type
-          }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.cameras') }}</span>
-          <div class="spec-list">
-            <div
-              v-for="(camera, index) in modelData?.cameras?.mainCamera
-                ?.cameraSpecs"
-              :key="index"
-            >
-              {{ camera }}
-            </div>
-          </div>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.features') }}</span>
-          <div class="spec-list">
-            <div
-              v-for="(feature, index) in modelData?.cameras?.mainCamera
-                ?.features"
-              :key="index"
-            >
-              {{ feature }}
-            </div>
-          </div>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.video') }}</span>
-          <div class="spec-list">
-            <div
-              v-for="(video, index) in modelData?.cameras?.mainCamera?.video"
-              :key="index"
-            >
-              {{ video }}
-            </div>
-          </div>
-        </div>
-      </div>
+            <td class="nfo" data-spec="memoryslot">microSDHC</td>
+          </tr>
 
-      <!-- Фронтальная камера -->
-      <div v-if="modelData?.cameras?.selfieCamera" class="spec-group">
-        <h3 class="spec-group-title">{{ t('listingDetails.specs.selfieCamera') }}</h3>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.type') }}</span>
-          <span class="spec-value">{{
-            modelData?.cameras?.selfieCamera?.type
-          }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.cameras') }}</span>
-          <div class="spec-list">
-            <div
-              v-for="(camera, index) in modelData?.cameras?.selfieCamera
-                ?.cameraSpecs"
-              :key="index"
-            >
-              {{ camera }}
-            </div>
-          </div>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.features') }}</span>
-          <div class="spec-list">
-            <div
-              v-for="(feature, index) in modelData?.cameras?.selfieCamera
-                ?.features"
-              :key="index"
-            >
-              {{ feature }}
-            </div>
-          </div>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.video') }}</span>
-          <div class="spec-list">
-            <div
-              v-for="(video, index) in modelData?.cameras?.selfieCamera?.video"
-              :key="index"
-            >
-              {{ video }}
-            </div>
-          </div>
-        </div>
-      </div>
+          <tr>
+            <td class="ttl">
+              <a href="glossary.php3?term=phonebook">Phonebook</a>
+            </td>
+            <td class="nfo">Yes</td>
+          </tr>
+          <tr>
+            <td class="ttl">
+              <a href="#" onclick="helpW('h_callr.htm');">Call records</a>
+            </td>
+            <td class="nfo">Yes</td>
+          </tr>
 
-      <!-- Батарея -->
-      <div v-if="modelData?.battery" class="spec-group">
-        <h3 class="spec-group-title">{{ t('listingDetails.specs.battery') }}</h3>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.type') }}</span>
-          <span class="spec-value">{{ modelData?.battery?.type }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.charging') }}</span>
-          <div class="spec-list">
-            <div
-              v-for="(charging, index) in modelData?.battery?.charging"
-              :key="index"
-            >
-              {{ charging }}
-            </div>
-          </div>
-        </div>
-      </div>
+          <tr>
+            <td class="ttl">
+              <a href="glossary.php3?term=dynamic-memory">Internal</a>
+            </td>
+            <td class="nfo" data-spec="internalmemory">Unspecified</td>
+          </tr>
+        </tbody>
+      </table>
 
-      <!-- Связь -->
-      <div v-if="modelData?.comms" class="spec-group">
-        <h3 class="spec-group-title">{{ t('listingDetails.specs.comms') }}</h3>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.wifi') }}</span>
-          <span class="spec-value">{{ modelData?.comms?.wlan }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.bluetooth') }}</span>
-          <span class="spec-value">{{ modelData?.comms?.bluetooth }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.gps') }}</span>
-          <span class="spec-value">{{ modelData?.comms?.positioning }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.nfc') }}</span>
-          <span class="spec-value">{{ modelData?.comms?.nfc }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.radio') }}</span>
-          <span class="spec-value">{{ modelData?.comms?.radio }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.usb') }}</span>
-          <span class="spec-value">{{ modelData?.comms?.usb }}</span>
-        </div>
-      </div>
+      <table cellspacing="0">
+        <tbody>
+          <tr>
+            <th rowspan="4" scope="row" class="small-line-height">
+              Main Camera
+            </th>
+            <td class="ttl"><a href="glossary.php3?term=camera">Single</a></td>
+            <td class="nfo" data-spec="cam1modules">QVGA</td>
+          </tr>
+          <tr>
+            <td class="ttl"><a href="glossary.php3?term=camera">Video</a></td>
+            <td class="nfo" data-spec="cam1video"></td>
+          </tr>
+        </tbody>
+      </table>
 
-      <!-- Сеть -->
-      <div v-if="modelData?.network" class="spec-group">
-        <h3 class="spec-group-title">{{ t('listingDetails.specs.network') }}</h3>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.tech') }}</span>
-          <span class="spec-value">{{ modelData?.network?.technology }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.bands2g') }}</span>
-          <span class="spec-value">{{ modelData?.network?.["2g"] }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.bands3g') }}</span>
-          <span class="spec-value">{{ modelData?.network?.["3g"] }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.bands4g') }}</span>
-          <span class="spec-value">{{ modelData?.network?.["4g"] }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.bands5g') }}</span>
-          <span class="spec-value">{{ modelData?.network?.["5g"] }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.speed') }}</span>
-          <span class="spec-value">{{ modelData?.network?.speed }}</span>
-        </div>
-      </div>
+      <table cellspacing="0">
+        <tbody>
+          <tr>
+            <th rowspan="4" scope="row" class="small-line-height">
+              Selfie camera
+            </th>
+            <td class="ttl">&nbsp;</td>
+            <td class="nfo" data-spec="cam2modules">No</td>
+          </tr>
+        </tbody>
+      </table>
 
-      <!-- Сенсоры -->
-      <div v-if="modelData?.features" class="spec-group">
-        <h3 class="spec-group-title">{{ t('listingDetails.specs.sensors') }}</h3>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.sensorsLabel') }}</span>
-          <span class="spec-value">{{ modelData?.features?.sensors }}</span>
-        </div>
-      </div>
+      <table cellspacing="0">
+        <tbody>
+          <tr>
+            <th rowspan="3" scope="row">Sound</th>
+            <td class="ttl">
+              <a href="glossary.php3?term=loudspeaker">Loudspeaker</a>
+            </td>
+            <td class="nfo">Yes</td>
+          </tr>
 
-      <!-- Звук -->
-      <div v-if="modelData?.sound" class="spec-group">
-        <h3 class="spec-group-title">{{ t('listingDetails.specs.sound') }}</h3>
-        <div class="spec-row">
-          <span class="spec-label">{{ t('listingDetails.specs.loudspeaker') }}</span>
-          <span class="spec-value">{{ modelData?.sound?.loudspeaker }}</span>
-        </div>
-      </div>
+          <tr>
+            <td class="ttl">
+              <a href="glossary.php3?term=audio-jack">3.5mm jack</a>
+            </td>
+            <td class="nfo">Yes</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table cellspacing="0">
+        <tbody>
+          <tr>
+            <th rowspan="9" scope="row">Comms</th>
+            <td class="ttl"><a href="glossary.php3?term=wi-fi">WLAN</a></td>
+            <td class="nfo" data-spec="wlan">No</td>
+          </tr>
+          <tr>
+            <td class="ttl">
+              <a href="glossary.php3?term=bluetooth">Bluetooth</a>
+            </td>
+            <td class="nfo" data-spec="bluetooth">5.0, A2DP</td>
+          </tr>
+          <tr>
+            <td class="ttl">
+              <a href="glossary.php3?term=gnss">Positioning</a>
+            </td>
+            <td class="nfo" data-spec="gps">No</td>
+          </tr>
+          <tr>
+            <td class="ttl"><a href="glossary.php3?term=nfc">NFC</a></td>
+            <td class="nfo" data-spec="nfc">No</td>
+          </tr>
+
+          <tr>
+            <td class="ttl"><a href="glossary.php3?term=fm-radio">Radio</a></td>
+            <td class="nfo" data-spec="radio">Wireless FM radio</td>
+          </tr>
+
+          <tr>
+            <td class="ttl"><a href="glossary.php3?term=usb">USB</a></td>
+            <td class="nfo" data-spec="usb">microUSB 2.0</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table cellspacing="0">
+        <tbody>
+          <tr>
+            <th rowspan="9" scope="row">Features</th>
+            <td class="ttl">
+              <a href="glossary.php3?term=sensors">Sensors</a>
+            </td>
+            <td class="nfo" data-spec="sensors"></td>
+          </tr>
+          <tr>
+            <td class="ttl">
+              <a href="glossary.php3?term=messaging">Messaging</a>
+            </td>
+            <td class="nfo">SMS</td>
+          </tr>
+
+          <tr>
+            <td class="ttl">
+              <a href="glossary.php3?term=mobile-games">Games</a>
+            </td>
+            <td class="nfo">Yes</td>
+          </tr>
+
+          <tr>
+            <td class="ttl"><a href="glossary.php3?term=java">Java</a></td>
+            <td class="nfo">No</td>
+          </tr>
+
+          <tr>
+            <td class="ttl">&nbsp;</td>
+            <td class="nfo" data-spec="featuresother">MP3 player</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table cellspacing="0">
+        <tbody>
+          <tr>
+            <th rowspan="7" scope="row">Battery</th>
+            <td class="ttl">
+              <a href="glossary.php3?term=rechargeable-battery-types">Type</a>
+            </td>
+            <td class="nfo" data-spec="batdescription1">Li-Ion 1450 mAh</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table cellspacing="0">
+        <tbody>
+          <tr>
+            <th rowspan="6" scope="row">Misc</th>
+            <td class="ttl"><a href="glossary.php3?term=build">Colors</a></td>
+            <td class="nfo" data-spec="colors">Midnight Blue, Arctic Purple</td>
+          </tr>
+
+          <tr>
+            <td class="ttl"><a href="glossary.php3?term=price">Price</a></td>
+            <td class="nfo" data-spec="price">About 40 EUR</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <template #footer>
       <div class="flex justify-end pl-16 pr-16 pb-16">
-        <el-button @click="handleClose">{{ t('listingDetails.close') }}</el-button>
+        <el-button @click="handleClose">{{
+          t("listingDetails.close")
+        }}</el-button>
       </div>
     </template>
   </el-dialog>
@@ -356,6 +363,175 @@ onUnmounted(() => {
   padding: 0 !important;
   .el-dialog__body {
     height: calc(100% - 182px) !important;
+  }
+}
+
+#specs-list {
+  padding: 20px;
+  background: var(--color-bg-secondary);
+  max-height: 65vh;
+  overflow-y: auto;
+
+  /* Кастомный скроллбар */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-border-medium);
+    border-radius: 4px;
+
+    &:hover {
+      background: var(--color-border-dark);
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 16px;
+    background: var(--color-bg-primary);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--color-border-light);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    tbody {
+      tr {
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background: var(--color-bg-hover, rgba(0, 0, 0, 0.02));
+        }
+
+        &:not(:last-child) {
+          td {
+            border-bottom: 1px solid var(--color-border-light);
+          }
+        }
+      }
+    }
+
+    th {
+      background: var(--color-bg-secondary);
+      color: var(--color-text-primary);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 16px 20px;
+      text-align: left;
+      vertical-align: top;
+      width: 120px;
+      min-width: 120px;
+      border-right: 1px solid var(--color-border-light);
+
+      &.small-line-height {
+        line-height: 1.3;
+      }
+    }
+
+    td {
+      padding: 12px 16px;
+      font-size: 14px;
+      color: var(--color-text-primary);
+      vertical-align: top;
+
+      &.ttl {
+        font-weight: 600;
+        color: var(--color-text-secondary);
+        width: 140px;
+        min-width: 140px;
+        background: var(--color-bg-secondary);
+      }
+
+      &.nfo {
+        color: var(--color-text-primary);
+        line-height: 1.6;
+        font-weight: 500;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+        pointer-events: none;
+        cursor: default;
+      }
+    }
+
+    hr.line {
+      border: none;
+      height: 1px;
+      background: var(--color-border-light);
+      margin: 8px 0;
+    }
+
+    sup {
+      font-size: 10px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 12px;
+    max-height: 100%;
+
+    table {
+      display: block;
+      margin-bottom: 12px;
+
+      tbody {
+        display: block;
+
+        tr {
+          &:not(:last-child) {
+            td {
+              border-bottom: none;
+            }
+          }
+        }
+      }
+
+      tr {
+        display: flex;
+        flex-wrap: wrap;
+
+        &:not(:last-child) {
+          border-bottom: 1px solid var(--color-border-light);
+        }
+      }
+
+      th {
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 12px;
+        border-right: none;
+      }
+
+      td {
+        padding: 10px 12px;
+
+        &.ttl {
+          width: 100%;
+          background: transparent;
+          padding-bottom: 4px;
+          font-size: 12px;
+        }
+
+        &.nfo {
+          width: 100%;
+          padding-top: 0;
+          padding-bottom: 12px;
+        }
+      }
+    }
   }
 }
 </style>

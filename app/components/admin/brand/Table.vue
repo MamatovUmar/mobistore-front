@@ -21,8 +21,8 @@ const emit = defineEmits<{
 
 const config = useRuntimeConfig();
 
-const getLogoUrl = (logo: string | null) => {
-  if (!logo) return null;
+const getLogoUrl = (logo: string | undefined) => {
+  if (!logo) return;
   if (logo.startsWith("http")) return logo;
   return `${config.public.apiBase}${logo}`;
 };

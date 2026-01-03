@@ -30,11 +30,30 @@ const loadingData = ref(true);
 const fileList = ref<any[]>([]);
 const existingImages = ref<IImage[]>([]);
 const formRef = ref<FormInstance>();
-const colors = ref<string[]>([]);
+const colors = ref<string[]>();
+
+const isCustomBrand = ref(false);
+const isCustomModel = ref(false);
 
 const validateImages = (rule: any, value: any, callback: any) => {
   if (fileList.value.length === 0 && existingImages.value.length === 0) {
     callback(new Error(t("account.editListing.validation.images")));
+  } else {
+    callback();
+  }
+};
+
+const validateBrand = (rule: any, value: any, callback: any) => {
+  if (!form.brand_id && !form.custom_brand) {
+    callback(new Error(t("account.editListing.validation.brand")));
+  } else {
+    callback();
+  }
+};
+
+const validateModel = (rule: any, value: any, callback: any) => {
+  if (!form.model_id && !form.custom_model) {
+    callback(new Error(t("account.editListing.validation.model")));
   } else {
     callback();
   }
@@ -49,8 +68,10 @@ const rules = computed<FormRules<IListingForm & { images?: any }>>(() => ({
     { required: true, message: t("account.editListing.validation.region"), trigger: "change" },
   ],
   city_id: [{ required: true, message: t("account.editListing.validation.city"), trigger: "change" }],
-  brand_id: [{ required: true, message: t("account.editListing.validation.brand"), trigger: "change" }],
-  model_id: [{ required: true, message: t("account.editListing.validation.model"), trigger: "change" }],
+  brand_id: [{ validator: validateBrand, trigger: "change" }],
+  custom_brand: [{ validator: validateBrand, trigger: "blur" }],
+  model_id: [{ validator: validateModel, trigger: "change" }],
+  custom_model: [{ validator: validateModel, trigger: "blur" }],
   price: [{ required: true, message: t("account.editListing.validation.price"), trigger: "blur" }],
   images: [{ validator: validateImages, trigger: "change" }],
   state: [{ required: true, message: t("account.editListing.validation.condition"), trigger: "change" }],
@@ -75,6 +96,8 @@ const form = reactive<IListingForm & { images?: any }>({
   show_phone: true,
   status: ListingStatus.ACTIVE,
   images: [],
+  custom_brand: null,
+  custom_model: null
 });
 
 // Загрузка данных объявления
@@ -93,6 +116,16 @@ const fetchAd = catcher(
       form.city_id = ad.city_id;
       form.brand_id = ad.brand_id;
       form.model_id = ad.model_id;
+      form.custom_brand = ad.custom_brand;
+      form.custom_model = ad.custom_model;
+
+      // Определяем режим кастомных полей
+      if (ad.custom_brand) {
+        isCustomBrand.value = true;
+        isCustomModel.value = true;
+      } else if (ad.custom_model) {
+        isCustomModel.value = true;
+      }
       form.price = ad.price;
       form.currency = ad.currency;
       form.state = ad.state;
@@ -139,8 +172,10 @@ const updateListing = catcher(
         description: form.description,
         region_id: form.region_id,
         city_id: form.city_id,
-        brand_id: form.brand_id,
-        model_id: form.model_id,
+        brand_id: form.brand_id || null,
+        model_id: form.model_id || null,
+        custom_brand: form.custom_brand || null,
+        custom_model: form.custom_model || null,
         price: Number(form.price),
         currency: form.currency,
         state: form.state,
@@ -239,8 +274,38 @@ const handleFileRemove = (file: any, fileListData: any[]) => {
   formRef.value?.validateField("images");
 };
 
-const handleModelSelect = (model: IModel) => {
-  colors.value = model.colors;
+const handleModelSelect = (model: IModel | null) => {
+  if (model) {
+    colors.value = model.colors || [];
+  } else {
+    colors.value = [];
+  }
+};
+
+const handleBrandSelectOther = () => {
+  isCustomBrand.value = true;
+  isCustomModel.value = true;
+  form.brand_id = null;
+  form.model_id = null;
+  form.custom_brand = null;
+  form.custom_model = null;
+  colors.value = [];
+};
+
+const handleModelSelectOther = () => {
+  isCustomModel.value = true;
+  form.model_id = null;
+  form.custom_model = null;
+};
+
+const handleBrandChange = () => {
+  if (form.brand_id) {
+    isCustomBrand.value = false;
+    isCustomModel.value = false;
+    form.custom_brand = null;
+    form.model_id = null;
+    form.custom_model = null;
+  }
 };
 
 // Загружаем данные при монтировании
@@ -289,17 +354,61 @@ fetchAd();
 
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12">
-                <el-form-item :label="$t('account.editListing.fields.brand')" prop="brand_id">
-                  <BrandAutocomplete v-model="form.brand_id" />
+                <el-form-item
+                  :label="$t('account.editListing.fields.brand')"
+                  :prop="isCustomBrand ? 'custom_brand' : 'brand_id'"
+                >
+                  <BrandAutocomplete
+                    v-if="!isCustomBrand"
+                    v-model="form.brand_id"
+                    :placeholder="$t('createListing.fields.brand.placeholder')"
+                    @select="handleBrandChange"
+                    @select-other="handleBrandSelectOther"
+                  />
+                  <div v-else class="custom-input-wrapper">
+                    <el-input
+                      v-model="form.custom_brand"
+                      :placeholder="$t('createListing.fields.brand.customPlaceholder')"
+                    />
+                    <el-button
+                      type="info"
+                      link
+                      @click="isCustomBrand = false; isCustomModel = false; form.custom_brand = null; form.custom_model = null;"
+                    >
+                      {{ $t('common.selectFromList') }}
+                    </el-button>
+                  </div>
                 </el-form-item>
               </el-col>
 
               <el-col :xs="24" :sm="12">
-                <el-form-item :label="$t('account.editListing.fields.model')" prop="model_id">
+                <el-form-item
+                  :label="$t('account.editListing.fields.model')"
+                  :prop="isCustomModel ? 'custom_model' : 'model_id'"
+                >
+                  <template v-if="isCustomBrand || isCustomModel">
+                    <div class="custom-input-wrapper">
+                      <el-input
+                        v-model="form.custom_model"
+                        :placeholder="$t('createListing.fields.model.customPlaceholder')"
+                      />
+                      <el-button
+                        v-if="!isCustomBrand"
+                        type="info"
+                        link
+                        @click="isCustomModel = false; form.custom_model = null;"
+                      >
+                        {{ $t('common.selectFromList') }}
+                      </el-button>
+                    </div>
+                  </template>
                   <ModelAutocomplete
+                    v-else
                     v-model="form.model_id"
                     :brand-id="form.brand_id"
+                    :placeholder="$t('createListing.fields.model.placeholder')"
                     @select="handleModelSelect"
+                    @select-other="handleModelSelectOther"
                   />
                 </el-form-item>
               </el-col>
@@ -341,7 +450,7 @@ fetchAd();
               <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item :label="$t('account.editListing.fields.color')">
                   <el-input
-                    v-if="colors.length === 0"
+                    v-if="colors?.length === 0"
                     v-model="form.color"
                     :placeholder="$t('account.editListing.placeholders.colorInput')"
                   />
@@ -607,6 +716,13 @@ fetchAd();
       top: 4px;
       right: 4px;
     }
+  }
+
+  .custom-input-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 
   // Quill Editor стили

@@ -110,10 +110,10 @@ const truncateText = (text: string, maxLength: number = 50) => {
       <el-table-column prop="status" label="Статус" width="130" align="center">
         <template #default="{ row }">
           <el-tag
-            :type="APPLICATION_STATUS_MAP[row.status]?.type || 'info'"
+            :type="APPLICATION_STATUS_MAP[row.status as keyof typeof APPLICATION_STATUS_MAP]?.type || 'info'"
             size="small"
           >
-            {{ APPLICATION_STATUS_MAP[row.status]?.label || row.status }}
+            {{ APPLICATION_STATUS_MAP[row.status as keyof typeof APPLICATION_STATUS_MAP]?.label || row.status }}
           </el-tag>
         </template>
       </el-table-column>

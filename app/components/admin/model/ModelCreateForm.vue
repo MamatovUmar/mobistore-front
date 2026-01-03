@@ -58,7 +58,7 @@ const rules = reactive<FormRules>({
 // JSON validation
 const validateJSON = (field: string, value: string): boolean => {
   if (!value || value.trim() === "") {
-    formData.value[field as keyof typeof formData.value] = "{}";
+    (formData.value[field as keyof typeof formData.value] as any) = "{}";
     return true;
   }
   try {
@@ -157,7 +157,7 @@ const formatJSON = (field: keyof typeof formData.value) => {
 
   try {
     const parsed = JSON.parse(value);
-    formData.value[field] = JSON.stringify(parsed, null, 2) as any;
+    (formData.value[field] as any) = JSON.stringify(parsed, null, 2);
   } catch (e) {
     // Invalid JSON, leave as is
   }

@@ -51,7 +51,7 @@ const handleCreateAd = () => {
         <!-- Logo -->
         <NuxtLink :to="localePath('/')" class="logo-link">
           <div class="logo">
-            <img src="/logo.png" alt="MobiStore" />
+            <img src="/logo.svg" alt="MobiStore" />
           </div>
         </NuxtLink>
 
@@ -170,7 +170,7 @@ const handleCreateAd = () => {
   align-items: center;
   gap: 12px;
   img {
-    height: 40px;
+    height: 50px;
   }
 }
 

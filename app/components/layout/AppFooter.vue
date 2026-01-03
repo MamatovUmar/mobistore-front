@@ -11,7 +11,9 @@ const localePath = useLocalePath();
       <div class="footer-content">
         <!-- Brand & Socials -->
         <div class="footer-column brand-column">
-          <h3 class="footer-logo">MobiStore</h3>
+          <div class="footer-logo">
+            <img src="/logo.svg" alt="MobiStore">
+          </div>
           <p class="footer-description">
             {{ t('footer.description') }}
           </p>
@@ -123,11 +125,9 @@ const localePath = useLocalePath();
 }
 
 .footer-logo {
-  font-size: 28px;
-  font-weight: 800;
-  color: #fff;
-  margin-bottom: 16px;
-  letter-spacing: -0.02em;
+  img {
+    height: 50px;
+  }
 }
 
 .footer-description {

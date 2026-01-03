@@ -89,7 +89,7 @@ const updateFilter = <K extends keyof IBrandFilters>(
                 v-for="option in popularOptions"
                 :key="String(option.value)"
                 :label="option.label"
-                :value="option.value"
+                :value="Boolean(option.value)"
               />
             </el-select>
           </div>

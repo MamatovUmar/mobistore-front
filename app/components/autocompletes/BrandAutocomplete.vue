@@ -3,6 +3,8 @@ import { ref, watch } from "vue";
 import type { IBrand } from "~/types/brand";
 import type { IBaseResponse } from "~/types";
 
+const OTHER_BRAND_VALUE = -1;
+
 interface Props {
   placeholder?: string;
   size?: "large" | "small";
@@ -11,10 +13,11 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const model = defineModel<number>();
+const model = defineModel<number | null>();
 
 const emit = defineEmits<{
-  select: [brand: IBrand];
+  select: [brand: IBrand | null];
+  selectOther: [];
 }>();
 
 const { $api } = useNuxtApp();
@@ -25,8 +28,10 @@ const computedPlaceholder = computed(() => props.placeholder ?? t("components.br
 const loading = ref(false);
 // Инициализируем список брендов с initData для SSR
 const brands = ref<IBrand[]>(props.initData ? [props.initData] : []);
+const searchQuery = ref("");
 
 const remoteSearch = async (query: string) => {
+  searchQuery.value = query;
   loading.value = true;
   try {
     const res = await $api<IBaseResponse<IBrand[]>>(`/brands/search?q=${query}`);
@@ -47,7 +52,13 @@ const remoteSearch = async (query: string) => {
   }
 };
 
-const handleChange = (value: number) => {
+const handleChange = (value: number | null) => {
+  if (value === OTHER_BRAND_VALUE) {
+    model.value = null;
+    emit("select", null);
+    emit("selectOther");
+    return;
+  }
   const selectedBrand = brands.value.find(b => b.id === value);
   if (selectedBrand) {
     emit("select", selectedBrand);
@@ -85,6 +96,13 @@ watch(() => props.initData, (newData) => {
       :key="brand.id"
       :label="brand.name"
       :value="brand.id"
+    />
+    <el-option
+      v-if="searchQuery.trim()"
+      :key="OTHER_BRAND_VALUE"
+      :label="$t('common.other')"
+      :value="OTHER_BRAND_VALUE"
+      class="other-option"
     />
   </el-select>
 </template>

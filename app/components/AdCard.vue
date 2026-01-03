@@ -82,7 +82,7 @@ const postDate = computed(() => t('adCard.today'));
     <div class="card-body">
       <!-- Brand & Date -->
       <div class="meta-row">
-        <span class="brand">{{ listing.brand.name }}</span>
+        <span class="brand">{{ listing.brand?.name || listing.custom_brand }}</span>
         <span class="date mobile-hidden">{{ postDate }}</span>
       </div>
 

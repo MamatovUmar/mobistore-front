@@ -97,7 +97,7 @@ const postDate = computed(() => {
         <!-- Title & Brand -->
         <div class="title-row">
           <h3 class="title">{{ listing.title }}</h3>
-          <span class="brand">{{ listing.brand.name }}</span>
+          <span class="brand">{{ listing.brand?.name || listing.custom_brand }}</span>
         </div>
 
         <!-- Location & Date -->

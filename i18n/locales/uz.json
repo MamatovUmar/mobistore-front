@@ -1,4 +1,8 @@
 {
+  "common": {
+    "other": "Boshqa",
+    "selectFromList": "Ro'yxatdan tanlash"
+  },
   "seo": {
     "home": {
       "title": "MobiStore - O'zbekistonda smartfonlarni sotib oling va soting | E'lonlar taxtasi",
@@ -112,11 +116,13 @@
       },
       "brand": {
         "label": "Brend",
-        "placeholder": "Brend nomini kiriting"
+        "placeholder": "Brend nomini kiriting",
+        "customPlaceholder": "Brend nomini qo'lda kiriting"
       },
       "model": {
         "label": "Model",
-        "placeholder": "Model nomini kiriting"
+        "placeholder": "Model nomini kiriting",
+        "customPlaceholder": "Model nomini qo'lda kiriting"
       },
       "memory": {
         "label": "Xotira",
@@ -398,6 +404,14 @@
   "listing": {
     "notFound": "E'lon topilmadi",
     "loadError": "E'lonni yuklashda xatolik yuz berdi",
+    "moderation": {
+      "title": "E'lon moderatsiyada",
+      "description": "Sizning e'loningiz tekshirilmoqda. U tez orada nashr etiladi."
+    },
+    "rejected": {
+      "title": "E'lon rad etildi",
+      "description": "Afsuski, sizning e'loningiz moderatsiyadan o'tmadi. Iltimos, mazmunini tekshiring va yangi e'lon yaratishga harakat qiling."
+    },
     "seo": {
       "defaultTitle": "E'lon — Mobistore",
       "defaultDesc": "Mobistore'dagi e'lon"
@@ -564,7 +578,8 @@
     "viewsCount": "marta ko'rildi",
     "adId": "E'lon IDsi",
     "publish": "Chop etish",
-    "bump": "Qidiruvda ko'tarish"
+    "bump": "Qidiruvda ko'tarish",
+    "edit": "Tahrirlash"
   },
   "userPage": {
     "defaultName": "Foydalanuvchi",

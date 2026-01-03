@@ -132,8 +132,8 @@ const getLocalizedCity = computed(() => {
 
       <!-- Specs Tags -->
       <div class="listing-tags">
-        <span class="tag-item">{{ listing.brand.name }}</span>
-        <span class="tag-item">{{ listing.model.name }}</span>
+        <span class="tag-item">{{ listing.brand?.name || listing.custom_brand }}</span>
+        <span class="tag-item">{{ listing.model?.name || listing.custom_model }}</span>
         <span class="tag-item">{{ getStateLabel(listing.state) }}</span>
         <span v-if="listing.storage" class="tag-item"
           >{{ listing.storage }} {{ $t("account.listings.card.gb") }}</span

@@ -34,12 +34,12 @@ const memoryValue = computed(() => {
 // Основные характеристики для отображения на странице
 const mainSpecs = computed(() => [
   {
-    label: t("listingDetails.specs.processor"),
-    value: modelData.value?.platform?.chipset || "—",
+    label: t("listingDetails.specs.color"),
+    value: listing?.color || "—",
   },
   {
     label: t("listingDetails.specs.os"),
-    value: modelData.value?.platform?.os || "—",
+    value: listing?.ram || "—",
   },
   {
     label: t("listingDetails.specs.memory"),

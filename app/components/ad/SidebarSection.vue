@@ -43,15 +43,20 @@ const formattedPrice = computed(() => {
   return new Intl.NumberFormat("ru-RU").format(listing.price);
 });
 
+const isMy = computed(() => listing.user_id === root.user?.id);
+
 // Форматирование даты
 const formattedDate = computed(() => {
-  if (!listing.published_at) return t('listingSidebar.notPublished');
-  const localeMap: Record<string, string> = { ru: 'ru-RU', uz: 'uz-UZ' };
-  return new Date(listing.published_at).toLocaleDateString(localeMap[locale.value] || 'ru-RU', {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  if (!listing.published_at) return t("listingSidebar.notPublished");
+  const localeMap: Record<string, string> = { ru: "ru-RU", uz: "uz-UZ" };
+  return new Date(listing.published_at).toLocaleDateString(
+    localeMap[locale.value] || "ru-RU",
+    {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }
+  );
 });
 
 // Информация о памяти
@@ -100,9 +105,11 @@ const publishListing = catcher(
 <template>
   <div class="info-section">
     <div class="listing-badges">
-      <span class="listing-brand">{{ listing.brand.name }}</span>
+      <span class="listing-brand">{{
+        listing.brand?.name || listing.custom_brand
+      }}</span>
       <span v-if="listing.allow_trade_in" class="badge-trade">
-        {{ t('listingSidebar.exchange') }}
+        {{ t("listingSidebar.exchange") }}
       </span>
     </div>
 
@@ -163,48 +170,62 @@ const publishListing = catcher(
 
     <div class="listing-meta">
       <div class="meta-item">
-        <span class="meta-label">{{ t('listingSidebar.state') }}</span>
+        <span class="meta-label">{{ t("listingSidebar.state") }}</span>
         <span class="meta-value">
           <StatusTag :state="listing.state" />
         </span>
       </div>
       <div v-if="listing.color" class="meta-item">
-        <span class="meta-label">{{ t('listingSidebar.color') }}</span>
+        <span class="meta-label">{{ t("listingSidebar.color") }}</span>
         <span class="meta-value">{{ listing.color }}</span>
       </div>
       <div v-if="memoryInfo" class="meta-item">
-        <span class="meta-label">{{ t('listingSidebar.memory') }}</span>
+        <span class="meta-label">{{ t("listingSidebar.memory") }}</span>
         <span class="meta-value">{{ memoryInfo }}</span>
       </div>
       <div class="meta-item">
-        <span class="meta-label">{{ t('listingSidebar.location') }}</span>
-        <span class="meta-value"
-          >{{ listing.city[`name_${locale}`] || listing.city.name_ru }}, {{ listing.region[`name_${locale}`] || listing.region.name_ru }}</span
+        <span class="meta-label">{{ t("listingSidebar.location") }}</span>
+        <span class="meta-value">
+          {{ listing.city[`name_${locale}`] || listing.city.name_ru }},
+          {{ listing.region[`name_${locale}`] || listing.region.name_ru }}</span
         >
       </div>
       <div class="meta-item">
-        <span class="meta-label">{{ t('listingSidebar.publishDate') }}</span>
+        <span class="meta-label">{{ t("listingSidebar.publishDate") }}</span>
         <span class="meta-value">{{ formattedDate }}</span>
       </div>
       <div class="meta-item">
-        <span class="meta-label">{{ t('listingSidebar.views') }}</span>
-        <span class="meta-value">{{ listing.views_count }} {{ t('listingSidebar.viewsCount') }}</span>
+        <span class="meta-label">{{ t("listingSidebar.views") }}</span>
+        <span class="meta-value">
+          {{ listing.views_count }} {{ t("listingSidebar.viewsCount") }}
+        </span>
       </div>
       <div class="meta-item">
-        <span class="meta-label">{{ t('listingSidebar.adId') }}</span>
+        <span class="meta-label">{{ t("listingSidebar.adId") }}</span>
         <span class="meta-value">#MS-{{ listing.id }}</span>
       </div>
     </div>
 
     <el-button
-      v-if="listing.status === 'draft'"
+      v-if="listing.status === 'draft' && isMy"
       type="primary"
       class="mt-20 w-full"
       :loading="publishLoading"
       size="large"
       @click="publishListing"
     >
-      {{ t('listingSidebar.publish') }}
+      {{ t("listingSidebar.publish") }}
+    </el-button>
+
+    <el-button
+      v-if="isMy"
+      type="primary"
+      plain
+      class="mt-20 w-full"
+      size="large"
+      @click="navigateTo(`/account/listings/edit/${listing.id}`)"
+    >
+      {{ t("listingSidebar.edit") }}
     </el-button>
 
     <el-button
@@ -215,7 +236,7 @@ const publishListing = catcher(
       size="large"
       @click="bumpAd(listing.id)"
     >
-      {{ t('listingSidebar.bump') }}
+      {{ t("listingSidebar.bump") }}
     </el-button>
 
     <!-- Кнопка жалобы (только для посетителей) -->

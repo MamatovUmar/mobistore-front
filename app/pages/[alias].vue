@@ -91,6 +91,24 @@ const openChat = () => {
           </el-breadcrumb>
         </div>
 
+        <el-alert
+          v-if="listing.status === 'moderation'"
+          :title="t('listing.moderation.title')"
+          :description="t('listing.moderation.description')"
+          type="warning"
+          :closable="false"
+          style="margin-bottom: 20px;"
+        />
+
+        <el-alert
+          v-if="listing.status === 'rejected'"
+          :title="t('listing.rejected.title')"
+          :description="t('listing.rejected.description')"
+          type="error"
+          :closable="false"
+          style="margin-bottom: 20px;"
+        />
+
         <div class="listing-grid">
           <div v-if="listing">
             <AdGallery :listing="listing" />
