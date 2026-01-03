@@ -9,6 +9,7 @@ interface Props {
   placeholder?: string;
   brandId?: number | null;
   initData?: IModel;
+  other?: boolean;
 }
 
 const props = defineProps<Props>();
@@ -123,7 +124,7 @@ watch(() => props.initData, (newData) => {
       </div>
     </el-option>
     <el-option
-      v-if="searchQuery.trim()"
+      v-if="searchQuery.trim() && other"
       :key="OTHER_MODEL_VALUE"
       :label="$t('common.other')"
       :value="OTHER_MODEL_VALUE"

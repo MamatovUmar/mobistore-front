@@ -310,6 +310,7 @@ onMounted(() => {
                     v-if="!isCustomBrand"
                     v-model="form.brand_id"
                     :placeholder="$t('createListing.fields.brand.placeholder')"
+                    other
                     @select="handleBrandChange"
                     @select-other="handleBrandSelectOther"
                   />
@@ -355,6 +356,7 @@ onMounted(() => {
                     v-model="form.model_id"
                     :brand-id="form.brand_id"
                     :placeholder="$t('createListing.fields.model.placeholder')"
+                    other
                     @select="handleModelSelect"
                     @select-other="handleModelSelectOther"
                   />
