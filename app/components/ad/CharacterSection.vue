@@ -18,19 +18,6 @@ const openModelSpecs = () => {
   showModelSpecs.value = true;
 };
 
-// Формируем значение памяти
-const memoryValue = computed(() => {
-  // Если есть storage или ram в объявлении, показываем их
-  if (listing.storage || listing.ram) {
-    const parts = [];
-    if (listing.storage) parts.push(`${listing.storage} ГБ`);
-    if (listing.ram) parts.push(`${listing.ram} ГБ RAM`);
-    return parts.join(' / ');
-  }
-  // Иначе показываем данные из модели
-  return modelData.value?.memory?.internal || "—";
-});
-
 // Основные характеристики для отображения на странице
 const mainSpecs = computed(() => [
   {
@@ -38,24 +25,24 @@ const mainSpecs = computed(() => [
     value: listing?.color || "—",
   },
   {
-    label: t("listingDetails.specs.os"),
-    value: listing?.ram || "—",
+    label: t("listingDetails.specs.ram"),
+    value: listing?.ram ? `${listing.ram} ${listing.ram_unit}` : "—",
   },
   {
-    label: t("listingDetails.specs.memory"),
-    value: memoryValue.value,
+    label: t("listingDetails.specs.storage"),
+    value: listing?.storage ? `${listing.storage} ${listing.storage_unit}` : "—",
   },
   {
     label: t("listingDetails.specs.screen"),
-    value: modelData.value?.display?.size || "—",
+    value: modelData.value?.display_size || "—",
   },
   {
     label: t("listingDetails.specs.screenType"),
-    value: modelData.value?.display?.type || "—",
+    value: modelData.value?.display_type || "—",
   },
   {
     label: t("listingDetails.specs.battery"),
-    value: modelData.value?.battery?.type || "—",
+    value: modelData.value?.battery_type || "—",
   },
 ]);
 </script>

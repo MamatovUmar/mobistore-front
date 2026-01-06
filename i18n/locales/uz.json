@@ -126,11 +126,11 @@
       },
       "memory": {
         "label": "Xotira",
-        "placeholder": "Xotirani tanlang"
+        "placeholder": "Xotirani kiriting"
       },
       "ram": {
         "label": "Operativ xotira",
-        "placeholder": "Operativ xotirani tanlang"
+        "placeholder": "Operativ xotirani kiriting"
       },
       "color": {
         "label": "Rang",
@@ -490,7 +490,10 @@
       "sensors": "Sensorlar va funksiyalar",
       "sensorsLabel": "Sensorlar",
       "sound": "Ovoz",
-      "loudspeaker": "Karnay"
+      "loudspeaker": "Karnay",
+      "color": "Rang",
+      "ram": "Operativ xotira",
+      "storage": "Ichki xotira"
     }
   },
   "chat": {

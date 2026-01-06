@@ -21,7 +21,9 @@ export interface IListingForm {
   allow_trade_in: boolean;
   color: string;
   storage: number | undefined;
+  storage_unit: string;
   ram: number | undefined;
+  ram_unit: string;
   phone_number: string;
   telegram_link: string;
   show_phone: boolean;
@@ -53,7 +55,9 @@ export interface IListing {
   allow_trade_in: boolean;
   color: string;
   storage: number;
+  storage_unit: string;
   ram: number;
+  ram_unit: string;
   phone_number: string;
   show_phone: boolean;
   telegram_link: string | null;

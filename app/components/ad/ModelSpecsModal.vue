@@ -12,6 +12,7 @@ const emit = defineEmits(["update:modelVisible"]);
 const { t } = useI18n();
 
 const isFull = ref(false);
+const config = useRuntimeConfig();
 
 const handleClose = () => {
   emit("update:modelVisible", false);
@@ -47,306 +48,23 @@ onUnmounted(() => {
     <template #header>
       <div class="modal-header">
         <div class="header-content">
-          <h2 class="model-name">{{ modelData.name }}</h2>
+          <div class="model-image-wrapper">
+            <el-image
+              class="model-image"
+              :preview-src-list="[config.public.apiUrl + modelData.image]"
+              :src="config.public.apiUrl + modelData.image"
+              fit="contain"
+            />
+          </div>
+          <div class="model-info">
+            <span class="brand-badge">{{ brand.name }}</span>
+            <h2 class="model-name">{{ modelData.name }}</h2>
+          </div>
         </div>
       </div>
     </template>
 
-    <div id="specs-list">
-      <table cellspacing="0" style="max-height: 111px">
-        <tbody>
-          <tr class="tr-hover">
-            <th rowspan="15" scope="row">Network</th>
-            <td class="ttl"><a href="network-bands.php3">Technology</a></td>
-            <td class="nfo">
-              <a href="#" class="link-network-detail" data-spec="nettech"
-                >GSM / HSPA / LTE</a
-              >
-            </td>
-          </tr>
-          <tr class="tr-toggle">
-            <td class="ttl"><a href="network-bands.php3">2G bands</a></td>
-            <td class="nfo" data-spec="net2g">GSM 900 / 1800</td>
-          </tr>
-          <tr class="tr-toggle">
-            <td class="ttl"><a href="network-bands.php3">3G bands</a></td>
-            <td class="nfo" data-spec="net3g">
-              HSDPA 850 / 900 / 1700(AWS) / 1900 / 2100
-            </td>
-          </tr>
-          <tr class="tr-toggle">
-            <td class="ttl"><a href="network-bands.php3">4G bands</a></td>
-            <td class="nfo" data-spec="net4g">LTE</td>
-          </tr>
-          <tr class="tr-toggle">
-            <td class="ttl"><a href="glossary.php3?term=3g">Speed</a></td>
-            <td class="nfo" data-spec="speed">HSPA, LTE</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table cellspacing="0">
-        <tbody>
-          <tr>
-            <th rowspan="2" scope="row">Launch</th>
-            <td class="ttl">
-              <a href="glossary.php3?term=phone-life-cycle">Announced</a>
-            </td>
-            <td class="nfo" data-spec="year">2023, May 18</td>
-          </tr>
-          <tr>
-            <td class="ttl">
-              <a href="glossary.php3?term=phone-life-cycle">Status</a>
-            </td>
-            <td class="nfo" data-spec="status">
-              Available. Released 2023, June
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table cellspacing="0">
-        <tbody>
-          <tr>
-            <th rowspan="6" scope="row">Body</th>
-            <td class="ttl">
-              <a href="#" onclick="helpW('h_dimens.htm');">Dimensions</a>
-            </td>
-            <td class="nfo" data-spec="dimensions">
-              121.5 x 50 x 14.4 mm (4.78 x 1.97 x 0.57 in)
-            </td>
-          </tr>
-          <tr>
-            <td class="ttl">
-              <a href="#" onclick="helpW('h_weight.htm');">Weight</a>
-            </td>
-            <td class="nfo" data-spec="weight">94.5 g (3.35 oz)</td>
-          </tr>
-          <tr>
-            <td class="ttl"><a href="glossary.php3?term=sim">SIM</a></td>
-            <td class="nfo" data-spec="sim">
-              · Nano-SIM
-              <hr class="line" />
-              · Nano-SIM + Nano-SIM
-            </td>
-          </tr>
-          <tr>
-            <td class="ttl">&nbsp;</td>
-            <td class="nfo" data-spec="bodyother">
-              Flashlight
-              <hr class="line" />
-              Splash resistant
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table cellspacing="0">
-        <tbody>
-          <tr>
-            <th rowspan="5" scope="row">Display</th>
-            <td class="ttl">
-              <a href="glossary.php3?term=display-type">Type</a>
-            </td>
-            <td class="nfo" data-spec="displaytype">TFT LCD, 65K colors</td>
-          </tr>
-          <tr>
-            <td class="ttl">
-              <a href="#" onclick="helpW('h_dsize.htm');">Size</a>
-            </td>
-            <td class="nfo" data-spec="displaysize">
-              1.8 inches, 10.0 cm<sup>2</sup> (~16.5% screen-to-body ratio)
-            </td>
-          </tr>
-          <tr>
-            <td class="ttl">
-              <a href="glossary.php3?term=resolution">Resolution</a>
-            </td>
-            <td class="nfo" data-spec="displayresolution">
-              120 x 160 pixels, 4:3 ratio (~111 ppi density)
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table cellspacing="0">
-        <tbody>
-          <tr>
-            <th rowspan="5" scope="row">Memory</th>
-            <td class="ttl">
-              <a href="glossary.php3?term=memory-card-slot">Card slot</a>
-            </td>
-
-            <td class="nfo" data-spec="memoryslot">microSDHC</td>
-          </tr>
-
-          <tr>
-            <td class="ttl">
-              <a href="glossary.php3?term=phonebook">Phonebook</a>
-            </td>
-            <td class="nfo">Yes</td>
-          </tr>
-          <tr>
-            <td class="ttl">
-              <a href="#" onclick="helpW('h_callr.htm');">Call records</a>
-            </td>
-            <td class="nfo">Yes</td>
-          </tr>
-
-          <tr>
-            <td class="ttl">
-              <a href="glossary.php3?term=dynamic-memory">Internal</a>
-            </td>
-            <td class="nfo" data-spec="internalmemory">Unspecified</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table cellspacing="0">
-        <tbody>
-          <tr>
-            <th rowspan="4" scope="row" class="small-line-height">
-              Main Camera
-            </th>
-            <td class="ttl"><a href="glossary.php3?term=camera">Single</a></td>
-            <td class="nfo" data-spec="cam1modules">QVGA</td>
-          </tr>
-          <tr>
-            <td class="ttl"><a href="glossary.php3?term=camera">Video</a></td>
-            <td class="nfo" data-spec="cam1video"></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table cellspacing="0">
-        <tbody>
-          <tr>
-            <th rowspan="4" scope="row" class="small-line-height">
-              Selfie camera
-            </th>
-            <td class="ttl">&nbsp;</td>
-            <td class="nfo" data-spec="cam2modules">No</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table cellspacing="0">
-        <tbody>
-          <tr>
-            <th rowspan="3" scope="row">Sound</th>
-            <td class="ttl">
-              <a href="glossary.php3?term=loudspeaker">Loudspeaker</a>
-            </td>
-            <td class="nfo">Yes</td>
-          </tr>
-
-          <tr>
-            <td class="ttl">
-              <a href="glossary.php3?term=audio-jack">3.5mm jack</a>
-            </td>
-            <td class="nfo">Yes</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table cellspacing="0">
-        <tbody>
-          <tr>
-            <th rowspan="9" scope="row">Comms</th>
-            <td class="ttl"><a href="glossary.php3?term=wi-fi">WLAN</a></td>
-            <td class="nfo" data-spec="wlan">No</td>
-          </tr>
-          <tr>
-            <td class="ttl">
-              <a href="glossary.php3?term=bluetooth">Bluetooth</a>
-            </td>
-            <td class="nfo" data-spec="bluetooth">5.0, A2DP</td>
-          </tr>
-          <tr>
-            <td class="ttl">
-              <a href="glossary.php3?term=gnss">Positioning</a>
-            </td>
-            <td class="nfo" data-spec="gps">No</td>
-          </tr>
-          <tr>
-            <td class="ttl"><a href="glossary.php3?term=nfc">NFC</a></td>
-            <td class="nfo" data-spec="nfc">No</td>
-          </tr>
-
-          <tr>
-            <td class="ttl"><a href="glossary.php3?term=fm-radio">Radio</a></td>
-            <td class="nfo" data-spec="radio">Wireless FM radio</td>
-          </tr>
-
-          <tr>
-            <td class="ttl"><a href="glossary.php3?term=usb">USB</a></td>
-            <td class="nfo" data-spec="usb">microUSB 2.0</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table cellspacing="0">
-        <tbody>
-          <tr>
-            <th rowspan="9" scope="row">Features</th>
-            <td class="ttl">
-              <a href="glossary.php3?term=sensors">Sensors</a>
-            </td>
-            <td class="nfo" data-spec="sensors"></td>
-          </tr>
-          <tr>
-            <td class="ttl">
-              <a href="glossary.php3?term=messaging">Messaging</a>
-            </td>
-            <td class="nfo">SMS</td>
-          </tr>
-
-          <tr>
-            <td class="ttl">
-              <a href="glossary.php3?term=mobile-games">Games</a>
-            </td>
-            <td class="nfo">Yes</td>
-          </tr>
-
-          <tr>
-            <td class="ttl"><a href="glossary.php3?term=java">Java</a></td>
-            <td class="nfo">No</td>
-          </tr>
-
-          <tr>
-            <td class="ttl">&nbsp;</td>
-            <td class="nfo" data-spec="featuresother">MP3 player</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table cellspacing="0">
-        <tbody>
-          <tr>
-            <th rowspan="7" scope="row">Battery</th>
-            <td class="ttl">
-              <a href="glossary.php3?term=rechargeable-battery-types">Type</a>
-            </td>
-            <td class="nfo" data-spec="batdescription1">Li-Ion 1450 mAh</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table cellspacing="0">
-        <tbody>
-          <tr>
-            <th rowspan="6" scope="row">Misc</th>
-            <td class="ttl"><a href="glossary.php3?term=build">Colors</a></td>
-            <td class="nfo" data-spec="colors">Midnight Blue, Arctic Purple</td>
-          </tr>
-
-          <tr>
-            <td class="ttl"><a href="glossary.php3?term=price">Price</a></td>
-            <td class="nfo" data-spec="price">About 40 EUR</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <div v-html="modelData.specs"></div>
 
     <template #footer>
       <div class="flex justify-end pl-16 pr-16 pb-16">
@@ -560,14 +278,43 @@ onUnmounted(() => {
 }
 
 .modal-header {
-  padding: 20px 20px 0;
-  background: var(--color-bg-primary);
+  padding: 24px;
 }
 
 .header-content {
   display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.model-image-wrapper {
+  flex-shrink: 0;
+  width: 100px;
+  height: 100px;
+  border-radius: 16px;
+  background: var(--color-bg-primary);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border-light);
+}
+
+.model-image {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+
+  :deep(img) {
+    object-fit: contain;
+  }
+}
+
+.model-info {
+  display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 .brand-badge {
@@ -712,16 +459,31 @@ onUnmounted(() => {
   }
 
   .modal-header {
-    padding: 24px 20px 20px;
+    padding: 16px;
+  }
+
+  .header-content {
+    gap: 16px;
+  }
+
+  .model-image-wrapper {
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+  }
+
+  .model-image {
+    width: 55px;
+    height: 55px;
   }
 
   .brand-badge {
-    font-size: 11px;
-    padding: 5px 12px;
+    font-size: 10px;
+    padding: 4px 10px;
   }
 
   .model-name {
-    font-size: 22px;
+    font-size: 18px;
   }
 
   .header-divider {

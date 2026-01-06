@@ -22,6 +22,8 @@ const loading = ref(false);
 const fileList = ref<any[]>([]);
 const formRef = ref<FormInstance>();
 const colors = ref<string[]>([]);
+const storadgeType = ref('GB');
+const ramType = ref('GB');
 
 const isCustomBrand = ref(false);
 const isCustomModel = ref(false);
@@ -123,7 +125,9 @@ const form = reactive<IListingForm & { images?: any }>({
   allow_trade_in: false,
   color: "",
   storage: undefined,
+  storage_unit: "GB",
   ram: undefined,
+  ram_unit: "GB",
   phone_number: "",
   telegram_link: "",
   show_phone: true,
@@ -370,17 +374,20 @@ onMounted(() => {
                   :label="$t('createListing.fields.memory.label')"
                   prop="storage"
                 >
-                  <el-select
-                    v-model="form.storage"
+                  <el-input
+                    v-model.number="form.storage"
+                    style="max-width: 600px"
                     :placeholder="$t('createListing.fields.memory.placeholder')"
+                    type="number"
                   >
-                    <el-option
-                      v-for="storage in [4, 8, 16, 32, 64, 128, 256, 512, 1024]"
-                      :key="storage"
-                      :label="storage + 'GB'"
-                      :value="storage"
-                    />
-                  </el-select>
+                    <template #append>
+                      <el-select v-model="form.storage_unit" style="width: 80px">
+                        <el-option label="MB" value="MB" />
+                        <el-option label="GB" value="GB" />
+                        <el-option label="TB" value="TB" />
+                      </el-select>
+                    </template>
+                  </el-input>
                 </el-form-item>
               </el-col>
 
@@ -389,17 +396,20 @@ onMounted(() => {
                   :label="$t('createListing.fields.ram.label')"
                   prop="ram"
                 >
-                  <el-select
-                    v-model="form.ram"
+                  <el-input
+                    v-model.number="form.ram"
+                    style="max-width: 600px"
                     :placeholder="$t('createListing.fields.ram.placeholder')"
+                    type="number"
                   >
-                    <el-option
-                      v-for="ram in 36"
-                      :key="ram"
-                      :label="ram + 'GB'"
-                      :value="ram"
-                    />
-                  </el-select>
+                    <template #append>
+                      <el-select v-model="form.ram_unit" style="width: 80px">
+                        <el-option label="MB" value="MB" />
+                        <el-option label="GB" value="GB" />
+                        <el-option label="TB" value="TB" />
+                      </el-select>
+                    </template>
+                  </el-input>
                 </el-form-item>
               </el-col>
 
@@ -458,8 +468,8 @@ onMounted(() => {
                   prop="price"
                 >
                   <el-input
-                    type="number"
                     v-model="form.price"
+                    type="number"
                     :placeholder="$t('createListing.fields.price.placeholder')"
                   />
                 </el-form-item>
@@ -469,6 +479,7 @@ onMounted(() => {
                 <el-form-item :label="$t('createListing.fields.currency.label')">
                   <el-select
                     v-model="form.currency"
+                    readonly
                     :placeholder="$t('createListing.fields.currency.placeholder')"
                   >
                     <el-option label="UZS" value="UZS" />

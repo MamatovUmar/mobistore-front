@@ -91,25 +91,19 @@ export interface IModelCameras {
 export interface IModel {
   id: number;
   name: string;
+  url: string;
+  image: string;
+  description: string;
   brand_id: number;
-  brand?: IBrand;
-  image_url: string | null;
   alias: string;
-
-  // Specs
-  battery?: IModelBattery;
-  platform?: IModelPlatform;
-  network?: IModelNetwork;
-  display?: IModelDisplay;
-  launch?: IModelLaunch;
-  body?: IModelBody;
-  memory?: IModelMemory;
-  sound?: IModelSound;
-  comms?: IModelComms;
-  features?: IModelFeatures;
-  colors?: string[];
-  cameras?: IModelCameras;
-
+  specs: string;
+  parsed: true;
+  ram: string[];
+  rom: string[];
+  colors: string[];
+  display_type: string;
+  display_size: string;
+  battery_type: string;
   created_at: string;
   updated_at: string;
 }
