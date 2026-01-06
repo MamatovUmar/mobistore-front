@@ -51,7 +51,7 @@ const mainSpecs = computed(() => [
   <div v-if="listing" class="specs-section">
     <div class="specs-header">
       <h2 class="section-title">{{ t('listingDetails.characteristics') }}</h2>
-      <el-button type="info" plain @click="openModelSpecs">
+      <el-button v-if="listing.model" type="info" plain @click="openModelSpecs">
         {{ t('listingDetails.fullCharacteristics') }}
       </el-button>
     </div>

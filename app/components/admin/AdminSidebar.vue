@@ -75,13 +75,7 @@ const menuItems = [
     icon: Iphone,
     path: "/admin/models",
     roles: ["admin", "moderator"],
-  },
-  {
-    title: "AI Парсер",
-    icon: Calendar,
-    path: "/admin/parser",
-    roles: ["admin", "moderator"],
-  },
+  }
 ];
 
 const isActive = (path: string) => {

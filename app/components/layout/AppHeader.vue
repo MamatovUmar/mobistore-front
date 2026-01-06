@@ -2,7 +2,6 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import { Monitor, Menu, Plus } from "@element-plus/icons-vue";
 import { useRootStore } from "~/store/root";
-import HeaderNotifications from "./header/HeaderNotifications.vue";
 import HeaderChat from "./header/HeaderChat.vue";
 import HeaderUserMenu from "./header/HeaderUserMenu.vue";
 import HeaderAuthModal from "./header/HeaderAuthModal.vue";
@@ -77,9 +76,6 @@ const handleCreateAd = () => {
           <template v-if="rootStore.user">
             <!-- Chat -->
             <HeaderChat />
-
-            <!-- Notifications -->
-            <HeaderNotifications />
           </template>
 
           <el-button
@@ -97,10 +93,6 @@ const handleCreateAd = () => {
 
         <!-- Mobile Actions -->
         <div class="header-actions mobile-only">
-          <template v-if="rootStore.user">
-            <HeaderNotifications />
-          </template>
-
           <el-button
             circle
             class="action-btn burger-btn"

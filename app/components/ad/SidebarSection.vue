@@ -32,7 +32,6 @@ const { addToFavorite, addLoading, removeFavorite, removeLoading } =
 
 // Состояние отображения контактов
 const showContacts = ref(false);
-const isFavorite = ref(false);
 const publishLoading = ref(false);
 const contacts = ref<IListingContacts>();
 

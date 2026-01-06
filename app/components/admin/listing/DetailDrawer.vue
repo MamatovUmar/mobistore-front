@@ -162,11 +162,11 @@ watch(
           <div class="specs-grid">
             <div class="spec-item">
               <span class="spec-label">Бренд</span>
-              <span class="spec-value">{{ ad.brand?.name || "—" }}</span>
+              <span class="spec-value">{{ ad.brand?.name || ad.custom_brand }}</span>
             </div>
             <div class="spec-item">
               <span class="spec-label">Модель</span>
-              <span class="spec-value">{{ ad.model?.name || "—" }}</span>
+              <span class="spec-value">{{ ad.model?.name || ad.custom_model }}</span>
             </div>
             <div class="spec-item">
               <span class="spec-label">Память</span>

@@ -133,7 +133,7 @@ const isOnModeration = (status: ListingStatus) => {
       <el-table-column prop="region" label="Регион" width="150">
         <template #default="{ row }">
           <span class="region-cell">
-            {{ row.city?.name || row.region?.name || "—" }}
+            {{row.region?.name_ru}}, {{ row.city?.name_ru }}
           </span>
         </template>
       </el-table-column>

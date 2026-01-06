@@ -73,21 +73,6 @@ export const useAdminModels = () => {
     }
   };
 
-  const createModel = async (data: IModelCreatePayload): Promise<IModel> => {
-    try {
-      const response = await $api<IBaseResponse<IModel>>("/admin/models", {
-        method: "POST",
-        body: data,
-      });
-      if (!response.data) throw new Error("Нет данных");
-      return response.data;
-    } catch (error: any) {
-      throw new Error(
-        error.response?.data?.message || "Ошибка при создании модели"
-      );
-    }
-  };
-
   const updateModel = async (
     id: number,
     data: IModelUpdatePayload
@@ -121,78 +106,6 @@ export const useAdminModels = () => {
     }
   };
 
-  // Image Management
-  const getModelImages = async (id: number): Promise<IModelImage[]> => {
-    try {
-      // API doc says array, but system uses IBaseResponse usually.
-      // We'll type as `unknown` and inspect, or generic `any`.
-      // But strictly following prompt "Response для списка изображений" -> Array
-      // Let's assume it *might* be wrapped.
-      const response = await $api<any>(`/admin/models/${id}/images`);
-
-      if (Array.isArray(response)) return response;
-      if (response.data && Array.isArray(response.data)) return response.data;
-      if (response.data && response.data.images) return response.data.images;
-
-      return [];
-    } catch (error: any) {
-      throw new Error(
-        error.response?.data?.message || "Ошибка при получении изображений"
-      );
-    }
-  };
-
-  const uploadModelImages = async (
-    id: number,
-    files: File[]
-  ): Promise<IModelImagesResponse> => {
-    try {
-      const formData = new FormData();
-      files.forEach((file) => {
-        formData.append("images", file);
-      });
-
-      // Prompt says response is { images: [], count: 2 }
-      // This looks like it might be the `data` part of response.
-      const response = await $api<IBaseResponse<IModelImagesResponse>>(
-        `/admin/models/${id}/images`,
-        {
-          method: "POST",
-          body: formData,
-          // content-type is usually handled auto by fetch when body is FormData
-        }
-      );
-
-      if (response.data) return response.data;
-      // Fallback if not wrapped?
-      // API client usually returns body.
-      // If body IS the object (images, count), then `response.data` is undefined unless the object has a property `data`.
-      // Let's assume wrapper.
-      if ((response as any).images) return response as any; // If not wrapped
-
-      throw new Error("Некорректный ответ сервера");
-    } catch (error: any) {
-      throw new Error(
-        error.response?.data?.message || "Ошибка при загрузке изображений"
-      );
-    }
-  };
-
-  const deleteModelImage = async (
-    modelId: number,
-    imageId: number
-  ): Promise<void> => {
-    try {
-      await $api(`/admin/models/${modelId}/images/${imageId}`, {
-        method: "DELETE",
-      });
-    } catch (error: any) {
-      throw new Error(
-        error.response?.data?.message || "Ошибка при удалении изображения"
-      );
-    }
-  };
-
   const resetFilters = () => {
     filters.value = {
       search: "",
@@ -221,12 +134,8 @@ export const useAdminModels = () => {
     // Methods
     fetchModels,
     getModel,
-    createModel,
     updateModel,
     deleteModel,
-    getModelImages,
-    uploadModelImages,
-    deleteModelImage,
     resetFilters,
     applyFilters,
   };

@@ -387,6 +387,7 @@ const { t } = useI18n();
   .hero-subtitle {
     font-size: 16px;
     padding: 0 10px;
+    margin-bottom: 0;
   }
 
   .stat-separator {

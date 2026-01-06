@@ -95,6 +95,7 @@ export interface IModel {
   image: string;
   description: string;
   brand_id: number;
+  brand: IBrand;
   alias: string;
   specs: string;
   parsed: true;
@@ -111,20 +112,18 @@ export interface IModel {
 export interface IModelCreatePayload {
   name: string;
   brand_id: number;
-  image_url?: string;
+  url?: string;
+  image?: string;
+  description?: string;
   alias?: string;
-  battery?: IModelBattery;
-  platform?: IModelPlatform;
-  network?: IModelNetwork;
-  display?: IModelDisplay;
-  launch?: IModelLaunch;
-  body?: IModelBody;
-  memory?: IModelMemory;
-  sound?: IModelSound;
-  comms?: IModelComms;
-  features?: IModelFeatures;
+  specs?: string;
+  parsed?: boolean;
+  ram?: string[];
+  rom?: string[];
   colors?: string[];
-  cameras?: IModelCameras;
+  display_type?: string;
+  display_size?: string;
+  battery_type?: string;
 }
 
 export interface IModelUpdatePayload extends Partial<IModelCreatePayload> {}
