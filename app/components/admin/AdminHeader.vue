@@ -50,10 +50,6 @@ const handleCommand = (command: string) => {
     </div>
 
     <div class="header-right">
-      <el-badge :value="3" :max="99" class="notification-badge">
-        <el-button :icon="Bell" text circle />
-      </el-badge>
-
       <el-dropdown trigger="click" @command="handleCommand">
         <div class="user-info">
           <el-avatar :size="36" class="user-avatar">
