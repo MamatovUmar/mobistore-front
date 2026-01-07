@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { IModel } from '~/types/model';
-import type { IBrand } from '~/types/brand';
+import type { IModel } from "~/types/model";
+import type { IBrand } from "~/types/brand";
 
 defineProps<{
   modelVisible: boolean;
@@ -9,295 +9,250 @@ defineProps<{
 }>();
 
 const emit = defineEmits(["update:modelVisible"]);
+const { t } = useI18n();
+
+const isFull = ref(false);
+const config = useRuntimeConfig();
 
 const handleClose = () => {
   emit("update:modelVisible", false);
 };
+
+onMounted(() => {
+  if (window.innerWidth < 768) {
+    isFull.value = true;
+  }
+  window.addEventListener("resize", () => {
+    if (window.innerWidth < 768) {
+      isFull.value = true;
+    } else {
+      isFull.value = false;
+    }
+  });
+});
+
+onUnmounted(() => {
+  window.removeEventListener("resize", () => {});
+});
 </script>
 
 <template>
   <el-dialog
     :model-value="modelVisible"
-    width="950px"
     :close-on-click-modal="true"
+    :fullscreen="isFull"
+    style="width: 100%; max-width: 800px"
     class="specs-dialog"
     @update:model-value="handleClose"
   >
     <template #header>
       <div class="modal-header">
         <div class="header-content">
-          <h2 class="model-name">{{ modelData.name }}</h2>
+          <div class="model-image-wrapper">
+            <el-image
+              class="model-image"
+              :preview-src-list="[config.public.apiUrl + modelData.image]"
+              :src="config.public.apiUrl + modelData.image"
+              fit="contain"
+            />
+          </div>
+          <div class="model-info">
+            <span class="brand-badge">{{ brand.name }}</span>
+            <h2 class="model-name">{{ modelData.name }}</h2>
+          </div>
         </div>
       </div>
     </template>
 
-    <div class="specs-modal">
-      <!-- Общая информация -->
-      <div class="spec-group">
-        <h3 class="spec-group-title">Общая информация</h3>
-        <div class="spec-row">
-          <span class="spec-label">Модель</span>
-          <span class="spec-value">{{ modelData.name }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Бренд</span>
-          <span class="spec-value">{{ brand.name }}</span>
-        </div>
-        <div v-if="modelData?.launch?.announced" class="spec-row">
-          <span class="spec-label">Дата анонса</span>
-          <span class="spec-value">{{ modelData?.launch?.announced }}</span>
-        </div>
-        <div v-if="modelData?.launch?.released" class="spec-row">
-          <span class="spec-label">Дата выхода</span>
-          <span class="spec-value">{{ modelData?.launch?.released }}</span>
-        </div>
-        <div v-if="modelData?.colors?.length" class="spec-row">
-          <span class="spec-label">Доступные цвета</span>
-          <span class="spec-value">{{ modelData?.colors?.join(", ") }}</span>
-        </div>
-      </div>
-
-      <!-- Корпус -->
-      <div v-if="modelData.body" class="spec-group">
-        <h3 class="spec-group-title">Корпус</h3>
-        <div class="spec-row">
-          <span class="spec-label">Размеры</span>
-          <span class="spec-value">{{ modelData.body.dimensions }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Вес</span>
-          <span class="spec-value">{{ modelData.body.weight }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Материалы</span>
-          <span class="spec-value">{{ modelData?.body?.build }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">SIM</span>
-          <span class="spec-value">{{ modelData.body.sim }}</span>
-        </div>
-      </div>
-
-      <!-- Дисплей -->
-      <div class="spec-group" v-if="modelData.display">
-        <h3 class="spec-group-title">Дисплей</h3>
-        <div class="spec-row">
-          <span class="spec-label">Тип</span>
-          <span class="spec-value">{{ modelData.display.type }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Размер</span>
-          <span class="spec-value">{{ modelData.display.size }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Разрешение</span>
-          <span class="spec-value">{{ modelData.display.resolution }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Защита</span>
-          <span class="spec-value">{{ modelData.display.protection }}</span>
-        </div>
-      </div>
-
-      <!-- Платформа -->
-      <div v-if="modelData?.platform" class="spec-group">
-        <h3 class="spec-group-title">Платформа</h3>
-        <div class="spec-row">
-          <span class="spec-label">Операционная система</span>
-          <span class="spec-value">{{ modelData?.platform?.os }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Чипсет</span>
-          <span class="spec-value">{{ modelData?.platform?.chipset }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Процессор</span>
-          <span class="spec-value">{{ modelData?.platform?.cpu }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Графический процессор</span>
-          <span class="spec-value">{{ modelData?.platform?.gpu }}</span>
-        </div>
-      </div>
-
-      <!-- Память -->
-      <div v-if="modelData?.memory" class="spec-group">
-        <h3 class="spec-group-title">Память</h3>
-        <div class="spec-row">
-          <span class="spec-label">Слот для карты</span>
-          <span class="spec-value">{{ modelData?.memory?.cardSlot }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Встроенная память</span>
-          <span class="spec-value">{{ modelData?.memory?.internal }}</span>
-        </div>
-      </div>
-
-      <!-- Основная камера -->
-      <div v-if="modelData?.cameras?.mainCamera" class="spec-group">
-        <h3 class="spec-group-title">Основная камера</h3>
-        <div class="spec-row">
-          <span class="spec-label">Тип</span>
-          <span class="spec-value">{{ modelData?.cameras?.mainCamera?.type }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Камеры</span>
-          <div class="spec-list">
-            <div v-for="(camera, index) in modelData?.cameras?.mainCamera?.cameraSpecs" :key="index">
-              {{ camera }}
-            </div>
-          </div>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Функции</span>
-          <div class="spec-list">
-            <div v-for="(feature, index) in modelData?.cameras?.mainCamera?.features" :key="index">
-              {{ feature }}
-            </div>
-          </div>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Видео</span>
-          <div class="spec-list">
-            <div v-for="(video, index) in modelData?.cameras?.mainCamera?.video" :key="index">
-              {{ video }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Фронтальная камера -->
-      <div v-if="modelData?.cameras?.selfieCamera" class="spec-group">
-        <h3 class="spec-group-title">Фронтальная камера</h3>
-        <div class="spec-row">
-          <span class="spec-label">Тип</span>
-          <span class="spec-value">{{ modelData?.cameras?.selfieCamera?.type }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Камеры</span>
-          <div class="spec-list">
-            <div v-for="(camera, index) in modelData?.cameras?.selfieCamera?.cameraSpecs" :key="index">
-              {{ camera }}
-            </div>
-          </div>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Функции</span>
-          <div class="spec-list">
-            <div v-for="(feature, index) in modelData?.cameras?.selfieCamera?.features" :key="index">
-              {{ feature }}
-            </div>
-          </div>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Видео</span>
-          <div class="spec-list">
-            <div v-for="(video, index) in modelData?.cameras?.selfieCamera?.video" :key="index">
-              {{ video }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Батарея -->
-      <div v-if="modelData?.battery" class="spec-group">
-        <h3 class="spec-group-title">Батарея</h3>
-        <div class="spec-row">
-          <span class="spec-label">Тип</span>
-          <span class="spec-value">{{ modelData?.battery?.type }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Зарядка</span>
-          <div class="spec-list">
-            <div v-for="(charging, index) in modelData?.battery?.charging" :key="index">
-              {{ charging }}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Связь -->
-      <div v-if="modelData?.comms" class="spec-group">
-        <h3 class="spec-group-title">Связь и коммуникации</h3>
-        <div class="spec-row">
-          <span class="spec-label">Wi-Fi</span>
-          <span class="spec-value">{{ modelData?.comms?.wlan }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Bluetooth</span>
-          <span class="spec-value">{{ modelData?.comms?.bluetooth }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">GPS</span>
-          <span class="spec-value">{{ modelData?.comms?.positioning }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">NFC</span>
-          <span class="spec-value">{{ modelData?.comms?.nfc }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Радио</span>
-          <span class="spec-value">{{ modelData?.comms?.radio }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">USB</span>
-          <span class="spec-value">{{ modelData?.comms?.usb }}</span>
-        </div>
-      </div>
-
-      <!-- Сеть -->
-      <div v-if="modelData?.network" class="spec-group">
-        <h3 class="spec-group-title">Сеть</h3>
-        <div class="spec-row">
-          <span class="spec-label">Технологии</span>
-          <span class="spec-value">{{ modelData?.network?.technology }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">2G диапазоны</span>
-          <span class="spec-value">{{ modelData?.network?.["2g"] }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">3G диапазоны</span>
-          <span class="spec-value">{{ modelData?.network?.["3g"] }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">4G диапазоны</span>
-          <span class="spec-value">{{ modelData?.network?.["4g"] }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">5G диапазоны</span>
-          <span class="spec-value">{{ modelData?.network?.["5g"] }}</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Скорость</span>
-          <span class="spec-value">{{ modelData?.network?.speed }}</span>
-        </div>
-      </div>
-
-      <!-- Сенсоры -->
-      <div v-if="modelData?.features" class="spec-group">
-        <h3 class="spec-group-title">Сенсоры и функции</h3>
-        <div class="spec-row">
-          <span class="spec-label">Сенсоры</span>
-          <span class="spec-value">{{ modelData?.features?.sensors }}</span>
-        </div>
-      </div>
-
-      <!-- Звук -->
-      <div v-if="modelData?.sound" class="spec-group">
-        <h3 class="spec-group-title">Звук</h3>
-        <div class="spec-row">
-          <span class="spec-label">Громкоговоритель</span>
-          <span class="spec-value">{{ modelData?.sound?.loudspeaker }}</span>
-        </div>
-      </div>
-    </div>
+    <div v-html="modelData.specs"></div>
 
     <template #footer>
-      <el-button @click="handleClose">Закрыть</el-button>
+      <div class="flex justify-end pl-16 pr-16 pb-16">
+        <el-button @click="handleClose">{{
+          t("listingDetails.close")
+        }}</el-button>
+      </div>
     </template>
   </el-dialog>
 </template>
+
+<style lang="scss">
+.specs-dialog {
+  padding: 0 !important;
+  .el-dialog__body {
+    height: calc(100% - 182px) !important;
+  }
+}
+
+#specs-list {
+  padding: 20px;
+  background: var(--color-bg-secondary);
+  max-height: 65vh;
+  overflow-y: auto;
+
+  /* Кастомный скроллбар */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-border-medium);
+    border-radius: 4px;
+
+    &:hover {
+      background: var(--color-border-dark);
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 16px;
+    background: var(--color-bg-primary);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--color-border-light);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    tbody {
+      tr {
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background: var(--color-bg-hover, rgba(0, 0, 0, 0.02));
+        }
+
+        &:not(:last-child) {
+          td {
+            border-bottom: 1px solid var(--color-border-light);
+          }
+        }
+      }
+    }
+
+    th {
+      background: var(--color-bg-secondary);
+      color: var(--color-text-primary);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 16px 20px;
+      text-align: left;
+      vertical-align: top;
+      width: 120px;
+      min-width: 120px;
+      border-right: 1px solid var(--color-border-light);
+
+      &.small-line-height {
+        line-height: 1.3;
+      }
+    }
+
+    td {
+      padding: 12px 16px;
+      font-size: 14px;
+      color: var(--color-text-primary);
+      vertical-align: top;
+
+      &.ttl {
+        font-weight: 600;
+        color: var(--color-text-secondary);
+        width: 140px;
+        min-width: 140px;
+        background: var(--color-bg-secondary);
+      }
+
+      &.nfo {
+        color: var(--color-text-primary);
+        line-height: 1.6;
+        font-weight: 500;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+        pointer-events: none;
+        cursor: default;
+      }
+    }
+
+    hr.line {
+      border: none;
+      height: 1px;
+      background: var(--color-border-light);
+      margin: 8px 0;
+    }
+
+    sup {
+      font-size: 10px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 12px;
+    max-height: 100%;
+
+    table {
+      display: block;
+      margin-bottom: 12px;
+
+      tbody {
+        display: block;
+
+        tr {
+          &:not(:last-child) {
+            td {
+              border-bottom: none;
+            }
+          }
+        }
+      }
+
+      tr {
+        display: flex;
+        flex-wrap: wrap;
+
+        &:not(:last-child) {
+          border-bottom: 1px solid var(--color-border-light);
+        }
+      }
+
+      th {
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 12px;
+        border-right: none;
+      }
+
+      td {
+        padding: 10px 12px;
+
+        &.ttl {
+          width: 100%;
+          background: transparent;
+          padding-bottom: 4px;
+          font-size: 12px;
+        }
+
+        &.nfo {
+          width: 100%;
+          padding-top: 0;
+          padding-bottom: 12px;
+        }
+      }
+    }
+  }
+}
+</style>
 
 <style lang="scss" scoped>
 :deep(.el-dialog) {
@@ -313,6 +268,7 @@ const handleClose = () => {
 
 :deep(.el-dialog__body) {
   padding: 0;
+  height: calc(100% - 200px);
 }
 
 :deep(.el-dialog__footer) {
@@ -322,14 +278,43 @@ const handleClose = () => {
 }
 
 .modal-header {
-  padding: 20px 20px 0;
-  background: var(--color-bg-primary);
+  padding: 24px;
 }
 
 .header-content {
   display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.model-image-wrapper {
+  flex-shrink: 0;
+  width: 100px;
+  height: 100px;
+  border-radius: 16px;
+  background: var(--color-bg-primary);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border-light);
+}
+
+.model-image {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+
+  :deep(img) {
+    object-fit: contain;
+  }
+}
+
+.model-info {
+  display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 .brand-badge {
@@ -359,6 +344,7 @@ const handleClose = () => {
   overflow-y: auto;
   padding: 20px;
   background: var(--color-bg-secondary);
+  height: -webkit-fill-available;
 
   /* Кастомный скроллбар */
   &::-webkit-scrollbar {
@@ -473,16 +459,31 @@ const handleClose = () => {
   }
 
   .modal-header {
-    padding: 24px 20px 20px;
+    padding: 16px;
+  }
+
+  .header-content {
+    gap: 16px;
+  }
+
+  .model-image-wrapper {
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+  }
+
+  .model-image {
+    width: 55px;
+    height: 55px;
   }
 
   .brand-badge {
-    font-size: 11px;
-    padding: 5px 12px;
+    font-size: 10px;
+    padding: 4px 10px;
   }
 
   .model-name {
-    font-size: 22px;
+    font-size: 18px;
   }
 
   .header-divider {
@@ -492,7 +493,7 @@ const handleClose = () => {
 
   .specs-modal {
     padding: 20px 16px;
-    max-height: 60vh;
+    max-height: 100%;
   }
 
   .spec-group {

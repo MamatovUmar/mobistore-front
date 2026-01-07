@@ -29,7 +29,7 @@ export const useCache = () => {
     loading.value = true;
     try {
       const result = await $api<IBaseResponse<ICacheKey[]>>("/cache/keys");
-      cacheKeys.value = result.data;
+      cacheKeys.value = result.data || [];
     } catch (error) {
       const message = getErrorMessage(error);
       ElMessage.error(message);
@@ -42,7 +42,7 @@ export const useCache = () => {
     loading.value = true;
     try {
       const result = await $api<IBaseResponse<ICacheStats>>("/cache/stats");
-      cacheStats.value = result.data;
+      cacheStats.value = result.data || null;
     } catch (error) {
       const message = getErrorMessage(error);
       ElMessage.error(message);

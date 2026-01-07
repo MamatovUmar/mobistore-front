@@ -3,6 +3,8 @@ import type { IBrand } from "~/types/brand";
 import type { IBaseResponse } from "~/types";
 
 const { $api } = useNuxtApp();
+const { t } = useI18n();
+const localePath = useLocalePath();
 
 // Fetch brands
 const { data: brands } = await useAsyncData(
@@ -37,9 +39,9 @@ const marqueeBrands = computed(() => {
     <div class="container">
       <div class="header-content">
         <h2 class="title">
-          Топ <span class="highlight">Бренды</span>
+          {{ t('home.brands.titleTop') }} <span class="highlight">{{ t('home.brands.titleBrands') }}</span>
         </h2>
-        <p class="subtitle">Выбор миллионов пользователей</p>
+        <p class="subtitle">{{ t('home.brands.subtitle') }}</p>
       </div>
     </div>
 
@@ -51,21 +53,12 @@ const marqueeBrands = computed(() => {
             v-for="(brand, index) in marqueeBrands"
             :key="`${brand.name}-1-${index}`"
             class="brand-card glass-card"
-            @click="navigateTo(`/search?brandId=${brand.id}`)"
+            @click="navigateTo(localePath(`/search?brandId=${brand.id}`))"
           >
             <div class="card-inner">
-              <div class="logo-box">
-                <img
-                  v-if="brand.logo"
-                  :src="brand.logo"
-                  :alt="brand.name"
-                  class="brand-logo"
-                />
-                <span v-else class="brand-text">{{ brand.name }}</span>
-              </div>
               <div class="brand-meta">
                 <span class="name">{{ brand.name }}</span>
-                <span class="count">{{ brand.ads_count }} объявлений</span>
+                <span class="count">{{ t('home.brands.adsCount', { count: brand.ads_count }) }}</span>
               </div>
             </div>
             <div class="glow-effect"></div>
@@ -80,21 +73,12 @@ const marqueeBrands = computed(() => {
             v-for="(brand, index) in marqueeBrands"
             :key="`${brand.name}-2-${index}`"
             class="brand-card glass-card"
-            @click="navigateTo(`/search?brandId=${brand.id}`)"
+            @click="navigateTo(localePath(`/search?brandId=${brand.id}`))"
           >
             <div class="card-inner">
-              <div class="logo-box">
-                <img
-                  v-if="brand.logo"
-                  :src="brand.logo"
-                  :alt="brand.name"
-                  class="brand-logo"
-                />
-                <span v-else class="brand-text">{{ brand.name }}</span>
-              </div>
               <div class="brand-meta">
                 <span class="name">{{ brand.name }}</span>
-                <span class="count">{{ brand.ads_count }} объявлений</span>
+                <span class="count">{{ t('home.brands.adsCount', { count: brand.ads_count }) }}</span>
               </div>
             </div>
             <div class="glow-effect"></div>
@@ -260,10 +244,10 @@ const marqueeBrands = computed(() => {
 
 .name {
   display: block;
-  font-size: 16px;
+  font-size: 24px;
   font-weight: 600;
   color: #fff;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
 }
 
 .count {
@@ -271,7 +255,11 @@ const marqueeBrands = computed(() => {
   font-size: 12px;
   color: #94a3b8;
 }
-
+.brand-card:hover {
+  .count {
+    color: #fff;
+  }
+}
 .glow-effect {
   position: absolute;
   inset: -1px;

@@ -64,7 +64,7 @@ const isOnModeration = (status: ListingStatus) => {
 </script>
 
 <template>
-  <el-card class="ads-table-card">
+  <el-card class="listings-table-card">
     <div v-if="loading && !ads.length" class="loading-state">
       <el-icon class="loading-icon" :size="32"><Loading /></el-icon>
       <span>Загрузка данных...</span>
@@ -74,17 +74,17 @@ const isOnModeration = (status: ListingStatus) => {
       v-else
       :data="ads"
       stripe
-      class="ads-table"
+      class="listings-table"
       @row-click="(row: IListing) => $emit('row-click', row)"
     >
       <el-table-column prop="id" label="ID" width="70" />
 
       <el-table-column prop="title" label="Объявление" min-width="300">
         <template #default="{ row }">
-          <div class="ad-cell">
+          <div class="listing-cell">
             <el-image
               :src="getFirstImage(row)"
-              class="ad-image"
+              class="listing-image"
               fit="cover"
             >
               <template #error>
@@ -93,10 +93,10 @@ const isOnModeration = (status: ListingStatus) => {
                 </div>
               </template>
             </el-image>
-            <div class="ad-info">
-              <span class="ad-title">{{ row.title }}</span>
-              <div class="ad-meta">
-                <span class="ad-price">{{ formatPrice(row.price, row.currency) }}</span>
+            <div class="listing-info">
+              <span class="listing-title">{{ row.title }}</span>
+              <div class="listing-meta">
+                <span class="listing-price">{{ formatPrice(row.price, row.currency) }}</span>
                 <el-tag size="small" type="info">{{ getStateLabel(row.state) }}</el-tag>
               </div>
             </div>
@@ -133,7 +133,7 @@ const isOnModeration = (status: ListingStatus) => {
       <el-table-column prop="region" label="Регион" width="150">
         <template #default="{ row }">
           <span class="region-cell">
-            {{ row.city?.name || row.region?.name || "—" }}
+            {{row.region?.name_ru}}, {{ row.city?.name_ru }}
           </span>
         </template>
       </el-table-column>
@@ -216,13 +216,13 @@ const isOnModeration = (status: ListingStatus) => {
 </template>
 
 <style lang="scss" scoped>
-.ads-table-card {
+.listings-table-card {
   border-radius: 12px;
   border: none;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
-.ads-table {
+.listings-table {
   width: 100%;
 
   :deep(.el-table__row) {
@@ -261,13 +261,13 @@ const isOnModeration = (status: ListingStatus) => {
   padding: 40px 20px;
 }
 
-.ad-cell {
+.listing-cell {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.ad-image {
+.listing-image {
   width: 56px;
   height: 56px;
   border-radius: 8px;
@@ -284,14 +284,14 @@ const isOnModeration = (status: ListingStatus) => {
   color: var(--color-text-muted);
 }
 
-.ad-info {
+.listing-info {
   display: flex;
   flex-direction: column;
   gap: 6px;
   min-width: 0;
 }
 
-.ad-title {
+.listing-title {
   font-size: 14px;
   font-weight: 500;
   color: var(--color-text-primary);
@@ -302,13 +302,13 @@ const isOnModeration = (status: ListingStatus) => {
   overflow: hidden;
 }
 
-.ad-meta {
+.listing-meta {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.ad-price {
+.listing-price {
   font-size: 14px;
   font-weight: 600;
   color: var(--color-primary);

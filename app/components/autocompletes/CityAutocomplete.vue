@@ -9,9 +9,7 @@ interface Props {
   initData?: ICity;
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  placeholder: "Введите название города",
-});
+const props = defineProps<Props>();
 
 const model = defineModel<number>();
 
@@ -20,6 +18,9 @@ const emit = defineEmits<{
 }>();
 
 const { $api } = useNuxtApp();
+const { locale, t } = useI18n();
+
+const computedPlaceholder = computed(() => props.placeholder ?? t("components.city.placeholder"));
 
 const loading = ref(false);
 // Инициализируем список городов с initData для SSR
@@ -87,7 +88,7 @@ watch(() => props.regionId, (newRegionId, oldRegionId) => {
 <template>
   <el-select
     v-model="model"
-    :placeholder="placeholder"
+    :placeholder="computedPlaceholder"
     :loading="loading"
     :disabled="!regionId"
     filterable
@@ -99,7 +100,7 @@ watch(() => props.regionId, (newRegionId, oldRegionId) => {
     <el-option
       v-for="city in cities"
       :key="city.id"
-      :label="city.name_ru"
+      :label="city[`name_${locale}`]"
       :value="city.id"
     />
   </el-select>

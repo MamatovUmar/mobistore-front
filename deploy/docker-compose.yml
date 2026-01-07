@@ -19,4 +19,6 @@ services:
         NUXT_PUBLIC_API_URL: https://api.mobistore.uz
     ports:
       - "3001:3000"
+    volumes:
+      - /var/www/mobistore/front/public:/app/public
     restart: unless-stopped

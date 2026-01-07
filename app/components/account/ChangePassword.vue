@@ -2,6 +2,7 @@
 import { Lock } from "@element-plus/icons-vue";
 import type { FormInstance, FormRules } from "element-plus";
 
+const { t } = useI18n();
 const { $api } = useNuxtApp();
 
 const isChangingPassword = ref(false);
@@ -22,25 +23,25 @@ const form = ref<PasswordForm>({
 
 const validateConfirmPassword = (rule: any, value: string, callback: (error?: Error) => void) => {
   if (value !== form.value.new_password) {
-    callback(new Error("Пароли не совпадают"));
+    callback(new Error(t("account.security.validation.mismatch")));
   } else {
     callback();
   }
 };
 
-const rules = reactive<FormRules<PasswordForm>>({
+const rules = computed<FormRules<PasswordForm>>(() => ({
   old_password: [
-    { required: true, message: "Введите текущий пароль", trigger: "blur" },
+    { required: true, message: t("account.security.validation.currentRequired"), trigger: "blur" },
   ],
   new_password: [
-    { required: true, message: "Введите новый пароль", trigger: "blur" },
-    { min: 6, message: "Пароль должен содержать минимум 6 символов", trigger: ["blur", "change"] },
+    { required: true, message: t("account.security.validation.newRequired"), trigger: "blur" },
+    { min: 6, message: t("account.security.validation.minLength"), trigger: ["blur", "change"] },
   ],
   confirm_password: [
-    { required: true, message: "Подтвердите новый пароль", trigger: "blur" },
+    { required: true, message: t("account.security.validation.confirmRequired"), trigger: "blur" },
     { validator: validateConfirmPassword, trigger: ["blur", "change"] },
   ],
-});
+}));
 
 const openChangePassword = () => {
   resetForm();
@@ -77,7 +78,7 @@ const savePassword = async () => {
       });
 
       ElMessage({
-        message: "Пароль успешно изменён",
+        message: t("account.security.messages.success"),
         type: "success",
       });
 
@@ -85,7 +86,7 @@ const savePassword = async () => {
       resetForm();
     } catch {
       ElMessage({
-        message: "Не удалось изменить пароль. Проверьте текущий пароль",
+        message: t("account.security.messages.error"),
         type: "error",
       });
     } finally {
@@ -98,20 +99,20 @@ const savePassword = async () => {
 <template>
   <div class="password-section">
     <div class="section-header">
-      <h2 class="section-title">Безопасность</h2>
+      <h2 class="section-title">{{ $t("account.security.title") }}</h2>
       <el-button
         v-if="!isChangingPassword"
         type="default"
         :icon="Lock"
         @click="openChangePassword"
       >
-        Изменить пароль
+        {{ $t("account.security.changePassword") }}
       </el-button>
     </div>
 
     <div v-if="!isChangingPassword" class="password-placeholder">
       <p class="placeholder-text">
-        Для изменения пароля нажмите кнопку "Изменить пароль"
+        {{ $t("account.security.hint") }}
       </p>
     </div>
 
@@ -123,43 +124,43 @@ const savePassword = async () => {
       label-position="top"
       size="large"
     >
-      <el-form-item label="Текущий пароль" prop="old_password">
+      <el-form-item :label="$t('account.security.fields.currentPassword')" prop="old_password">
         <el-input
           v-model="form.old_password"
           type="password"
-          placeholder="Введите текущий пароль"
+          :placeholder="$t('account.security.placeholders.currentPassword')"
           show-password
         />
       </el-form-item>
 
-      <el-form-item label="Новый пароль" prop="new_password">
+      <el-form-item :label="$t('account.security.fields.newPassword')" prop="new_password">
         <el-input
           v-model="form.new_password"
           type="password"
-          placeholder="Введите новый пароль"
+          :placeholder="$t('account.security.placeholders.newPassword')"
           show-password
         />
       </el-form-item>
 
-      <el-form-item label="Подтвердите новый пароль" prop="confirm_password">
+      <el-form-item :label="$t('account.security.fields.confirmPassword')" prop="confirm_password">
         <el-input
           v-model="form.confirm_password"
           type="password"
-          placeholder="Повторите новый пароль"
+          :placeholder="$t('account.security.placeholders.confirmPassword')"
           show-password
         />
       </el-form-item>
 
       <div class="form-actions">
         <el-button :disabled="loading" @click="cancelChangePassword">
-          Отмена
+          {{ $t("account.profile.cancel") }}
         </el-button>
         <el-button
           type="primary"
           :loading="loading"
           @click="savePassword"
         >
-          Сохранить пароль
+          {{ $t("account.security.savePassword") }}
         </el-button>
       </div>
     </el-form>

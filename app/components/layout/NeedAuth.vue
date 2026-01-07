@@ -2,6 +2,8 @@
 import { Lock } from "@element-plus/icons-vue";
 
 const model = defineModel<boolean>({ default: false });
+const { t } = useI18n();
+const localePath = useLocalePath();
 </script>
 
 <template>
@@ -19,17 +21,16 @@ const model = defineModel<boolean>({ default: false });
           <Lock />
         </el-icon>
       </div>
-      <div class="need-auth-title">Для этого действия нужно авторизоваться</div>
+      <div class="need-auth-title">{{ t('auth.needAuth.title') }}</div>
       <p class="need-auth-text">
-        Пожалуйста, авторизуйтесь, чтобы продолжить использование всех
-        возможностей сервиса.
+        {{ t('auth.needAuth.text') }}
       </p>
     </div>
     <template #footer>
       <div class="need-auth-actions">
-        <el-button size="large" @click="model = false">Позже</el-button>
-        <el-button type="primary" size="large" @click="navigateTo('/login')">
-          Войти
+        <el-button size="large" @click="model = false">{{ t('auth.modal.later') }}</el-button>
+        <el-button type="primary" size="large" @click="navigateTo(localePath('/login'))">
+          {{ t('auth.common.login') }}
         </el-button>
       </div>
     </template>

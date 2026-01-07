@@ -11,15 +11,19 @@ export interface IListingForm {
   description: string;
   region_id: number | undefined;
   city_id: number | undefined;
-  brand_id: number | undefined;
-  model_id: number | undefined;
+  brand_id: number | null | undefined;
+  model_id: number | null | undefined;
+  custom_brand: string | null;
+  custom_model: string | null;
   price: number | undefined;
   currency: ICurrency;
   state: IState | undefined;
   allow_trade_in: boolean;
   color: string;
   storage: number | undefined;
+  storage_unit: string;
   ram: number | undefined;
+  ram_unit: string;
   phone_number: string;
   telegram_link: string;
   show_phone: boolean;
@@ -51,7 +55,9 @@ export interface IListing {
   allow_trade_in: boolean;
   color: string;
   storage: number;
+  storage_unit: string;
   ram: number;
+  ram_unit: string;
   phone_number: string;
   show_phone: boolean;
   telegram_link: string | null;
@@ -62,12 +68,14 @@ export interface IListing {
   favorites_count: number;
   created_at: string;
   updated_at: string;
-  brand: IBrand;
-  model: IModel;
+  brand: IBrand | null;
+  model: IModel | null;
   city: ICity;
   user: IUser;
   region: IRegion;
   images: IImage[];
+  custom_brand: string | null;
+  custom_model: string | null;
 }
 
 export interface IImage {

@@ -1,0 +1,1216 @@
+{
+  "common": {
+    "other": "Boshqa",
+    "selectFromList": "Ro'yxatdan tanlash"
+  },
+  "seo": {
+    "home": {
+      "title": "MobiStore - O'zbekistonda smartfonlarni sotib oling va soting | E'lonlar taxtasi",
+      "description": "O'zbekistondagi smartfonlar, planshetlar va mobil qurilmalar bo'yicha eng yirik e'lonlar taxtasi. Jismoniy shaxslar va do'konlardan minglab e'lonlar. Tezkor savdo, xavfsiz bitimlar. Bepul e'lon joylashtirish.",
+      "ogTitle": "MobiStore - O'zbekistonda smartfonlarni sotib oling va soting",
+      "ogDescription": "Minglab e'lonlar orasidan o'zingizga mos smartfonni toping. Mashhur brendlar: iPhone, Samsung, Xiaomi. Bepul e'lon joylashtirish.",
+      "twitterTitle": "MobiStore - O'zbekistonda smartfonlarni sotib oling va soting",
+      "twitterDescription": "O'zbekistondagi eng yirik smartfonlar e'lonlar taxtasi. Bepul joylashtirish, xavfsiz bitimlar."
+    }
+  },
+  "home": {
+    "hero": {
+      "smartphones": "Smartfonlar",
+      "profitable": "Foydali",
+      "fast": "Tez",
+      "badge": "O'zbekistonda №1 platforma",
+      "titleMain": "Texnologiyalar",
+      "titleGradient": "qo'lingizda",
+      "subtitle": "Smartfonlarni foydali sotib oling va soting. Minglab tekshirilgan e'lonlar, xavfsiz bitimlar va shahringizda qulay qidiruv.",
+      "stats": {
+        "ads": "E'lonlar",
+        "users": "Foydalanuvchilar",
+        "support": "Qo'llab-quvvatlash"
+      }
+    },
+    "filter": {
+      "region": "Viloyat",
+      "regionPlaceholder": "Butun mamlakat",
+      "city": "Shahar",
+      "cityPlaceholder": "Barcha shaharlar",
+      "brand": "Brend",
+      "brandPlaceholder": "Barcha brendlar",
+      "model": "Model",
+      "modelPlaceholder": "Barcha modellar",
+      "showResults": "Natijalarni ko'rsatish"
+    },
+    "latestAds": {
+      "title": "Yangi e'lonlar",
+      "subtitle": "Bozordagi eng dolzarb takliflar",
+      "viewAll": "Barchasini ko'rish"
+    },
+    "brands": {
+      "titleTop": "Top",
+      "titleBrands": "Brendlar",
+      "subtitle": "Millionlab foydalanuvchilar tanlovi",
+      "adsCount": "{count} ta e'lon"
+    },
+    "promo": {
+      "badge": "MobiStore",
+      "titleMain": "Eski gadjetni",
+      "titleGradient": "yangi imkoniyatlarga aylantiring",
+      "description": "Smartfoningiz javonda chang bosib yotmasin. Uni O'zbekistonning asosiy platformasida foydali soting.",
+      "benefits": {
+        "freeListing": "2 daqiqada bepul joylashtirish",
+        "realBuyers": "Minglab haqiqiy xaridorlar"
+      },
+      "startSelling": "Sotishni boshlash",
+      "profitable": "Foydali",
+      "fast": "Tez",
+      "sold": "Sotildi"
+    }
+  },
+  "header": {
+    "createAd": "E'lon berish",
+    "adminPanel": "Admin panel",
+    "login": "Kirish"
+  },
+  "footer": {
+    "description": "O'zbekistonda gadjetlarni sotib olish va sotish uchun eng yirik ekotizim. Har bir bitimda xavfsizlik, tezkorlik va qulaylik.",
+    "help": "Yordam",
+    "privacyPolicy": "Maxfiylik siyosati",
+    "termsOfService": "Foydalanuvchi shartnomasi",
+    "contacts": "Kontaktlar",
+    "location": "Toshkent, O'zbekiston",
+    "copyright": "© 2025 MobiStore. Barcha huquqlar himoyalangan."
+  },
+  "userMenu": {
+    "profile": "Shaxsiy ma'lumotlar",
+    "myListings": "Mening e'lonlarim",
+    "favorites": "Sevimlilar",
+    "conversations": "Xabarlar",
+    "logout": "Chiqish"
+  },
+  "adCard": {
+    "noPhoto": "Rasm yo'q",
+    "today": "Bugun"
+  },
+  "createListing": {
+    "title": "E'lon berish",
+    "subtitle": "Qurilmangiz haqidagi ma'lumotlarni to'ldiring",
+    "meta": {
+      "title": "E'lon berish — MobiStore",
+      "description": "MobiStore-da smartfon sotish haqida bepul e'lon bering. Tezkor sotuv, minglab xaridorlar, qulay joylashtirish shakli.",
+      "ogTitle": "E'lon berish — MobiStore",
+      "ogDescription": "Smartfoningizni MobiStore-da tez va foydali soting"
+    },
+    "sections": {
+      "main": "Asosiy ma'lumotlar",
+      "specsAndPrice": "Xususiyatlari va narxi",
+      "locationAndPhotos": "Joylashuv va rasmlar",
+      "contacts": "Kontaktlar"
+    },
+    "fields": {
+      "title": {
+        "label": "Sarlavha",
+        "placeholder": "Sarlavhani kiriting"
+      },
+      "description": {
+        "label": "Tavsif",
+        "placeholder": "Tavsifni kiriting"
+      },
+      "brand": {
+        "label": "Brend",
+        "placeholder": "Brend nomini kiriting",
+        "customPlaceholder": "Brend nomini qo'lda kiriting"
+      },
+      "model": {
+        "label": "Model",
+        "placeholder": "Model nomini kiriting",
+        "customPlaceholder": "Model nomini qo'lda kiriting"
+      },
+      "memory": {
+        "label": "Xotira",
+        "placeholder": "Xotirani kiriting"
+      },
+      "ram": {
+        "label": "Operativ xotira",
+        "placeholder": "Operativ xotirani kiriting"
+      },
+      "color": {
+        "label": "Rang",
+        "placeholderInput": "Rangni kiriting",
+        "placeholderSelect": "Rangni tanlang"
+      },
+      "condition": {
+        "label": "Holati",
+        "placeholder": "Holatini tanlang",
+        "options": {
+          "new": "Yangi",
+          "restored": "Tiklangan",
+          "used": "B/U"
+        }
+      },
+      "price": {
+        "label": "Narxi",
+        "placeholder": "Narxni kiriting"
+      },
+      "currency": {
+        "label": "Valyuta",
+        "placeholder": "Valyutani tanlang"
+      },
+      "exchange": "Almashish mumkin",
+      "region": {
+        "label": "Viloyat",
+        "placeholder": "Viloyatni tanlang"
+      },
+      "city": {
+        "label": "Shahar",
+        "placeholder": "Shahar nomini kiriting"
+      },
+      "photos": {
+        "label": "Rasmlar (maks. 8 ta)",
+        "dragText": "Fayllarni bu yerga sudrab olib keling yoki",
+        "clickText": "yuklash uchun bosing",
+        "tip": "Qo'llab-quvvatlanadigan formatlar: jpg, png (maks. 8 ta rasm)"
+      },
+      "phone": {
+        "label": "Telefon"
+      },
+      "telegram": {
+        "label": "Telegram"
+      },
+      "showContacts": "Kontaktlarni ko'rsatish"
+    },
+    "buttons": {
+      "preview": "Oldindan ko'rish",
+      "publish": "E'lon qilish"
+    },
+    "validation": {
+      "required": "Barcha majburiy maydonlarni to'ldiring",
+      "images": "Kamida bitta rasm yuklang",
+      "title": "Sarlavhani kiriting",
+      "description": "Tavsifni kiriting",
+      "region": "Viloyatni tanlang",
+      "city": "Shaharni tanlang",
+      "brand": "Brendni tanlang",
+      "model": "Modelni tanlang",
+      "price": "Narxni kiriting",
+      "state": "Holatini tanlang",
+      "success": "E'lon muvaffaqiyatli yaratildi",
+      "imageUploadError": "Rasmlarni yuklashda xatolik yuz berdi"
+    }
+  },
+  "components": {
+    "brand": {
+      "placeholder": "Brend nomini kiriting"
+    },
+    "model": {
+      "placeholder": "Model nomini kiriting"
+    },
+    "region": {
+      "placeholder": "Viloyatni tanlang"
+    },
+    "city": {
+      "placeholder": "Shahar nomini kiriting"
+    }
+  },
+  "mobileDrawer": {
+    "welcome": "Xush kelibsiz!",
+    "subText": "Tizimga kiring yoki ro'yxatdan o'ting",
+    "account": "Hisob",
+    "admin": "Ma'muriyat",
+    "signup": "Ro'yxatdan o'tish"
+  },
+  "search": {
+    "title": "Smartfonlar qidiruvi",
+    "description": "O'zbekistonda eng yaxshi smartfonlarni qulay narxlarda toping.",
+    "breadcrumbs": {
+      "home": "Bosh sahifa",
+      "results": "Qidiruv natijalari"
+    },
+    "filters": {
+      "title": "Filtrlar",
+      "region": "Viloyat",
+      "city": "Shahar",
+      "brand": "Brend",
+      "model": "Model",
+      "state": "Holati",
+      "ram": "Operativ xotira (RAM)",
+      "storage": "Ichki xotira",
+      "tradeIn": "Almashish mumkin",
+      "price": {
+        "from": "dan",
+        "to": "gacha",
+        "currency": "so'm"
+      },
+      "clear": "Filtrlarni tozalash",
+      "placeholders": {
+        "all": "Barchasi",
+        "any": "Istalgan hajm"
+      },
+      "states": {
+        "new": "Yangi",
+        "used": "Foydalanilgan",
+        "restored": "Tiklangan"
+      }
+    },
+    "noResults": {
+      "title": "Hech narsa topilmadi",
+      "text": "Qidiruv parametrlarini o'zgartirib ko'ring yoki filtrlarni tozalang"
+    },
+    "seo": {
+      "new": "yangi",
+      "used": "foydalanilgan",
+      "in": "",
+      "buy": "Sotib olish",
+      "phones": "smartfonlar",
+      "priceFrom": "dan",
+      "priceTo": "gacha",
+      "defaultTitle": "O'zbekistonda smartfonlar qidiruvi | MobiStore",
+      "defaultDesc": "O'zbekistonda eng yaxshi smartfonlarni qulay narxlarda toping. Yangi va foydalanilgan qurilmalarning katta tanlovi."
+    }
+  },
+  "ads": {
+    "status": {
+      "active": "Faol",
+      "draft": "Qoralama",
+      "archived": "Arxivlangan",
+      "sold": "Sotilgan",
+      "moderation": "Moderatsiyada",
+      "rejected": "Rad etilgan"
+    },
+    "state": {
+      "new": "Yangi",
+      "used": "Foydalanilgan",
+      "restored": "Tiklangan"
+    },
+    "actions": {
+      "changeStatusError": "Statusni o'zgartirib bo'lmadi",
+      "bumpError": "E'lonni ko'tarib bo'lmadi"
+    }
+  },
+  "favorites": {
+    "addSuccess": "Sevimlilarga qo'shildi",
+    "addError": "Sevimlilarga qo'shishda xatolik",
+    "removeSuccess": "Sevimlilardan o'chirildi",
+    "removeError": "Sevimlilardan o'chirishda xatolik"
+  },
+  "auth": {
+    "common": {
+      "email": "Email",
+      "emailPlaceholder": "Emailingizni kiriting",
+      "password": "Parol",
+      "passwordPlaceholder": "Parolni kiriting",
+      "orLoginWith": "yoki orqali kiring",
+      "orSignupWith": "yoki orqali ro'yxatdan o'ting",
+      "hasAccount": "Akkountingiz bormi?",
+      "noAccount": "Akkountingiz yo'qmi?",
+      "login": "Kirish",
+      "signup": "Ro'yxatdan o'tish",
+      "submit": "Yuborish",
+      "save": "Saqlash",
+      "backToLogin": "Kirish sahifasiga qaytish",
+      "goToHome": "Bosh sahifaga o'tish",
+      "error": "Xatolik",
+      "loading": "Iltimos, kuting...",
+      "validation": {
+        "email": "Iltimos, to'g'ri email kiriting",
+        "password": "Iltimos, parolni kiriting",
+        "passwordMin": "Parol kamida 6 belgidan iborat bo'lishi kerak",
+        "name": "Iltimos, ismingizni kiriting",
+        "passwordsMismatch": "Parollar mos kelmadi",
+        "confirmPassword": "Iltimos, parolni tasdiqlang"
+      }
+    },
+    "login": {
+      "title": "Xush kelibsiz",
+      "subtitle": "MobiStore akkountingizga kiring",
+      "metaTitle": "Akkountga kirish — MobiStore",
+      "metaDesc": "MobiStore akkountingizga kiring va e'lonlar, sevimlilar va xabarlarni boshqaring. Email yoki Google orqali tezkor kirish.",
+      "forgotPassword": "Parolni unutdingizmi?",
+      "error": "Xatolik yuz berdi"
+    },
+    "signup": {
+      "title": "Akkount yaratish",
+      "subtitle": "MobiStore-ga qo'shiling",
+      "metaTitle": "Ro'yxatdan o'tish — MobiStore",
+      "metaDesc": "MobiStore-da bepul akkount yarating. Smartfon sotish bo'yicha e'lonlar joylashtiring, sevimlilarni saqlang va sotuvchilar bilan muloqot qiling.",
+      "firstName": "Ism",
+      "firstNamePlaceholder": "Ismingizni kiriting",
+      "lastName": "Familiya",
+      "lastNamePlaceholder": "Familiyangizni kiriting",
+      "successTitle": "Ro'yxatdan o'tish muvaffaqiyatli!",
+      "successMessage": "Emailingizga akkountni faollashtirish uchun havola yuborildi. Iltimos, pochtangizni tekshiring va ro'yxatdan o'tishni yakunlash uchun havolaga o'ting.",
+      "error": "Ro'yxatdan o'tishda xatolik yuz berdi"
+    },
+    "verify": {
+      "metaTitle": "Emailni tasdiqlash — MobiStore",
+      "title": "Emailni tasdiqlash",
+      "successTitle": "Email tasdiqlandi!",
+      "successMessage": "Sizning emailingiz muvaffaqiyatli tasdiqlandi. Kirish sahifasiga yo'naltirilmoqda...",
+      "errorTitle": "Tasdiqlash xatoligi",
+      "errorLink": "Tasdiqlash havolasi noto'g'ri",
+      "errorGeneric": "Emailni tasdiqlashda xatolik",
+      "goToLogin": "Kirishga o'tish"
+    },
+    "callback": {
+      "loadingTitle": "Kirilmoqda...",
+      "errorTitle": "Xatolik",
+      "errorToken": "Avtorizatsiya tokeni topilmadi",
+      "errorGeneric": "Avtorizatsiya xatoligi. Qaytadan urinib ko'ring."
+    },
+    "forgot": {
+      "metaTitle": "Parolni tiklash — MobiStore",
+      "metaDesc": "Parolni unutdingizmi? MobiStore akkountiga kirishni tiklang. Emailni kiriting va parolni o'zgartirish uchun havola oling.",
+      "title": "Parolni unutdingizmi?",
+      "subtitleDefault": "Emailni kiriting va biz tiklash uchun havola yuboramiz",
+      "subtitleSent": "Pochtangizni tekshiring",
+      "sendLink": "Havolani yuborish",
+      "sendAgain": "Qayta yuborish",
+      "successText1": "Biz xatni",
+      "successText2": "ga yubordik. Parolni tiklash uchun xatdagi havolaga o'ting.",
+      "remembered": "Parolni esladingizmi?",
+      "successMessage": "Parolni tiklash havolasi pochtangizga yuborildi",
+      "errorMessage": "Xatni yuborib bo'lmadi. Emailni tekshiring va qayta urinib ko'ring"
+    },
+    "reset": {
+      "metaTitle": "Parolni o'zgartirish — MobiStore",
+      "invalidTitle": "Yaroqsiz havola",
+      "invalidSubtitle": "Parolni tiklash havolasi yaroqsiz yoki eskirgan",
+      "requestNew": "Yangi havola so'rash",
+      "successTitle": "Parol o'zgartirildi!",
+      "successSubtitle": "Parolingiz muvaffaqiyatli o'zgartirildi. Endi yangi parol bilan kirishingiz mumkin.",
+      "loginAction": "Akkountga kirish",
+      "formTitle": "Yangi parol",
+      "formSubtitle": "Akkountingiz uchun yangi parol kiriting",
+      "newPassword": "Yangi parol",
+      "newPasswordPlaceholder": "Yangi parolni kiriting",
+      "confirmPassword": "Parolni tasdiqlang",
+      "confirmPasswordPlaceholder": "Parolni takrorlang",
+      "save": "Parolni saqlash",
+      "successMessage": "Parol muvaffaqiyatli o'zgartirildi",
+      "errorMessage": "Parolni o'zgartirib bo'lmadi. Havolani qayta so'rab ko'ring"
+    },
+    "modal": {
+      "title": "Avtorizatsiya talab qilinadi",
+      "text": "E'lon joylashtirish uchun tizimga kirish yoki yangi akkount yaratish kerak.",
+      "cancel": "Bekor qilish",
+      "later": "Keyinroq"
+    },
+    "needAuth": {
+      "title": "Bu amal uchun avtorizatsiya kerak",
+      "text": "Xizmatning barcha imkoniyatlaridan foydalanishni davom ettirish uchun iltimos, avtorizatsiyadan o'ting."
+    }
+  },
+  "telegram": {
+    "notSpecified": "Ko'rsatilmagan"
+  },
+  "listing": {
+    "notFound": "E'lon topilmadi",
+    "loadError": "E'lonni yuklashda xatolik yuz berdi",
+    "moderation": {
+      "title": "E'lon moderatsiyada",
+      "description": "Sizning e'loningiz tekshirilmoqda. U tez orada nashr etiladi."
+    },
+    "rejected": {
+      "title": "E'lon rad etildi",
+      "description": "Afsuski, sizning e'loningiz moderatsiyadan o'tmadi. Iltimos, mazmunini tekshiring va yangi e'lon yaratishga harakat qiling."
+    },
+    "seo": {
+      "defaultTitle": "E'lon — Mobistore",
+      "defaultDesc": "Mobistore'dagi e'lon"
+    }
+  },
+  "formatters": {
+    "currency": {
+      "uzs": "so'm"
+    },
+    "activity": {
+      "offline": "Tarmoqda emas",
+      "online": "Tarmoqda",
+      "was": "saytda",
+      "minutesAgo": "daqiqa avval",
+      "hoursAgo": "soat avval",
+      "daysAgo": "kun avval",
+      "yesterday": "kecha"
+    }
+  },
+  "listingDetails": {
+    "description": "Tavsif",
+    "characteristics": "Xususiyatlari",
+    "fullCharacteristics": "Modelning to'liq xususiyatlari",
+    "close": "Yopish",
+    "seller": "Sotuvchi",
+    "onSiteSince": "Saytda {year} yildan beri",
+    "specs": {
+      "processor": "Protsessor",
+      "os": "Operatsion tizim",
+      "memory": "Xotira",
+      "screen": "Ekran",
+      "screenType": "Ekran turi",
+      "battery": "Batareya",
+      "general": "Umumiy ma'lumot",
+      "model": "Model",
+      "brand": "Brend",
+      "announceDate": "E'lon qilingan sana",
+      "releaseDate": "Chiqarilgan sana",
+      "colors": "Mavjud ranglar",
+      "body": "Korpus",
+      "dimensions": "O'lchamlari",
+      "weight": "Vazni",
+      "materials": "Materiallar",
+      "sim": "SIM",
+      "display": "Displey",
+      "type": "Turi",
+      "size": "O'lchami",
+      "resolution": "Ruxsati",
+      "protection": "Himoya",
+      "platform": "Platforma",
+      "chipset": "Chipset",
+      "cpu": "Protsessor",
+      "gpu": "Grafik protsessor",
+      "cardSlot": "Karta uchun slot",
+      "internal": "Ichki xotira",
+      "mainCamera": "Asosiy kamera",
+      "cameras": "Kameralar",
+      "features": "Funksiyalar",
+      "video": "Video",
+      "selfieCamera": "Old kamera",
+      "charging": "Quvvatlash",
+      "comms": "Aloqa va kommunikatsiyalar",
+      "wifi": "Wi-Fi",
+      "bluetooth": "Bluetooth",
+      "gps": "GPS",
+      "nfc": "NFC",
+      "radio": "Radio",
+      "usb": "USB",
+      "network": "Tarmoq",
+      "tech": "Texnologiyalar",
+      "bands2g": "2G diapazonlari",
+      "bands3g": "3G diapazonlari",
+      "bands4g": "4G diapazonlari",
+      "bands5g": "5G diapazonlari",
+      "speed": "Tezlik",
+      "sensors": "Sensorlar va funksiyalar",
+      "sensorsLabel": "Sensorlar",
+      "sound": "Ovoz",
+      "loudspeaker": "Karnay",
+      "color": "Rang",
+      "ram": "Operativ xotira",
+      "storage": "Ichki xotira"
+    }
+  },
+  "chat": {
+    "placeholder": "Xabar yozing...",
+    "justNow": "Hozirgina",
+    "yesterday": "Kecha",
+    "ago": {
+      "minutes": "daqiqa avval",
+      "hours": "soat avval",
+      "days": "kun avval"
+    }
+  },
+  "complaint": {
+    "button": "Shikoyat qilish",
+    "title": "Shikoyat",
+    "loading": "Shikoyat yuborilmoqda...",
+    "success": "Shikoyat muvaffaqiyatli yuborildi! Uni tez orada ko'rib chiqamiz.",
+    "error": "Shikoyat yuborishda xatolik. Keyinroq urinib ko'ring.",
+    "categories": {
+      "sellerInfo": {
+        "label": "Sotuvchi haqida noto'g'ri ma'lumot",
+        "desc": "Yolg'on aloqa ma'lumotlari yoki profil",
+        "children": {
+          "contacts": "Noto'g'ri aloqa ma'lumotlari",
+          "fakeProfile": "Soxta profil"
+        }
+      },
+      "itemProblem": {
+        "label": "Mahsulot yoki xizmat bilan bog'liq muammo",
+        "desc": "Taqiqlangan yoki qalbaki mahsulot",
+        "children": {
+          "forbidden": "Taqiqlangan mahsulot",
+          "forbiddenDesc": "Qurol, giyohvand moddalar, taqiqlangan qurilmalar",
+          "counterfeit": "Qalbaki mahsulot",
+          "counterfeitDesc": "Qalbaki qurilmalar, brendlarning soxta nusxalari",
+          "stolen": "O'g'irlangan mahsulot",
+          "stolenDesc": "O'g'irlangan qurilma"
+        }
+      },
+      "misleading": {
+        "label": "Chalg'ituvchi e'lon",
+        "desc": "Ishonchsiz yoki ziddiyatli ma'lumotlar",
+        "children": {
+          "category": "Kategoriya noto'g'ri ko'rsatilgan",
+          "price": "Narx noto'g'ri ko'rsatilgan",
+          "mismatch": "Rasm va tavsif mos kelmaydi",
+          "mismatchDesc": "E'londagi ziddiyatli ma'lumotlar",
+          "location": "Joylashuv noto'g'ri ko'rsatilgan",
+          "sold": "Mahsulot allaqachon sotilgan",
+          "duplicate": "E'lon takrorlanmoqda",
+          "duplicateDesc": "Bunday e'lon allaqachon mavjud",
+          "spam": "Spam",
+          "notSelling": "Hech narsa sotilmayapti",
+          "notSellingDesc": "Foydalanuvchi sotmoqchi emas, balki sotib olmoqchi"
+        }
+      },
+      "fraud": {
+        "label": "Firibgarlik",
+        "desc": "Kimdir firibgarlik qilgan yoki qilishga urinmoqda",
+        "children": {
+          "victim": "Men firibgarlik qurboni bo'ldim",
+          "suspect": "Men firibgarlikdan shubhadaman"
+        }
+      },
+      "abuse": {
+        "label": "Zo'ravonlik, kamsitish, haqorat",
+        "desc": "Zararli yoki haqoratli tarkib",
+        "children": {
+          "offensive": "Haqoratli tarkib",
+          "discrimination": "Kamsitish",
+          "violence": "Zo'ravonlikka chaqiruvlar"
+        }
+      }
+    }
+  },
+  "listingSidebar": {
+    "notPublished": "Chop etilmagan",
+    "exchange": "Almashish mumkin",
+    "state": "Holati",
+    "color": "Rangi",
+    "memory": "Xotira",
+    "location": "Joylashuvi",
+    "publishDate": "Chop etilgan sana",
+    "views": "Ko'rishlar",
+    "viewsCount": "marta ko'rildi",
+    "adId": "E'lon IDsi",
+    "publish": "Chop etish",
+    "bump": "Qidiruvda ko'tarish",
+    "edit": "Tahrirlash"
+  },
+  "userPage": {
+    "defaultName": "Foydalanuvchi",
+    "seo": {
+      "adsCount": "E'lonlar: {count}",
+      "defaultProfile": "Shaxsiy profil va kontaktlar.",
+      "title": "{name} — profil va e'lonlar | MobiStore",
+      "description": "{name}{location} ning MobiStore'dagi profili. {adsText}"
+    },
+    "notFound": {
+      "title": "Foydalanuvchi topilmadi",
+      "text": "Akkount o'chirilgan bo'lishi yoki havola noto'g'ri bo'lishi mumkin",
+      "button": "Bosh sahifaga"
+    },
+    "listings": {
+      "title": "Foydalanuvchi e'lonlari"
+    },
+    "emptyListings": "Foydalanuvchida hozircha e'lonlar yo'q"
+  },
+  "userProfile": {
+    "defaultName": "Foydalanuvchi",
+    "memberSince": "Saytda {date} dan beri",
+    "lastSeen": {
+      "today": "Bugun",
+      "yesterday": "Kecha",
+      "daysAgo": "{days} kun avval"
+    },
+    "showContacts": "Kontaktlarni ko'rsatish"
+  },
+  "account": {
+    "title": "Mening akkauntim",
+    "meta": {
+      "profile": "Mening profilim — MobiStore",
+      "favorites": "Sevimlilar — MobiStore",
+      "conversations": "Xabarlar — MobiStore",
+      "myListings": "Mening e'lonlarim — MobiStore",
+      "editListing": "E'lonni tahrirlash — MobiStore"
+    },
+    "sidebar": {
+      "personalData": "Shaxsiy ma'lumotlar",
+      "myListings": "Mening e'lonlarim",
+      "favorites": "Sevimlilar",
+      "conversations": "Yozishmalar",
+      "logout": "Chiqish"
+    },
+    "profile": {
+      "title": "Shaxsiy ma'lumotlar",
+      "edit": "Tahrirlash",
+      "save": "Saqlash",
+      "cancel": "Bekor qilish",
+      "fields": {
+        "name": "Ism",
+        "lastName": "Familiya",
+        "email": "Email",
+        "phone": "Telefon",
+        "telegram": "Telegram",
+        "region": "Viloyat",
+        "city": "Shahar",
+        "showContacts": "Kontaktlarni ko'rsatish",
+        "language": "Til"
+      },
+      "placeholders": {
+        "name": "Ismingizni kiriting",
+        "lastName": "Familiyangizni kiriting",
+        "phone": "+998 90 123 45 67",
+        "telegram": "{'@'}username",
+        "region": "Viloyatni tanlang",
+        "city": "Shaharni tanlang",
+        "language": "Tilni tanlang"
+      },
+      "validation": {
+        "nameRequired": "Ismingizni kiriting",
+        "lastNameRequired": "Familiyangizni kiriting",
+        "nameLength": "Uzunlik 2 dan 50 gacha belgi bo'lishi kerak",
+        "languageRequired": "Tilni tanlang"
+      },
+      "values": {
+        "notSpecified": "Ko'rsatilmagan",
+        "yes": "Ha",
+        "no": "Yo'q",
+        "russian": "Русский",
+        "uzbek": "O'zbekcha"
+      }
+    },
+    "security": {
+      "title": "Xavfsizlik",
+      "changePassword": "Parolni o'zgartirish",
+      "hint": "Parolni o'zgartirish uchun \"Parolni o'zgartirish\" tugmasini bosing",
+      "fields": {
+        "currentPassword": "Joriy parol",
+        "newPassword": "Yangi parol",
+        "confirmPassword": "Yangi parolni tasdiqlang"
+      },
+      "placeholders": {
+        "currentPassword": "Joriy parolni kiriting",
+        "newPassword": "Yangi parolni kiriting",
+        "confirmPassword": "Yangi parolni takrorlang"
+      },
+      "validation": {
+        "currentRequired": "Joriy parolni kiriting",
+        "newRequired": "Yangi parolni kiriting",
+        "confirmRequired": "Yangi parolni tasdiqlang",
+        "minLength": "Parol kamida 6 belgidan iborat bo'lishi kerak",
+        "mismatch": "Parollar mos kelmadi"
+      },
+      "messages": {
+        "success": "Parol muvaffaqiyatli o'zgartirildi",
+        "error": "Parolni o'zgartirib bo'lmadi. Joriy parolni tekshiring"
+      },
+      "savePassword": "Parolni saqlash"
+    },
+    "favorites": {
+      "title": "Sevimli e'lonlar",
+      "count": "{count} ta e'lon",
+      "empty": {
+        "title": "Sizda hali sevimli e'lonlar yo'q",
+        "text": "Yoqtirgan e'lonlarni sevimlilarga qo'shing, ularni yo'qotmang",
+        "button": "E'lonlarga o'tish"
+      }
+    },
+    "conversations": {
+      "title": "Yozishmalar",
+      "subtitle": "Bu yerda barcha suhbatlaringiz to'plangan",
+      "search": "E'lon yoki ism bo'yicha qidirish",
+      "noConversations": {
+        "title": "Yozishmalar yo'q",
+        "text": "E'lon sahifasida muloqotni boshlang — yozishma bu yerda avtomatik paydo bo'ladi"
+      },
+      "noMessages": {
+        "title": "Hozircha xabarlar yo'q",
+        "text": "Suhbatni boshlash uchun biror narsa yozing"
+      },
+      "placeholder": {
+        "title": "Yozishmani tanlang",
+        "text": "Chap tomonda barcha suhbatlaringiz ko'rsatilgan. Tafsilotlarni ko'rish va muloqotni davom ettirish uchun istalganiga bosing.",
+        "button": "Yozishmalarni ochish"
+      },
+      "input": "Xabar yozing...",
+      "noMessagesYet": "Hozircha xabarlar yo'q",
+      "unknownUser": "Noma'lum foydalanuvchi",
+      "defaultUser": "Foydalanuvchi",
+      "unknownStatus": "Holat noma'lum",
+      "online": "Tarmoqda",
+      "wasMinutes": "{min}d avval saytda",
+      "wasHours": "{hours}s avval saytda",
+      "wasYesterday": "Kecha saytda",
+      "wasDays": "{days}k avval saytda",
+      "wasDate": "{date} saytda",
+      "justNow": "Hozirgina",
+      "errors": {
+        "loadConversations": "Yozishmalarni yuklab bo'lmadi",
+        "loadMessages": "Xabarlarni yuklab bo'lmadi",
+        "sendMessage": "Xabarni yuborib bo'lmadi"
+      }
+    },
+    "listings": {
+      "title": "Mening e'lonlarim",
+      "statuses": {
+        "all": "Barchasi",
+        "active": "Faol",
+        "draft": "Qoralamalar",
+        "archived": "Arxiv",
+        "moderation": "Moderatsiyada",
+        "rejected": "Rad etilgan"
+      },
+      "selectStatus": "Statusni tanlang",
+      "empty": {
+        "title": "Sizda hali e'lonlar yo'q",
+        "button": "Birinchi e'lonni yaratish"
+      },
+      "card": {
+        "view": "Ko'rish",
+        "edit": "Tahrirlash",
+        "activate": "Faollashtirish",
+        "sold": "Sotildi",
+        "toArchive": "Arxivga",
+        "views": "Ko'rishlar",
+        "inFavorites": "Sevimlilarda",
+        "gb": "GB"
+      }
+    },
+    "editListing": {
+      "title": "E'lonni tahrirlash",
+      "subtitle": "Qurilmangiz haqidagi ma'lumotlarni o'zgartiring",
+      "sections": {
+        "main": "Asosiy ma'lumotlar",
+        "specsAndPrice": "Xususiyatlari va narxi",
+        "locationAndPhotos": "Joylashuv va rasmlar",
+        "contacts": "Kontaktlar"
+      },
+      "fields": {
+        "title": "Sarlavha",
+        "description": "Tavsif",
+        "brand": "Brend",
+        "model": "Model",
+        "memory": "Xotira",
+        "ram": "Operativ xotira",
+        "color": "Rang",
+        "condition": "Holati",
+        "price": "Narxi",
+        "currency": "Valyuta",
+        "region": "Viloyat",
+        "city": "Shahar",
+        "currentPhotos": "Joriy rasmlar",
+        "addPhotos": "Yangi rasmlar qo'shish (maks. 8)",
+        "phone": "Telefon",
+        "telegram": "Telegram"
+      },
+      "placeholders": {
+        "title": "Sarlavhani kiriting",
+        "description": "Tavsifni kiriting",
+        "memory": "Xotirani tanlang",
+        "ram": "Operativ xotirani tanlang",
+        "colorInput": "Rangni kiriting",
+        "colorSelect": "Rangni tanlang",
+        "condition": "Holatini tanlang",
+        "price": "Narxni kiriting",
+        "currency": "Valyutani tanlang"
+      },
+      "conditions": {
+        "new": "Yangi",
+        "restored": "Tiklangan",
+        "used": "B/U"
+      },
+      "checkboxes": {
+        "exchange": "Almashish mumkin",
+        "showContacts": "Kontaktlarni e'londa ko'rsatish"
+      },
+      "validation": {
+        "title": "Sarlavhani kiriting",
+        "description": "Tavsifni kiriting",
+        "region": "Viloyatni tanlang",
+        "city": "Shaharni tanlang",
+        "brand": "Brendni tanlang",
+        "model": "Modelni tanlang",
+        "price": "Narxni kiriting",
+        "condition": "Holatini tanlang",
+        "images": "Kamida bitta rasm yuklang",
+        "required": "Barcha majburiy maydonlarni to'ldiring"
+      },
+      "upload": {
+        "dragText": "Fayllarni bu yerga sudrab olib keling yoki",
+        "clickText": "yuklash uchun bosing",
+        "tip": "Qo'llab-quvvatlanadigan formatlar: jpg, png (maks. {count} ta fayl)"
+      },
+      "buttons": {
+        "cancel": "Bekor qilish",
+        "save": "O'zgarishlarni saqlash"
+      },
+      "messages": {
+        "loadError": "E'lonni yuklashda xatolik",
+        "updateSuccess": "E'lon muvaffaqiyatli yangilandi",
+        "imageUploadSuccess": "Rasmlar muvaffaqiyatli yuklandi",
+        "imageUploadError": "Rasmlarni yuklashda xatolik",
+        "imageDeleteSuccess": "Rasm o'chirildi",
+        "imageDeleteError": "Rasmni o'chirishda xatolik"
+      }
+    }
+  },
+  "contacts": {
+    "seo": {
+      "title": "Kontaktlar — MobiStore",
+      "description": "MobiStore jamoasi bilan bog'laning. Qo'llab-quvvatlash xizmati, aloqa shakli, telefon va email savollar va takliflar uchun.",
+      "ogTitle": "Kontaktlar — MobiStore",
+      "ogDescription": "Biz bilan qulay usulda bog'laning"
+    },
+    "title": "Kontaktlar",
+    "subtitle": "Biz bilan qulay usulda bog'laning yoki aloqa shaklini to'ldiring",
+    "info": {
+      "title": "Bizning kontaktlar",
+      "description": "Biz sizga yordam berishdan doimo xursandmiz. Biz bilan qulay usulda bog'laning"
+    },
+    "support": {
+      "online": "Qo'llab-quvvatlash xizmati onlayn",
+      "workingHours": "Har kuni 09:00 dan 23:00 gacha ishlaymiz (GMT+5). O'rtacha 5 daqiqada javob beramiz.",
+      "callNow": "Hozir qo'ng'iroq qilish",
+      "writeEmail": "Pochtaga yozish"
+    },
+    "form": {
+      "title": "Aloqa shakli",
+      "description": "Quyidagi shaklni to'ldiring va biz siz bilan tez orada bog'lanamiz",
+      "name": "Ismingiz",
+      "namePlaceholder": "Ismingizni kiriting",
+      "email": "Email",
+      "emailPlaceholder": "example{'@'}mail.com",
+      "phone": "Telefon",
+      "phonePlaceholder": "+998 90 123 45 67",
+      "topic": "Murojaat mavzusi",
+      "topicPlaceholder": "Mavzuni tanlang",
+      "message": "Xabar",
+      "messagePlaceholder": "Muammo yoki savolingizni tasvirlab bering",
+      "submit": "Xabarni yuborish",
+      "topics": {
+        "question": "Umumiy savol",
+        "technical": "Texnik yordam",
+        "partnership": "Hamkorlik taklifi",
+        "complaint": "Shikoyat",
+        "other": "Boshqa"
+      }
+    },
+    "validation": {
+      "name": "Ismingizni kiriting",
+      "topic": "Murojaat mavzusini tanlang",
+      "message": "Xabarni kiriting"
+    },
+    "messages": {
+      "success": "Xabar muvaffaqiyatli yuborildi!",
+      "error": "Xabarni yuborishda xatolik"
+    }
+  },
+  "privacy": {
+    "seo": {
+      "title": "MobiStore maxfiylik siyosati",
+      "description": "MobiStore sizning shaxsiy ma'lumotlaringizni qanday to'plashi, ishlatishi va himoya qilishini bilib oling."
+    },
+    "eyebrow": "Maxfiylik siyosati",
+    "title": "MobiStore maxfiylik siyosati",
+    "lead": "Ushbu Maxfiylik siyosati MobiStore sayti va MobiStore mobil ilovasidan foydalanuvchilarning shaxsiy ma'lumotlarini qayta ishlash va himoya qilish tartibini belgilaydi.",
+    "lastUpdated": "Oxirgi yangilanish sanasi: {date}",
+    "consent": "Sayt yoki Ilovadan foydalanib, siz ushbu Siyosatga roziligingizni tasdiqlaysiz.",
+    "feedbackForm": "Aloqa shakli",
+    "sections": {
+      "definitions": {
+        "title": "1. Ta'riflar",
+        "paragraphs": [
+          "«Ma'muriyat», «biz», «MobiStore» — MobiStore platformasini boshqaruvchi jamoa.",
+          "«Foydalanuvchi» — sayt yoki ilovadan foydalanuvchi shaxs.",
+          "«Shaxsiy ma'lumotlar» — foydalanuvchini aniqlash imkonini beruvchi har qanday ma'lumot."
+        ]
+      },
+      "dataCollection": {
+        "title": "2. Qanday ma'lumotlarni to'playmiz",
+        "userProvided": {
+          "title": "2.1. Foydalanuvchi tomonidan taqdim etilgan ma'lumotlar",
+          "intro": "Ro'yxatdan o'tish, avtorizatsiya va xizmatdan foydalanishda:",
+          "list": [
+            "foydalanuvchi nomi;",
+            "email;",
+            "parol (shifrlangan holda);",
+            "Google ID — Google OAuth orqali avtorizatsiyada;",
+            "Telegram ma'lumotlari (agar kelajakda Telegram WebApp orqali avtorizatsiya yoqilsa);",
+            "telefon raqami (agar e'londa ko'rsatilgan bo'lsa);",
+            "Telegram havolasi;",
+            "avatar;",
+            "afzal ko'rilgan interfeys tili."
+          ]
+        },
+        "automatic": {
+          "title": "2.2. Avtomatik to'planadigan ma'lumotlar",
+          "intro": "Saytga tashrif buyurganda:",
+          "list": [
+            "IP-manzil;",
+            "brauzer va qurilma ma'lumotlari;",
+            "cookies;",
+            "tashriflar sanasi va vaqti;",
+            "harakatlar statistikasi (e'lonlarni ko'rish, bosishlar va h.k.)."
+          ]
+        },
+        "listings": {
+          "title": "2.3. E'lonlar bilan bog'liq ma'lumotlar",
+          "intro": "E'lon yaratishda:",
+          "list": [
+            "tovar rasmlari;",
+            "qurilma tavsifi va xususiyatlari;",
+            "viloyat va shahar;",
+            "brend va model;",
+            "narx va valyuta;",
+            "qurilma holati;",
+            "sotuvchi kontakt ma'lumotlari."
+          ]
+        },
+        "chat": {
+          "title": "2.4. Yozishmalar ma'lumotlari",
+          "intro": "O'rnatilgan chatdan foydalanishda:",
+          "list": [
+            "xaridorlar va sotuvchilar o'rtasidagi xabarlar;",
+            "yuborish va qabul qilish vaqti;",
+            "suhbat ishtirokchilari IDsi."
+          ]
+        },
+        "feedback": {
+          "title": "2.5. Aloqa shakli ma'lumotlari",
+          "intro": "/info/contacts sahifasi orqali foydalanuvchi quyidagilarni yuborishi mumkin:",
+          "list": [
+            "ism;",
+            "email yoki telefon raqami;",
+            "murojaat matni;",
+            "ilovalar (agar shakl ruxsat bersa);",
+            "texnik ma'lumotlar (IP, yuborish vaqti, brauzer — spamdan himoya uchun)."
+          ],
+          "note": "Bu ma'lumotlar faqat foydalanuvchi murojaatiga javob berish uchun ishlatiladi."
+        }
+      },
+      "dataUsage": {
+        "title": "3. Ma'lumotlarni qanday ishlatamiz",
+        "intro": "Biz ma'lumotlarni quyidagilar uchun qayta ishlaymiz:",
+        "list": [
+          "foydalanuvchilarni ro'yxatdan o'tkazish va avtorizatsiya qilish;",
+          "sotuvchi profili va kontakt ma'lumotlarini ko'rsatish;",
+          "e'lonlarni yaratish, nashr qilish, tahrirlash va o'chirish;",
+          "chat ishlashi;",
+          "foydalanuvchilar bilan ularning murojaatlari bo'yicha bog'lanish (/info/contacts orqali ham);",
+          "xizmat bildirishnomalarini yuborish;",
+          "tahlil va xizmat ishini yaxshilash;",
+          "spam, firibgarlik va qoidalar buzilishidan himoya qilish."
+        ]
+      },
+      "thirdParty": {
+        "title": "4. Ma'lumotlarni uchinchi shaxslarga uzatish",
+        "intro": "Biz shaxsiy ma'lumotlarni uchinchi shaxslarga uzatmaymiz va sotmaymiz, quyidagi holatlar bundan mustasno:",
+        "list": [
+          "Google — Google OAuth orqali avtorizatsiyada;",
+          "Telegram — WebApp avtorizatsiyasi faollashtirilganda;",
+          "Timeweb pochta xizmati — tasdiqlash xatlarini yuborish uchun;",
+          "Xosting-provayderlar — sayt ishlashi va fayllarni saqlashni ta'minlash uchun;",
+          "Davlat organlari — qonuniy talab mavjud bo'lganda."
+        ],
+        "note": "Biz foydalanuvchilar ma'lumotlarini tijorat maqsadlarida ishlatmaymiz va reklama kompaniyalariga uzatmaymiz."
+      },
+      "cookies": {
+        "title": "5. Cookies va tahlil",
+        "intro": "Biz cookies-dan quyidagilar uchun foydalanamiz:",
+        "list": [
+          "foydalanuvchi sozlamalarini saqlash;",
+          "avtorizatsiyani qo'llab-quvvatlash;",
+          "sayt tashriflarini tahlil qilish;",
+          "firibgarlik harakatlaridan himoya qilish."
+        ],
+        "note": "Foydalanuvchi brauzerda cookies-ni o'chirishi mumkin, lekin xizmatning ba'zi funksiyalari noto'g'ri ishlashi mumkin."
+      },
+      "security": {
+        "title": "6. Ma'lumotlarni saqlash va himoya qilish",
+        "intro": "Biz zamonaviy texnik xavfsizlik choralarini qo'llaymiz:",
+        "list": [
+          "parollarni shifrlash (bcrypt);",
+          "xavfsiz HTTPS ulanishi;",
+          "parol tanlash va DDOS dan himoya (rate limiting);",
+          "ma'lumotlarni himoyalangan serverlarda saqlash;",
+          "ma'lumotlar bazasiga kirishni nazorat qilish;",
+          "shubhali faoliyatni muntazam monitoring qilish."
+        ]
+      },
+      "retention": {
+        "title": "7. Ma'lumotlarni saqlash muddati",
+        "paragraphs": [
+          "Biz shaxsiy ma'lumotlarni foydalanuvchi xizmatdan foydalanishni davom ettirguncha yoki qonunchilik belgilagan muddatlar davomida saqlaymiz.",
+          "Foydalanuvchi tomonidan akkauntni o'chirish hozircha mavjud emas, lekin kelajakdagi yangilanishlarda paydo bo'ladi."
+        ]
+      },
+      "rights": {
+        "title": "8. Foydalanuvchi huquqlari",
+        "intro": "Foydalanuvchi quyidagi huquqlarga ega:",
+        "list": [
+          "qanday ma'lumotlar to'planayotgani haqida ma'lumot olish;",
+          "ma'lumotlarni tuzatishni so'rash;",
+          "o'z kontakt ma'lumotlaridan foydalanishni cheklash;",
+          "xabarlar yuborishdan voz kechish;",
+          "/info/contacts aloqa shakli orqali shikoyat va savollar yuborish."
+        ]
+      },
+      "children": {
+        "title": "9. Bolalar ma'lumotlari",
+        "paragraphs": [
+          "Biz 16 yoshdan kichik bolalarning ma'lumotlarini to'plamaymiz.",
+          "Agar voyaga yetmagan shaxsning ma'lumotlari xato uzatilgan bo'lsa — bizga xabar bering va biz ularni o'chiramiz."
+        ]
+      },
+      "updates": {
+        "title": "10. Siyosat yangilanishlari",
+        "paragraphs": [
+          "Biz Maxfiylik siyosatini yangilashimiz mumkin.",
+          "Dolzarb versiya doimo saytda mavjud."
+        ]
+      },
+      "contact": {
+        "title": "11. Kontaktlar",
+        "paragraphs": [
+          "Maxfiylik va shaxsiy ma'lumotlarni qayta ishlash bilan bog'liq har qanday savol bo'yicha foydalanuvchi aloqa shakli orqali murojaat qilishi mumkin."
+        ],
+        "note": "Bu usul murojaatlar uchun asosiy va ustuvor hisoblanadi."
+      }
+    }
+  },
+  "terms": {
+    "seo": {
+      "title": "MobiStore xizmatidan foydalanish shartlari",
+      "description": "MobiStore savdo platformasi foydalanuvchilarining e'lon joylashtirish qoidalari, taqiqlar va javobgarligi."
+    },
+    "eyebrow": "Foydalanish shartlari",
+    "title": "MobiStore xizmati shartlari",
+    "lead": "Ushbu qoidalar MobiStore platformasida e'lonlar nashr qilish, foydalanuvchilar o'zaro munosabatlari va tomonlar javobgarligini tartibga soladi.",
+    "lastUpdated": "Oxirgi yangilanish sanasi: {date}",
+    "consent": "Xizmatdan foydalanib, siz Shartlarga roziligingizni tasdiqlaysiz.",
+    "intro": {
+      "title": "Kirish",
+      "text": "Ushbu Shartlar MobiStore (mobistore.uz) platformasidan kompyuter va mobil brauzerlarda foydalanish tartibini tartibga soladi. Iltimos, e'lonlar joylashtirish va boshqa foydalanuvchilar bilan muloqot qilishdan oldin ularni diqqat bilan o'qib chiqing."
+    },
+    "sections": {
+      "definitions": {
+        "title": "1. Ta'riflar",
+        "paragraphs": [
+          "Xizmat (MobiStore) — mobil telefonlar va aksessuarlarni sotish bo'yicha e'lonlar joylashtirish uchun onlayn-platforma.",
+          "Foydalanuvchi — Xizmatdan foydalanuvchi jismoniy shaxs.",
+          "Akkaunt — Foydalanuvchi tomonidan e'lonlar nashr qilish uchun yaratilgan hisob yozuvi.",
+          "E'lon — Foydalanuvchi tomonidan joylashtirilgan tovar haqida ma'lumot.",
+          "Sotuvchi — e'lonlar nashr qiluvchi foydalanuvchi.",
+          "Xaridor — e'lonlarni ko'ruvchi va sotuvchi bilan muloqot qiluvchi foydalanuvchi.",
+          "Xabarlar (chat) — Xizmat ichida xaridor va sotuvchi o'rtasida xabar almashish tizimi.",
+          "Taqiqlangan tovarlar — qonunchilik va MobiStore ro'yxati bilan taqiqlangan tovarlar."
+        ]
+      },
+      "general": {
+        "title": "2. Umumiy qoidalar",
+        "paragraphs": [
+          "MobiStore faqat e'lonlar joylashtirish uchun platforma bo'lib, sotuvchi, vositachi yoki bitim ishtirokchisi emas.",
+          "Ma'muriyat tovarlar sifati, foydalanuvchilar harakatlari, ma'lumotlar ishonchliligi va kelishuvlar bajarilishi uchun javobgar emas.",
+          "Foydalanuvchi O'zbekiston Respublikasi qonunchiligiga rioya qilishi shart.",
+          "Ma'muriyat Shartlarni buzuvchi e'lonlarni yashirish, bloklash yoki o'chirish huquqiga ega."
+        ]
+      },
+      "account": {
+        "title": "3. Akkaunt va ro'yxatdan o'tish",
+        "paragraphs": [
+          "E'lonlar nashr qilish uchun email va parol orqali ro'yxatdan o'tish talab qilinadi.",
+          "Foydalanuvchi ishonchli ma'lumotlar taqdim etishga va kirish ma'lumotlarini uchinchi shaxslarga uzatmaslikka majbur.",
+          "Akkauntni o'chirish hozircha ko'zda tutilmagan. Shartlar buzilganda ma'muriyat kirishni cheklashi mumkin."
+        ]
+      },
+      "listings": {
+        "title": "4. E'lonlar joylashtirish",
+        "intro": "E'lon joylashtirib, Foydalanuvchi tovarga bo'lgan huquqini va ma'lumotlar ishonchliligini tasdiqlaydi.",
+        "list": [
+          "Brend va model tovarga mos kelishi kerak.",
+          "Narx so'mlarda (UZS) ko'rsatiladi.",
+          "Tavsifda kontaktlar qoldirish taqiqlangan.",
+          "Sarlavha va tavsifda spam, haqorat va boshqa saytlar reklamasi bo'lmasligi kerak.",
+          "Har bir tovar alohida e'lon sifatida nashr qilinadi.",
+          "Ma'muriyat e'lonni moderatsiyaga yuborishi yoki rad etishi mumkin."
+        ]
+      },
+      "statuses": {
+        "title": "5. E'lon statuslari",
+        "list": [
+          "draft — qoralama",
+          "active — nashr qilingan",
+          "sold — tovar sotilgan",
+          "archived — foydalanuvchi tomonidan yashirilgan",
+          "moderation — tekshirilmoqda",
+          "rejected — rad etilgan"
+        ]
+      },
+      "images": {
+        "title": "6. Rasmlar",
+        "paragraphs": [
+          "Foydalanuvchi faqat tovarning haqiqiy rasmlarini yuklaydi.",
+          "Boshqalarning rasmlari, boshqa platformalar suv belgilari, 18+ materiallar, zo'ravonlik sahnalari va haqoratlar taqiqlangan.",
+          "Ma'muriyat Shartlarni buzuvchi rasmlarni o'chirish huquqiga ega."
+        ]
+      },
+      "chat": {
+        "title": "7. Xaridor va sotuvchi o'rtasidagi chat",
+        "paragraphs": [
+          "Xabarlar faqat xarid muhokamasi uchun ishlatiladi.",
+          "Spam, firibgarlik havolalari, haqoratlar va taqiqlangan materiallar yuborish taqiqlangan.",
+          "Shikoyat bo'lganda yozishmalar moderatsiya tomonidan ko'rib chiqilishi mumkin."
+        ]
+      },
+      "favorites": {
+        "title": "8. Sevimlilar",
+        "paragraphs": [
+          "Foydalanuvchi e'lonlarni \"Sevimlilar\" bo'limiga qo'shishi mumkin. Funksiya faqat qulaylik uchun xizmat qiladi va majburiyatlar yaratmaydi."
+        ]
+      },
+      "prohibited": {
+        "title": "9. Taqiqlangan tovarlar",
+        "fullyProhibited": {
+          "title": "To'liq taqiqlangan",
+          "list": [
+            "o'g'irlangan va topilgan telefonlar",
+            "qalbaki qurilmalar",
+            "o'zgartirilgan yoki o'chirilgan IMEI li qurilmalar",
+            "operator ostida bloklangan telefonlar",
+            "sim-kartalar, eSIM, akkauntlar, buzish xizmatlari",
+            "O'zR qonuni bilan taqiqlangan tovarlar"
+          ]
+        },
+        "conditionallyProhibited": {
+          "title": "Shartli taqiqlangan (halol tavsif talab qiladi)",
+          "list": [
+            "tiklangan telefonlar — \"restored\" deb belgilanishi kerak",
+            "shikastlangan telefonlar — barcha nuqsonlarni ko'rsatish kerak"
+          ]
+        }
+      },
+      "responsibility": {
+        "title": "10. Foydalanuvchi javobgarligi",
+        "paragraphs": [
+          "Foydalanuvchi e'lonlar, tovarlar va yozishmalar uchun javobgar.",
+          "Dublikatlar yaratish, chalg'itish, ishlatilganni yangi deb ko'rsatish va xizmatni firibgarlik uchun ishlatish taqiqlangan.",
+          "Buzilishlar bo'lganda ma'muriyat e'lonlarni o'chirishi, akkauntga kirishni cheklashi yoki yangi nashrlarni taqiqlashi mumkin."
+        ]
+      },
+      "liability": {
+        "title": "11. MobiStore javobgarligini cheklash",
+        "list": [
+          "Xizmat foydalanuvchilar o'rtasidagi bitimlar va har qanday moliyaviy yo'qotishlar uchun javobgar emas.",
+          "MobiStore foydalanuvchilar xatolari, uskunaning ishlamasligi yoki internet yo'qligi uchun javobgar emas.",
+          "Texnik tanaffuslar va server yangilanishlariga ruxsat beriladi."
+        ]
+      },
+      "complaints": {
+        "title": "12. Shikoyatlar",
+        "paragraphs": [
+          "Foydalanuvchi aloqa shakli orqali shikoyat yuborishi mumkin. Ma'muriyat shikoyatlarni ko'rib chiqadi va o'z ixtiyoriga ko'ra choralar ko'radi."
+        ]
+      },
+      "changes": {
+        "title": "13. Shartlar o'zgarishlari",
+        "paragraphs": [
+          "MobiStore Shartlarni istalgan vaqtda o'zgartirishi mumkin. Yangi tahrir saytda nashr qilinadi va nashr qilingan paytdan kuchga kiradi."
+        ]
+      },
+      "law": {
+        "title": "14. Qo'llaniladigan huquq",
+        "paragraphs": [
+          "Tomonlar munosabatlariga O'zbekiston Respublikasi qonunchiligi qo'llaniladi. Nizolar O'zR sudlarida ko'rib chiqiladi."
+        ]
+      }
+    }
+  }
+}

@@ -6,6 +6,11 @@ definePageMeta({
   layout: "admin",
 });
 
+useSeoMeta({
+  title: "Логи — Админ MobiStore",
+  robots: "noindex, nofollow",
+});
+
 const {
   loading,
   logs,

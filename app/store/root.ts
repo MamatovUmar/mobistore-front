@@ -4,10 +4,12 @@ import { ref } from "#imports";
 import { catcher } from "~/utils/catcher";
 import type { IBaseResponse } from "~/types";
 import { getErrorMessage } from "~/utils/error";
+import { useLocalePath } from "#i18n";
 
 export const useRootStore = defineStore('root', () => {
   const { $api } = useNuxtApp();
   const tokenCookie = useCookie("token");
+  const localePath = useLocalePath();
 
   const user = ref<IUser>();
 
@@ -43,7 +45,7 @@ export const useRootStore = defineStore('root', () => {
   const logout = catcher(async () => {
     user.value = undefined;
     tokenCookie.value = undefined;
-    navigateTo('/');
+    navigateTo(localePath('/'));
   });
 
   return {

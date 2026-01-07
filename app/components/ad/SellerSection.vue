@@ -3,6 +3,8 @@ import type { IListing } from "~/types/ads";
 import { lastActivity } from "~/utils/formatters";
 
 const { listing } = defineProps<{ listing: IListing }>();
+const localePath = useLocalePath();
+const { t } = useI18n();
 
 const seller = computed(() => listing.user);
 
@@ -19,9 +21,9 @@ const registrationYear = computed(() => {
 
 <template>
   <div class="seller-section">
-    <h2 class="section-title">Продавец</h2>
+    <h2 class="section-title">{{ t('listingDetails.seller') }}</h2>
 
-    <nuxt-link :to="`/user/${seller.id}`" class="seller-info">
+    <nuxt-link :to="localePath(`/user/${seller.id}`)" class="seller-info">
       <div class="user-avatar-wrapper">
         <el-avatar v-if="seller?.avatar" :src="seller.avatar" :size="64" />
         <el-avatar v-else :size="64" class="user-avatar">
@@ -39,12 +41,12 @@ const registrationYear = computed(() => {
         <div class="seller-stats">
           <span
             class="activity-status"
-            :class="{ online: lastActivityText === 'В сети' }"
+            :class="{ online: lastActivityText === t('formatters.activity.online') }"
           >
             {{ lastActivityText }}
           </span>
         </div>
-        <div class="seller-meta">На сайте с {{ registrationYear }} года</div>
+        <div class="seller-meta">{{ t('listingDetails.onSiteSince', { year: registrationYear }) }}</div>
       </div>
     </nuxt-link>
   </div>

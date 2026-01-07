@@ -1,18 +1,25 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import { User, Lock, ArrowLeft } from "@element-plus/icons-vue";
+import { User, Lock, ArrowLeft, CircleCheckFilled } from "@element-plus/icons-vue";
 import type { IAuthResponse } from "~/types/auth";
-import { useRootStore } from "~/store/root";
-import { useCookie } from "#app";
 
 definePageMeta({
   layout: "empty",
   middleware: "guest",
 });
 
+const { t } = useI18n();
+const localePath = useLocalePath();
+
+useSeoMeta({
+  title: t("auth.signup.metaTitle"),
+  description: t("auth.signup.metaDesc"),
+  ogTitle: t("auth.signup.metaTitle"),
+  ogDescription: t("auth.signup.metaDesc"),
+  robots: "noindex, nofollow",
+});
+
 const { $api } = useNuxtApp();
-const rootStore = useRootStore();
-const tokenCookie = useCookie("token");
 
 const formRef = ref();
 
@@ -23,37 +30,38 @@ const form = reactive({
   last_name: "",
 });
 
-const rules = {
+const rules = computed(() => ({
   email: [
     {
       required: true,
       type: "email" as const,
-      message: "Пожалуйста, введите корректный email",
+      message: t("auth.common.validation.email"),
       trigger: ["blur", "change"],
     },
   ],
   password: [
     {
       required: true,
-      message: "Пожалуйста, введите пароль",
+      message: t("auth.common.validation.password"),
       trigger: "blur",
     },
     {
       min: 6,
-      message: "Пароль должен содержать минимум 6 символов",
+      message: t("auth.common.validation.passwordMin"),
       trigger: ["blur", "change"],
     },
   ],
   first_name: [
     {
       required: true,
-      message: "Пожалуйста, введите имя",
+      message: t("auth.common.validation.name"),
       trigger: "blur",
     },
   ]
-};
+}));
 
 const loading = ref(false);
+const showSuccessDialog = ref(false);
 
 const register = async () => {
   if (!formRef.value) return;
@@ -62,21 +70,15 @@ const register = async () => {
     if (valid) {
       loading.value = true;
       try {
-        const res = await $api<IAuthResponse>("/auth/register", {
+        await $api<IAuthResponse>("/auth/register", {
           method: "POST",
           body: form
         });
 
-        rootStore.user = res.data?.user;
-        tokenCookie.value = res.data?.token;
+        showSuccessDialog.value = true;
+      } catch {
         ElMessage({
-          message: "Вы успешно зарегистрировались",
-          type: "success",
-        });
-        navigateTo('/')
-      } catch (error) {
-        ElMessage({
-          message: "Произошла ошибка при регистрации",
+          message: t("auth.signup.error"),
           type: "error",
         });
       } finally {
@@ -86,12 +88,39 @@ const register = async () => {
   });
 };
 
+const goToHome = () => {
+  navigateTo(localePath('/'));
+};
+
 </script>
 
 <template>
   <div class="signup-page">
+    <el-dialog
+      v-model="showSuccessDialog"
+      :show-close="false"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      width="400px"
+      center
+      class="success-dialog"
+    >
+      <div class="success-content">
+        <el-icon class="success-icon" :size="64" color="#67c23a">
+          <CircleCheckFilled />
+        </el-icon>
+        <h3 class="success-title">{{ t('auth.signup.successTitle') }}</h3>
+        <p class="success-message">
+          {{ t('auth.signup.successMessage') }}
+        </p>
+        <el-button type="primary" size="large" class="success-button" @click="goToHome">
+          {{ t('auth.common.goToHome') }}
+        </el-button>
+      </div>
+    </el-dialog>
+
     <div class="signup-card">
-      <NuxtLink to="/" class="back-link">
+      <NuxtLink :to="localePath('/')" class="back-link">
         <el-icon :size="18">
           <ArrowLeft />
         </el-icon>
@@ -99,8 +128,8 @@ const register = async () => {
 
       <div class="signup-header">
         <div class="logo-section">
-          <h1 class="signup-title">Создать аккаунт</h1>
-          <p class="signup-subtitle">Присоединяйтесь к MobiStore</p>
+          <h1 class="signup-title">{{ t('auth.signup.title') }}</h1>
+          <p class="signup-subtitle">{{ t('auth.signup.subtitle') }}</p>
         </div>
       </div>
 
@@ -108,40 +137,40 @@ const register = async () => {
         <el-form ref="formRef" :model="form" :rules="rules" @submit.prevent="register">
           <div class="name-row">
             <el-form-item prop="first_name">
-              <label class="form-label">Имя</label>
+              <label class="form-label">{{ t('auth.signup.firstName') }}</label>
               <el-input
                 v-model="form.first_name"
-                placeholder="Введите имя"
+                :placeholder="t('auth.signup.firstNamePlaceholder')"
                 size="large"
               />
             </el-form-item>
 
             <el-form-item>
-              <label class="form-label">Фамилия</label>
+              <label class="form-label">{{ t('auth.signup.lastName') }}</label>
               <el-input
                 v-model="form.last_name"
-                placeholder="Введите фамилию"
+                :placeholder="t('auth.signup.lastNamePlaceholder')"
                 size="large"
               />
             </el-form-item>
           </div>
 
           <el-form-item prop="email">
-            <label class="form-label">Email</label>
+            <label class="form-label">{{ t('auth.common.email') }}</label>
             <el-input
               v-model="form.email"
-              placeholder="Введите ваш email"
+              :placeholder="t('auth.common.emailPlaceholder')"
               size="large"
               :prefix-icon="User"
             />
           </el-form-item>
 
           <el-form-item prop="password">
-            <label class="form-label">Пароль</label>
+            <label class="form-label">{{ t('auth.common.password') }}</label>
             <el-input
               v-model="form.password"
               type="password"
-              placeholder="Введите пароль"
+              :placeholder="t('auth.common.passwordPlaceholder')"
               size="large"
               :prefix-icon="Lock"
               show-password
@@ -155,20 +184,20 @@ const register = async () => {
             :loading="loading"
             native-type="submit"
           >
-            Зарегистрироваться
+            {{ t('auth.common.signup') }}
           </el-button>
         </el-form>
 
         <div class="divider">
-          <span>или зарегистрируйтесь с помощью</span>
+          <span>{{ t('auth.common.orSignupWith') }}</span>
         </div>
 
         <AuthGoogleButton />
 
         <div class="login-prompt">
-          <span>Уже есть аккаунт?</span>
-          <NuxtLink to="/login" class="login-link">
-            Войти
+          <span>{{ t('auth.common.hasAccount') }}</span>
+          <NuxtLink :to="localePath('/login')" class="login-link">
+            {{ t('auth.common.login') }}
           </NuxtLink>
         </div>
       </div>
@@ -340,6 +369,55 @@ const register = async () => {
 
   &:hover {
     color: var(--color-primary-hover);
+  }
+}
+
+.success-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.success-icon {
+  margin-bottom: 20px;
+}
+
+.success-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 16px 0;
+}
+
+.success-message {
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0 0 24px 0;
+}
+
+.success-button {
+  width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 10px;
+}
+</style>
+
+<style lang="scss">
+.success-dialog {
+  .el-dialog__header {
+    display: none;
+  }
+
+  .el-dialog__body {
+    padding: 30px;
+  }
+
+  .el-dialog {
+    border-radius: 16px;
   }
 }
 </style>

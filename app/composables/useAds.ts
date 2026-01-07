@@ -4,17 +4,18 @@ import type { IBaseResponse } from "~/types";
 export const useAds = () => {
 
   const {$api} = useNuxtApp();
+  const { t } = useI18n();
 
   const bumpLoading = ref(false);
 
   const getStatusLabel = (status: ListingStatus) => {
     const labels: Record<ListingStatus, string> = {
-      [ListingStatus.ACTIVE]: "Активно",
-      [ListingStatus.DRAFT]: "Черновик",
-      [ListingStatus.ARCHIVED]: "Архивировано",
-      [ListingStatus.SOLD]: "Продано",
-      [ListingStatus.MODERATION]: "На модерации",
-      [ListingStatus.REJECTED]: "Отклонено",
+      [ListingStatus.ACTIVE]: t("ads.status.active"),
+      [ListingStatus.DRAFT]: t("ads.status.draft"),
+      [ListingStatus.ARCHIVED]: t("ads.status.archived"),
+      [ListingStatus.SOLD]: t("ads.status.sold"),
+      [ListingStatus.MODERATION]: t("ads.status.moderation"),
+      [ListingStatus.REJECTED]: t("ads.status.rejected"),
     };
     return labels[status] || status;
   };
@@ -36,9 +37,9 @@ export const useAds = () => {
 
   const getStateLabel = (state: IState) => {
     const labels: Record<IState, string> = {
-      new: "Новый",
-      used: "Б/У",
-      restored: "Восстановлен",
+      new: t("ads.state.new"),
+      used: t("ads.state.used"),
+      restored: t("ads.state.restored"),
     };
     return labels[state] || state;
   };
@@ -54,7 +55,7 @@ export const useAds = () => {
     ElMessage.success(result.message);
   }, (error: any) => {
     const message = getErrorMessage(error)
-    ElMessage.error(message || "Не удалось изменить статус");
+    ElMessage.error(message || t("ads.actions.changeStatusError"));
   });
 
   const bumpAd = catcher(async (id: number) => {
@@ -69,7 +70,7 @@ export const useAds = () => {
   }, (error: any) => {
     bumpLoading.value = false
     const message = error?.response?._data?.message
-    ElMessage.error(message || "Не удалось поднять объявление");
+    ElMessage.error(message || t("ads.actions.bumpError"));
   });
 
   return {

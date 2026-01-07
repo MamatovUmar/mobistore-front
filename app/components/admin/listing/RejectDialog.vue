@@ -74,9 +74,9 @@ watch(
     @closed="handleClose"
   >
     <div v-if="ad" class="reject-content">
-      <div class="ad-preview">
-        <span class="ad-title">{{ ad.title }}</span>
-        <span class="ad-id">ID: {{ ad.id }}</span>
+      <div class="listing-preview">
+        <span class="listing-title">{{ ad.title }}</span>
+        <span class="listing-id">ID: {{ ad.id }}</span>
       </div>
 
       <div class="quick-reasons">
@@ -148,7 +148,7 @@ watch(
   gap: 20px;
 }
 
-.ad-preview {
+.listing-preview {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -157,13 +157,13 @@ watch(
   border-radius: 8px;
 }
 
-.ad-title {
+.listing-title {
   font-size: 14px;
   font-weight: 500;
   color: var(--color-text-primary);
 }
 
-.ad-id {
+.listing-id {
   font-size: 12px;
   color: var(--color-text-muted);
 }

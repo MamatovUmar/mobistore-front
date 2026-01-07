@@ -7,6 +7,8 @@ const { listing } = defineProps<{
   listing: IListing;
 }>();
 
+const { t } = useI18n();
+
 // Пример данных модели - в реальном приложении придут из API
 const modelData = computed(() => listing.model);
 
@@ -16,54 +18,41 @@ const openModelSpecs = () => {
   showModelSpecs.value = true;
 };
 
-// Формируем значение памяти
-const memoryValue = computed(() => {
-  // Если есть storage или ram в объявлении, показываем их
-  if (listing.storage || listing.ram) {
-    const parts = [];
-    if (listing.storage) parts.push(`${listing.storage} ГБ`);
-    if (listing.ram) parts.push(`${listing.ram} ГБ RAM`);
-    return parts.join(' / ');
-  }
-  // Иначе показываем данные из модели
-  return modelData.value?.memory?.internal || "—";
-});
-
 // Основные характеристики для отображения на странице
-const mainSpecs = [
+const mainSpecs = computed(() => [
   {
-    label: "Процессор",
-    value: modelData.value?.platform?.chipset || "—",
+    label: t("listingDetails.specs.color"),
+    value: listing?.color || "—",
   },
   {
-    label: "Операционная система",
-    value: modelData.value?.platform?.os || "—",
+    label: t("listingDetails.specs.ram"),
+    value: listing?.ram ? `${listing.ram} ${listing.ram_unit}` : "—",
   },
   {
-    label: "Память",
-    value: memoryValue.value,
+    label: t("listingDetails.specs.storage"),
+    value: listing?.storage ? `${listing.storage} ${listing.storage_unit}` : "—",
   },
   {
-    label: "Экран",
-    value: modelData.value?.display?.size || "—",
+    label: t("listingDetails.specs.screen"),
+    value: modelData.value?.display_size || "—",
   },
   {
-    label: "Тип экрана",
-    value: modelData.value?.display?.type || "—",
+    label: t("listingDetails.specs.screenType"),
+    value: modelData.value?.display_type || "—",
   },
   {
-    label: "Батарея",
-    value: modelData.value?.battery?.type || "—",
+    label: t("listingDetails.specs.battery"),
+    value: modelData.value?.battery_type || "—",
   },
-];
+]);
 </script>
 
 <template>
   <div v-if="listing" class="specs-section">
     <div class="specs-header">
-      <h2 class="section-title">Характеристики</h2>
-      <el-button type="info" plain @click="openModelSpecs">
-        Полные характеристики модели
+      <h2 class="section-title">{{ t('listingDetails.characteristics') }}</h2>
+      <el-button v-if="listing.model" type="info" plain @click="openModelSpecs">
+        {{ t('listingDetails.fullCharacteristics') }}
       </el-button>
     </div>
 

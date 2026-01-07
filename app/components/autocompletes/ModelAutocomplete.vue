@@ -3,29 +3,36 @@ import { ref, watch } from "vue";
 import type { IModel, IModelResponse } from "~/types/model";
 import type { IBaseResponse } from "~/types";
 
+const OTHER_MODEL_VALUE = -1;
+
 interface Props {
   placeholder?: string;
-  brandId?: number;
+  brandId?: number | null;
   initData?: IModel;
+  other?: boolean;
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  placeholder: "Введите название модели",
-});
+const props = defineProps<Props>();
 
-const model = defineModel<number>();
+const model = defineModel<number | null>();
 
 const emit = defineEmits<{
-  select: [model: IModel];
+  select: [model: IModel | null];
+  selectOther: [];
 }>();
 
 const { $api } = useNuxtApp();
+const { t } = useI18n();
+
+const computedPlaceholder = computed(() => props.placeholder ?? t("components.model.placeholder"));
 
 const loading = ref(false);
 // Инициализируем список моделей с initData для SSR
 const models = ref<IModel[]>(props.initData ? [props.initData] : []);
+const searchQuery = ref("");
 
 const remoteSearch = async (query: string) => {
+  searchQuery.value = query;
   if (!query || query.trim() === "") {
     // При пустом поиске сохраняем только initData
     models.value = props.initData ? [props.initData] : [];
@@ -57,7 +64,13 @@ const remoteSearch = async (query: string) => {
   }
 };
 
-const handleChange = (value: number) => {
+const handleChange = (value: number | null) => {
+  if (value === OTHER_MODEL_VALUE) {
+    model.value = null;
+    emit("select", null);
+    emit("selectOther");
+    return;
+  }
   const selectedModel = models.value.find(m => m.id === value);
   if (selectedModel) {
     emit("select", selectedModel);
@@ -88,7 +101,7 @@ watch(() => props.initData, (newData) => {
 <template>
   <el-select
     v-model="model"
-    :placeholder="placeholder"
+    :placeholder="computedPlaceholder"
     :loading="loading"
     :disabled="!brandId"
     filterable
@@ -110,6 +123,13 @@ watch(() => props.initData, (newData) => {
         <span class="model-brand">{{ modelItem.brand?.name }}</span>
       </div>
     </el-option>
+    <el-option
+      v-if="searchQuery.trim() && other"
+      :key="OTHER_MODEL_VALUE"
+      :label="$t('common.other')"
+      :value="OTHER_MODEL_VALUE"
+      class="other-option"
+    />
   </el-select>
 </template>
 

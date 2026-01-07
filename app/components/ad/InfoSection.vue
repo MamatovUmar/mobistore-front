@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import type { IListing } from '~/types/ads';
+import type { IListing } from "~/types/ads";
 
 const { listing } = defineProps<{
   listing: IListing;
 }>();
 
+const { t } = useI18n();
 </script>
 
 <template>
   <div class="description-section">
-    <h2 class="section-title">Описание</h2>
+    <h2 class="section-title">{{ t('listingDetails.description') }}</h2>
     <ClientOnly>
       <p class="description-text" v-html="listing.description"></p>
     </ClientOnly>
@@ -23,6 +24,7 @@ const { listing } = defineProps<{
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   margin-top: 20px;
+  word-break: break-all;
 }
 
 .section-title {
@@ -33,7 +35,8 @@ const { listing } = defineProps<{
   color: var(--color-text-primary);
 }
 
-.description-text, .description-text * {
+.description-text,
+.description-text * {
   color: var(--color-text-secondary) !important;
   font-size: 16px;
   line-height: 1.8;

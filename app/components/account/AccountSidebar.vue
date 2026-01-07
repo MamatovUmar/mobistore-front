@@ -3,20 +3,22 @@ import { User, Document, Star, SwitchButton, MessageBox } from "@element-plus/ic
 import { useRootStore } from "~/store/root";
 import ProfileImage from "./ProfileImage.vue";
 
+const { t } = useI18n();
+const localePath = useLocalePath();
 const root = useRootStore();
 
-const menuItems = [
-  { title: "Личные данные", icon: User, path: "/account" },
-  { title: "Мои объявления", icon: Document, path: "/account/listings" },
-  { title: "Избранные", icon: Star, path: "/account/favorites" },
-  { title: "Переписки", icon: MessageBox, path: "/account/conversations" },
-];
+const menuItems = computed(() => [
+  { title: t("account.sidebar.personalData"), icon: User, path: localePath("/account") },
+  { title: t("account.sidebar.myListings"), icon: Document, path: localePath("/account/listings") },
+  { title: t("account.sidebar.favorites"), icon: Star, path: localePath("/account/favorites") },
+  { title: t("account.sidebar.conversations"), icon: MessageBox, path: localePath("/account/conversations") },
+]);
 </script>
 
 <template>
   <aside class="account-sidebar">
     <ProfileImage />
-    
+
     <nav class="sidebar-nav">
       <NuxtLink
         v-for="item in menuItems"
@@ -37,7 +39,7 @@ const menuItems = [
         <el-icon class="nav-icon">
           <SwitchButton />
         </el-icon>
-        <span class="nav-text">Выйти</span>
+        <span class="nav-text">{{ $t("account.sidebar.logout") }}</span>
       </button>
     </nav>
   </aside>

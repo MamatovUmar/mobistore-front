@@ -30,7 +30,7 @@ export interface IAdminAdsResponse {
   pagination: IPagination;
 }
 
-export interface IUpdateStatusPayload {
+export interface IAdUpdateStatusPayload {
   status: ListingStatus;
   reason?: string;
 }
@@ -178,7 +178,7 @@ export const useAdminAds = () => {
   };
 
   // ADMIN: Force change status
-  const changeStatus = async (id: number, payload: IUpdateStatusPayload) => {
+  const changeStatus = async (id: number, payload: IAdUpdateStatusPayload) => {
     try {
       const result = await $api<IBaseResponse<IListing>>(`/admin/ads/${id}/status`, {
         method: "PATCH",

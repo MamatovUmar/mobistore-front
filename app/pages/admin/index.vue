@@ -1,8 +1,14 @@
 <script setup lang="ts">
+import { markRaw } from "vue";
 import { User, Document, TrendCharts, View } from "@element-plus/icons-vue";
 
 definePageMeta({
   layout: "admin",
+});
+
+useSeoMeta({
+  title: "Админ панель — MobiStore",
+  robots: "noindex, nofollow",
 });
 
 const stats = ref([
@@ -11,7 +17,7 @@ const stats = ref([
     value: "1,234",
     change: "+12%",
     trend: "up",
-    icon: User,
+    icon: markRaw(User),
     color: "#3b82f6",
     bgColor: "rgba(59, 130, 246, 0.1)",
   },
@@ -20,7 +26,7 @@ const stats = ref([
     value: "5,678",
     change: "+8%",
     trend: "up",
-    icon: Document,
+    icon: markRaw(Document),
     color: "#10b981",
     bgColor: "rgba(16, 185, 129, 0.1)",
   },
@@ -29,7 +35,7 @@ const stats = ref([
     value: "45.2K",
     change: "+24%",
     trend: "up",
-    icon: View,
+    icon: markRaw(View),
     color: "#f59e0b",
     bgColor: "rgba(245, 158, 11, 0.1)",
   },
@@ -38,7 +44,7 @@ const stats = ref([
     value: "89%",
     change: "-2%",
     trend: "down",
-    icon: TrendCharts,
+    icon: markRaw(TrendCharts),
     color: "#8b5cf6",
     bgColor: "rgba(139, 92, 246, 0.1)",
   },
@@ -97,7 +103,10 @@ const recentActivity = ref([
           <span class="stat-value">{{ stat.value }}</span>
           <span
             class="stat-change"
-            :class="{ 'stat-change--up': stat.trend === 'up', 'stat-change--down': stat.trend === 'down' }"
+            :class="{
+              'stat-change--up': stat.trend === 'up',
+              'stat-change--down': stat.trend === 'down',
+            }"
           >
             {{ stat.change }} за месяц
           </span>
@@ -115,7 +124,11 @@ const recentActivity = ref([
         </template>
 
         <div class="activity-list">
-          <div v-for="item in recentActivity" :key="item.id" class="activity-item">
+          <div
+            v-for="item in recentActivity"
+            :key="item.id"
+            class="activity-item"
+          >
             <el-avatar :size="40" class="activity-avatar">
               {{ item.user.charAt(0) }}
             </el-avatar>
@@ -123,7 +136,9 @@ const recentActivity = ref([
               <p class="activity-text">
                 <strong>{{ item.user }}</strong>
                 {{ item.action }}
-                <span v-if="item.target" class="activity-target">{{ item.target }}</span>
+                <span v-if="item.target" class="activity-target">{{
+                  item.target
+                }}</span>
               </p>
               <span class="activity-time">{{ item.time }}</span>
             </div>
@@ -300,12 +315,16 @@ const recentActivity = ref([
   display: flex;
   flex-direction: column;
   gap: 12px;
+  button {
+    margin-left: 0;
+  }
 }
 
 .action-btn {
   justify-content: flex-start;
   height: 48px;
   font-weight: 500;
+  margin-left: 0;
 
   .el-icon {
     margin-right: 8px;

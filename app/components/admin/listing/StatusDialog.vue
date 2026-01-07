@@ -84,8 +84,8 @@ watch(
     @closed="handleClose"
   >
     <div v-if="ad" class="status-content">
-      <div class="ad-preview">
-        <span class="ad-title">{{ ad.title }}</span>
+      <div class="listing-preview">
+        <span class="listing-title">{{ ad.title }}</span>
         <el-tag :type="getStatusType(ad.status)" size="small">
           {{ getStatusLabel(ad.status) }}
         </el-tag>
@@ -170,7 +170,7 @@ watch(
   gap: 20px;
 }
 
-.ad-preview {
+.listing-preview {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -179,7 +179,7 @@ watch(
   border-radius: 8px;
 }
 
-.ad-title {
+.listing-title {
   font-size: 14px;
   font-weight: 500;
   color: var(--color-text-primary);

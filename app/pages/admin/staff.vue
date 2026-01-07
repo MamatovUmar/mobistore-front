@@ -8,6 +8,11 @@ definePageMeta({
   layout: "admin",
 });
 
+useSeoMeta({
+  title: "Сотрудники — Админ MobiStore",
+  robots: "noindex, nofollow",
+});
+
 const { user } = useRootStore();
 
 const {

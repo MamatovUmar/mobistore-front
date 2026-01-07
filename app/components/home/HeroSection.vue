@@ -1,183 +1,405 @@
 <script setup lang="ts">
+import { Cellphone, Lightning, Wallet } from "@element-plus/icons-vue";
+
+const { t } = useI18n();
 </script>
 
 <template>
   <div class="hero-wrapper">
-    <section class="hero">
-      <div class="ambient-light"></div>
-      <div class="container">
-        <div class="hero-content">
-          <div class="text-content">
-            <h1 class="hero-title">
-              <span class="line">Технологии</span>
-              <span class="line gradient-text">в твоих руках</span>
-            </h1>
-            <p class="hero-subtitle">
-              Купите новый или б/у смартфон по лучшей цене. Публикуйте объявления и находите покупателей в любом городе Узбекистана.
-            </p>
-            <div class="hero-actions">
-              <NuxtLink to="/search" class="btn btn-primary">
-                Найти смартфон
-              </NuxtLink>
-              <NuxtLink to="/create" class="btn btn-secondary">
-                Продать устройство
-              </NuxtLink>
+    <!-- Animated Background -->
+    <div class="hero-bg">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="grid-overlay"></div>
+    </div>
+
+    <div class="container">
+      <!-- Floating Elements (Background Layer) -->
+      <div class="floating-elements">
+        <div class="float-card card-1">
+          <div class="icon-box blue">
+            <el-icon><Cellphone /></el-icon>
+          </div>
+          <span>{{ t('home.hero.smartphones') }}</span>
+        </div>
+        <div class="float-card card-2">
+          <div class="icon-box purple">
+            <el-icon><Wallet /></el-icon>
+          </div>
+          <span>{{ t('home.hero.profitable') }}</span>
+        </div>
+        <div class="float-card card-3">
+          <div class="icon-box orange">
+            <el-icon><Lightning /></el-icon>
+          </div>
+          <span>{{ t('home.hero.fast') }}</span>
+        </div>
+      </div>
+
+      <div class="hero-content">
+        <!-- Main Content -->
+        <div class="text-content">
+          <div class="badge slide-up">
+            <span class="badge-dot"></span>
+            {{ t('home.hero.badge') }}
+          </div>
+
+          <h1 class="hero-title slide-up delay-1">
+            {{ t('home.hero.titleMain') }}
+            <span class="gradient-text">{{ t('home.hero.titleGradient') }}</span>
+          </h1>
+
+          <p class="hero-subtitle slide-up delay-2">
+            {{ t('home.hero.subtitle') }}
+          </p>
+
+          <!-- Quick Stats -->
+          <div class="hero-stats slide-up delay-4" v-if="false">
+            <div class="stat-item">
+              <span class="stat-count">10k+</span>
+              <span class="stat-label">{{ t('home.hero.stats.ads') }}</span>
+            </div>
+            <div class="stat-separator"></div>
+            <div class="stat-item">
+              <span class="stat-count">5k+</span>
+              <span class="stat-label">{{ t('home.hero.stats.users') }}</span>
+            </div>
+            <div class="stat-separator"></div>
+            <div class="stat-item">
+              <span class="stat-count">24/7</span>
+              <span class="stat-label">{{ t('home.hero.stats.support') }}</span>
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-
-
 .hero-wrapper {
-  background-color: #ffffff; // White background
-}
-
-.hero {
   position: relative;
-  text-align: center;
+  background-color: #f8fafc;
   overflow: hidden;
-  padding: 20px 0 60px;
+  min-height: 460px;
+  display: flex;
+  align-items: center;
+  .container {
+    height: -webkit-fill-available;
+  }
 }
 
-.ambient-light {
+/* Background Effects */
+.hero-bg {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 120%;
-  height: 120%;
-  background: radial-gradient(circle at center, rgba(56, 189, 248, 0.15) 0%, transparent 55%);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
   z-index: 0;
 }
 
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.6;
+  animation: float 20s infinite ease-in-out;
+}
+
+.blob-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #60a5fa30 0%, #3b82f610 70%);
+  top: -100px;
+  left: -100px;
+}
+
+.blob-2 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, #a78bfa30 0%, #8b5cf610 70%);
+  bottom: -150px;
+  right: -100px;
+  animation-delay: -10s;
+}
+
+.grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(rgba(15, 23, 42, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+}
+
 .container {
-  max-width: 900px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 80px 40px;
+  padding: 0 20px;
   position: relative;
-  z-index: 2;
+  z-index: 1;
+  width: 100%;
 }
 
 .hero-content {
+  position: relative;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 0;
   display: flex;
+  height: -webkit-fill-available;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
 }
 
-.text-content {
-  max-width: 750px;
+/* Badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+  margin-bottom: 32px;
 }
 
+.badge-dot {
+  width: 8px;
+  height: 8px;
+  background: #22c55e;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #dcfce7;
+}
+
+/* Typography */
 .hero-title {
-  font-size: 72px;
+  font-size: 64px;
   font-weight: 800;
-  color: #1e293b; // Dark Slate 800
+  color: #0f172a;
   line-height: 1.1;
   margin: 0 0 24px;
-  letter-spacing: -2.5px;
-
-  .line {
-    display: block;
-  }
+  letter-spacing: -2px;
 
   .gradient-text {
-    background: linear-gradient(90deg, var(--color-primary), #63e2b7);
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-fill-color: transparent;
   }
 }
 
 .hero-subtitle {
   font-size: 20px;
-  color: #64748b; // Slate 500
-  margin-bottom: 40px;
+  color: #64748b;
   line-height: 1.6;
-  max-width: 650px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto 48px;
+  max-width: 800px;
 }
 
-.hero-actions {
+/* Stats */
+.hero-stats {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
 }
 
-.btn {
-  padding: 16px 32px;
-  border-radius: 8px;
-  font-size: 16px;
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-count {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-separator {
+  width: 1px;
+  height: 40px;
+  background: #e2e8f0;
+}
+
+/* Floating Elements */
+.floating-elements {
+  position: absolute;
+  top: 0;
+  left: 10%;
+  width: 80%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.float-card {
+  position: absolute;
+  background: white;
+  padding: 12px 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
   font-weight: 600;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
-  display: inline-block;
+  color: #0f172a;
+  font-size: 14px;
+  animation: float 6s infinite ease-in-out;
 }
 
-.btn-primary {
-  background-color: var(--color-primary);
+.icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
   color: white;
-  box-shadow: 0 5px 20px rgba(59, 130, 246, 0.25);
 
-  &:hover {
-    background-color: var(--color-primary-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.35);
+  &.blue {
+    background: #3b82f6;
+  }
+
+  &.purple {
+    background: #8b5cf6;
+  }
+
+  &.orange {
+    background: #f97316;
   }
 }
 
-.btn-secondary {
-  background-color: white;
-  color: #475569; // Slate 600
-  border: 1px solid #e2e8f0; // Slate 200
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+.card-1 {
+  top: 10%;
+  left: 2%;
+  transform: rotate(-5deg);
+  animation-delay: 0s;
+}
 
-  &:hover {
-    background-color: #f8fafc; // Slate 50
-    border-color: #cbd5e1; // Slate 300
-    color: #1e293b; // Slate 800
-    transform: translateY(-2px);
+.card-2 {
+  top: 15%;
+  right: 2%;
+  transform: rotate(5deg);
+  animation-delay: -2s;
+}
+
+.card-3 {
+  bottom: 15%;
+  left: 5%;
+  transform: rotate(3deg);
+  animation-delay: -4s;
+}
+
+@media (max-width: 1200px) {
+  .float-card {
+    scale: 0.9;
+  }
+  .card-1 {
+    left: -20px;
+  }
+  .card-2 {
+    right: -20px;
   }
 }
 
+@media (max-width: 900px) {
+  .floating-elements {
+    display: none;
+  }
+}
 
+/* Animations */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--r, 0deg));
+  }
+  50% {
+    transform: translateY(-20px) rotate(var(--r, 0deg));
+  }
+}
+
+.slide-up {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.delay-1 {
+  animation-delay: 0.1s;
+}
+.delay-2 {
+  animation-delay: 0.2s;
+}
+.delay-3 {
+  animation-delay: 0.3s;
+}
+.delay-4 {
+  animation-delay: 0.4s;
+}
+
+@keyframes slideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile Responsive */
 @media (max-width: 768px) {
   .hero-wrapper {
-    padding: 30px 0;
+    min-height: auto;
+    padding: 40px 0;
   }
 
-  .container {
-    padding: 60px 20px;
+  .hero-content {
+    padding: 20px 0;
   }
 
   .hero-title {
-    font-size: 48px;
-    letter-spacing: -1.5px;
+    font-size: 40px;
+    letter-spacing: -1px;
   }
 
   .hero-subtitle {
     font-size: 16px;
+    padding: 0 10px;
+    margin-bottom: 0;
   }
 
-  .hero-actions {
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
+  .stat-separator {
+    display: none;
+  }
 
-    .btn {
-      width: 100%;
-      max-width: 300px;
-    }
+  .hero-stats {
+    gap: 20px;
+  }
+
+  .floating-elements {
+    display: none; /* Hide floating cards on mobile to avoid clutter */
   }
 }
 </style>

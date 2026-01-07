@@ -90,10 +90,10 @@ watch(
     title="Детали объявления"
     direction="rtl"
     size="600px"
-    class="ad-drawer"
+    class="listing-drawer"
   >
     <template v-if="ad">
-      <div class="ad-detail">
+      <div class="listing-detail">
         <!-- Images Gallery -->
         <div v-if="images.length" class="detail-gallery">
           <div class="gallery-main">
@@ -146,14 +146,14 @@ watch(
 
         <!-- Title & Price -->
         <div class="detail-section">
-          <h2 class="ad-title">{{ ad.title }}</h2>
-          <div class="ad-price">{{ formatPrice(ad.price, ad.currency) }}</div>
+          <h2 class="listing-title">{{ ad.title }}</h2>
+          <div class="listing-price">{{ formatPrice(ad.price, ad.currency) }}</div>
         </div>
 
         <!-- Description -->
         <div class="detail-section">
           <h4 class="section-title">Описание</h4>
-          <div class="ad-description" v-html="ad.description"></div>
+          <div class="listing-description" v-html="ad.description"></div>
         </div>
 
         <!-- Specs -->
@@ -162,11 +162,11 @@ watch(
           <div class="specs-grid">
             <div class="spec-item">
               <span class="spec-label">Бренд</span>
-              <span class="spec-value">{{ ad.brand?.name || "—" }}</span>
+              <span class="spec-value">{{ ad.brand?.name || ad.custom_brand }}</span>
             </div>
             <div class="spec-item">
               <span class="spec-label">Модель</span>
-              <span class="spec-value">{{ ad.model?.name || "—" }}</span>
+              <span class="spec-value">{{ ad.model?.name || ad.custom_model }}</span>
             </div>
             <div class="spec-item">
               <span class="spec-label">Память</span>
@@ -305,7 +305,7 @@ watch(
 </template>
 
 <style lang="scss" scoped>
-.ad-drawer {
+.listing-drawer {
   :deep(.el-drawer__header) {
     margin-bottom: 0;
     padding: 20px 24px;
@@ -318,7 +318,7 @@ watch(
   }
 }
 
-.ad-detail {
+.listing-detail {
   padding: 24px;
 }
 
@@ -459,7 +459,7 @@ watch(
 }
 
 // Title & Price
-.ad-title {
+.listing-title {
   font-size: 20px;
   font-weight: 600;
   color: var(--color-text-primary);
@@ -467,14 +467,14 @@ watch(
   line-height: 1.3;
 }
 
-.ad-price {
+.listing-price {
   font-size: 24px;
   font-weight: 700;
   color: var(--color-primary);
 }
 
 // Description
-.ad-description {
+.listing-description {
   font-size: 14px;
   line-height: 1.6;
   color: var(--color-text-primary);

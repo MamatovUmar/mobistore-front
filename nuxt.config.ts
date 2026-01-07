@@ -8,7 +8,8 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@nuxt/image',
     '@element-plus/nuxt',
-    '@pinia/nuxt'
+    '@pinia/nuxt',
+    '@nuxtjs/i18n'
   ],
   runtimeConfig: {
     public: {
@@ -18,6 +19,20 @@ export default defineNuxtConfig({
   // Конфигурация SSR
   ssr: true,
 
+  i18n: {
+    defaultLocale: 'ru',
+    locales: [
+      { code: 'uz', language: 'uz-UZ', name: 'O`zbekcha', file: 'uz.json' },
+      { code: 'ru', language: 'ru-RU', name: 'Русский', file: 'ru.json' }
+    ],
+    strategy: 'prefix_except_default',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'locale'
+    },
+    baseUrl: 'https://mobistore.uz'
+  },
+
   // SEO и производительность
   app: {
     head: {
@@ -25,6 +40,10 @@ export default defineNuxtConfig({
       viewport: 'width=device-width, initial-scale=1',
       meta: [
         { name: 'format-detection', content: 'telephone=no' }
+      ],
+      link: [
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
       ]
     }
   },
@@ -34,6 +53,22 @@ export default defineNuxtConfig({
     importStyle: 'scss',
   },
 
+  // Оптимизация шрифтов
+  fonts: {
+    families: [
+      {
+        name: 'Inter',
+        provider: 'google',
+        weights: [500, 600, 700, 800],
+        display: 'swap',
+      }
+    ],
+    defaults: {
+      weights: [500, 600, 700, 800],
+      preload: true,
+    }
+  },
+
   // Экспериментальные функции для улучшения производительности
   experimental: {
     payloadExtraction: false,
@@ -41,6 +76,6 @@ export default defineNuxtConfig({
 
   // Настройки рендеринга
   routeRules: {
-    '/': { prerender: true }, // Пререндер главной страницы
+    '/': { prerender: false },
   }
 })

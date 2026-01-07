@@ -1,185 +1,17 @@
 <script setup lang="ts">
+const { t, rt } = useI18n();
+const localePath = useLocalePath();
+const i18n = useI18n();
+
+const getList = (key: string): string[] => (i18n as any).tm(key);
+
 const lastUpdated = "04.12.2025";
 
-const sections = [
-  {
-    title: "1. Определения",
-    paragraphs: [
-      "«Администрация», «мы», «MobiStore» — команда, управляющая платформой MobiStore.",
-      "«Пользователь» — лицо, использующее сайт или приложение.",
-      "«Персональные данные» — любая информация, позволяющая идентифицировать пользователя.",
-    ],
-  },
-  {
-    title: "2. Какие данные мы собираем",
-    subSections: [
-      {
-        title: "2.1. Данные, предоставляемые пользователем",
-        paragraphs: ["При регистрации, авторизации и использовании сервиса:"],
-        list: [
-          "имя пользователя;",
-          "email;",
-          "пароль (в зашифрованном виде);",
-          "Google ID — при авторизации через Google OAuth;",
-          "Telegram данные (если в будущем будет включена авторизация через Telegram WebApp);",
-          "номер телефона (если указан в объявлении);",
-          "ссылка на Telegram;",
-          "аватар;",
-          "предпочитаемый язык интерфейса.",
-        ],
-      },
-      {
-        title: "2.2. Данные, собираемые автоматически",
-        paragraphs: ["При посещении сайта:"],
-        list: [
-          "IP-адрес;",
-          "данные браузера и устройства;",
-          "cookies;",
-          "дата и время посещений;",
-          "статистика действий (просмотры объявлений, клики и т.д.).",
-        ],
-      },
-      {
-        title: "2.3. Данные, связанные с объявлениями",
-        paragraphs: ["При создании объявлений:"],
-        list: [
-          "фотографии товара;",
-          "описание устройства и его характеристики;",
-          "регион и город;",
-          "бренд и модель;",
-          "цена и валюта;",
-          "состояние устройства;",
-          "контактные данные продавца.",
-        ],
-      },
-      {
-        title: "2.4. Данные переписки",
-        paragraphs: ["При использовании встроенного чата:"],
-        list: [
-          "сообщения между покупателями и продавцами;",
-          "время отправки и получения;",
-          "ID участников диалога.",
-        ],
-      },
-      {
-        title: "2.5. Данные формы обратной связи",
-        paragraphs: [
-          "Через страницу /info/contacts пользователь может отправлять:",
-        ],
-        list: [
-          "имя;",
-          "email или номер телефона;",
-          "текст обращения;",
-          "вложения (если форма позволяет);",
-          "техническую информацию (IP, время отправки, браузер — для защиты от спама).",
-        ],
-        note: "Эти данные используются исключительно для ответа на обращение пользователя.",
-      },
-    ],
-  },
-  {
-    title: "3. Как мы используем данные",
-    paragraphs: ["Мы обрабатываем данные для:"],
-    list: [
-      "регистрации и авторизации пользователей;",
-      "отображения профиля и контактных данных продавца;",
-      "создания, публикации, редактирования и удаления объявлений;",
-      "функционирования чата;",
-      "связи с пользователями по их обращениям (в т.ч. через /info/contacts);",
-      "отправки сервисных уведомлений;",
-      "аналитики и улучшения работы сервиса;",
-      "защиты от спама, мошенничества и нарушений правил.",
-    ],
-  },
-  {
-    title: "4. Передача данных третьим лицам",
-    paragraphs: [
-      "Мы не передаём и не продаём персональные данные третьим лицам, за исключением следующих случаев:",
-    ],
-    list: [
-      "Google — при авторизации через Google OAuth;",
-      "Telegram — при активации WebApp авторизации;",
-      "Почтовый сервис Timeweb — для отправки писем подтверждения;",
-      "Хостинг-провайдеры — для обеспечения работы сайта и хранения файлов;",
-      "Государственные органы — при наличии законного требования.",
-    ],
-    note: "Мы не используем данные пользователей в коммерческих целях и не передаем их рекламным компаниям.",
-  },
-  {
-    title: "5. Cookies и аналитика",
-    paragraphs: ["Мы используем cookies для:"],
-    list: [
-      "сохранения настроек пользователя;",
-      "поддержки авторизации;",
-      "анализа посещаемости сайта;",
-      "защиты от мошеннических действий.",
-    ],
-    note: "Пользователь может отключить cookies в браузере, но часть функций сервиса может работать некорректно.",
-  },
-  {
-    title: "6. Хранение и защита данных",
-    paragraphs: ["Мы применяем современные технические меры безопасности:"],
-    list: [
-      "шифрование паролей (bcrypt);",
-      "безопасное соединение HTTPS;",
-      "защита от подбора пароля и DDOS (rate limiting);",
-      "хранение данных на защищённых серверах;",
-      "контроль доступа к базе данных;",
-      "регулярный мониторинг подозрительной активности.",
-    ],
-  },
-  {
-    title: "7. Срок хранения данных",
-    paragraphs: [
-      "Мы храним персональные данные до тех пор, пока пользователь продолжает использовать сервис, или в течение сроков, установленных законодательством.",
-      "Удаление аккаунта пользователем пока недоступно, но появится в будущих обновлениях.",
-    ],
-  },
-  {
-    title: "8. Права пользователя",
-    paragraphs: ["Пользователь имеет право:"],
-    list: [
-      "получать информацию о том, какие данные собираются;",
-      "запрашивать исправление данных;",
-      "ограничивать использование своих контактных данных;",
-      "отказываться от рассылок;",
-      "направлять жалобы и вопросы через форму обратной связи /info/contacts.",
-    ],
-  },
-  {
-    title: "9. Данные детей",
-    paragraphs: [
-      "Мы не собираем данные детей младше 16 лет.",
-      "Если данные несовершеннолетнего были переданы ошибочно — сообщите нам, и мы удалим их.",
-    ],
-  },
-  {
-    title: "10. Обновления политики",
-    paragraphs: [
-      "Мы можем обновлять Политику конфиденциальности.",
-      "Актуальная версия всегда доступна на сайте.",
-    ],
-  },
-  {
-    title: "11. Контакты",
-    paragraphs: [
-      "По любым вопросам, связанным с конфиденциальностью и обработкой персональных данных, пользователь может обратиться через форму обратной связи.",
-    ],
-    link: {
-      text: "Форма обратной связи",
-      url: "/info/contacts",
-    },
-    note: "Этот способ является основным и приоритетным для обращений.",
-  },
-];
-
 useSeoMeta({
-  title: "Политика конфиденциальности MobiStore",
-  description:
-    "Узнайте, как MobiStore собирает, использует и защищает ваши персональные данные.",
-  ogTitle: "Политика конфиденциальности MobiStore",
-  ogDescription:
-    "Узнайте, как MobiStore собирает, использует и защищает ваши персональные данные.",
+  title: () => t("privacy.seo.title"),
+  description: () => t("privacy.seo.description"),
+  ogTitle: () => t("privacy.seo.title"),
+  ogDescription: () => t("privacy.seo.description"),
 });
 </script>
 
@@ -187,73 +19,140 @@ useSeoMeta({
   <main class="privacy-page">
     <div class="container">
       <section class="hero-card">
-        <p class="eyebrow">Политика конфиденциальности</p>
-        <h1>Политика конфиденциальности MobiStore</h1>
-        <p class="lead">
-          Настоящая Политика конфиденциальности определяет порядок обработки и
-          защиты персональных данных пользователей сайта MobiStore и мобильного
-          приложения MobiStore.
-        </p>
+        <p class="eyebrow">{{ t("privacy.eyebrow") }}</p>
+        <h1>{{ t("privacy.title") }}</h1>
+        <p class="lead">{{ t("privacy.lead") }}</p>
         <div class="hero-meta">
-          <div class="badge">Дата последнего обновления: {{ lastUpdated }}</div>
-          <div class="summary">
-            Используя Сайт или Приложение, вы подтверждаете согласие с данной
-            Политикой.
-          </div>
+          <div class="badge">{{ t("privacy.lastUpdated", { date: lastUpdated }) }}</div>
+          <div class="summary">{{ t("privacy.consent") }}</div>
         </div>
       </section>
 
-      <section
-        v-for="section in sections"
-        :key="section.title"
-        class="content-card"
-      >
-        <h3>{{ section.title }}</h3>
+      <!-- 1. Определения -->
+      <section class="content-card">
+        <h3>{{ t("privacy.sections.definitions.title") }}</h3>
+        <p v-for="(p, i) in getList('privacy.sections.definitions.paragraphs')" :key="i" class="paragraph">{{ rt(p) }}</p>
+      </section>
 
-        <template v-if="section.subSections">
-          <div
-            v-for="subSection in section.subSections"
-            :key="subSection.title"
-            class="sub-section"
-          >
-            <h4>{{ subSection.title }}</h4>
-            <p
-              v-for="paragraph in subSection.paragraphs"
-              :key="paragraph"
-              class="paragraph"
-            >
-              {{ paragraph }}
-            </p>
-            <ul v-if="subSection.list" class="bullet-list">
-              <li v-for="item in subSection.list" :key="item">
-                {{ item }}
-              </li>
-            </ul>
-            <p v-if="subSection.note" class="note">{{ subSection.note }}</p>
-          </div>
-        </template>
+      <!-- 2. Какие данные мы собираем -->
+      <section class="content-card">
+        <h3>{{ t("privacy.sections.dataCollection.title") }}</h3>
 
-        <template v-else>
-          <p
-            v-for="paragraph in section.paragraphs"
-            :key="paragraph"
-            class="paragraph"
-          >
-            {{ paragraph }}
-          </p>
-
-          <ul v-if="section.list" class="bullet-list">
-            <li v-for="item in section.list" :key="item">
-              {{ item }}
-            </li>
+        <div class="sub-section">
+          <h4>{{ t("privacy.sections.dataCollection.userProvided.title") }}</h4>
+          <p class="paragraph">{{ t("privacy.sections.dataCollection.userProvided.intro") }}</p>
+          <ul class="bullet-list">
+            <li v-for="(item, i) in getList('privacy.sections.dataCollection.userProvided.list')" :key="i">{{ rt(item) }}</li>
           </ul>
+        </div>
 
-          <p v-if="section.note" class="note">{{ section.note }}</p>
+        <div class="sub-section">
+          <h4>{{ t("privacy.sections.dataCollection.automatic.title") }}</h4>
+          <p class="paragraph">{{ t("privacy.sections.dataCollection.automatic.intro") }}</p>
+          <ul class="bullet-list">
+            <li v-for="(item, i) in getList('privacy.sections.dataCollection.automatic.list')" :key="i">{{ rt(item) }}</li>
+          </ul>
+        </div>
 
-          <NuxtLink v-if="section.link" :to="section.link.url" class="cta-link">
-            {{ section.link.text }}
-          </NuxtLink>
-        </template>
+        <div class="sub-section">
+          <h4>{{ t("privacy.sections.dataCollection.listings.title") }}</h4>
+          <p class="paragraph">{{ t("privacy.sections.dataCollection.listings.intro") }}</p>
+          <ul class="bullet-list">
+            <li v-for="(item, i) in getList('privacy.sections.dataCollection.listings.list')" :key="i">{{ rt(item) }}</li>
+          </ul>
+        </div>
+
+        <div class="sub-section">
+          <h4>{{ t("privacy.sections.dataCollection.chat.title") }}</h4>
+          <p class="paragraph">{{ t("privacy.sections.dataCollection.chat.intro") }}</p>
+          <ul class="bullet-list">
+            <li v-for="(item, i) in getList('privacy.sections.dataCollection.chat.list')" :key="i">{{ rt(item) }}</li>
+          </ul>
+        </div>
+
+        <div class="sub-section">
+          <h4>{{ t("privacy.sections.dataCollection.feedback.title") }}</h4>
+          <p class="paragraph">{{ t("privacy.sections.dataCollection.feedback.intro") }}</p>
+          <ul class="bullet-list">
+            <li v-for="(item, i) in getList('privacy.sections.dataCollection.feedback.list')" :key="i">{{ rt(item) }}</li>
+          </ul>
+          <p class="note">{{ t("privacy.sections.dataCollection.feedback.note") }}</p>
+        </div>
+      </section>
+
+      <!-- 3. Как мы используем данные -->
+      <section class="content-card">
+        <h3>{{ t("privacy.sections.dataUsage.title") }}</h3>
+        <p class="paragraph">{{ t("privacy.sections.dataUsage.intro") }}</p>
+        <ul class="bullet-list">
+          <li v-for="(item, i) in getList('privacy.sections.dataUsage.list')" :key="i">{{ rt(item) }}</li>
+        </ul>
+      </section>
+
+      <!-- 4. Передача данных третьим лицам -->
+      <section class="content-card">
+        <h3>{{ t("privacy.sections.thirdParty.title") }}</h3>
+        <p class="paragraph">{{ t("privacy.sections.thirdParty.intro") }}</p>
+        <ul class="bullet-list">
+          <li v-for="(item, i) in getList('privacy.sections.thirdParty.list')" :key="i">{{ rt(item) }}</li>
+        </ul>
+        <p class="note">{{ t("privacy.sections.thirdParty.note") }}</p>
+      </section>
+
+      <!-- 5. Cookies и аналитика -->
+      <section class="content-card">
+        <h3>{{ t("privacy.sections.cookies.title") }}</h3>
+        <p class="paragraph">{{ t("privacy.sections.cookies.intro") }}</p>
+        <ul class="bullet-list">
+          <li v-for="(item, i) in getList('privacy.sections.cookies.list')" :key="i">{{ rt(item) }}</li>
+        </ul>
+        <p class="note">{{ t("privacy.sections.cookies.note") }}</p>
+      </section>
+
+      <!-- 6. Хранение и защита данных -->
+      <section class="content-card">
+        <h3>{{ t("privacy.sections.security.title") }}</h3>
+        <p class="paragraph">{{ t("privacy.sections.security.intro") }}</p>
+        <ul class="bullet-list">
+          <li v-for="(item, i) in getList('privacy.sections.security.list')" :key="i">{{ rt(item) }}</li>
+        </ul>
+      </section>
+
+      <!-- 7. Срок хранения данных -->
+      <section class="content-card">
+        <h3>{{ t("privacy.sections.retention.title") }}</h3>
+        <p v-for="(p, i) in getList('privacy.sections.retention.paragraphs')" :key="i" class="paragraph">{{ rt(p) }}</p>
+      </section>
+
+      <!-- 8. Права пользователя -->
+      <section class="content-card">
+        <h3>{{ t("privacy.sections.rights.title") }}</h3>
+        <p class="paragraph">{{ t("privacy.sections.rights.intro") }}</p>
+        <ul class="bullet-list">
+          <li v-for="(item, i) in getList('privacy.sections.rights.list')" :key="i">{{ rt(item) }}</li>
+        </ul>
+      </section>
+
+      <!-- 9. Данные детей -->
+      <section class="content-card">
+        <h3>{{ t("privacy.sections.children.title") }}</h3>
+        <p v-for="(p, i) in getList('privacy.sections.children.paragraphs')" :key="i" class="paragraph">{{ rt(p) }}</p>
+      </section>
+
+      <!-- 10. Обновления политики -->
+      <section class="content-card">
+        <h3>{{ t("privacy.sections.updates.title") }}</h3>
+        <p v-for="(p, i) in getList('privacy.sections.updates.paragraphs')" :key="i" class="paragraph">{{ rt(p) }}</p>
+      </section>
+
+      <!-- 11. Контакты -->
+      <section class="content-card">
+        <h3>{{ t("privacy.sections.contact.title") }}</h3>
+        <p v-for="(p, i) in getList('privacy.sections.contact.paragraphs')" :key="i" class="paragraph">{{ rt(p) }}</p>
+        <NuxtLink :to="localePath('/info/contacts')" class="cta-link">
+          {{ t("privacy.feedbackForm") }}
+        </NuxtLink>
+        <p class="note">{{ t("privacy.sections.contact.note") }}</p>
       </section>
     </div>
   </main>

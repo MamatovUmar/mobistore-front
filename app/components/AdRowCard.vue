@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { LocationInformation, Picture, StarFilled, Loading } from "@element-plus/icons-vue";
+import {
+  LocationInformation,
+  Picture,
+  StarFilled,
+  Loading,
+} from "@element-plus/icons-vue";
 import type { IListing } from "~/types/ads";
 import { formatCurrency } from "~/utils/formatters";
 import StatusTag from "~/components/ad/StatusTag.vue";
@@ -10,10 +15,12 @@ const props = defineProps<{
   listing: IListing;
 }>();
 
-const emit = defineEmits(['favoriteChanged'])
+const emit = defineEmits(["favoriteChanged"]);
 
 const { addToFavorite, removeFavorite } = useFavorite();
 const root = useRootStore();
+const { locale } = useI18n();
+const localePath = useLocalePath();
 
 const favorites = computed(() => root.user?.favorites || []);
 
@@ -34,26 +41,29 @@ const toggleFavorite = async (e: MouseEvent) => {
   } else {
     await addToFavorite(props.listing.id);
   }
-  emit('favoriteChanged')
+  emit("favoriteChanged");
 };
 
-// Format date (placeholder - replace with actual date from listing)
+// Format date based on current locale
 const postDate = computed(() => {
-  return new Date(props.listing?.published_at ?? new Date()).toLocaleDateString("ru-RU");
+  const localeMap: Record<string, string> = { ru: 'ru-RU', uz: 'uz-UZ' };
+  return new Date(props.listing?.published_at ?? new Date()).toLocaleDateString(
+    localeMap[locale.value] || 'ru-RU'
+  );
 });
 </script>
 
 <template>
-  <NuxtLink class="ad-row-card" :to="`/${listing.alias}`">
+  <NuxtLink class="listing-row-card" :to="localePath(`/${listing.alias}`)">
     <div class="card-glow" />
-    
+
     <!-- Image Container -->
     <div class="image-wrapper">
       <div v-if="hasImage" class="image-inner" @click.stop.prevent>
         <el-image
           class="card-image"
           :src="image"
-          :preview-src-list="listing.images.map(img => img.url)"
+          :preview-src-list="listing.images.map((img) => img.url)"
           fit="cover"
           loading="lazy"
           :preview-teleported="true"
@@ -70,11 +80,11 @@ const postDate = computed(() => {
           </template>
         </el-image>
       </div>
-      
+
       <div v-else class="card-image no-image">
         <el-icon :size="24" color="#cbd5e1"><Picture /></el-icon>
       </div>
-      
+
       <!-- Status Badge -->
       <div class="top-badges">
         <StatusTag :state="listing.state" size="small" />
@@ -87,14 +97,14 @@ const postDate = computed(() => {
         <!-- Title & Brand -->
         <div class="title-row">
           <h3 class="title">{{ listing.title }}</h3>
-          <span class="brand">{{ listing.brand.name }}</span>
+          <span class="brand">{{ listing.brand?.name || listing.custom_brand }}</span>
         </div>
 
         <!-- Location & Date -->
         <div class="meta-info">
           <div class="location-row">
             <el-icon class="location-icon"><LocationInformation /></el-icon>
-            <span>{{ listing.region.name_ru }}</span>
+            <span>{{ listing.region[`name_${locale}`] || listing.region.name_ru }}</span>
           </div>
           <span class="separator">•</span>
           <span class="date">{{ postDate }}</span>
@@ -106,7 +116,7 @@ const postDate = computed(() => {
         <div class="price-tag">
           {{ formatCurrency(listing.price, listing.currency) }}
         </div>
-        
+
         <button
           class="fav-button"
           :class="{ active: favorites.includes(listing.id) }"
@@ -120,7 +130,7 @@ const postDate = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-.ad-row-card {
+.listing-row-card {
   position: relative;
   display: flex;
   background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
@@ -172,13 +182,13 @@ const postDate = computed(() => {
     align-items: center;
     justify-content: center;
   }
-  
+
   :deep(img) {
     transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 }
 
-.ad-row-card:hover .card-image :deep(img) {
+.listing-row-card:hover .card-image :deep(img) {
   transform: scale(1.05);
 }
 
@@ -262,7 +272,7 @@ const postDate = computed(() => {
   display: flex;
   align-items: center;
   gap: 4px;
-  
+
   .location-icon {
     color: #3b82f6;
     font-size: 13px;
@@ -303,52 +313,94 @@ const postDate = computed(() => {
   cursor: pointer;
   transition: all 0.2s ease;
   color: #94a3b8;
-  
+
   &:hover {
     background: #fff;
     border-color: #f59e0b;
     color: #f59e0b;
     transform: scale(1.05);
   }
-  
+
   &.active {
     background: #fff7ed;
     border-color: #f59e0b;
     color: #f59e0b;
   }
-  
+
   .el-icon {
     font-size: 16px;
   }
 }
 
 // Адаптивность
-@media (max-width: 768px) {
-  .ad-row-card {
+@media (max-width: 900px) {
+  .listing-row-card {
     height: auto;
     flex-direction: column;
+    min-height: 280px; /* Ensure consistent height */
   }
 
   .image-wrapper {
     width: 100%;
-    height: 200px;
+    height: 140px; /* Reduced height for 2-column grid */
+    flex-shrink: 0;
   }
 
   .card-body {
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    gap: 12px;
+    padding: 10px;
+    flex: 1;
+  }
+
+  .main-info {
+    width: 100%;
+    gap: 4px;
+  }
+
+  .title {
+    font-size: 14px; /* Smaller title */
+    line-height: 18px;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  .brand {
+    font-size: 9px;
+    padding: 2px 4px;
+    margin-bottom: 4px;
+  }
+
+  .meta-info {
+    flex-wrap: wrap;
+    font-size: 11px;
+    margin-top: 4px;
   }
 
   .price-actions {
     width: 100%;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
     padding-left: 0;
     border-left: none;
-    border-top: 1px solid #f1f5f9;
-    padding-top: 16px;
+    border-top: none;
+    padding-top: 0;
+    margin-top: auto; /* Push to bottom */
+  }
+
+  .price-tag {
+    font-size: 16px;
+  }
+
+  .fav-button {
+    width: 28px;
+    height: 28px;
+
+    .el-icon {
+      font-size: 14px;
+    }
   }
 }
 </style>

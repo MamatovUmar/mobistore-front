@@ -1,21 +1,20 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
-import {
-  MessageBox,
-  Plus,
-  User,
-  Document,
-  Star,
-  SwitchButton,
-  Lock,
-  Setting,
-} from "@element-plus/icons-vue";
+import { Monitor, Menu, Plus } from "@element-plus/icons-vue";
 import { useRootStore } from "~/store/root";
+import HeaderChat from "./header/HeaderChat.vue";
+import HeaderUserMenu from "./header/HeaderUserMenu.vue";
+import HeaderAuthModal from "./header/HeaderAuthModal.vue";
+import HeaderMobileDrawer from "./header/HeaderMobileDrawer.vue";
+import LanguageSwitcher from "./header/LanguageSwitcher.vue";
 
 const rootStore = useRootStore();
 const router = useRouter();
+const { t } = useI18n();
+const localePath = useLocalePath();
 
 const showAuthDialog = ref(false);
+const showMobileDrawer = ref(false);
 const isScrolled = ref(false);
 
 const handleScroll = () => {
@@ -32,12 +31,15 @@ onUnmounted(() => {
 
 const goToLogin = () => {
   showAuthDialog.value = false;
-  router.push("/login");
+  router.push(localePath('/login'));
 };
 
-const goToSignup = () => {
-  showAuthDialog.value = false;
-  router.push("/signup");
+const handleCreateAd = () => {
+  if (rootStore.user) {
+    router.push(localePath('/create'));
+  } else {
+    showAuthDialog.value = true;
+  }
 };
 </script>
 
@@ -46,105 +48,76 @@ const goToSignup = () => {
     <div class="header-container">
       <div class="header-content">
         <!-- Logo -->
-        <NuxtLink to="/" class="logo-link">
+        <NuxtLink :to="localePath('/')" class="logo-link">
           <div class="logo">
-            <img src="/logo.png" alt="MobiStore" />
+            <img src="/logo.svg" alt="MobiStore" />
           </div>
         </NuxtLink>
 
-        <!-- Actions -->
-        <div class="header-actions">
-          <el-button
+        <!-- Desktop Actions -->
+        <div class="header-actions desktop-only">
+          <button class="btn-create" @click="handleCreateAd">
+            <el-icon class="btn-icon"><Plus /></el-icon>
+            <span class="btn-text">{{ t('header.createAd') }}</span>
+          </button>
+
+          <LanguageSwitcher />
+
+          <el-tooltip
             v-if="rootStore.isAdmin || rootStore.isModerator"
-            @click="navigateTo('/admin')"
+            :content="t('header.adminPanel')"
+            placement="bottom"
           >
-            Админка
-          </el-button>
+            <el-button circle class="action-btn" @click="navigateTo(localePath('/admin'))">
+              <el-icon><Monitor /></el-icon>
+            </el-button>
+          </el-tooltip>
+
+          <template v-if="rootStore.user">
+            <!-- Chat -->
+            <HeaderChat />
+          </template>
+
           <el-button
             v-if="!rootStore.user"
             class="btn-login"
             size="large"
             @click="goToLogin"
           >
-            Войти
+            {{ t('header.login') }}
           </el-button>
 
-          <el-dropdown v-else trigger="click" class="user-menu">
-            <div class="user-trigger">
-              <el-avatar
-                v-if="rootStore.user?.avatar"
-                :src="rootStore.user.avatar"
-                :size="40"
-              />
-              <el-avatar v-else :size="40" class="user-avatar">
-                {{
-                  `${rootStore.user.first_name?.charAt(
-                    0
-                  )}${rootStore.user.last_name?.charAt(0)}`.trim()
-                }}
-              </el-avatar>
-            </div>
+          <!-- User Menu -->
+          <HeaderUserMenu v-else />
+        </div>
 
-            <template #dropdown>
-              <el-dropdown-menu class="user-dropdown">
-                <el-dropdown-item @click="router.push('/account')">
-                  <el-icon><User /></el-icon>
-                  <span>Личные данные</span>
-                </el-dropdown-item>
-                <el-dropdown-item @click="router.push('/account/listings')">
-                  <el-icon><Document /></el-icon>
-                  <span>Мои объявления</span>
-                </el-dropdown-item>
-                <el-dropdown-item @click="router.push('/account/favorites')">
-                  <el-icon><Star /></el-icon>
-                  <span>Избранное</span>
-                </el-dropdown-item>
-                <el-dropdown-item
-                  @click="router.push('/account/conversations')"
-                >
-                  <el-icon><MessageBox /></el-icon>
-                  <span>Переписки</span>
-                </el-dropdown-item>
-                <el-dropdown-item divided @click="rootStore.logout()">
-                  <el-icon><SwitchButton /></el-icon>
-                  <span>Выйти</span>
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
+        <!-- Mobile Actions -->
+        <div class="header-actions mobile-only">
+          <el-button
+            circle
+            class="action-btn burger-btn"
+            @click="showMobileDrawer = true"
+          >
+            <el-icon><Menu /></el-icon>
+          </el-button>
         </div>
       </div>
     </div>
 
     <!-- Auth Dialog -->
-    <el-dialog
-      v-model="showAuthDialog"
-      width="450px"
-      align-center
-      :show-close="false"
-    >
-      <div class="auth-dialog">
-        <div class="dialog-icon">
-          <el-icon :size="48"><Lock /></el-icon>
-        </div>
-        <h3 class="dialog-title">Требуется авторизация</h3>
-        <p class="dialog-text">
-          Для размещения объявлений необходимо войти в систему или создать новый
-          аккаунт.
-        </p>
-      </div>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button size="large" @click="showAuthDialog = false"
-            >Отмена</el-button
-          >
-          <el-button size="large" @click="goToSignup">Регистрация</el-button>
-          <el-button type="primary" size="large" @click="goToLogin"
-            >Войти</el-button
-          >
-        </div>
-      </template>
-    </el-dialog>
+    <HeaderAuthModal v-model="showAuthDialog" />
+
+    <!-- Mobile Drawer -->
+    <HeaderMobileDrawer
+      v-model="showMobileDrawer"
+      @login="goToLogin"
+      @signup="
+        () => {
+          showAuthDialog = true;
+          showMobileDrawer = false;
+        }
+      "
+    />
   </header>
 </template>
 
@@ -189,7 +162,7 @@ const goToSignup = () => {
   align-items: center;
   gap: 12px;
   img {
-    height: 40px;
+    height: 50px;
   }
 }
 
@@ -204,16 +177,17 @@ const goToSignup = () => {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 24px;
+  padding: 10px 20px;
   background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
   color: #fff;
   border: none;
-  border-radius: 12px;
-  font-size: 15px;
+  border-radius: 6px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  margin-right: 12px;
 
   .btn-icon {
     font-size: 18px;
@@ -231,7 +205,7 @@ const goToSignup = () => {
 }
 
 .btn-login {
-  border-radius: 12px;
+  border-radius: 6px;
   font-weight: 600;
 
   &:hover {
@@ -239,118 +213,27 @@ const goToSignup = () => {
   }
 }
 
-/* User Menu */
-.user-trigger {
-  cursor: pointer;
-  transition: transform 0.2s ease;
+.action-btn {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  transition: all 0.2s ease;
 
   &:hover {
-    transform: scale(1.05);
+    color: #3b82f6;
+    border-color: #3b82f6;
+    background: #eff6ff;
+  }
+
+  .el-icon {
+    font-size: 18px;
   }
 }
 
-.user-avatar {
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);
-}
-
-:deep(.user-dropdown) {
-  min-width: 220px;
-  margin-top: 8px;
-  padding: 8px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15);
-
-  .el-dropdown-menu__item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-
-    .el-icon {
-      font-size: 18px;
-      color: #64748b;
-    }
-
-    span {
-      color: #0f172a;
-    }
-
-    &:hover {
-      background: #f8fafc;
-
-      .el-icon {
-        color: #3b82f6;
-      }
-
-      span {
-        color: #3b82f6;
-      }
-    }
-
-    &.is-divided {
-      border-top: 1px solid #f1f5f9;
-      margin-top: 4px;
-      padding-top: 12px;
-
-      .el-icon {
-        color: #ef4444;
-      }
-
-      span {
-        color: #ef4444;
-      }
-
-      &:hover {
-        background: rgba(239, 68, 68, 0.08);
-      }
-    }
-  }
-}
-
-/* Auth Dialog */
-.auth-dialog {
-  text-align: center;
-  padding: 20px 0;
-}
-
-.dialog-icon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 24px;
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
-}
-
-.dialog-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: #0f172a;
-  margin: 0 0 12px;
-}
-
-.dialog-text {
-  font-size: 15px;
-  line-height: 1.6;
-  color: #64748b;
-  margin: 0;
-}
-
-.dialog-footer {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
+.mobile-only {
+  display: none;
 }
 
 /* Mobile Responsive */
@@ -359,30 +242,16 @@ const goToSignup = () => {
     height: 64px;
   }
 
-  .btn-create {
-    padding: 12px;
-    border-radius: 50%;
-    width: 44px;
-    height: 44px;
-    justify-content: center;
-
-    .btn-text {
-      display: none;
-    }
-  }
-
-  .logo-subtitle {
+  .desktop-only {
     display: none;
   }
 
-  .logo-title {
-    font-size: 18px;
+  .mobile-only {
+    display: flex;
   }
 
-  .logo-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 14px;
+  .logo img {
+    height: 32px;
   }
 }
 </style>

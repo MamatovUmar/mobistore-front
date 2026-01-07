@@ -6,6 +6,11 @@ import {
   DataLine,
   Setting,
   HomeFilled,
+  MessageBox,
+  Memo,
+  Iphone,
+  Collection,
+  Calendar,
 } from "@element-plus/icons-vue";
 import { useRootStore } from "~/store/root";
 
@@ -31,13 +36,13 @@ const menuItems = [
   },
   {
     title: "Объявления",
-    icon: Document,
+    icon: MessageBox,
     path: "/admin/listings",
     roles: ["admin", "moderator"],
   },
   {
     title: "Логи",
-    icon: DataLine,
+    icon: Memo,
     path: "/admin/logs",
     roles: ["admin"],
   },
@@ -53,6 +58,24 @@ const menuItems = [
     path: "/admin/staff",
     roles: ["admin"],
   },
+  {
+    title: "Заявки",
+    icon: Document,
+    path: "/admin/applications",
+    roles: ["admin", "moderator"],
+  },
+  {
+    title: "Бренды",
+    icon: Collection,
+    path: "/admin/brands",
+    roles: ["admin", "moderator"],
+  },
+  {
+    title: "Модели",
+    icon: Iphone,
+    path: "/admin/models",
+    roles: ["admin", "moderator"],
+  }
 ];
 
 const isActive = (path: string) => {

@@ -1,12 +1,17 @@
 <script setup lang="ts">
+const { t } = useI18n();
 
+useSeoMeta({
+  title: () => t("account.meta.conversations"),
+  robots: "noindex, nofollow",
+});
 </script>
 
 <template>
   <main class="page-account">
     <div class="container">
       <div class="page-header">
-        <h1 class="page-title">Переписки</h1>
+        <h1 class="page-title">{{ $t("account.conversations.title") }}</h1>
       </div>
 
       <div class="account-layout">

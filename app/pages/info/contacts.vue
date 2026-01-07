@@ -2,7 +2,15 @@
 import { Phone } from "@element-plus/icons-vue";
 import type { FormInstance, FormRules } from "element-plus";
 
+const { t } = useI18n();
 const { $api } = useNuxtApp();
+
+useSeoMeta({
+  title: () => t("contacts.seo.title"),
+  description: () => t("contacts.seo.description"),
+  ogTitle: () => t("contacts.seo.ogTitle"),
+  ogDescription: () => t("contacts.seo.ogDescription"),
+});
 
 const formRef = ref<FormInstance>();
 
@@ -14,13 +22,11 @@ const feedbackForm = ref({
   message: "",
 });
 
-const rules: FormRules = {
-  name: [{ required: true, message: "Введите ваше имя", trigger: "blur" }],
-  type: [
-    { required: true, message: "Выберите тему обращения", trigger: "change" },
-  ],
-  message: [{ required: true, message: "Введите сообщение", trigger: "blur" }],
-};
+const rules = computed<FormRules>(() => ({
+  name: [{ required: true, message: t("contacts.validation.name"), trigger: "blur" }],
+  type: [{ required: true, message: t("contacts.validation.topic"), trigger: "change" }],
+  message: [{ required: true, message: t("contacts.validation.message"), trigger: "blur" }],
+}));
 
 const isLoading = ref(false);
 
@@ -43,10 +49,10 @@ const submitForm = async () => {
         },
       });
 
-      ElMessage.success("Сообщение успешно отправлено!");
+      ElMessage.success(t("contacts.messages.success"));
       formRef.value?.resetFields();
     } catch {
-      ElMessage.error("Ошибка при отправке сообщения");
+      ElMessage.error(t("contacts.messages.error"));
     } finally {
       isLoading.value = false;
     }
@@ -57,31 +63,23 @@ const submitForm = async () => {
 <template>
   <main class="page-contacts">
     <div class="container">
-      <!-- Заголовок -->
       <div class="page-header">
-        <h1 class="page-title">Контакты</h1>
-        <p class="page-subtitle">
-          Свяжитесь с нами любым удобным способом или заполните форму обратной
-          связи
-        </p>
+        <h1 class="page-title">{{ t("contacts.title") }}</h1>
+        <p class="page-subtitle">{{ t("contacts.subtitle") }}</p>
       </div>
 
-      <!-- Основной контент -->
       <div class="contacts-layout">
-        <!-- Контактная информация -->
         <div class="contact-info">
           <div class="info-card">
             <div class="card-header">
-              <h2 class="info-title">Наши контакты</h2>
-              <p class="info-description">
-                Мы всегда рады помочь вам. Свяжитесь с нами удобным способом
-              </p>
+              <h2 class="info-title">{{ t("contacts.info.title") }}</h2>
+              <p class="info-description">{{ t("contacts.info.description") }}</p>
             </div>
 
             <div class="support-highlight">
               <div class="support-status">
                 <span class="status-dot" />
-                Служба поддержки онлайн
+                {{ t("contacts.support.online") }}
               </div>
               <div class="support-main">
                 <el-icon><Phone /></el-icon>
@@ -89,32 +87,23 @@ const submitForm = async () => {
                   +998 90 123 45 67
                 </a>
               </div>
-              <p class="support-note">
-                Работаем ежедневно с 09:00 до 23:00 (GMT+5). В среднем отвечаем
-                за 5 минут.
-              </p>
+              <p class="support-note">{{ t("contacts.support.workingHours") }}</p>
               <div class="support-actions">
                 <a href="tel:+998901234567" class="support-action phone">
-                  Позвонить сейчас
+                  {{ t("contacts.support.callNow") }}
                 </a>
-                <a
-                  href="mailto:support@mobistore.uz"
-                  class="support-action email"
-                >
-                  Написать на почту
+                <a href="mailto:info@mobistore.uz" class="support-action email">
+                  {{ t("contacts.support.writeEmail") }}
                 </a>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Форма обратной связи -->
         <div class="feedback-form">
           <div class="form-card">
-            <h2 class="form-title">Форма обратной связи</h2>
-            <p class="form-description">
-              Заполните форму ниже, и мы свяжемся с вами в ближайшее время
-            </p>
+            <h2 class="form-title">{{ t("contacts.form.title") }}</h2>
+            <p class="form-description">{{ t("contacts.form.description") }}</p>
 
             <el-form
               ref="formRef"
@@ -124,50 +113,47 @@ const submitForm = async () => {
               size="large"
               @submit.prevent="submitForm"
             >
-              <el-form-item label="Ваше имя" prop="name">
+              <el-form-item :label="t('contacts.form.name')" prop="name">
                 <el-input
                   v-model="feedbackForm.name"
-                  placeholder="Введите ваше имя"
+                  :placeholder="t('contacts.form.namePlaceholder')"
                 />
               </el-form-item>
 
-              <el-form-item label="Email">
+              <el-form-item :label="t('contacts.form.email')">
                 <el-input
                   v-model="feedbackForm.email"
                   type="email"
-                  placeholder="example@mail.com"
+                  :placeholder="t('contacts.form.emailPlaceholder')"
                 />
               </el-form-item>
 
-              <el-form-item label="Телефон">
+              <el-form-item :label="t('contacts.form.phone')">
                 <el-input
                   v-model="feedbackForm.phone"
-                  placeholder="+998 90 123 45 67"
+                  :placeholder="t('contacts.form.phonePlaceholder')"
                 />
               </el-form-item>
 
-              <el-form-item label="Тема обращения" prop="type">
+              <el-form-item :label="t('contacts.form.topic')" prop="type">
                 <el-select
                   v-model="feedbackForm.type"
-                  placeholder="Выберите тему"
+                  :placeholder="t('contacts.form.topicPlaceholder')"
                 >
-                  <el-option label="Общий вопрос" value="question" />
-                  <el-option label="Техническая поддержка" value="technical" />
-                  <el-option
-                    label="Предложение о сотрудничестве"
-                    value="partnership"
-                  />
-                  <el-option label="Жалоба" value="complaint" />
-                  <el-option label="Другое" value="other" />
+                  <el-option :label="t('contacts.form.topics.question')" value="question" />
+                  <el-option :label="t('contacts.form.topics.technical')" value="technical" />
+                  <el-option :label="t('contacts.form.topics.partnership')" value="partnership" />
+                  <el-option :label="t('contacts.form.topics.complaint')" value="complaint" />
+                  <el-option :label="t('contacts.form.topics.other')" value="other" />
                 </el-select>
               </el-form-item>
 
-              <el-form-item label="Сообщение" prop="message">
+              <el-form-item :label="t('contacts.form.message')" prop="message">
                 <el-input
                   v-model="feedbackForm.message"
                   type="textarea"
                   :rows="6"
-                  placeholder="Опишите вашу проблему или вопрос"
+                  :placeholder="t('contacts.form.messagePlaceholder')"
                 />
               </el-form-item>
 
@@ -178,7 +164,7 @@ const submitForm = async () => {
                 :loading="isLoading"
                 @click="submitForm"
               >
-                Отправить сообщение
+                {{ t("contacts.form.submit") }}
               </el-button>
             </el-form>
           </div>
@@ -194,9 +180,25 @@ const submitForm = async () => {
   padding: 40px 0 80px;
   background: var(--color-bg-secondary);
 
+  @media (max-width: 768px) {
+    padding: 24px 0 60px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 16px 0 40px;
+  }
+
   .page-header {
     text-align: center;
     margin-bottom: 48px;
+
+    @media (max-width: 768px) {
+      margin-bottom: 32px;
+    }
+
+    @media (max-width: 480px) {
+      margin-bottom: 24px;
+    }
   }
 
   .page-title {
@@ -204,6 +206,15 @@ const submitForm = async () => {
     font-weight: 700;
     color: var(--color-text-primary);
     margin-bottom: 12px;
+
+    @media (max-width: 768px) {
+      font-size: 28px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
   }
 
   .page-subtitle {
@@ -211,6 +222,11 @@ const submitForm = async () => {
     color: var(--color-text-secondary);
     max-width: 600px;
     margin: 0 auto;
+
+    @media (max-width: 480px) {
+      font-size: 14px;
+      padding: 0 16px;
+    }
   }
 
   /* === LAYOUT === */
@@ -244,6 +260,11 @@ const submitForm = async () => {
     margin-bottom: 24px;
     padding-bottom: 20px;
     border-bottom: 2px solid var(--color-bg-secondary);
+
+    @media (max-width: 480px) {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+    }
   }
 
   .info-title {
@@ -251,12 +272,24 @@ const submitForm = async () => {
     font-weight: 700;
     color: var(--color-text-primary);
     margin-bottom: 8px;
+
+    @media (max-width: 768px) {
+      font-size: 22px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 20px;
+    }
   }
 
   .info-description {
     font-size: 14px;
     color: var(--color-text-secondary);
     margin: 0;
+
+    @media (max-width: 480px) {
+      font-size: 13px;
+    }
   }
 
   .support-highlight {
@@ -273,6 +306,18 @@ const submitForm = async () => {
     flex-direction: column;
     gap: 16px;
 
+    @media (max-width: 768px) {
+      padding: 20px;
+      margin-bottom: 24px;
+      border-radius: 12px;
+    }
+
+    @media (max-width: 480px) {
+      padding: 16px;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
     .support-status {
       display: inline-flex;
       align-items: center;
@@ -281,6 +326,10 @@ const submitForm = async () => {
       font-weight: 600;
       color: #047857;
 
+      @media (max-width: 480px) {
+        font-size: 12px;
+      }
+
       .status-dot {
         width: 8px;
         height: 8px;
@@ -288,6 +337,12 @@ const submitForm = async () => {
         background: #10b981;
         box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.2);
         display: inline-block;
+
+        @media (max-width: 480px) {
+          width: 6px;
+          height: 6px;
+          box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+        }
       }
     }
 
@@ -296,9 +351,21 @@ const submitForm = async () => {
       align-items: center;
       gap: 16px;
 
+      @media (max-width: 480px) {
+        gap: 12px;
+      }
+
       .el-icon {
         font-size: 32px;
         color: #047857;
+
+        @media (max-width: 768px) {
+          font-size: 28px;
+        }
+
+        @media (max-width: 480px) {
+          font-size: 24px;
+        }
       }
 
       .support-phone {
@@ -306,6 +373,18 @@ const submitForm = async () => {
         font-weight: 700;
         color: var(--color-text-primary);
         text-decoration: none;
+
+        @media (max-width: 768px) {
+          font-size: 26px;
+        }
+
+        @media (max-width: 480px) {
+          font-size: 22px;
+        }
+
+        @media (max-width: 360px) {
+          font-size: 18px;
+        }
       }
     }
 
@@ -314,12 +393,22 @@ const submitForm = async () => {
       font-size: 14px;
       color: var(--color-text-secondary);
       line-height: 1.5;
+
+      @media (max-width: 480px) {
+        font-size: 13px;
+        line-height: 1.4;
+      }
     }
 
     .support-actions {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
+
+      @media (max-width: 480px) {
+        gap: 8px;
+        flex-direction: column;
+      }
 
       .support-action {
         flex: 1;
@@ -330,6 +419,18 @@ const submitForm = async () => {
         font-weight: 600;
         text-decoration: none;
         transition: transform 0.2s, box-shadow 0.2s;
+
+        @media (max-width: 768px) {
+          min-width: 140px;
+          padding: 10px 14px;
+        }
+
+        @media (max-width: 480px) {
+          min-width: unset;
+          width: 100%;
+          padding: 12px 16px;
+          font-size: 14px;
+        }
 
         &.phone {
           background: #047857;
@@ -346,6 +447,16 @@ const submitForm = async () => {
         &:hover {
           transform: translateY(-2px);
           box-shadow: 0 15px 30px rgba(4, 120, 87, 0.2);
+        }
+
+        @media (max-width: 480px) {
+          &:hover {
+            transform: none;
+          }
+
+          &:active {
+            transform: scale(0.98);
+          }
         }
       }
     }
@@ -378,6 +489,15 @@ const submitForm = async () => {
       @media (max-width: 968px) {
         position: static;
       }
+
+      @media (max-width: 768px) {
+        padding: 24px;
+        border-radius: 12px;
+      }
+
+      @media (max-width: 480px) {
+        padding: 20px 16px;
+      }
     }
   }
 
@@ -386,12 +506,25 @@ const submitForm = async () => {
     font-weight: 700;
     color: var(--color-text-primary);
     margin-bottom: 8px;
+
+    @media (max-width: 768px) {
+      font-size: 22px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 20px;
+    }
   }
 
   .form-description {
     font-size: 15px;
     color: var(--color-text-secondary);
     margin-bottom: 24px;
+
+    @media (max-width: 480px) {
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
   }
 }
 </style>

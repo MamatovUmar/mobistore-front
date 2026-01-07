@@ -6,6 +6,14 @@ definePageMeta({
   layout: "empty",
 });
 
+const { t } = useI18n();
+const localePath = useLocalePath();
+
+useSeoMeta({
+  title: t("auth.reset.metaTitle"),
+  robots: "noindex, nofollow",
+});
+
 const { $api } = useNuxtApp();
 const route = useRoute();
 
@@ -22,29 +30,29 @@ const form = reactive({
 
 const validateConfirmPassword = (rule: any, value: string, callback: (error?: Error) => void) => {
   if (value !== form.new_password) {
-    callback(new Error("Пароли не совпадают"));
+    callback(new Error(t("auth.common.validation.passwordsMismatch")));
   } else {
     callback();
   }
 };
 
-const rules = {
+const rules = computed(() => ({
   new_password: [
     {
       required: true,
-      message: "Пожалуйста, введите новый пароль",
+      message: t("auth.reset.newPasswordPlaceholder"),
       trigger: "blur",
     },
     {
       min: 6,
-      message: "Пароль должен содержать минимум 6 символов",
+      message: t("auth.common.validation.passwordMin"),
       trigger: ["blur", "change"],
     },
   ],
   confirm_password: [
     {
       required: true,
-      message: "Пожалуйста, подтвердите пароль",
+      message: t("auth.common.validation.confirmPassword"),
       trigger: "blur",
     },
     {
@@ -52,7 +60,7 @@ const rules = {
       trigger: ["blur", "change"],
     },
   ],
-};
+}));
 
 const loading = ref(false);
 
@@ -87,12 +95,12 @@ const resetPassword = async () => {
 
         resetSuccess.value = true;
         ElMessage({
-          message: "Пароль успешно изменён",
+          message: t("auth.reset.successMessage"),
           type: "success",
         });
       } catch {
         ElMessage({
-          message: "Не удалось сбросить пароль. Попробуйте запросить ссылку заново",
+          message: t("auth.reset.errorMessage"),
           type: "error",
         });
       } finally {
@@ -106,7 +114,7 @@ const resetPassword = async () => {
 <template>
   <div class="reset-page">
     <div class="reset-card">
-      <NuxtLink to="/login" class="back-link">
+      <NuxtLink :to="localePath('/login')" class="back-link">
         <el-icon :size="18">
           <ArrowLeft />
         </el-icon>
@@ -121,13 +129,13 @@ const resetPassword = async () => {
             </svg>
           </el-icon>
         </div>
-        <h1 class="reset-title">Недействительная ссылка</h1>
+        <h1 class="reset-title">{{ t('auth.reset.invalidTitle') }}</h1>
         <p class="reset-subtitle">
-          Ссылка для сброса пароля недействительна или устарела
+          {{ t('auth.reset.invalidSubtitle') }}
         </p>
-        <NuxtLink to="/auth/forgot-password">
+        <NuxtLink :to="localePath('/auth/forgot-password')">
           <el-button type="primary" size="large" class="submit-button">
-            Запросить новую ссылку
+            {{ t('auth.reset.requestNew') }}
           </el-button>
         </NuxtLink>
       </div>
@@ -141,13 +149,13 @@ const resetPassword = async () => {
             </svg>
           </el-icon>
         </div>
-        <h1 class="reset-title">Пароль изменён!</h1>
+        <h1 class="reset-title">{{ t('auth.reset.successTitle') }}</h1>
         <p class="reset-subtitle">
-          Ваш пароль был успешно изменён. Теперь вы можете войти с новым паролем.
+          {{ t('auth.reset.successSubtitle') }}
         </p>
-        <NuxtLink to="/login">
+        <NuxtLink :to="localePath('/login')">
           <el-button type="primary" size="large" class="submit-button">
-            Войти в аккаунт
+            {{ t('auth.reset.loginAction') }}
           </el-button>
         </NuxtLink>
       </div>
@@ -161,9 +169,9 @@ const resetPassword = async () => {
                 <Lock />
               </el-icon>
             </div>
-            <h1 class="reset-title">Новый пароль</h1>
+            <h1 class="reset-title">{{ t('auth.reset.formTitle') }}</h1>
             <p class="reset-subtitle">
-              Введите новый пароль для вашего аккаунта
+              {{ t('auth.reset.formSubtitle') }}
             </p>
           </div>
         </div>
@@ -171,11 +179,11 @@ const resetPassword = async () => {
         <div class="reset-form">
           <el-form ref="formRef" :model="form" :rules="rules" @submit.prevent="resetPassword">
             <el-form-item prop="new_password">
-              <label class="form-label">Новый пароль</label>
+              <label class="form-label">{{ t('auth.reset.newPassword') }}</label>
               <el-input
                 v-model="form.new_password"
                 type="password"
-                placeholder="Введите новый пароль"
+                :placeholder="t('auth.reset.newPasswordPlaceholder')"
                 size="large"
                 :prefix-icon="Lock"
                 show-password
@@ -183,11 +191,11 @@ const resetPassword = async () => {
             </el-form-item>
 
             <el-form-item prop="confirm_password">
-              <label class="form-label">Подтвердите пароль</label>
+              <label class="form-label">{{ t('auth.reset.confirmPassword') }}</label>
               <el-input
                 v-model="form.confirm_password"
                 type="password"
-                placeholder="Повторите пароль"
+                :placeholder="t('auth.reset.confirmPasswordPlaceholder')"
                 size="large"
                 :prefix-icon="Lock"
                 show-password
@@ -201,15 +209,15 @@ const resetPassword = async () => {
               :loading="loading"
               native-type="submit"
             >
-              Сохранить пароль
+              {{ t('auth.reset.save') }}
             </el-button>
           </el-form>
         </div>
 
         <div class="login-prompt">
-          <span>Вспомнили пароль?</span>
-          <NuxtLink to="/login" class="login-link">
-            Войти
+          <span>{{ t('auth.forgot.remembered') }}</span>
+          <NuxtLink :to="localePath('/login')" class="login-link">
+            {{ t('auth.common.login') }}
           </NuxtLink>
         </div>
       </template>

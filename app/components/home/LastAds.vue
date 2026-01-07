@@ -5,6 +5,8 @@ import type { IListing } from "~/types/ads";
 import AdCard from "~/components/AdCard.vue";
 
 const { $api } = useNuxtApp();
+const { t } = useI18n();
+const localePath = useLocalePath();
 
 // Fetch latest ads
 const { data: listings } = await useAsyncData(
@@ -33,12 +35,14 @@ const { data: listings } = await useAsyncData(
     <div class="container">
       <div class="section-header">
         <div class="header-content">
-          <h2 class="section-title">Свежие объявления</h2>
-          <p class="section-subtitle">Самые актуальные предложения на рынке</p>
+          <h2 class="section-title">{{ t('home.latestAds.title') }}</h2>
+          <div class="section-subtitle">
+            {{ t('home.latestAds.subtitle') }}
+          </div>
         </div>
-        
-        <NuxtLink to="/search" class="view-all-link">
-          <span>Смотреть все</span>
+
+        <NuxtLink :to="localePath('/search')" class="view-all-link">
+          <span>{{ t('home.latestAds.viewAll') }}</span>
           <el-icon><Right /></el-icon>
         </NuxtLink>
       </div>
@@ -123,8 +127,14 @@ const { data: listings } = await useAsyncData(
   }
 
   .listings-grid {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Smaller cards on mobile */
-    gap: 16px;
+    grid-template-columns: repeat(2, 1fr); /* Force 2 columns on mobile */
+    gap: 12px;
+  }
+}
+
+@media (max-width: 375px) {
+  .listings-grid {
+    gap: 10px;
   }
 }
 </style>

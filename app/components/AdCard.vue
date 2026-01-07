@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { LocationInformation, Picture, StarFilled } from "@element-plus/icons-vue";
+import {
+  LocationInformation,
+  Picture,
+  StarFilled,
+} from "@element-plus/icons-vue";
 import type { IListing } from "~/types/ads";
 import { formatCurrency } from "~/utils/formatters";
 import StatusTag from "~/components/ad/StatusTag.vue";
@@ -10,8 +14,10 @@ const props = defineProps<{
   listing: IListing;
 }>();
 
-const root = useRootStore()
+const root = useRootStore();
 const { addToFavorite, removeFavorite } = useFavorite();
+const { t, locale } = useI18n();
+const localePath = useLocalePath();
 
 const image = computed(() => {
   if (props.listing.images.length > 0) {
@@ -34,13 +40,13 @@ const toggleFavorite = (e: MouseEvent) => {
 };
 
 // Format date (placeholder - replace with actual date from listing)
-const postDate = "Сегодня";
+const postDate = computed(() => t('adCard.today'));
 </script>
 
 <template>
-  <NuxtLink class="ad-card" :to="`/${listing.alias}`">
+  <NuxtLink class="listing-card" :to="localePath(`/${listing.alias}`)">
     <div class="card-glow"></div>
-    
+
     <!-- Image Container -->
     <div class="image-wrapper">
       <div
@@ -50,13 +56,13 @@ const postDate = "Сегодня";
       >
         <div v-if="!hasImage" class="placeholder">
           <el-icon :size="40" color="#cbd5e1"><Picture /></el-icon>
-          <span> Нет фото </span>
+          <span>{{ t('adCard.noPhoto') }}</span>
         </div>
-        
+
         <!-- Gradient Overlay -->
         <div v-if="hasImage" class="image-overlay"></div>
       </div>
-      
+
       <!-- Status Badge -->
       <div class="top-badges">
         <StatusTag :state="listing.state" />
@@ -76,8 +82,8 @@ const postDate = "Сегодня";
     <div class="card-body">
       <!-- Brand & Date -->
       <div class="meta-row">
-        <span class="brand">{{ listing.brand.name }}</span>
-        <span class="date">{{ postDate }}</span>
+        <span class="brand">{{ listing.brand?.name || listing.custom_brand }}</span>
+        <span class="date mobile-hidden">{{ postDate }}</span>
       </div>
 
       <!-- Title -->
@@ -91,14 +97,14 @@ const postDate = "Сегодня";
       <!-- Location -->
       <div class="location-row">
         <el-icon class="location-icon"><LocationInformation /></el-icon>
-        <span>{{ listing.region.name_ru }}</span>
+        <span>{{ listing.region[`name_${locale}`] || listing.region.name_ru }}</span>
       </div>
     </div>
   </NuxtLink>
 </template>
 
 <style lang="scss" scoped>
-.ad-card {
+.listing-card {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -227,7 +233,7 @@ const postDate = "Сегодня";
     background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
     color: #fff;
     border-color: transparent;
-    
+
     &:hover {
       transform: scale(1.15);
       box-shadow: 0 8px 20px -4px rgba(245, 158, 11, 0.5);
@@ -324,15 +330,49 @@ const postDate = "Сегодня";
 
 @media (max-width: 768px) {
   .card-body {
-    padding: 16px;
+    padding: 12px;
+    gap: 8px;
   }
 
   .title {
-    font-size: 15px;
+    font-size: 14px;
+    min-height: 40px; /* Reduced min-height */
+    line-height: 1.35;
   }
 
   .price-tag {
-    font-size: 20px;
+    font-size: 17px;
+  }
+
+  .brand {
+    padding: 2px 6px;
+    font-size: 10px;
+  }
+
+  .location-row {
+    font-size: 12px;
+    padding-top: 8px;
+  }
+
+  .fav-button {
+    width: 32px;
+    height: 32px;
+    top: 8px;
+    right: 8px;
+
+    .el-icon {
+      font-size: 16px;
+    }
+  }
+
+  .top-badges {
+    top: 8px;
+    left: 8px;
+  }
+}
+.mobile-hidden {
+  @media (max-width: 768px) {
+    display: none;
   }
 }
 </style>
