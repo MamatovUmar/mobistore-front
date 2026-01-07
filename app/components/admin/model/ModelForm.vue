@@ -157,44 +157,17 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
 
       <!-- RAM -->
       <el-form-item label="Варианты RAM" prop="ram">
-        <el-select
-          v-model="form.ram"
-          multiple
-          filterable
-          allow-create
-          default-first-option
-          :reserve-keyword="false"
-          placeholder="4GB, 6GB, 8GB..."
-          style="width: 100%"
-        />
+        <el-input-tag v-model="form.ram" placeholder="4GB, 6GB, 8GB..." />
       </el-form-item>
 
       <!-- ROM -->
       <el-form-item label="Варианты ROM" prop="rom">
-        <el-select
-          v-model="form.rom"
-          multiple
-          filterable
-          allow-create
-          default-first-option
-          :reserve-keyword="false"
-          placeholder="64GB, 128GB, 256GB..."
-          style="width: 100%"
-        />
+        <el-input-tag v-model="form.rom" placeholder="64GB, 128GB, 256GB..." />
       </el-form-item>
 
       <!-- Цвета -->
       <el-form-item label="Цвета" prop="colors">
-        <el-select
-          v-model="form.colors"
-          multiple
-          filterable
-          allow-create
-          default-first-option
-          :reserve-keyword="false"
-          placeholder="Введите цвета"
-          style="width: 100%"
-        />
+        <el-input-tag v-model="form.colors" placeholder="Введите цвета" />
       </el-form-item>
 
       <!-- Specs HTML -->

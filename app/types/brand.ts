@@ -5,6 +5,7 @@ export interface IBrand {
   logo: string | null;
   alias: string;
   ads_count: number;
+  devices_count: number;
 }
 
 export interface IBrandFilters {

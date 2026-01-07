@@ -89,6 +89,12 @@ const handleSizeChange = (size: number) => {
         </template>
       </el-table-column>
 
+      <el-table-column prop="devices_count" label="Устройств" min-width="150">
+        <template #default="{ row }">
+          <span :style="{ color: row.devices_count === row.models_count ? 'green' : 'red' }" class="alias-cell">{{ row.models_count }}/{{ row.devices_count }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column
         prop="is_popular"
         label="Популярный"
