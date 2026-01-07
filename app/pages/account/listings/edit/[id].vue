@@ -97,7 +97,9 @@ const form = reactive<IListingForm & { images?: any }>({
   status: ListingStatus.ACTIVE,
   images: [],
   custom_brand: null,
-  custom_model: null
+  custom_model: null,
+  storage_unit: "",
+  ram_unit: ""
 });
 
 // Загрузка данных объявления

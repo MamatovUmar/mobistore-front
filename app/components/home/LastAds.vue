@@ -32,7 +32,7 @@ const { data: listings } = await useAsyncData(
 
 <template>
   <section id="listings" class="listings-section">
-    <div class="container">
+    <div v-if="listings.length" class="container">
       <div class="section-header">
         <div class="header-content">
           <h2 class="section-title">{{ t('home.latestAds.title') }}</h2>
