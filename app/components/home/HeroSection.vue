@@ -105,9 +105,12 @@ const handleCreateAd = () => {
 
 <style lang="scss" scoped>
 .create-button-container {
-  display: flex;
   justify-content: center;
   margin-top: 20px;
+  display: none;
+  @media (max-width: 768px) {
+    display: flex;
+  }
 }
 .btn-create {
   display: flex;
@@ -434,7 +437,7 @@ const handleCreateAd = () => {
 @media (max-width: 768px) {
   .hero-wrapper {
     min-height: auto;
-    padding: 40px 0;
+    padding: 40px 0 20px;
   }
 
   .hero-content {
