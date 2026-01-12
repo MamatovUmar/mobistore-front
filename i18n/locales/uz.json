@@ -254,6 +254,15 @@
       "title": "Hech narsa topilmadi",
       "text": "Qidiruv parametrlarini o'zgartirib ko'ring yoki filtrlarni tozalang"
     },
+    "results": {
+      "found": "ta e'lon topildi"
+    },
+    "sort": {
+      "newest": "Avval yangilari",
+      "priceAsc": "Avval arzonlari",
+      "priceDesc": "Avval qimmatlari",
+      "popular": "Mashhurlik bo'yicha"
+    },
     "seo": {
       "new": "yangi",
       "used": "foydalanilgan",

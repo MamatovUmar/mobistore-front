@@ -8,7 +8,7 @@ import AdCardSkeleton from "@/components/skeletons/AdCardSkeleton.vue";
 import FilterFormSkeleton from "@/components/skeletons/FilterFormSkeleton.vue";
 import type { IBaseResponse } from "~/types";
 import type { IAdsResponse } from "~/types/ads";
-import { Search, Filter } from "@element-plus/icons-vue";
+import { Search, Filter, Sort, ArrowDown } from "@element-plus/icons-vue";
 
 const route = useRoute();
 const { $api } = useNuxtApp();
@@ -24,9 +24,36 @@ const keywords = ref("");
 const pageParams = reactive({
   page: 1,
   limit: 12,
+  sortBy: "last_bumped_at",
+  sortOrder: "desc",
 });
 
 const { locale } = useI18n();
+
+// Опции сортировки
+const sortOptions = computed(() => [
+  { value: "last_bumped_at:desc", sortBy: "last_bumped_at", sortOrder: "desc", label: t("search.sort.newest") },
+  { value: "price:asc", sortBy: "price", sortOrder: "asc", label: t("search.sort.priceAsc") },
+  { value: "price:desc", sortBy: "price", sortOrder: "desc", label: t("search.sort.priceDesc") },
+  { value: "views_count:desc", sortBy: "views_count", sortOrder: "desc", label: t("search.sort.popular") },
+]);
+
+const currentSortKey = computed(() => `${pageParams.sortBy}:${pageParams.sortOrder}`);
+
+const currentSortLabel = computed(() => {
+  const option = sortOptions.value.find((o) => o.value === currentSortKey.value);
+  return option?.label || t("search.sort.newest");
+});
+
+const handleSortChange = (value: string) => {
+  const option = sortOptions.value.find((o) => o.value === value);
+  if (option) {
+    pageParams.sortBy = option.sortBy;
+    pageParams.sortOrder = option.sortOrder;
+    pageParams.page = 1;
+    refresh();
+  }
+};
 
 // Функция для генерации SEO заголовка на основе серверных данных
 const generateSeoTitle = () => {
@@ -160,6 +187,7 @@ const {
   data: adsData,
   pending: loading,
   error: _error,
+  refresh,
 } = await useAsyncData(
   queryKey,
   () => {
@@ -173,11 +201,13 @@ const {
         limit: pageParams.limit,
         minPrice: priceRange?.[0],
         maxPrice: priceRange?.[1],
+        sortBy: pageParams.sortBy,
+        sortOrder: pageParams.sortOrder,
       },
     });
   },
   {
-    watch: [queryKey],
+    watch: [queryKey, () => pageParams.sortBy, () => pageParams.sortOrder],
   }
 );
 
@@ -350,6 +380,31 @@ definePageMeta({
             role="main"
             :aria-label="t('search.breadcrumbs.results')"
           >
+            <div v-if="ads.length > 0 || loading" class="results-header">
+              <div class="results-count">
+                <span class="count-number">{{ pagination?.total || 0 }}</span>
+                <span class="count-label">{{ t('search.results.found') }}</span>
+              </div>
+              <el-dropdown trigger="click" @command="handleSortChange">
+                <button class="sort-button">
+                  <el-icon><Sort /></el-icon>
+                  <span>{{ currentSortLabel }}</span>
+                  <el-icon class="arrow-icon"><ArrowDown /></el-icon>
+                </button>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item
+                      v-for="option in sortOptions"
+                      :key="option.value"
+                      :command="option.value"
+                      :class="{ 'is-active': currentSortKey === option.value }"
+                    >
+                      {{ option.label }}
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </div>
             <!-- Скелетоны при загрузке -->
             <div v-if="loading" class="results-grid">
               <template v-for="i in 6" :key="`skeleton-${i}`">
@@ -457,6 +512,60 @@ definePageMeta({
 
   .results-section {
     min-height: 400px;
+  }
+
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 12px;
+    background: var(--color-bg-primary);
+    border-radius: 12px;
+    border: 1px solid var(--color-border-light);
+  }
+
+  .results-count {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+
+    .count-number {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+    }
+
+    .count-label {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+    }
+  }
+
+  .sort-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-light);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: var(--color-primary);
+      background: var(--color-bg-primary);
+    }
+
+    .arrow-icon {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      transition: transform 0.2s;
+    }
   }
 
   .results-grid {
@@ -642,25 +751,36 @@ definePageMeta({
   }
 
   .mobile-only {
-    display: block; // Or flex/grid depending on context
+    display: block;
   }
 
   .results-page {
+    .results-header {
+      padding: 12px 16px;
+
+      .count-number {
+        font-size: 18px;
+      }
+
+      .sort-button {
+        padding: 8px 12px;
+        font-size: 13px;
+      }
+    }
+
     .results-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 12px;
 
-      // Override for desktop components if they leak through styles
       .desktop-only {
         display: none;
       }
 
-      // Ensure AdCard fills the grid cell
       .mobile-only {
-        display: flex; /* AdCard is flex container usually */
+        display: flex;
         width: 100%;
-        min-width: 0; /* Prevent grid blowout */
+        min-width: 0;
       }
     }
   }
