@@ -29,24 +29,22 @@ const goToSignup = () => {
 <template>
   <el-dialog
     :model-value="modelValue"
-    @update:model-value="(val) => emit('update:modelValue', val)"
-    width="450px"
+    width="min(450px, 92vw)"
     align-center
     append-to-body
-    :show-close="false"
+    @update:model-value="(val) => emit('update:modelValue', val)"
   >
     <div class="auth-dialog">
-      <div class="dialog-icon">
+      <div class="auth-dialog__icon">
         <el-icon :size="48"><Lock /></el-icon>
       </div>
-      <h3 class="dialog-title">{{ t('auth.modal.title') }}</h3>
-      <p class="dialog-text">
+      <h3 class="auth-dialog__title">{{ t('auth.modal.title') }}</h3>
+      <p class="auth-dialog__text">
         {{ t('auth.modal.text') }}
       </p>
     </div>
     <template #footer>
-      <div class="dialog-footer">
-        <el-button size="large" @click="handleClose">{{ t('auth.modal.cancel') }}</el-button>
+      <div class="auth-dialog__footer">
         <el-button size="large" @click="goToSignup">{{ t('auth.common.signup') }}</el-button>
         <el-button type="primary" size="large" @click="goToLogin">
           {{ t('auth.common.login') }}
@@ -57,42 +55,79 @@ const goToSignup = () => {
 </template>
 
 <style lang="scss" scoped>
-/* Auth Dialog */
 .auth-dialog {
   text-align: center;
   padding: 20px 0;
+
+  &__icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 24px;
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+  }
+
+  &__title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 12px;
+  }
+
+  &__text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #64748b;
+    margin: 0;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    button {
+      flex: 1;
+    }
+  }
 }
 
-.dialog-icon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 24px;
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
-}
+@media (max-width: 480px) {
+  .auth-dialog {
+    padding: 12px 0;
 
-.dialog-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: #0f172a;
-  margin: 0 0 12px;
-}
+    &__icon {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 16px;
 
-.dialog-text {
-  font-size: 15px;
-  line-height: 1.6;
-  color: #64748b;
-  margin: 0;
-}
+      :deep(svg) {
+        width: 32px;
+        height: 32px;
+      }
+    }
 
-.dialog-footer {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
+    &__title {
+      font-size: 20px;
+    }
+
+    &__text {
+      font-size: 14px;
+    }
+
+    &__footer {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+
+      :deep(.el-button) {
+        width: 100%;
+      }
+    }
+  }
 }
 </style>
