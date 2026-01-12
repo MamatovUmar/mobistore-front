@@ -9,6 +9,7 @@ import type { IListing } from "~/types/ads";
 import type { IBaseResponse } from "~/types";
 import NeedAuth from "~/components/layout/NeedAuth.vue";
 import { useRootStore } from "~/store/root";
+import SimilarAds from "~/components/ad/SimilarAds.vue";
 
 const route = useRoute();
 const { $api } = useNuxtApp();
@@ -131,6 +132,8 @@ const openChat = () => {
           :listing="listing"
         />
         <NeedAuth v-else v-model="showChat" />
+
+        <SimilarAds :id="listing.id" />
       </template>
 
       <div v-else class="error-state">
