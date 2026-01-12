@@ -146,7 +146,7 @@ const handleCreateAd = () => {
   position: relative;
   background-color: #f8fafc;
   overflow: hidden;
-  min-height: 460px;
+  height: 460px;
   display: flex;
   align-items: center;
   .container {
