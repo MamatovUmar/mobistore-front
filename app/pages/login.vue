@@ -171,9 +171,10 @@ const login = async () => {
           <span>{{ t("auth.common.orLoginWith") }}</span>
         </div>
 
-        <AuthGoogleButton />
-
-        <TelegramLoginButton :botName="botName" @auth="onTelegramAuth" />
+        <div class="social-login-group">
+          <AuthGoogleButton />
+          <TelegramLoginButton :botName="botName" @auth="onTelegramAuth" />
+        </div>
 
         <div class="register-prompt">
           <span>{{ t("auth.common.noAccount") }}</span>
@@ -386,6 +387,13 @@ const login = async () => {
   to {
     opacity: 1;
   }
+}
+
+.social-login-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
 }
 
 .info-title {

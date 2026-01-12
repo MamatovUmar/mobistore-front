@@ -1,6 +1,15 @@
 <template>
-  <div ref="telegramContainer"></div>
+  <div ref="telegramContainer" class="telegram-login-container"></div>
 </template>
+
+<style scoped>
+.telegram-login-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 12px;
+}
+</style>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
@@ -29,6 +38,7 @@ onMounted(() => {
   script.setAttribute("data-size", props.buttonSize || "large");
   script.setAttribute("data-onauth", "onTelegramAuth(user)");
   script.setAttribute("data-request-access", "write");
+  script.setAttribute("data-radius", "10");
   script.async = true;
 
   telegramContainer.value?.appendChild(script);
