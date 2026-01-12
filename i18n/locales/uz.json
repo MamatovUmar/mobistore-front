@@ -37,7 +37,9 @@
       "brandPlaceholder": "Barcha brendlar",
       "model": "Model",
       "modelPlaceholder": "Barcha modellar",
-      "showResults": "Natijalarni ko'rsatish"
+      "showResults": "Natijalarni ko'rsatish",
+      "mobileTitle": "Qidiruv",
+      "mobileHint": "Parametrlarni tanlang va «Ko‘rsatish» tugmasini bosing"
     },
     "latestAds": {
       "title": "Yangi e'lonlar",
