@@ -25,10 +25,6 @@ useSeoMeta({
 const { $api } = useNuxtApp();
 const rootStore = useRootStore();
 const tokenCookie = useCookie("token");
-const { telegramLogin } = useAuthApi();
-const config = useRuntimeConfig();
-
-const botName = config.public.telegramBotName;
 
 const formRef = ref();
 const loading = ref(false);
@@ -59,21 +55,6 @@ const rules = computed(() => ({
     },
   ],
 }));
-
-const onTelegramAuth = async (user: any) => {
-  loading.value = true;
-  try {
-    const res = await telegramLogin(user);
-    rootStore.user = res.data?.user;
-    tokenCookie.value = res.data?.token;
-    navigateTo(localePath("/"));
-  } catch (error: any) {
-    const message = error?.response?._data?.message || t("auth.login.error");
-    ElMessage.error(message);
-  } finally {
-    loading.value = false;
-  }
-};
 
 const login = async () => {
   if (!formRef.value) return;
@@ -173,7 +154,7 @@ const login = async () => {
 
         <div class="social-login-group">
           <AuthGoogleButton />
-          <TelegramLoginButton :botName="botName" @auth="onTelegramAuth" />
+          <TelegramLoginButton />
         </div>
 
         <div class="register-prompt">
