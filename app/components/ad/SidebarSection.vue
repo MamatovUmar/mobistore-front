@@ -17,7 +17,7 @@ import ComplaintButton from "~/components/ad/ComplaintButton.vue";
 import { useFavorite } from "#imports";
 import { useRootStore } from "~/store/root";
 
-const { listing } = defineProps<{ listing: IListing }>();
+const { listing, isArchived = false } = defineProps<{ listing: IListing; isArchived?: boolean }>();
 
 const emit = defineEmits<{
   update: [];
@@ -116,7 +116,7 @@ const publishListing = catcher(
 
     <div class="listing-price">{{ formattedPrice }} {{ listing.currency }}</div>
 
-    <div class="listing-actions">
+    <div v-if="!isArchived" class="listing-actions">
       <el-button
         v-if="listing.user_id !== root.user?.id"
         size="large"
