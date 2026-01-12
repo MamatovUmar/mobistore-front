@@ -16,15 +16,9 @@
   transition: background-color 0.2s;
 }
 
-.telegram-login-container:hover {
-  background-color: #4b97d1;
-}
-
 :deep(iframe) {
-  /* Scale might be necessary if we want to fill usage, but native centering is safer for now */
-  transform: scale(1.1);
-  opacity: 0.99; /* Hack to force rendering layer */
-  pointer-events: auto; /* Ensure clicks go through */
+  opacity: 1;
+  pointer-events: auto;
 }
 </style>
 
