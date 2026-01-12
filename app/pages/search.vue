@@ -521,7 +521,7 @@ definePageMeta({
     margin-bottom: 20px;
     padding: 12px;
     background: var(--color-bg-primary);
-    border-radius: 12px;
+    border-radius: 8px;
     border: 1px solid var(--color-border-light);
   }
 

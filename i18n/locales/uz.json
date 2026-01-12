@@ -5,12 +5,12 @@
   },
   "seo": {
     "home": {
-      "title": "MobiStore - O'zbekistonda smartfonlarni sotib oling va soting | E'lonlar taxtasi",
-      "description": "O'zbekistondagi smartfonlar, planshetlar va mobil qurilmalar bo'yicha eng yirik e'lonlar taxtasi. Jismoniy shaxslar va do'konlardan minglab e'lonlar. Tezkor savdo, xavfsiz bitimlar. Bepul e'lon joylashtirish.",
-      "ogTitle": "MobiStore - O'zbekistonda smartfonlarni sotib oling va soting",
-      "ogDescription": "Minglab e'lonlar orasidan o'zingizga mos smartfonni toping. Mashhur brendlar: iPhone, Samsung, Xiaomi. Bepul e'lon joylashtirish.",
-      "twitterTitle": "MobiStore - O'zbekistonda smartfonlarni sotib oling va soting",
-      "twitterDescription": "O'zbekistondagi eng yirik smartfonlar e'lonlar taxtasi. Bepul joylashtirish, xavfsiz bitimlar."
+      "title": "MobiStore — O‘zbekistonda smartfon sotish va xarid qilish uchun yangi platforma",
+      "description": "MobiStore — O‘zbekistonda smartfonlar, planshetlar va aqlli soatlarni sotish va xarid qilish uchun yangi onlayn maydoncha. Loyiha endigina ishga tushdi — e’lon joylashtirish bepul.",
+      "ogTitle": "MobiStore — smartfon sotish uchun yangi platforma",
+      "ogDescription": "Biz endigina ishga tushdik 👋 Smartfonlar, planshetlar va aqlli soatlarni butun O‘zbekiston bo‘ylab sotish uchun e’lonlarni bepul joylashtiring.",
+      "twitterTitle": "MobiStore — smartfonlar uchun yangi marketplace",
+      "twitterDescription": "O‘zbekistonda smartfon sotish va xarid qilish uchun yangi platforma. Ishga tushish bosqichida e’lon joylashtirish bepul."
     }
   },
   "home": {
@@ -57,7 +57,7 @@
       "description": "Smartfoningiz javonda chang bosib yotmasin. Uni O'zbekistonning asosiy platformasida foydali soting.",
       "benefits": {
         "freeListing": "2 daqiqada bepul joylashtirish",
-        "realBuyers": "Minglab haqiqiy xaridorlar"
+        "realBuyers": "Haqiqiy xaridorlar"
       },
       "startSelling": "Sotishni boshlash",
       "profitable": "Foydali",
@@ -71,7 +71,7 @@
     "login": "Kirish"
   },
   "footer": {
-    "description": "O'zbekistonda gadjetlarni sotib olish va sotish uchun eng yirik ekotizim. Har bir bitimda xavfsizlik, tezkorlik va qulaylik.",
+    "description": "O‘zbekistonda gadjetlar savdosi uchun zamonaviy platforma. Tez va qulay sotish hamda xarid qilish uchun.",
     "help": "Yordam",
     "privacyPolicy": "Maxfiylik siyosati",
     "termsOfService": "Foydalanuvchi shartnomasi",
