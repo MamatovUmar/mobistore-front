@@ -7,6 +7,7 @@ import {
   CircleCheckFilled,
 } from "@element-plus/icons-vue";
 import type { IAuthResponse } from "~/types/auth";
+import TelegramLoginButton from "~/components/auth/TelegramLoginButton.vue";
 
 definePageMeta({
   layout: "empty",

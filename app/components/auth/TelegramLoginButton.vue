@@ -6,14 +6,25 @@
 .telegram-login-container {
   display: flex;
   justify-content: center;
+  align-items: center;
   width: 100%;
-  margin-top: 12px;
+  height: 40px;
+  background-color: #54a9eb; /* Telegram Blue */
+  border-radius: 10px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: background-color 0.2s;
+}
+
+.telegram-login-container:hover {
+  background-color: #4b97d1;
 }
 
 :deep(iframe) {
-  width: 100% !important;
-  max-width: 100% !important;
-  border-radius: 10px;
+  /* Scale might be necessary if we want to fill usage, but native centering is safer for now */
+  transform: scale(1.1);
+  opacity: 0.99; /* Hack to force rendering layer */
+  pointer-events: auto; /* Ensure clicks go through */
 }
 </style>
 
@@ -56,7 +67,7 @@ onMounted(() => {
   script.setAttribute("data-onauth", "onTelegramAuth(user)");
   script.setAttribute("data-request-access", "write");
   script.setAttribute("data-radius", "10");
-  script.setAttribute("data-userpic", "true");
+  script.setAttribute("data-userpic", "false");
   script.async = true;
 
   telegramContainer.value?.appendChild(script);
