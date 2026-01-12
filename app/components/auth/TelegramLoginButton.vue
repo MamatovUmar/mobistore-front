@@ -9,6 +9,12 @@
   width: 100%;
   margin-top: 12px;
 }
+
+:deep(iframe) {
+  width: 100% !important;
+  max-width: 100% !important;
+  border-radius: 10px;
+}
 </style>
 
 <script setup lang="ts">
@@ -50,6 +56,7 @@ onMounted(() => {
   script.setAttribute("data-onauth", "onTelegramAuth(user)");
   script.setAttribute("data-request-access", "write");
   script.setAttribute("data-radius", "10");
+  script.setAttribute("data-userpic", "true");
   script.async = true;
 
   telegramContainer.value?.appendChild(script);
