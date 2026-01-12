@@ -9,6 +9,7 @@ import type { IListing } from "~/types/ads";
 import type { IBaseResponse } from "~/types";
 import NeedAuth from "~/components/layout/NeedAuth.vue";
 import { useRootStore } from "~/store/root";
+import SimilarAds from "~/components/ad/SimilarAds.vue";
 
 const route = useRoute();
 const { $api } = useNuxtApp();
@@ -74,6 +75,16 @@ const handleUpdate = async () => {
 const openChat = () => {
   showChat.value = true;
 };
+
+const statusAlert = computed(() => {
+  const alerts: Record<string, { title: string; description: string; type: 'warning' | 'error' | 'success' }> = {
+    moderation: { title: t('listing.moderation.title'), description: t('listing.moderation.description'), type: 'warning' },
+    rejected: { title: t('listing.rejected.title'), description: t('listing.rejected.description'), type: 'error' },
+    archived: { title: t('listing.archived.title'), description: t('listing.archived.description'), type: 'error' },
+    sold: { title: t('listing.sold.title'), description: t('listing.sold.description'), type: 'success' },
+  };
+  return listing.value?.status ? alerts[listing.value.status] : null;
+});
 </script>
 
 <template>
@@ -92,19 +103,10 @@ const openChat = () => {
         </div>
 
         <el-alert
-          v-if="listing.status === 'moderation'"
-          :title="t('listing.moderation.title')"
-          :description="t('listing.moderation.description')"
-          type="warning"
-          :closable="false"
-          style="margin-bottom: 20px;"
-        />
-
-        <el-alert
-          v-if="listing.status === 'rejected'"
-          :title="t('listing.rejected.title')"
-          :description="t('listing.rejected.description')"
-          type="error"
+          v-if="statusAlert"
+          :title="statusAlert.title"
+          :description="statusAlert.description"
+          :type="statusAlert.type"
           :closable="false"
           style="margin-bottom: 20px;"
         />
@@ -119,6 +121,7 @@ const openChat = () => {
           <div v-if="listing">
             <SidebarSection
               :listing="listing"
+              :is-archived="listing.status === 'archived' || listing.status === 'sold'"
               @update="handleUpdate"
               @open-chat="openChat"
             />
@@ -131,6 +134,8 @@ const openChat = () => {
           :listing="listing"
         />
         <NeedAuth v-else v-model="showChat" />
+
+        <SimilarAds :id="listing.id" />
       </template>
 
       <div v-else class="error-state">

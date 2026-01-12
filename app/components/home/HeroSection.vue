@@ -149,7 +149,7 @@ const { t } = useI18n();
 .hero-content {
   position: relative;
   text-align: center;
-  max-width: 800px;
+  max-width: 840px;
   margin: 0 auto;
   padding: 40px 0;
   display: flex;
@@ -184,7 +184,7 @@ const { t } = useI18n();
 
 /* Typography */
 .hero-title {
-  font-size: 64px;
+  font-size: 45px;
   font-weight: 800;
   color: #0f172a;
   line-height: 1.1;
@@ -204,7 +204,7 @@ const { t } = useI18n();
   color: #64748b;
   line-height: 1.6;
   margin: 0 auto 48px;
-  max-width: 800px;
+  // max-width: 800px;
 }
 
 /* Stats */
