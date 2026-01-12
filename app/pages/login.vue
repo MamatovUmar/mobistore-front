@@ -4,6 +4,7 @@ import { User, Lock, ArrowLeft } from "@element-plus/icons-vue";
 import type { IAuthResponse } from "~/types/auth";
 import { useRootStore } from "~/store/root";
 import { useCookie } from "#app";
+import TelegramLoginButton from "~/components/auth/TelegramLoginButton.vue";
 
 definePageMeta({
   layout: "empty",
@@ -26,7 +27,7 @@ const rootStore = useRootStore();
 const tokenCookie = useCookie("token");
 
 const formRef = ref();
-
+const loading = ref(false);
 const form = reactive({
   email: "",
   password: "",
@@ -55,8 +56,6 @@ const rules = computed(() => ({
   ],
 }));
 
-const loading = ref(false);
-
 const login = async () => {
   if (!formRef.value) return;
 
@@ -66,14 +65,15 @@ const login = async () => {
       try {
         const res = await $api<IAuthResponse>("/auth/login", {
           method: "POST",
-          body: form
+          body: form,
         });
 
         rootStore.user = res.data?.user;
         tokenCookie.value = res.data?.token;
-        navigateTo(localePath('/'))
+        navigateTo(localePath("/"));
       } catch (error: any) {
-        const message = error?.response?._data?.message || t("auth.login.error");
+        const message =
+          error?.response?._data?.message || t("auth.login.error");
         ElMessage.error(message);
       } finally {
         loading.value = false;
@@ -81,7 +81,6 @@ const login = async () => {
     }
   });
 };
-
 </script>
 
 <template>
@@ -95,15 +94,20 @@ const login = async () => {
 
       <div class="login-header">
         <div class="logo-section">
-          <h1 class="login-title">{{ t('auth.login.title') }}</h1>
-          <p class="login-subtitle">{{ t('auth.login.subtitle') }}</p>
+          <h1 class="login-title">{{ t("auth.login.title") }}</h1>
+          <p class="login-subtitle">{{ t("auth.login.subtitle") }}</p>
         </div>
       </div>
 
       <div class="login-form">
-        <el-form ref="formRef" :model="form" :rules="rules" @submit.prevent="login">
+        <el-form
+          ref="formRef"
+          :model="form"
+          :rules="rules"
+          @submit.prevent="login"
+        >
           <el-form-item prop="email">
-            <label class="form-label">{{ t('auth.common.email') }}</label>
+            <label class="form-label">{{ t("auth.common.email") }}</label>
             <el-input
               v-model="form.email"
               :placeholder="t('auth.common.emailPlaceholder')"
@@ -113,7 +117,7 @@ const login = async () => {
           </el-form-item>
 
           <el-form-item prop="password">
-            <label class="form-label">{{ t('auth.common.password') }}</label>
+            <label class="form-label">{{ t("auth.common.password") }}</label>
             <el-input
               v-model="form.password"
               type="password"
@@ -125,8 +129,11 @@ const login = async () => {
           </el-form-item>
 
           <div class="form-options">
-            <NuxtLink :to="localePath('/auth/forgot-password')" class="forgot-link">
-              {{ t('auth.login.forgotPassword') }}
+            <NuxtLink
+              :to="localePath('/auth/forgot-password')"
+              class="forgot-link"
+            >
+              {{ t("auth.login.forgotPassword") }}
             </NuxtLink>
           </div>
 
@@ -137,20 +144,23 @@ const login = async () => {
             :loading="loading"
             native-type="submit"
           >
-            {{ t('auth.common.login') }}
+            {{ t("auth.common.login") }}
           </el-button>
         </el-form>
 
         <div class="divider">
-          <span>{{ t('auth.common.orLoginWith') }}</span>
+          <span>{{ t("auth.common.orLoginWith") }}</span>
         </div>
 
-        <AuthGoogleButton />
+        <div class="social-login-group">
+          <AuthGoogleButton />
+          <TelegramLoginButton />
+        </div>
 
         <div class="register-prompt">
-          <span>{{ t('auth.common.noAccount') }}</span>
+          <span>{{ t("auth.common.noAccount") }}</span>
           <NuxtLink :to="localePath('/signup')" class="register-link">
-            {{ t('auth.common.signup') }}
+            {{ t("auth.common.signup") }}
           </NuxtLink>
         </div>
       </div>
@@ -358,6 +368,13 @@ const login = async () => {
   to {
     opacity: 1;
   }
+}
+
+.social-login-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
 }
 
 .info-title {

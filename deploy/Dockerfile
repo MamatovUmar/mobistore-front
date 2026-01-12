@@ -13,6 +13,9 @@ WORKDIR /app
 ARG NUXT_PUBLIC_API_URL
 ENV NUXT_PUBLIC_API_URL=${NUXT_PUBLIC_API_URL}
 
+ARG NUXT_PUBLIC_TELEGRAM_BOT_NAME
+ENV NUXT_PUBLIC_TELEGRAM_BOT_NAME=${NUXT_PUBLIC_TELEGRAM_BOT_NAME}
+
 # Ограничиваем память Node.js для предотвращения OOM
 ENV NODE_OPTIONS="--max-old-space-size=3072"
 
@@ -36,8 +39,10 @@ WORKDIR /app
 
 # Runtime переменная для API URL (должна быть доступна при запуске)
 ARG NUXT_PUBLIC_API_URL
+ARG NUXT_PUBLIC_TELEGRAM_BOT_NAME
 ENV NODE_ENV=production
 ENV NUXT_PUBLIC_API_URL=${NUXT_PUBLIC_API_URL}
+ENV NUXT_PUBLIC_TELEGRAM_BOT_NAME=${NUXT_PUBLIC_TELEGRAM_BOT_NAME}
 
 # Nitro output самодостаточен
 COPY --from=builder /app/.output ./.output

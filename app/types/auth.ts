@@ -13,5 +13,15 @@ export interface IRegisterForm {
   last_name: string;
 }
 
-export interface IAuthResponse extends IBaseResponse<{ user: IUser; token: string }> {}
-  
+export interface TelegramUser {
+  id: number;
+  first_name: string;
+  last_name?: string;
+  username?: string;
+  photo_url?: string;
+  auth_date: number;
+  hash: string;
+}
+
+export interface IAuthResponse
+  extends IBaseResponse<{ user: IUser; token: string }> {}

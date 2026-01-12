@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import { User, Lock, ArrowLeft, CircleCheckFilled } from "@element-plus/icons-vue";
+import {
+  User,
+  Lock,
+  ArrowLeft,
+  CircleCheckFilled,
+} from "@element-plus/icons-vue";
 import type { IAuthResponse } from "~/types/auth";
+import TelegramLoginButton from "~/components/auth/TelegramLoginButton.vue";
 
 definePageMeta({
   layout: "empty",
@@ -57,7 +63,7 @@ const rules = computed(() => ({
       message: t("auth.common.validation.name"),
       trigger: "blur",
     },
-  ]
+  ],
 }));
 
 const loading = ref(false);
@@ -72,7 +78,7 @@ const register = async () => {
       try {
         await $api<IAuthResponse>("/auth/register", {
           method: "POST",
-          body: form
+          body: form,
         });
 
         showSuccessDialog.value = true;
@@ -89,9 +95,8 @@ const register = async () => {
 };
 
 const goToHome = () => {
-  navigateTo(localePath('/'));
+  navigateTo(localePath("/"));
 };
-
 </script>
 
 <template>
@@ -109,12 +114,17 @@ const goToHome = () => {
         <el-icon class="success-icon" :size="64" color="#67c23a">
           <CircleCheckFilled />
         </el-icon>
-        <h3 class="success-title">{{ t('auth.signup.successTitle') }}</h3>
+        <h3 class="success-title">{{ t("auth.signup.successTitle") }}</h3>
         <p class="success-message">
-          {{ t('auth.signup.successMessage') }}
+          {{ t("auth.signup.successMessage") }}
         </p>
-        <el-button type="primary" size="large" class="success-button" @click="goToHome">
-          {{ t('auth.common.goToHome') }}
+        <el-button
+          type="primary"
+          size="large"
+          class="success-button"
+          @click="goToHome"
+        >
+          {{ t("auth.common.goToHome") }}
         </el-button>
       </div>
     </el-dialog>
@@ -128,16 +138,21 @@ const goToHome = () => {
 
       <div class="signup-header">
         <div class="logo-section">
-          <h1 class="signup-title">{{ t('auth.signup.title') }}</h1>
-          <p class="signup-subtitle">{{ t('auth.signup.subtitle') }}</p>
+          <h1 class="signup-title">{{ t("auth.signup.title") }}</h1>
+          <p class="signup-subtitle">{{ t("auth.signup.subtitle") }}</p>
         </div>
       </div>
 
       <div class="signup-form">
-        <el-form ref="formRef" :model="form" :rules="rules" @submit.prevent="register">
+        <el-form
+          ref="formRef"
+          :model="form"
+          :rules="rules"
+          @submit.prevent="register"
+        >
           <div class="name-row">
             <el-form-item prop="first_name">
-              <label class="form-label">{{ t('auth.signup.firstName') }}</label>
+              <label class="form-label">{{ t("auth.signup.firstName") }}</label>
               <el-input
                 v-model="form.first_name"
                 :placeholder="t('auth.signup.firstNamePlaceholder')"
@@ -146,7 +161,7 @@ const goToHome = () => {
             </el-form-item>
 
             <el-form-item>
-              <label class="form-label">{{ t('auth.signup.lastName') }}</label>
+              <label class="form-label">{{ t("auth.signup.lastName") }}</label>
               <el-input
                 v-model="form.last_name"
                 :placeholder="t('auth.signup.lastNamePlaceholder')"
@@ -156,7 +171,7 @@ const goToHome = () => {
           </div>
 
           <el-form-item prop="email">
-            <label class="form-label">{{ t('auth.common.email') }}</label>
+            <label class="form-label">{{ t("auth.common.email") }}</label>
             <el-input
               v-model="form.email"
               :placeholder="t('auth.common.emailPlaceholder')"
@@ -166,7 +181,7 @@ const goToHome = () => {
           </el-form-item>
 
           <el-form-item prop="password">
-            <label class="form-label">{{ t('auth.common.password') }}</label>
+            <label class="form-label">{{ t("auth.common.password") }}</label>
             <el-input
               v-model="form.password"
               type="password"
@@ -184,20 +199,23 @@ const goToHome = () => {
             :loading="loading"
             native-type="submit"
           >
-            {{ t('auth.common.signup') }}
+            {{ t("auth.common.signup") }}
           </el-button>
         </el-form>
 
         <div class="divider">
-          <span>{{ t('auth.common.orSignupWith') }}</span>
+          <span>{{ t("auth.common.orSignupWith") }}</span>
         </div>
 
-        <AuthGoogleButton />
+        <div class="social-buttons">
+          <AuthGoogleButton />
+          <TelegramLoginButton />
+        </div>
 
         <div class="login-prompt">
-          <span>{{ t('auth.common.hasAccount') }}</span>
+          <span>{{ t("auth.common.hasAccount") }}</span>
           <NuxtLink :to="localePath('/login')" class="login-link">
-            {{ t('auth.common.login') }}
+            {{ t("auth.common.login") }}
           </NuxtLink>
         </div>
       </div>
@@ -206,6 +224,13 @@ const goToHome = () => {
 </template>
 
 <style lang="scss" scoped>
+.social-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
 .signup-page {
   min-height: 100dvh;
   background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
