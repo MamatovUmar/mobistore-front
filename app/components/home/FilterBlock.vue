@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { reactive } from "vue";
+import { Search } from "@element-plus/icons-vue";
 import RegionAutocomplete from "@/components/autocompletes/RegionAutocomplete.vue";
 import CityAutocomplete from "@/components/autocompletes/CityAutocomplete.vue";
 import BrandAutocomplete from "@/components/autocompletes/BrandAutocomplete.vue";
@@ -38,6 +39,15 @@ interface IFilterForm {
 <template>
   <div class="container">
     <div class="filters">
+      <div class="filters__mobile-header">
+        <div class="filters__mobile-title">
+          <el-icon class="filters__mobile-icon" :size="18">
+            <Search />
+          </el-icon>
+          <span class="filters__mobile-text">{{ t('home.filter.mobileTitle') }}</span>
+        </div>
+        <div class="filters__mobile-hint">{{ t('home.filter.mobileHint') }}</div>
+      </div>
       <ClientOnly>
         <el-form :model="form" label-position="top" size="large">
           <div class="filters-grid">
@@ -109,6 +119,50 @@ interface IFilterForm {
   box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.1),
     0 0 0 1px rgba(255, 255, 255, 0.5) inset;
   border: 1px solid rgba(255, 255, 255, 0.6);
+
+  &__mobile-header {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .filters {
+    &__mobile-header {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(139, 92, 246, 0.06) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.12);
+    }
+
+    &__mobile-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #0f172a;
+      font-weight: 800;
+      font-size: 16px;
+      line-height: 1.2;
+    }
+
+    &__mobile-icon {
+      color: #3b82f6;
+    }
+
+    &__mobile-text {
+      letter-spacing: -0.2px;
+    }
+
+    &__mobile-hint {
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+      line-height: 1.35;
+    }
+  }
 }
 
 .filters-grid {

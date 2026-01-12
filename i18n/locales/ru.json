@@ -37,7 +37,9 @@
       "brandPlaceholder": "Все бренды",
       "model": "Модель",
       "modelPlaceholder": "Все модели",
-      "showResults": "Показать результаты"
+      "showResults": "Показать результаты",
+      "mobileTitle": "Поиск",
+      "mobileHint": "Выберите параметры и нажмите «Показать»"
     },
     "latestAds": {
       "title": "Свежие объявления",

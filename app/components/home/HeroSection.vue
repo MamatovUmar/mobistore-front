@@ -1,7 +1,24 @@
 <script setup lang="ts">
 import { Cellphone, Lightning, Wallet } from "@element-plus/icons-vue";
+import { Plus } from "@element-plus/icons-vue";
+import { ref } from "vue";
+import { useRootStore } from "~/store/root";
+import HeaderAuthModal from "~/components/layout/header/HeaderAuthModal.vue";
 
 const { t } = useI18n();
+const rootStore = useRootStore();
+const router = useRouter();
+const localePath = useLocalePath();
+
+const showAuthDialog = ref(false);
+
+const handleCreateAd = () => {
+  if (rootStore.user) {
+    router.push(localePath("/create"));
+  } else {
+    showAuthDialog.value = true;
+  }
+};
 </script>
 
 <template>
@@ -20,19 +37,19 @@ const { t } = useI18n();
           <div class="icon-box blue">
             <el-icon><Cellphone /></el-icon>
           </div>
-          <span>{{ t('home.hero.smartphones') }}</span>
+          <span>{{ t("home.hero.smartphones") }}</span>
         </div>
         <div class="float-card card-2">
           <div class="icon-box purple">
             <el-icon><Wallet /></el-icon>
           </div>
-          <span>{{ t('home.hero.profitable') }}</span>
+          <span>{{ t("home.hero.profitable") }}</span>
         </div>
         <div class="float-card card-3">
           <div class="icon-box orange">
             <el-icon><Lightning /></el-icon>
           </div>
-          <span>{{ t('home.hero.fast') }}</span>
+          <span>{{ t("home.hero.fast") }}</span>
         </div>
       </div>
 
@@ -41,42 +58,90 @@ const { t } = useI18n();
         <div class="text-content">
           <div class="badge slide-up">
             <span class="badge-dot"></span>
-            {{ t('home.hero.badge') }}
+            {{ t("home.hero.badge") }}
           </div>
 
           <h1 class="hero-title slide-up delay-1">
-            {{ t('home.hero.titleMain') }}
-            <span class="gradient-text">{{ t('home.hero.titleGradient') }}</span>
+            {{ t("home.hero.titleMain") }}
+            <span class="gradient-text">{{
+              t("home.hero.titleGradient")
+            }}</span>
           </h1>
 
           <p class="hero-subtitle slide-up delay-2">
-            {{ t('home.hero.subtitle') }}
+            {{ t("home.hero.subtitle") }}
           </p>
 
+          <div class="create-button-container">
+            <button class="btn-create" @click="handleCreateAd">
+              <el-icon class="btn-icon"><Plus /></el-icon>
+              <span class="btn-text">{{ t("header.createAd") }}</span>
+            </button>
+          </div>
           <!-- Quick Stats -->
           <div class="hero-stats slide-up delay-4" v-if="false">
             <div class="stat-item">
               <span class="stat-count">10k+</span>
-              <span class="stat-label">{{ t('home.hero.stats.ads') }}</span>
+              <span class="stat-label">{{ t("home.hero.stats.ads") }}</span>
             </div>
             <div class="stat-separator"></div>
             <div class="stat-item">
               <span class="stat-count">5k+</span>
-              <span class="stat-label">{{ t('home.hero.stats.users') }}</span>
+              <span class="stat-label">{{ t("home.hero.stats.users") }}</span>
             </div>
             <div class="stat-separator"></div>
             <div class="stat-item">
               <span class="stat-count">24/7</span>
-              <span class="stat-label">{{ t('home.hero.stats.support') }}</span>
+              <span class="stat-label">{{ t("home.hero.stats.support") }}</span>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <HeaderAuthModal v-model="showAuthDialog" />
 </template>
 
 <style lang="scss" scoped>
+.create-button-container {
+  justify-content: center;
+  margin-top: 20px;
+  display: none;
+  @media (max-width: 768px) {
+    display: flex;
+  }
+}
+.btn-create {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  margin-right: 12px;
+
+  .btn-icon {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
 .hero-wrapper {
   position: relative;
   background-color: #f8fafc;
@@ -372,11 +437,11 @@ const { t } = useI18n();
 @media (max-width: 768px) {
   .hero-wrapper {
     min-height: auto;
-    padding: 40px 0;
+    padding: 40px 0 20px;
   }
 
   .hero-content {
-    padding: 20px 0;
+    padding: 20px 0 0;
   }
 
   .hero-title {
