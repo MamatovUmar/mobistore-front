@@ -18,7 +18,7 @@ services:
       dockerfile: deploy/Dockerfile
       args:
         NUXT_PUBLIC_API_URL: https://api.mobistore.uz
-        NUXT_PUBLIC_TELEGRAM_BOT_NAME: mobistore_regster_bot
+        NUXT_PUBLIC_TELEGRAM_BOT_NAME: mobistore_helper_bot
     ports:
       - "3001:3000"
     volumes:
