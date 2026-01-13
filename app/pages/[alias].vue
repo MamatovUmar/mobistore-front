@@ -30,36 +30,56 @@ const listing = computed(() => data.value?.data);
 const showChat = ref(false);
 
 const config = useRuntimeConfig();
-const siteUrl = config.public.siteUrl || 'https://mobistore.uz';
+const siteUrl = config.public.siteUrl || "https://mobistore.uz";
 
 useSeoMeta({
-  title: () => listing.value?.title 
-    ? `${listing.value.title} — Mobistore` 
-    : t("listing.seo.defaultTitle"),
-  description: () => listing.value 
-    ? `${listing.value.brand?.name} ${listing.value.model?.name} за ${listing.value.price?.toLocaleString('ru-RU')} ${listing.value.currency}. ${listing.value.description?.slice(0, 150)}...`
-    : t("listing.seo.defaultDesc"),
+  title: () =>
+    listing.value?.title
+      ? `${listing.value.title} — Mobistore`
+      : t("listing.seo.defaultTitle"),
+  description: () =>
+    listing.value
+      ? `${listing.value.brand?.name} ${
+          listing.value.model?.name
+        } за ${listing.value.price?.toLocaleString("ru-RU")} ${
+          listing.value.currency
+        }. ${listing.value.description?.slice(0, 150)}...`
+      : t("listing.seo.defaultDesc"),
   ogTitle: () => listing.value?.title || t("listing.seo.defaultTitle"),
-  ogDescription: () => listing.value 
-    ? `${listing.value.brand?.name} ${listing.value.model?.name} • ${listing.value.price?.toLocaleString('ru-RU')} ${listing.value.currency} • ${listing.value.region?.[`name_${locale.value}`] || listing.value.region.name_ru}`
-    : t("listing.seo.defaultDesc"),
-  ogImage: () => listing.value?.images?.[0]?.url || '/og-default.png',
+  ogDescription: () =>
+    listing.value
+      ? `${listing.value.brand?.name} ${
+          listing.value.model?.name
+        } • ${listing.value.price?.toLocaleString("ru-RU")} ${
+          listing.value.currency
+        } • ${
+          listing.value.region?.[`name_${locale.value}`] ||
+          listing.value.region.name_ru
+        }`
+      : t("listing.seo.defaultDesc"),
+  ogImage: () =>
+    listing.value?.images?.[0]?.url || "https://mobistore.uz/og-default.png",
   ogUrl: () => `${siteUrl}/${listing.value?.alias}`,
-  ogType: 'website',
-  ogSiteName: 'Mobistore',
-  ogLocale: () => locale.value === 'ru' ? 'ru_RU' : 'uz_UZ',
-  twitterCard: 'summary_large_image',
+  ogType: "website",
+  ogSiteName: "Mobistore",
+  ogLocale: () => (locale.value === "ru" ? "ru_RU" : "uz_UZ"),
+  twitterCard: "summary_large_image",
   twitterTitle: () => listing.value?.title || t("listing.seo.defaultTitle"),
-  twitterDescription: () => listing.value 
-    ? `${listing.value.brand?.name} ${listing.value.model?.name} • ${listing.value.price?.toLocaleString('ru-RU')} ${listing.value.currency}`
-    : t("listing.seo.defaultDesc"),
-  twitterImage: () => listing.value?.images?.[0]?.url || '/og-default.png',
+  twitterDescription: () =>
+    listing.value
+      ? `${listing.value.brand?.name} ${
+          listing.value.model?.name
+        } • ${listing.value.price?.toLocaleString("ru-RU")} ${
+          listing.value.currency
+        }`
+      : t("listing.seo.defaultDesc"),
+  twitterImage: () => listing.value?.images?.[0]?.url || "/og-default.png",
 });
 
 useHead({
   link: [
-    { rel: 'canonical', href: () => `${siteUrl}/${listing.value?.alias}` }
-  ]
+    { rel: "canonical", href: () => `${siteUrl}/${listing.value?.alias}` },
+  ],
 });
 
 if (error.value) {
@@ -77,11 +97,34 @@ const openChat = () => {
 };
 
 const statusAlert = computed(() => {
-  const alerts: Record<string, { title: string; description: string; type: 'warning' | 'error' | 'success' }> = {
-    moderation: { title: t('listing.moderation.title'), description: t('listing.moderation.description'), type: 'warning' },
-    rejected: { title: t('listing.rejected.title'), description: t('listing.rejected.description'), type: 'error' },
-    archived: { title: t('listing.archived.title'), description: t('listing.archived.description'), type: 'error' },
-    sold: { title: t('listing.sold.title'), description: t('listing.sold.description'), type: 'success' },
+  const alerts: Record<
+    string,
+    {
+      title: string;
+      description: string;
+      type: "warning" | "error" | "success";
+    }
+  > = {
+    moderation: {
+      title: t("listing.moderation.title"),
+      description: t("listing.moderation.description"),
+      type: "warning",
+    },
+    rejected: {
+      title: t("listing.rejected.title"),
+      description: t("listing.rejected.description"),
+      type: "error",
+    },
+    archived: {
+      title: t("listing.archived.title"),
+      description: t("listing.archived.description"),
+      type: "error",
+    },
+    sold: {
+      title: t("listing.sold.title"),
+      description: t("listing.sold.description"),
+      type: "success",
+    },
   };
   return listing.value?.status ? alerts[listing.value.status] : null;
 });
@@ -97,7 +140,9 @@ const statusAlert = computed(() => {
       <template v-else-if="listing">
         <div class="breadcrumbs">
           <el-breadcrumb>
-            <el-breadcrumb-item :to="localePath('/')">{{ t('search.breadcrumbs.home') }}</el-breadcrumb-item>
+            <el-breadcrumb-item :to="localePath('/')">{{
+              t("search.breadcrumbs.home")
+            }}</el-breadcrumb-item>
             <el-breadcrumb-item>{{ listing?.title }}</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
@@ -108,7 +153,7 @@ const statusAlert = computed(() => {
           :description="statusAlert.description"
           :type="statusAlert.type"
           :closable="false"
-          style="margin-bottom: 20px;"
+          style="margin-bottom: 20px"
         />
 
         <div class="listing-grid">
@@ -121,7 +166,9 @@ const statusAlert = computed(() => {
           <div v-if="listing">
             <SidebarSection
               :listing="listing"
-              :is-archived="listing.status === 'archived' || listing.status === 'sold'"
+              :is-archived="
+                listing.status === 'archived' || listing.status === 'sold'
+              "
               @update="handleUpdate"
               @open-chat="openChat"
             />
