@@ -2,10 +2,15 @@
 import { Search, Plus, Refresh } from "@element-plus/icons-vue";
 import { useAdminStaff } from "@/composables/useAdminStaff";
 import { useRootStore } from "@/store/root";
-import type { IStaffMember, IStaffUpdatePayload, UserRole } from "@/types/admin-staff";
+import type {
+  IStaffMember,
+  IStaffUpdatePayload,
+  UserRole,
+} from "@/types/admin-staff";
 
 definePageMeta({
   layout: "admin",
+  middleware: "admin",
 });
 
 useSeoMeta({
@@ -141,9 +146,7 @@ const handleSearch = () => {
         />
       </div>
       <div class="toolbar-right">
-        <el-button :icon="Refresh" @click="handleRefresh">
-          Обновить
-        </el-button>
+        <el-button :icon="Refresh" @click="handleRefresh"> Обновить </el-button>
         <el-button type="primary" :icon="Plus" @click="addDialogVisible = true">
           Добавить сотрудника
         </el-button>

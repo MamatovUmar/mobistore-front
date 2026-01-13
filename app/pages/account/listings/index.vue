@@ -9,6 +9,10 @@ import { ListingStatus } from "~/types/ads";
 const { t } = useI18n();
 const localePath = useLocalePath();
 
+definePageMeta({
+  middleware: "auth-only",
+});
+
 useSeoMeta({
   title: () => t("account.meta.myListings"),
   robots: "noindex, nofollow",
@@ -35,9 +39,18 @@ const statuses = computed(() => [
   { value: "all", label: t("account.listings.statuses.all") },
   { value: ListingStatus.ACTIVE, label: t("account.listings.statuses.active") },
   { value: ListingStatus.DRAFT, label: t("account.listings.statuses.draft") },
-  { value: ListingStatus.ARCHIVED, label: t("account.listings.statuses.archived") },
-  { value: ListingStatus.MODERATION, label: t("account.listings.statuses.moderation") },
-  { value: ListingStatus.REJECTED, label: t("account.listings.statuses.rejected") },
+  {
+    value: ListingStatus.ARCHIVED,
+    label: t("account.listings.statuses.archived"),
+  },
+  {
+    value: ListingStatus.MODERATION,
+    label: t("account.listings.statuses.moderation"),
+  },
+  {
+    value: ListingStatus.REJECTED,
+    label: t("account.listings.statuses.rejected"),
+  },
 ]);
 
 const getMyListings = catcher(
@@ -150,8 +163,13 @@ getMyListings();
               <!-- Пустое состояние -->
               <div v-if="listings.length === 0" class="empty-state">
                 <el-icon class="empty-icon"><Document /></el-icon>
-                <p class="empty-text">{{ $t("account.listings.empty.title") }}</p>
-                <el-button type="primary" @click="$router.push(localePath('/create'))">
+                <p class="empty-text">
+                  {{ $t("account.listings.empty.title") }}
+                </p>
+                <el-button
+                  type="primary"
+                  @click="$router.push(localePath('/create'))"
+                >
                   {{ $t("account.listings.empty.button") }}
                 </el-button>
               </div>

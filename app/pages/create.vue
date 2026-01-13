@@ -13,6 +13,10 @@ import type { IBaseResponse } from "~/types/index";
 import type { IModel } from "~/types/model";
 import { useRootStore } from "~/store/root";
 
+definePageMeta({
+  middleware: "auth-only",
+});
+
 const { $api } = useNuxtApp();
 const root = useRootStore();
 const { t } = useI18n();
@@ -22,8 +26,6 @@ const loading = ref(false);
 const fileList = ref<any[]>([]);
 const formRef = ref<FormInstance>();
 const colors = ref<string[]>([]);
-const storadgeType = ref('GB');
-const ramType = ref('GB');
 
 const isCustomBrand = ref(false);
 const isCustomModel = ref(false);
@@ -58,7 +60,6 @@ const validateModel = (rule: any, value: any, callback: any) => {
     callback();
   }
 };
-
 
 const rules = computed<FormRules<IListingForm & { images?: any }>>(() => ({
   title: [
@@ -280,7 +281,10 @@ onMounted(() => {
               {{ $t("createListing.sections.main") }}
             </h2>
 
-            <el-form-item :label="$t('createListing.fields.title.label')" prop="title">
+            <el-form-item
+              :label="$t('createListing.fields.title.label')"
+              prop="title"
+            >
               <el-input
                 v-model="form.title"
                 :placeholder="$t('createListing.fields.title.placeholder')"
@@ -294,7 +298,9 @@ onMounted(() => {
             >
               <RichTextEditor
                 v-model:content="form.description"
-                :placeholder="$t('createListing.fields.description.placeholder')"
+                :placeholder="
+                  $t('createListing.fields.description.placeholder')
+                "
               />
             </el-form-item>
           </div>
@@ -321,14 +327,21 @@ onMounted(() => {
                   <div v-else class="custom-input-wrapper">
                     <el-input
                       v-model="form.custom_brand"
-                      :placeholder="$t('createListing.fields.brand.customPlaceholder')"
+                      :placeholder="
+                        $t('createListing.fields.brand.customPlaceholder')
+                      "
                     />
                     <el-button
                       type="info"
                       link
-                      @click="isCustomBrand = false; isCustomModel = false; form.custom_brand = null; form.custom_model = null;"
+                      @click="
+                        isCustomBrand = false;
+                        isCustomModel = false;
+                        form.custom_brand = null;
+                        form.custom_model = null;
+                      "
                     >
-                      {{ $t('common.selectFromList') }}
+                      {{ $t("common.selectFromList") }}
                     </el-button>
                   </div>
                 </el-form-item>
@@ -343,15 +356,20 @@ onMounted(() => {
                     <div class="custom-input-wrapper">
                       <el-input
                         v-model="form.custom_model"
-                        :placeholder="$t('createListing.fields.model.customPlaceholder')"
+                        :placeholder="
+                          $t('createListing.fields.model.customPlaceholder')
+                        "
                       />
                       <el-button
                         v-if="!isCustomBrand"
                         type="info"
                         link
-                        @click="isCustomModel = false; form.custom_model = null;"
+                        @click="
+                          isCustomModel = false;
+                          form.custom_model = null;
+                        "
                       >
-                        {{ $t('common.selectFromList') }}
+                        {{ $t("common.selectFromList") }}
                       </el-button>
                     </div>
                   </template>
@@ -381,7 +399,10 @@ onMounted(() => {
                     type="number"
                   >
                     <template #append>
-                      <el-select v-model="form.storage_unit" style="width: 80px">
+                      <el-select
+                        v-model="form.storage_unit"
+                        style="width: 80px"
+                      >
                         <el-option label="MB" value="MB" />
                         <el-option label="GB" value="GB" />
                         <el-option label="TB" value="TB" />
@@ -418,12 +439,16 @@ onMounted(() => {
                   <el-input
                     v-if="colors.length === 0"
                     v-model="form.color"
-                    :placeholder="$t('createListing.fields.color.placeholderInput')"
+                    :placeholder="
+                      $t('createListing.fields.color.placeholderInput')
+                    "
                   />
                   <el-select
                     v-else
                     v-model="form.color"
-                    :placeholder="$t('createListing.fields.color.placeholderSelect')"
+                    :placeholder="
+                      $t('createListing.fields.color.placeholderSelect')
+                    "
                   >
                     <el-option
                       v-for="color in colors"
@@ -444,14 +469,18 @@ onMounted(() => {
                 >
                   <el-select
                     v-model="form.state"
-                    :placeholder="$t('createListing.fields.condition.placeholder')"
+                    :placeholder="
+                      $t('createListing.fields.condition.placeholder')
+                    "
                   >
                     <el-option
                       :label="$t('createListing.fields.condition.options.new')"
                       value="new"
                     />
                     <el-option
-                      :label="$t('createListing.fields.condition.options.restored')"
+                      :label="
+                        $t('createListing.fields.condition.options.restored')
+                      "
                       value="restored"
                     />
                     <el-option
@@ -476,11 +505,15 @@ onMounted(() => {
               </el-col>
 
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item :label="$t('createListing.fields.currency.label')">
+                <el-form-item
+                  :label="$t('createListing.fields.currency.label')"
+                >
                   <el-select
                     v-model="form.currency"
                     readonly
-                    :placeholder="$t('createListing.fields.currency.placeholder')"
+                    :placeholder="
+                      $t('createListing.fields.currency.placeholder')
+                    "
                   >
                     <el-option label="UZS" value="UZS" />
                     <!-- <el-option label="USD" value="USD" /> -->
@@ -574,7 +607,9 @@ onMounted(() => {
               </el-col>
 
               <el-col :xs="24" :sm="12">
-                <el-form-item :label="$t('createListing.fields.telegram.label')">
+                <el-form-item
+                  :label="$t('createListing.fields.telegram.label')"
+                >
                   <TelegramLink v-model="form.telegram_link" />
                 </el-form-item>
               </el-col>

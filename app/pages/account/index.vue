@@ -8,6 +8,10 @@ import TelegramLink from "~/components/form/TelegramLink.vue";
 
 const { t, locale } = useI18n();
 
+definePageMeta({
+  middleware: "auth-only",
+});
+
 useSeoMeta({
   title: () => t("account.meta.profile"),
   robots: "noindex, nofollow",
@@ -36,7 +40,11 @@ const profileForm = ref<IUpdateProfilePayload>({
 // Правила валидации
 const profileRules = computed<FormRules<IUpdateProfilePayload>>(() => ({
   first_name: [
-    { required: true, message: t("account.profile.validation.nameRequired"), trigger: "blur" },
+    {
+      required: true,
+      message: t("account.profile.validation.nameRequired"),
+      trigger: "blur",
+    },
     {
       min: 2,
       max: 50,
@@ -45,7 +53,11 @@ const profileRules = computed<FormRules<IUpdateProfilePayload>>(() => ({
     },
   ],
   last_name: [
-    { required: true, message: t("account.profile.validation.lastNameRequired"), trigger: "blur" },
+    {
+      required: true,
+      message: t("account.profile.validation.lastNameRequired"),
+      trigger: "blur",
+    },
     {
       min: 2,
       max: 50,
@@ -54,19 +66,27 @@ const profileRules = computed<FormRules<IUpdateProfilePayload>>(() => ({
     },
   ],
   language_code: [
-    { required: true, message: t("account.profile.validation.languageRequired"), trigger: "change" },
+    {
+      required: true,
+      message: t("account.profile.validation.languageRequired"),
+      trigger: "change",
+    },
   ],
 }));
 
 // Локализованное отображение региона и города
 const getLocalizedRegion = computed(() => {
   if (!user.value?.region) return t("account.profile.values.notSpecified");
-  return locale.value === "uz" ? user.value.region.name_uz : user.value.region.name_ru;
+  return locale.value === "uz"
+    ? user.value.region.name_uz
+    : user.value.region.name_ru;
 });
 
 const getLocalizedCity = computed(() => {
   if (!user.value?.city) return t("account.profile.values.notSpecified");
-  return locale.value === "uz" ? user.value.city.name_uz : user.value.city.name_ru;
+  return locale.value === "uz"
+    ? user.value.city.name_uz
+    : user.value.city.name_ru;
 });
 
 // Инициализация формы данными пользователя
@@ -147,45 +167,65 @@ const handleRegionSelect = () => {
 
             <div v-if="!isEditingProfile && user" class="profile-info">
               <div class="info-row">
-                <span class="info-label">{{ $t("account.profile.fields.name") }}:</span>
+                <span class="info-label"
+                  >{{ $t("account.profile.fields.name") }}:</span
+                >
                 <span class="info-value"
                   >{{ user.first_name }} {{ user.last_name }}</span
                 >
               </div>
               <div class="info-row">
-                <span class="info-label">{{ $t("account.profile.fields.email") }}:</span>
+                <span class="info-label"
+                  >{{ $t("account.profile.fields.email") }}:</span
+                >
                 <span class="info-value">{{ user.email }}</span>
               </div>
               <div class="info-row">
-                <span class="info-label">{{ $t("account.profile.fields.phone") }}:</span>
+                <span class="info-label"
+                  >{{ $t("account.profile.fields.phone") }}:</span
+                >
                 <span class="info-value">{{
                   user.phone_number || $t("account.profile.values.notSpecified")
                 }}</span>
               </div>
               <div class="info-row">
-                <span class="info-label">{{ $t("account.profile.fields.telegram") }}:</span>
+                <span class="info-label"
+                  >{{ $t("account.profile.fields.telegram") }}:</span
+                >
                 <span class="info-value">
                   <TelegramAppear :value="user.telegram" />
                 </span>
               </div>
               <div class="info-row">
-                <span class="info-label">{{ $t("account.profile.fields.region") }}:</span>
+                <span class="info-label"
+                  >{{ $t("account.profile.fields.region") }}:</span
+                >
                 <span class="info-value">{{ getLocalizedRegion }}</span>
               </div>
               <div class="info-row">
-                <span class="info-label">{{ $t("account.profile.fields.city") }}:</span>
+                <span class="info-label"
+                  >{{ $t("account.profile.fields.city") }}:</span
+                >
                 <span class="info-value">{{ getLocalizedCity }}</span>
               </div>
               <div class="info-row">
-                <span class="info-label">{{ $t("account.profile.fields.showContacts") }}:</span>
+                <span class="info-label"
+                  >{{ $t("account.profile.fields.showContacts") }}:</span
+                >
                 <span class="info-value">{{
-                  user.show_contacts ? $t("account.profile.values.yes") : $t("account.profile.values.no")
+                  user.show_contacts
+                    ? $t("account.profile.values.yes")
+                    : $t("account.profile.values.no")
                 }}</span>
               </div>
               <div class="info-row">
-                <span class="info-label">{{ $t("account.profile.fields.language") }}:</span>
+                <span class="info-label"
+                  >{{ $t("account.profile.fields.language") }}:</span
+                >
                 <span class="info-value">{{
-                  user.language_code === "ru" ? $t("account.profile.values.russian") : $t("account.profile.values.uzbek")
+                  user.language_code === "ru"
+                    ? $t("account.profile.values.russian")
+                    : $t("account.profile.values.uzbek")
                 }}</span>
               </div>
             </div>
@@ -200,7 +240,10 @@ const handleRegionSelect = () => {
             >
               <el-row :gutter="20">
                 <el-col :xs="24" :sm="12">
-                  <el-form-item :label="$t('account.profile.fields.name')" prop="first_name">
+                  <el-form-item
+                    :label="$t('account.profile.fields.name')"
+                    prop="first_name"
+                  >
                     <el-input
                       v-model="profileForm.first_name"
                       :placeholder="$t('account.profile.placeholders.name')"
@@ -208,7 +251,10 @@ const handleRegionSelect = () => {
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12">
-                  <el-form-item :label="$t('account.profile.fields.lastName')" prop="last_name">
+                  <el-form-item
+                    :label="$t('account.profile.fields.lastName')"
+                    prop="last_name"
+                  >
                     <el-input
                       v-model="profileForm.last_name"
                       :placeholder="$t('account.profile.placeholders.lastName')"
@@ -228,7 +274,10 @@ const handleRegionSelect = () => {
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12">
-                  <el-form-item :label="$t('account.profile.fields.phone')" prop="phone_number">
+                  <el-form-item
+                    :label="$t('account.profile.fields.phone')"
+                    prop="phone_number"
+                  >
                     <PhoneNumber
                       v-model="profileForm.phone_number"
                       :placeholder="$t('account.profile.placeholders.phone')"
@@ -239,7 +288,10 @@ const handleRegionSelect = () => {
 
               <el-row :gutter="20">
                 <el-col :xs="24" :sm="12">
-                  <el-form-item :label="$t('account.profile.fields.telegram')" prop="telegram">
+                  <el-form-item
+                    :label="$t('account.profile.fields.telegram')"
+                    prop="telegram"
+                  >
                     <TelegramLink
                       v-model="profileForm.telegram"
                       :placeholder="$t('account.profile.placeholders.telegram')"
@@ -247,13 +299,22 @@ const handleRegionSelect = () => {
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12">
-                  <el-form-item :label="$t('account.profile.fields.language')" prop="language_code">
+                  <el-form-item
+                    :label="$t('account.profile.fields.language')"
+                    prop="language_code"
+                  >
                     <el-select
                       v-model="profileForm.language_code"
                       :placeholder="$t('account.profile.placeholders.language')"
                     >
-                      <el-option :label="$t('account.profile.values.russian')" value="ru" />
-                      <el-option :label="$t('account.profile.values.uzbek')" value="uz" />
+                      <el-option
+                        :label="$t('account.profile.values.russian')"
+                        value="ru"
+                      />
+                      <el-option
+                        :label="$t('account.profile.values.uzbek')"
+                        value="uz"
+                      />
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -261,7 +322,10 @@ const handleRegionSelect = () => {
 
               <el-row :gutter="20">
                 <el-col :xs="24" :sm="12">
-                  <el-form-item :label="$t('account.profile.fields.region')" prop="region_id">
+                  <el-form-item
+                    :label="$t('account.profile.fields.region')"
+                    prop="region_id"
+                  >
                     <AutocompletesRegionAutocomplete
                       v-model="profileForm.region_id"
                       :placeholder="$t('account.profile.placeholders.region')"
@@ -270,7 +334,10 @@ const handleRegionSelect = () => {
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12">
-                  <el-form-item :label="$t('account.profile.fields.city')" prop="city_id">
+                  <el-form-item
+                    :label="$t('account.profile.fields.city')"
+                    prop="city_id"
+                  >
                     <AutocompletesCityAutocomplete
                       v-model="profileForm.city_id"
                       :region-id="profileForm.region_id"

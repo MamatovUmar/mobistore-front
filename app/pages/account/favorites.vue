@@ -4,6 +4,10 @@ import { Star } from "@element-plus/icons-vue";
 const { t } = useI18n();
 const localePath = useLocalePath();
 
+definePageMeta({
+  middleware: "auth-only",
+});
+
 useSeoMeta({
   title: () => t("account.meta.favorites"),
   robots: "noindex, nofollow",
@@ -30,9 +34,13 @@ getProfileFavorites();
           <div class="favorites-section">
             <div class="section-header">
               <div>
-                <h2 class="section-title">{{ $t("account.favorites.title") }}</h2>
+                <h2 class="section-title">
+                  {{ $t("account.favorites.title") }}
+                </h2>
                 <p class="section-subtitle">
-                  {{ $t("account.favorites.count", { count: favorites.length }) }}
+                  {{
+                    $t("account.favorites.count", { count: favorites.length })
+                  }}
                 </p>
               </div>
             </div>
@@ -50,11 +58,16 @@ getProfileFavorites();
             <!-- Пустое состояние -->
             <div v-if="favorites.length === 0" class="empty-state">
               <el-icon class="empty-icon"><Star /></el-icon>
-              <p class="empty-text">{{ $t("account.favorites.empty.title") }}</p>
+              <p class="empty-text">
+                {{ $t("account.favorites.empty.title") }}
+              </p>
               <p class="empty-description">
                 {{ $t("account.favorites.empty.text") }}
               </p>
-              <el-button type="primary" @click="$router.push(localePath('/search'))">
+              <el-button
+                type="primary"
+                @click="$router.push(localePath('/search'))"
+              >
                 {{ $t("account.favorites.empty.button") }}
               </el-button>
             </div>

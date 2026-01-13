@@ -5,6 +5,7 @@ import type { IAdminUser, IAdminUserUpdatePayload } from "@/types/admin-user";
 
 definePageMeta({
   layout: "admin",
+  middleware: "admin",
 });
 
 useSeoMeta({
@@ -119,7 +120,9 @@ const handleBan = async (user: IAdminUser) => {
 
     actionLoading.value = true;
     const result = await banUser(user.id);
-    ElMessage.success(`${result.message}. Архивировано объявлений: ${result.archivedAds}`);
+    ElMessage.success(
+      `${result.message}. Архивировано объявлений: ${result.archivedAds}`
+    );
 
     // Update user in list
     if (selectedUser.value?.id === user.id) {
@@ -209,9 +212,7 @@ const handleSearch = () => {
         </el-button>
       </div>
       <div class="toolbar-right">
-        <el-button :icon="Refresh" @click="handleRefresh">
-          Обновить
-        </el-button>
+        <el-button :icon="Refresh" @click="handleRefresh"> Обновить </el-button>
       </div>
     </div>
 

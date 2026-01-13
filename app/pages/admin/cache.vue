@@ -3,6 +3,7 @@ import { Delete, Refresh, Loading } from "@element-plus/icons-vue";
 
 definePageMeta({
   layout: "admin",
+  middleware: "admin",
 });
 
 useSeoMeta({
@@ -10,7 +11,15 @@ useSeoMeta({
   robots: "noindex, nofollow",
 });
 
-const { loading, cacheKeys, cacheStats, refresh, clearByKey, clearAll, formatTTL } = useCache();
+const {
+  loading,
+  cacheKeys,
+  cacheStats,
+  refresh,
+  clearByKey,
+  clearAll,
+  formatTTL,
+} = useCache();
 
 const clearingKey = ref<string | null>(null);
 const clearingAll = ref(false);
@@ -86,11 +95,15 @@ const handleRefresh = async () => {
       </div>
       <div class="stat-card">
         <span class="stat-label">Паттернов</span>
-        <span class="stat-value">{{ cacheKeys.filter(k => k.isPattern).length }}</span>
+        <span class="stat-value">{{
+          cacheKeys.filter((k) => k.isPattern).length
+        }}</span>
       </div>
       <div class="stat-card">
         <span class="stat-label">Статичных</span>
-        <span class="stat-value">{{ cacheKeys.filter(k => !k.isPattern).length }}</span>
+        <span class="stat-value">{{
+          cacheKeys.filter((k) => !k.isPattern).length
+        }}</span>
       </div>
     </div>
 
