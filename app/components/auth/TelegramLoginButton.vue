@@ -34,7 +34,7 @@ const { t } = useI18n();
 const localePath = useLocalePath();
 const config = useRuntimeConfig();
 const rootStore = useRootStore();
-const tokenCookie = useCookie("token");
+const tokenCookie = useCookie("token", { maxAge: 60 * 60 * 24 * 7 });
 const { telegramLogin } = useAuthApi();
 
 const botName = config.public.telegramBotName;

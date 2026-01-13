@@ -9,20 +9,19 @@ const { t } = useI18n();
 
 // SEO метаданные для главной страницы
 useSeoMeta({
-  title: () => t('seo.home.title'),
-  description: () => t('seo.home.description'),
-  ogTitle: () => t('seo.home.ogTitle'),
-  ogDescription: () => t('seo.home.ogDescription'),
-  ogImage: "/home.png",
+  title: () => t("seo.home.title"),
+  description: () => t("seo.home.description"),
+  ogTitle: () => t("seo.home.ogTitle"),
+  ogDescription: () => t("seo.home.ogDescription"),
+  ogImage: "https://mobistore.uz/home.jpg",
   ogImageHeight: 630,
   ogImageWidth: 1200,
   ogType: "website",
   twitterCard: "summary_large_image",
-  twitterTitle: () => t('seo.home.twitterTitle'),
-  twitterDescription: () => t('seo.home.twitterDescription'),
+  twitterTitle: () => t("seo.home.twitterTitle"),
+  twitterDescription: () => t("seo.home.twitterDescription"),
   robots: "index, follow",
 });
-
 </script>
 
 <template>

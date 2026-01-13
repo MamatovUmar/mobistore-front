@@ -32,16 +32,40 @@ const { locale } = useI18n();
 
 // Опции сортировки
 const sortOptions = computed(() => [
-  { value: "last_bumped_at:desc", sortBy: "last_bumped_at", sortOrder: "desc", label: t("search.sort.newest") },
-  { value: "price:asc", sortBy: "price", sortOrder: "asc", label: t("search.sort.priceAsc") },
-  { value: "price:desc", sortBy: "price", sortOrder: "desc", label: t("search.sort.priceDesc") },
-  { value: "views_count:desc", sortBy: "views_count", sortOrder: "desc", label: t("search.sort.popular") },
+  {
+    value: "last_bumped_at:desc",
+    sortBy: "last_bumped_at",
+    sortOrder: "desc",
+    label: t("search.sort.newest"),
+  },
+  {
+    value: "price:asc",
+    sortBy: "price",
+    sortOrder: "asc",
+    label: t("search.sort.priceAsc"),
+  },
+  {
+    value: "price:desc",
+    sortBy: "price",
+    sortOrder: "desc",
+    label: t("search.sort.priceDesc"),
+  },
+  {
+    value: "views_count:desc",
+    sortBy: "views_count",
+    sortOrder: "desc",
+    label: t("search.sort.popular"),
+  },
 ]);
 
-const currentSortKey = computed(() => `${pageParams.sortBy}:${pageParams.sortOrder}`);
+const currentSortKey = computed(
+  () => `${pageParams.sortBy}:${pageParams.sortOrder}`
+);
 
 const currentSortLabel = computed(() => {
-  const option = sortOptions.value.find((o) => o.value === currentSortKey.value);
+  const option = sortOptions.value.find(
+    (o) => o.value === currentSortKey.value
+  );
   return option?.label || t("search.sort.newest");
 });
 
@@ -67,15 +91,20 @@ const generateSeoTitle = () => {
   }
 
   if (currentFilters?.region) {
-    seoTitle += ` ${t('search.seo.in')} ${currentFilters.region[`name_${locale.value}`] || currentFilters.region.name_ru}`;
+    seoTitle += ` ${t("search.seo.in")} ${
+      currentFilters.region[`name_${locale.value}`] ||
+      currentFilters.region.name_ru
+    }`;
   } else if (currentFilters?.city) {
-    seoTitle += ` ${t('search.seo.in')} ${currentFilters.city[`name_${locale.value}`] || currentFilters.city.name_ru}`;
+    seoTitle += ` ${t("search.seo.in")} ${
+      currentFilters.city[`name_${locale.value}`] || currentFilters.city.name_ru
+    }`;
   }
 
   if (query.state === "new") {
-    seoTitle += ` (${t('search.seo.new')})`;
+    seoTitle += ` (${t("search.seo.new")})`;
   } else if (query.state === "used") {
-    seoTitle += ` (${t('search.seo.used')})`;
+    seoTitle += ` (${t("search.seo.used")})`;
   }
 
   seoTitle += " | MobiStore";
@@ -106,9 +135,14 @@ const generateSeoDescription = () => {
   }
 
   if (currentFilters?.region) {
-    desc += ` ${t('search.seo.in')} ${currentFilters.region[`name_${locale.value}`] || currentFilters.region.name_ru}`;
+    desc += ` ${t("search.seo.in")} ${
+      currentFilters.region[`name_${locale.value}`] ||
+      currentFilters.region.name_ru
+    }`;
   } else if (currentFilters?.city) {
-    desc += ` ${t('search.seo.in')} ${currentFilters.city[`name_${locale.value}`] || currentFilters.city.name_ru}`;
+    desc += ` ${t("search.seo.in")} ${
+      currentFilters.city[`name_${locale.value}`] || currentFilters.city.name_ru
+    }`;
   }
 
   if (query.minPrice || query.maxPrice) {
@@ -119,11 +153,17 @@ const generateSeoDescription = () => {
       ? Number(query.maxPrice).toLocaleString("ru-RU")
       : "";
     if (min && max) {
-      desc += ` ${t('search.filters.price.from')} ${min} ${t('search.filters.price.to')} ${max} ${t('search.filters.price.currency')}`;
+      desc += ` ${t("search.filters.price.from")} ${min} ${t(
+        "search.filters.price.to"
+      )} ${max} ${t("search.filters.price.currency")}`;
     } else if (min) {
-      desc += ` ${t('search.filters.price.from')} ${min} ${t('search.filters.price.currency')}`;
+      desc += ` ${t("search.filters.price.from")} ${min} ${t(
+        "search.filters.price.currency"
+      )}`;
     } else if (max) {
-      desc += ` ${t('search.filters.price.to')} ${max} ${t('search.filters.price.currency')}`;
+      desc += ` ${t("search.filters.price.to")} ${max} ${t(
+        "search.filters.price.currency"
+      )}`;
     }
   }
 
@@ -140,11 +180,15 @@ const updateSeo = () => {
   description.value = generateSeoDescription();
 
   // Обновляем keywords на основе серверных данных
-  const kw = [t("search.seo.phones") + " Uzbekistan", t("search.seo.buy"), "MobiStore"];
+  const kw = [
+    t("search.seo.phones") + " Uzbekistan",
+    t("search.seo.buy"),
+    "MobiStore",
+  ];
 
   if (currentFilters?.brand?.name) {
     kw.push(
-      `${currentFilters.brand.name} ${t('search.seo.phones')}`,
+      `${currentFilters.brand.name} ${t("search.seo.phones")}`,
       `${currentFilters.brand.name} phone`
     );
   }
@@ -152,28 +196,28 @@ const updateSeo = () => {
   if (currentFilters?.model?.name) {
     kw.push(
       `${currentFilters.model.name}`,
-      `${t('search.seo.buy')} ${currentFilters.model.name}`
+      `${t("search.seo.buy")} ${currentFilters.model.name}`
     );
   }
 
   if (query.state === "new") {
-    kw.push(`${t('search.seo.new')} ${t('search.seo.phones')}`);
+    kw.push(`${t("search.seo.new")} ${t("search.seo.phones")}`);
   } else if (query.state === "used") {
-    kw.push(`${t('search.seo.used')} ${t('search.seo.phones')}`);
+    kw.push(`${t("search.seo.used")} ${t("search.seo.phones")}`);
   }
 
   if (currentFilters?.region) {
-     const regionName = currentFilters.region[`name_${locale.value}`] || currentFilters.region.name_ru;
-    kw.push(
-      `${t('search.seo.phones')} ${regionName}`
-    );
+    const regionName =
+      currentFilters.region[`name_${locale.value}`] ||
+      currentFilters.region.name_ru;
+    kw.push(`${t("search.seo.phones")} ${regionName}`);
   }
 
   if (currentFilters?.city) {
-    const cityName = currentFilters.city[`name_${locale.value}`] || currentFilters.city.name_ru;
-    kw.push(
-      `${t('search.seo.phones')} ${cityName}`
-    );
+    const cityName =
+      currentFilters.city[`name_${locale.value}`] ||
+      currentFilters.city.name_ru;
+    kw.push(`${t("search.seo.phones")} ${cityName}`);
   }
 
   keywords.value = kw.join(", ");
@@ -279,7 +323,7 @@ useSeoMeta({
   keywords: () => keywords.value,
   ogTitle: () => title.value,
   ogDescription: () => description.value,
-  ogImage: "/result.png",
+  ogImage: "https://mobistore.uz/result.jpg",
   ogImageHeight: 630,
   ogImageWidth: 1200,
   ogType: "website",
@@ -344,7 +388,7 @@ definePageMeta({
             itemscope
             itemtype="https://schema.org/ListItem"
           >
-            <span itemprop="name">{{ t('search.breadcrumbs.home') }}</span>
+            <span itemprop="name">{{ t("search.breadcrumbs.home") }}</span>
             <meta itemprop="position" content="1" />
           </el-breadcrumb-item>
           <el-breadcrumb-item
@@ -352,7 +396,7 @@ definePageMeta({
             itemscope
             itemtype="https://schema.org/ListItem"
           >
-            <span itemprop="name">{{ t('search.breadcrumbs.results') }}</span>
+            <span itemprop="name">{{ t("search.breadcrumbs.results") }}</span>
             <meta itemprop="position" content="2" />
           </el-breadcrumb-item>
         </el-breadcrumb>
@@ -383,7 +427,7 @@ definePageMeta({
             <div v-if="ads.length > 0 || loading" class="results-header">
               <div class="results-count">
                 <span class="count-number">{{ pagination?.total || 0 }}</span>
-                <span class="count-label">{{ t('search.results.found') }}</span>
+                <span class="count-label">{{ t("search.results.found") }}</span>
               </div>
               <el-dropdown trigger="click" @command="handleSortChange">
                 <button class="sort-button">
@@ -450,9 +494,11 @@ definePageMeta({
                 <div class="no-results-icon">
                   <el-icon size="60"><Search /></el-icon>
                 </div>
-                <h2 class="no-results-title">{{ t('search.noResults.title') }}</h2>
+                <h2 class="no-results-title">
+                  {{ t("search.noResults.title") }}
+                </h2>
                 <p class="no-results-text">
-                  {{ t('search.noResults.text') }}
+                  {{ t("search.noResults.text") }}
                 </p>
               </div>
             </div>
@@ -464,7 +510,7 @@ definePageMeta({
     <!-- Мобильная кнопка фильтров -->
     <div class="mobile-filter-btn" @click="showMobileFilters = true">
       <el-icon><Filter /></el-icon>
-      <span>{{ t('search.filters.title') }}</span>
+      <span>{{ t("search.filters.title") }}</span>
     </div>
 
     <!-- Мобильное меню фильтров -->
