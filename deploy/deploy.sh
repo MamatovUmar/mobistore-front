@@ -87,11 +87,11 @@ fi
 
 # Переключение Nginx upstream
 echo "🔀 Switching Nginx to port $NEW_PORT..."
-echo "upstream mobistore_${ENV}_front { server 127.0.0.1:$NEW_PORT; }" > "$NGINX_UPSTREAM"
+echo "upstream mobistore_${ENV}_front { server 127.0.0.1:$NEW_PORT; }" | sudo tee "$NGINX_UPSTREAM" > /dev/null
 
 # Проверка и перезагрузка Nginx
-nginx -t
-nginx -s reload
+sudo nginx -t
+sudo nginx -s reload
 
 echo "✅ Nginx switched to port $NEW_PORT"
 
