@@ -8,7 +8,7 @@ definePageMeta({
 
 const route = useRoute();
 const rootStore = useRootStore();
-const tokenCookie = useCookie("token");
+const tokenCookie = useCookie("token", { maxAge: 60 * 60 * 24 * 7 });
 const { t } = useI18n();
 const localePath = useLocalePath();
 
@@ -25,8 +25,6 @@ onMounted(async () => {
   }
 
   try {
-    console.log(token);
-    
     await rootStore.fetchUser(token);
     navigateTo(localePath("/"), { external: true });
   } catch (e) {
@@ -47,8 +45,8 @@ onMounted(async () => {
             <Loading />
           </el-icon>
         </div>
-        <h2 class="callback-title">{{ t('auth.callback.loadingTitle') }}</h2>
-        <p class="callback-text">{{ t('auth.common.loading') }}</p>
+        <h2 class="callback-title">{{ t("auth.callback.loadingTitle") }}</h2>
+        <p class="callback-text">{{ t("auth.common.loading") }}</p>
       </template>
 
       <template v-else-if="error">
@@ -57,11 +55,13 @@ onMounted(async () => {
             <CircleCloseFilled />
           </el-icon>
         </div>
-        <h2 class="callback-title error">{{ t('auth.callback.errorTitle') }}</h2>
+        <h2 class="callback-title error">
+          {{ t("auth.callback.errorTitle") }}
+        </h2>
         <p class="callback-text">{{ error }}</p>
         <NuxtLink :to="localePath('/login')" class="back-button">
           <el-button type="primary" size="large">
-            {{ t('auth.common.backToLogin') }}
+            {{ t("auth.common.backToLogin") }}
           </el-button>
         </NuxtLink>
       </template>

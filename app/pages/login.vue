@@ -24,7 +24,7 @@ useSeoMeta({
 
 const { $api } = useNuxtApp();
 const rootStore = useRootStore();
-const tokenCookie = useCookie("token");
+const tokenCookie = useCookie("token", { maxAge: 60 * 60 * 24 * 7 });
 
 const formRef = ref();
 const loading = ref(false);
