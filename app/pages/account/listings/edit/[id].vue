@@ -16,6 +16,10 @@ import EditListingSkeleton from "~/components/skeletons/EditListingSkeleton.vue"
 const { t } = useI18n();
 const localePath = useLocalePath();
 
+definePageMeta({
+  middleware: "auth-only",
+});
+
 useSeoMeta({
   title: () => t("account.meta.editListing"),
   robots: "noindex, nofollow",
@@ -60,21 +64,53 @@ const validateModel = (rule: any, value: any, callback: any) => {
 };
 
 const rules = computed<FormRules<IListingForm & { images?: any }>>(() => ({
-  title: [{ required: true, message: t("account.editListing.validation.title"), trigger: "blur" }],
+  title: [
+    {
+      required: true,
+      message: t("account.editListing.validation.title"),
+      trigger: "blur",
+    },
+  ],
   description: [
-    { required: true, message: t("account.editListing.validation.description"), trigger: "blur" },
+    {
+      required: true,
+      message: t("account.editListing.validation.description"),
+      trigger: "blur",
+    },
   ],
   region_id: [
-    { required: true, message: t("account.editListing.validation.region"), trigger: "change" },
+    {
+      required: true,
+      message: t("account.editListing.validation.region"),
+      trigger: "change",
+    },
   ],
-  city_id: [{ required: true, message: t("account.editListing.validation.city"), trigger: "change" }],
+  city_id: [
+    {
+      required: true,
+      message: t("account.editListing.validation.city"),
+      trigger: "change",
+    },
+  ],
   brand_id: [{ validator: validateBrand, trigger: "change" }],
   custom_brand: [{ validator: validateBrand, trigger: "blur" }],
   model_id: [{ validator: validateModel, trigger: "change" }],
   custom_model: [{ validator: validateModel, trigger: "blur" }],
-  price: [{ required: true, message: t("account.editListing.validation.price"), trigger: "blur" }],
+  price: [
+    {
+      required: true,
+      message: t("account.editListing.validation.price"),
+      trigger: "blur",
+    },
+  ],
   images: [{ validator: validateImages, trigger: "change" }],
-  state: [{ required: true, message: t("account.editListing.validation.condition"), trigger: "change" }],
+  state: [
+    {
+      required: true,
+      message: t("account.editListing.validation.condition"),
+      trigger: "change",
+    },
+  ],
 }));
 
 const form = reactive<IListingForm & { images?: any }>({
@@ -99,7 +135,7 @@ const form = reactive<IListingForm & { images?: any }>({
   custom_brand: null,
   custom_model: null,
   storage_unit: "",
-  ram_unit: ""
+  ram_unit: "",
 });
 
 // Загрузка данных объявления
@@ -259,7 +295,9 @@ const deleteImage = catcher(
   },
   (e: any) => {
     const message = e?.response?._data?.message;
-    ElMessage.error(message || t("account.editListing.messages.imageDeleteError"));
+    ElMessage.error(
+      message || t("account.editListing.messages.imageDeleteError")
+    );
     console.error("Delete error:", e);
   }
 );
@@ -333,10 +371,18 @@ fetchAd();
           size="large"
         >
           <div class="form-section">
-            <h2 class="section-title">{{ $t("account.editListing.sections.main") }}</h2>
+            <h2 class="section-title">
+              {{ $t("account.editListing.sections.main") }}
+            </h2>
 
-            <el-form-item :label="$t('account.editListing.fields.title')" prop="title">
-              <el-input v-model="form.title" :placeholder="$t('account.editListing.placeholders.title')" />
+            <el-form-item
+              :label="$t('account.editListing.fields.title')"
+              prop="title"
+            >
+              <el-input
+                v-model="form.title"
+                :placeholder="$t('account.editListing.placeholders.title')"
+              />
             </el-form-item>
 
             <el-form-item
@@ -346,13 +392,17 @@ fetchAd();
             >
               <RichTextEditor
                 v-model:content="form.description"
-                :placeholder="$t('account.editListing.placeholders.description')"
+                :placeholder="
+                  $t('account.editListing.placeholders.description')
+                "
               />
             </el-form-item>
           </div>
 
           <div class="form-section">
-            <h2 class="section-title">{{ $t("account.editListing.sections.specsAndPrice") }}</h2>
+            <h2 class="section-title">
+              {{ $t("account.editListing.sections.specsAndPrice") }}
+            </h2>
 
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12">
@@ -370,14 +420,21 @@ fetchAd();
                   <div v-else class="custom-input-wrapper">
                     <el-input
                       v-model="form.custom_brand"
-                      :placeholder="$t('createListing.fields.brand.customPlaceholder')"
+                      :placeholder="
+                        $t('createListing.fields.brand.customPlaceholder')
+                      "
                     />
                     <el-button
                       type="info"
                       link
-                      @click="isCustomBrand = false; isCustomModel = false; form.custom_brand = null; form.custom_model = null;"
+                      @click="
+                        isCustomBrand = false;
+                        isCustomModel = false;
+                        form.custom_brand = null;
+                        form.custom_model = null;
+                      "
                     >
-                      {{ $t('common.selectFromList') }}
+                      {{ $t("common.selectFromList") }}
                     </el-button>
                   </div>
                 </el-form-item>
@@ -392,15 +449,20 @@ fetchAd();
                     <div class="custom-input-wrapper">
                       <el-input
                         v-model="form.custom_model"
-                        :placeholder="$t('createListing.fields.model.customPlaceholder')"
+                        :placeholder="
+                          $t('createListing.fields.model.customPlaceholder')
+                        "
                       />
                       <el-button
                         v-if="!isCustomBrand"
                         type="info"
                         link
-                        @click="isCustomModel = false; form.custom_model = null;"
+                        @click="
+                          isCustomModel = false;
+                          form.custom_model = null;
+                        "
                       >
-                        {{ $t('common.selectFromList') }}
+                        {{ $t("common.selectFromList") }}
                       </el-button>
                     </div>
                   </template>
@@ -418,7 +480,10 @@ fetchAd();
 
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item :label="$t('account.editListing.fields.memory')" prop="storage">
+                <el-form-item
+                  :label="$t('account.editListing.fields.memory')"
+                  prop="storage"
+                >
                   <el-select
                     v-model="form.storage"
                     :placeholder="$t('account.editListing.placeholders.memory')"
@@ -434,7 +499,10 @@ fetchAd();
               </el-col>
 
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item :label="$t('account.editListing.fields.ram')" prop="ram">
+                <el-form-item
+                  :label="$t('account.editListing.fields.ram')"
+                  prop="ram"
+                >
                   <el-select
                     v-model="form.ram"
                     :placeholder="$t('account.editListing.placeholders.ram')"
@@ -454,12 +522,16 @@ fetchAd();
                   <el-input
                     v-if="colors?.length === 0"
                     v-model="form.color"
-                    :placeholder="$t('account.editListing.placeholders.colorInput')"
+                    :placeholder="
+                      $t('account.editListing.placeholders.colorInput')
+                    "
                   />
                   <el-select
                     v-else
                     v-model="form.color"
-                    :placeholder="$t('account.editListing.placeholders.colorSelect')"
+                    :placeholder="
+                      $t('account.editListing.placeholders.colorSelect')
+                    "
                   >
                     <el-option
                       v-for="color in colors"
@@ -474,20 +546,37 @@ fetchAd();
 
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item :label="$t('account.editListing.fields.condition')" prop="state">
+                <el-form-item
+                  :label="$t('account.editListing.fields.condition')"
+                  prop="state"
+                >
                   <el-select
                     v-model="form.state"
-                    :placeholder="$t('account.editListing.placeholders.condition')"
+                    :placeholder="
+                      $t('account.editListing.placeholders.condition')
+                    "
                   >
-                    <el-option :label="$t('account.editListing.conditions.new')" value="new" />
-                    <el-option :label="$t('account.editListing.conditions.restored')" value="restored" />
-                    <el-option :label="$t('account.editListing.conditions.used')" value="used" />
+                    <el-option
+                      :label="$t('account.editListing.conditions.new')"
+                      value="new"
+                    />
+                    <el-option
+                      :label="$t('account.editListing.conditions.restored')"
+                      value="restored"
+                    />
+                    <el-option
+                      :label="$t('account.editListing.conditions.used')"
+                      value="used"
+                    />
                   </el-select>
                 </el-form-item>
               </el-col>
 
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item :label="$t('account.editListing.fields.price')" prop="price">
+                <el-form-item
+                  :label="$t('account.editListing.fields.price')"
+                  prop="price"
+                >
                   <el-input
                     type="number"
                     v-model="form.price"
@@ -497,10 +586,14 @@ fetchAd();
               </el-col>
 
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item :label="$t('account.editListing.fields.currency')">
+                <el-form-item
+                  :label="$t('account.editListing.fields.currency')"
+                >
                   <el-select
                     v-model="form.currency"
-                    :placeholder="$t('account.editListing.placeholders.currency')"
+                    :placeholder="
+                      $t('account.editListing.placeholders.currency')
+                    "
                   >
                     <el-option label="UZS" value="UZS" />
                   </el-select>
@@ -518,17 +611,25 @@ fetchAd();
           </div>
 
           <div class="form-section">
-            <h2 class="section-title">{{ $t("account.editListing.sections.locationAndPhotos") }}</h2>
+            <h2 class="section-title">
+              {{ $t("account.editListing.sections.locationAndPhotos") }}
+            </h2>
 
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12">
-                <el-form-item :label="$t('account.editListing.fields.region')" prop="region_id">
+                <el-form-item
+                  :label="$t('account.editListing.fields.region')"
+                  prop="region_id"
+                >
                   <RegionAutocomplete v-model="form.region_id" />
                 </el-form-item>
               </el-col>
 
               <el-col :xs="24" :sm="12">
-                <el-form-item :label="$t('account.editListing.fields.city')" prop="city_id">
+                <el-form-item
+                  :label="$t('account.editListing.fields.city')"
+                  prop="city_id"
+                >
                   <CityAutocomplete
                     v-model="form.city_id"
                     :region-id="form.region_id"
@@ -577,11 +678,16 @@ fetchAd();
               >
                 <el-icon class="el-icon--upload"><upload-filled /></el-icon>
                 <div class="el-upload__text">
-                  {{ $t("account.editListing.upload.dragText") }} <em>{{ $t("account.editListing.upload.clickText") }}</em>
+                  {{ $t("account.editListing.upload.dragText") }}
+                  <em>{{ $t("account.editListing.upload.clickText") }}</em>
                 </div>
                 <template #tip>
                   <div class="el-upload__tip">
-                    {{ $t("account.editListing.upload.tip", { count: 8 - existingImages.length }) }}
+                    {{
+                      $t("account.editListing.upload.tip", {
+                        count: 8 - existingImages.length,
+                      })
+                    }}
                   </div>
                 </template>
               </el-upload>
@@ -589,17 +695,24 @@ fetchAd();
           </div>
 
           <div class="form-section">
-            <h2 class="section-title">{{ $t("account.editListing.sections.contacts") }}</h2>
+            <h2 class="section-title">
+              {{ $t("account.editListing.sections.contacts") }}
+            </h2>
 
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12">
-                <el-form-item :label="$t('account.editListing.fields.phone')" prop="phone_number">
+                <el-form-item
+                  :label="$t('account.editListing.fields.phone')"
+                  prop="phone_number"
+                >
                   <PhoneNumber v-model="form.phone_number" />
                 </el-form-item>
               </el-col>
 
               <el-col :xs="24" :sm="12">
-                <el-form-item :label="$t('account.editListing.fields.telegram')">
+                <el-form-item
+                  :label="$t('account.editListing.fields.telegram')"
+                >
                   <TelegramLink v-model="form.telegram_link" />
                 </el-form-item>
               </el-col>

@@ -6,6 +6,7 @@ import { useRootStore } from "@/store/root";
 
 definePageMeta({
   layout: "admin",
+  middleware: "admin",
 });
 
 useSeoMeta({
@@ -241,7 +242,10 @@ onMounted(() => {
             v-if="filters.status"
             closable
             size="small"
-            @close="filters.status = undefined; applyFilters()"
+            @close="
+              filters.status = undefined;
+              applyFilters();
+            "
           >
             Статус: {{ filters.status }}
           </el-tag>
@@ -249,7 +253,10 @@ onMounted(() => {
             v-if="filters.search"
             closable
             size="small"
-            @close="filters.search = undefined; applyFilters()"
+            @close="
+              filters.search = undefined;
+              applyFilters();
+            "
           >
             Поиск: {{ filters.search }}
           </el-tag>
@@ -257,7 +264,10 @@ onMounted(() => {
             v-if="filters.userId"
             closable
             size="small"
-            @close="filters.userId = undefined; applyFilters()"
+            @close="
+              filters.userId = undefined;
+              applyFilters();
+            "
           >
             Пользователь: {{ filters.userId }}
           </el-tag>

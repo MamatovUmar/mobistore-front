@@ -4,6 +4,7 @@ import { User, Document, TrendCharts, View } from "@element-plus/icons-vue";
 
 definePageMeta({
   layout: "admin",
+  middleware: "admin",
 });
 
 useSeoMeta({

@@ -5,6 +5,7 @@ import type { IApplication, ApplicationStatus } from "@/types/application";
 
 definePageMeta({
   layout: "admin",
+  middleware: "admin",
 });
 
 useSeoMeta({

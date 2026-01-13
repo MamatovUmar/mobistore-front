@@ -1,6 +1,10 @@
 <script setup lang="ts">
 const { t } = useI18n();
 
+definePageMeta({
+  middleware: "auth-only",
+});
+
 useSeoMeta({
   title: () => t("account.meta.conversations"),
   robots: "noindex, nofollow",

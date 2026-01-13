@@ -1,11 +1,5 @@
 <script setup lang="ts">
-import {
-  Search,
-  Refresh,
-  Edit,
-  Delete,
-  View,
-} from "@element-plus/icons-vue";
+import { Search, Refresh, Edit, Delete, View } from "@element-plus/icons-vue";
 import { useAdminModels } from "@/composables/useAdminModels";
 import type { IModel, IModelCreatePayload, IModelImage } from "@/types/model";
 import ModelForm from "@/components/admin/model/ModelForm.vue";
@@ -13,6 +7,7 @@ import BrandAutocomplete from "@/components/autocompletes/BrandAutocomplete.vue"
 
 definePageMeta({
   layout: "admin",
+  middleware: "admin",
 });
 
 useSeoMeta({
@@ -30,7 +25,7 @@ const {
   fetchModels,
   updateModel,
   deleteModel,
-  getModel
+  getModel,
 } = useAdminModels();
 
 onMounted(() => {
@@ -179,7 +174,6 @@ const resetFormData = () => {
     battery_type: "",
   };
 };
-
 </script>
 
 <template>

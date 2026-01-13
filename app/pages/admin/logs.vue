@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { Refresh, Filter, Delete } from "@element-plus/icons-vue";
-import type { LogStatus, ILog, ILogsFilters, ICleanupPayload } from "~/composables/useLogs";
+import type {
+  LogStatus,
+  ILog,
+  ILogsFilters,
+  ICleanupPayload,
+} from "~/composables/useLogs";
 
 definePageMeta({
   layout: "admin",
+  middleware: "admin",
 });
 
 useSeoMeta({
@@ -113,7 +119,9 @@ const handleBulkStatusChange = async (newStatus: LogStatus) => {
 
   try {
     await ElMessageBox.confirm(
-      `Изменить статус ${selectedIds.value.length} логов на "${getStatusLabel(newStatus)}"?`,
+      `Изменить статус ${selectedIds.value.length} логов на "${getStatusLabel(
+        newStatus
+      )}"?`,
       "Подтверждение",
       {
         confirmButtonText: "Подтвердить",
@@ -191,7 +199,11 @@ onMounted(() => {
         <el-button :icon="Refresh" :loading="loading" @click="handleRefresh">
           Обновить
         </el-button>
-        <el-button type="danger" :icon="Delete" @click="cleanupDialogVisible = true">
+        <el-button
+          type="danger"
+          :icon="Delete"
+          @click="cleanupDialogVisible = true"
+        >
           Очистка
         </el-button>
       </div>
