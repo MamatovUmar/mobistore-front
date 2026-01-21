@@ -49,7 +49,7 @@
     "brands": {
       "titleTop": "Топ",
       "titleBrands": "Бренды",
-      "subtitle": "Выбор большенства пользователей",
+      "subtitle": "Выбор большинства пользователей",
       "adsCount": "{count} объявлений"
     },
     "promo": {
@@ -630,7 +630,8 @@
       "yesterday": "Вчера",
       "daysAgo": "{days} дн. назад"
     },
-    "showContacts": "Показать контакты"
+    "showContacts": "Показать контакты",
+    "noContacts": "Контакты не указаны"
   },
   "account": {
     "title": "Мой аккаунт",

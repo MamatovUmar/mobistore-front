@@ -197,20 +197,20 @@ const handleRegionSelect = () => {
                 </span>
               </div>
               <div class="info-row">
-                <span class="info-label"
-                  >{{ $t("account.profile.fields.region") }}:</span
-                >
+                <span class="info-label">
+                  {{ $t("account.profile.fields.region") }}:
+                </span>
                 <span class="info-value">{{ getLocalizedRegion }}</span>
               </div>
               <div class="info-row">
-                <span class="info-label"
-                  >{{ $t("account.profile.fields.city") }}:</span
-                >
+                <span class="info-label">
+                  {{ $t("account.profile.fields.city") }}:
+                </span>
                 <span class="info-value">{{ getLocalizedCity }}</span>
               </div>
               <div class="info-row">
-                <span class="info-label"
-                  >{{ $t("account.profile.fields.showContacts") }}:</span
+                <span class="info-label">
+                  {{ $t("account.profile.fields.showContacts") }}:</span
                 >
                 <span class="info-value">{{
                   user.show_contacts
@@ -218,16 +218,16 @@ const handleRegionSelect = () => {
                     : $t("account.profile.values.no")
                 }}</span>
               </div>
-              <div class="info-row">
-                <span class="info-label"
-                  >{{ $t("account.profile.fields.language") }}:</span
+              <!-- <div class="info-row">
+                <span class="info-label">
+                  {{ $t("account.profile.fields.language") }}:</span
                 >
                 <span class="info-value">{{
                   user.language_code === "ru"
                     ? $t("account.profile.values.russian")
                     : $t("account.profile.values.uzbek")
                 }}</span>
-              </div>
+              </div> -->
             </div>
 
             <el-form
@@ -289,40 +289,6 @@ const handleRegionSelect = () => {
               <el-row :gutter="20">
                 <el-col :xs="24" :sm="12">
                   <el-form-item
-                    :label="$t('account.profile.fields.telegram')"
-                    prop="telegram"
-                  >
-                    <TelegramLink
-                      v-model="profileForm.telegram"
-                      :placeholder="$t('account.profile.placeholders.telegram')"
-                    />
-                  </el-form-item>
-                </el-col>
-                <el-col :xs="24" :sm="12">
-                  <el-form-item
-                    :label="$t('account.profile.fields.language')"
-                    prop="language_code"
-                  >
-                    <el-select
-                      v-model="profileForm.language_code"
-                      :placeholder="$t('account.profile.placeholders.language')"
-                    >
-                      <el-option
-                        :label="$t('account.profile.values.russian')"
-                        value="ru"
-                      />
-                      <el-option
-                        :label="$t('account.profile.values.uzbek')"
-                        value="uz"
-                      />
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-
-              <el-row :gutter="20">
-                <el-col :xs="24" :sm="12">
-                  <el-form-item
                     :label="$t('account.profile.fields.region')"
                     prop="region_id"
                   >
@@ -345,6 +311,40 @@ const handleRegionSelect = () => {
                     />
                   </el-form-item>
                 </el-col>
+              </el-row>
+
+              <el-row :gutter="20">
+                <el-col :xs="24" :sm="12">
+                  <el-form-item
+                    :label="$t('account.profile.fields.telegram')"
+                    prop="telegram"
+                  >
+                    <TelegramLink
+                      v-model="profileForm.telegram"
+                      :placeholder="$t('account.profile.placeholders.telegram')"
+                    />
+                  </el-form-item>
+                </el-col>
+                <!-- <el-col :xs="24" :sm="12">
+                  <el-form-item
+                    :label="$t('account.profile.fields.language')"
+                    prop="language_code"
+                  >
+                    <el-select
+                      v-model="profileForm.language_code"
+                      :placeholder="$t('account.profile.placeholders.language')"
+                    >
+                      <el-option
+                        :label="$t('account.profile.values.russian')"
+                        value="ru"
+                      />
+                      <el-option
+                        :label="$t('account.profile.values.uzbek')"
+                        value="uz"
+                      />
+                    </el-select>
+                  </el-form-item>
+                </el-col> -->
               </el-row>
 
               <el-form-item :label="$t('account.profile.fields.showContacts')">
@@ -371,7 +371,7 @@ const handleRegionSelect = () => {
           </div>
 
           <!-- Смена пароля -->
-          <AccountChangePassword />
+          <AccountChangePassword v-if="!user?.telegram_user_id && !user?.google_id" />
         </div>
       </div>
     </div>

@@ -630,7 +630,8 @@
       "yesterday": "Kecha",
       "daysAgo": "{days} kun avval"
     },
-    "showContacts": "Kontaktlarni ko'rsatish"
+    "showContacts": "Kontaktlarni ko'rsatish",
+    "noContacts": "Kontaktlar mavjud emas"
   },
   "account": {
     "title": "Mening akkauntim",
