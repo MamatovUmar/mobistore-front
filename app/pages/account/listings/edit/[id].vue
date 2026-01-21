@@ -29,6 +29,17 @@ const { $api } = useNuxtApp();
 const route = useRoute();
 const adId = computed(() => Number(route.params.id));
 
+// Форматирование цены с разделителями тысяч
+const formatPrice = (value: string | number | undefined) => {
+  if (!value) return '';
+  const numValue = String(value).replace(/\D/g, '');
+  return numValue.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+};
+
+const parsePrice = (value: string) => {
+  return value.replace(/\s/g, '');
+};
+
 const loading = ref(false);
 const loadingData = ref(true);
 const fileList = ref<any[]>([]);
@@ -628,8 +639,9 @@ fetchAd();
                 >
                   <el-input
                     v-model="form.price"
-                    type="number"
                     :placeholder="$t('createListing.fields.price.placeholder')"
+                    :formatter="formatPrice"
+                    :parser="parsePrice"
                   />
                 </el-form-item>
               </el-col>

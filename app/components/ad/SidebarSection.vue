@@ -105,7 +105,7 @@ const handleMessage = () => {
 const publishListing = catcher(
   async () => {
     publishLoading.value = true;
-    await changeStatus(listing.id, ListingStatus.ACTIVE);
+    await changeStatus(listing.id, ListingStatus.MODERATION);
     emit("update");
     publishLoading.value = false;
   },
