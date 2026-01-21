@@ -4,6 +4,7 @@ import type { IListing } from "~/types/ads";
 import type { IConversationMessage } from "~/types/chat";
 import { useChat } from "~/composables/useChat";
 import { useRootStore } from "~/store/root";
+import { formatRelativeTime } from "~/utils/formatDate";
 
 const props = defineProps<{
   visible: boolean;
@@ -39,27 +40,10 @@ const sellerActivityStatus = computed(() => lastActivity(seller.value?.last_ente
 const formattedMessages = computed(() => {
   return messages.value.map((msg) => ({
     ...msg,
-    time: formatTime(new Date(msg.created_at)),
+    time: formatRelativeTime(msg.created_at, t, locale.value),
     sender: msg.sender_id === root.user?.id ? "user" : "seller",
   }));
 });
-
-const formatTime = (date: Date): string => {
-  const now = new Date();
-  const diff = now.getTime() - date.getTime();
-  const mins = Math.floor(diff / 60000);
-  const hours = Math.floor(diff / 3600000);
-  const days = Math.floor(diff / 86400000);
-
-  if (mins < 1) return t('chat.justNow');
-  if (mins < 60) return `${mins}${t('chat.ago.minutes')}`;
-  if (hours < 24) return `${hours}${t('chat.ago.hours')}`;
-  if (days === 1) return t('chat.yesterday');
-  if (days < 7) return `${days}${t('chat.ago.days')}`;
-
-  const localeMap: Record<string, string> = { ru: 'ru-RU', uz: 'uz-UZ' };
-  return date.toLocaleDateString(localeMap[locale.value] || 'ru-RU');
-};
 
 const autoResize = () => {
   if (!textareaRef.value) return;

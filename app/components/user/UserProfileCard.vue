@@ -132,6 +132,10 @@ const hasContacts = computed(() => {
             </a>
           </div>
         </div>
+
+        <div v-else-if="contacts !== null" class="no-contacts">
+          {{ t('userProfile.noContacts') }}
+        </div>
       </transition>
     </div>
   </div>
@@ -143,6 +147,10 @@ const hasContacts = computed(() => {
   border-radius: 16px;
   padding: 24px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.no-contacts {
+  color: var(--color-text-secondary);
+  text-align: center;
 }
 
 .profile-header {

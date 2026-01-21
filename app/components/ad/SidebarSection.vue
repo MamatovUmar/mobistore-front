@@ -48,14 +48,31 @@ const isMy = computed(() => listing.user_id === root.user?.id);
 const formattedDate = computed(() => {
   if (!listing.published_at) return t("listingSidebar.notPublished");
   const localeMap: Record<string, string> = { ru: "ru-RU", uz: "uz-UZ" };
-  return new Date(listing.published_at).toLocaleDateString(
-    localeMap[locale.value] || "ru-RU",
-    {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    }
-  );
+  const date = new Date(listing.published_at);
+  const resolvedLocale = localeMap[locale.value] || "ru-RU";
+  const formatted = date.toLocaleDateString(resolvedLocale, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
+  if (locale.value !== "uz" || !/\bM\d{2}\b/.test(formatted)) return formatted;
+
+  const uzMonths = [
+    "yanvar",
+    "fevral",
+    "mart",
+    "aprel",
+    "may",
+    "iyun",
+    "iyul",
+    "avgust",
+    "sentabr",
+    "oktabr",
+    "noyabr",
+    "dekabr",
+  ];
+  return `${date.getDate()} ${uzMonths[date.getMonth()]} ${date.getFullYear()}`;
 });
 
 // Информация о памяти
@@ -71,10 +88,7 @@ const formattedPhone = computed(() => {
   if (!contacts.value?.phone_number) return "";
   const phone = contacts.value.phone_number.replace(/\D/g, "");
   if (phone.length === 12) {
-    return `+${phone[0]} ${phone.slice(1, 4)} ${phone.slice(
-      4,
-      7
-    )} ${phone.slice(7, 9)} ${phone.slice(9)}`;
+    return `+${phone.slice(0, 3)} ${phone.slice(3, 5)} ${phone.slice(5, 8)} ${phone.slice(8, 10)} ${phone.slice(10)}`;
   }
   return contacts.value.phone_number;
 });
@@ -91,7 +105,7 @@ const handleMessage = () => {
 const publishListing = catcher(
   async () => {
     publishLoading.value = true;
-    await changeStatus(listing.id, ListingStatus.ACTIVE);
+    await changeStatus(listing.id, ListingStatus.MODERATION);
     emit("update");
     publishLoading.value = false;
   },
@@ -154,7 +168,7 @@ const publishListing = catcher(
         </div>
         <div v-if="contacts?.telegram_link" class="contact-compact">
           <a
-            :href="contacts?.telegram_link"
+            :href="contacts?.telegram_link?.replace('@', 'https://t.me/')"
             target="_blank"
             class="contact-compact-link telegram"
           >
@@ -199,10 +213,6 @@ const publishListing = catcher(
           {{ listing.views_count }} {{ t("listingSidebar.viewsCount") }}
         </span>
       </div>
-      <div class="meta-item">
-        <span class="meta-label">{{ t("listingSidebar.adId") }}</span>
-        <span class="meta-value">#MS-{{ listing.id }}</span>
-      </div>
     </div>
 
     <el-button
@@ -222,7 +232,7 @@ const publishListing = catcher(
       plain
       class="mt-20 w-full"
       size="large"
-      @click="navigateTo(`/account/listings/edit/${listing.id}`)"
+      @click="navigateTo($localePath(`/account/listings/edit/${listing.id}`))"
     >
       {{ t("listingSidebar.edit") }}
     </el-button>

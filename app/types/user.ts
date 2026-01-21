@@ -18,6 +18,8 @@ export interface IUser {
   region: IRegion | null;
   city: ICity | null;
   favorites: number[];
+  telegram_user_id: string | null,
+  google_id: string | null,
 }
 
 export interface IUpdateProfilePayload {

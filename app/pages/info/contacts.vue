@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Phone } from "@element-plus/icons-vue";
 import type { FormInstance, FormRules } from "element-plus";
 
 const { t } = useI18n();
@@ -25,10 +24,19 @@ const feedbackForm = ref({
 const rules = computed<FormRules>(() => ({
   name: [{ required: true, message: t("contacts.validation.name"), trigger: "blur" }],
   type: [{ required: true, message: t("contacts.validation.topic"), trigger: "change" }],
-  message: [{ required: true, message: t("contacts.validation.message"), trigger: "blur" }],
+  message: [
+    { required: true, message: t("contacts.validation.message"), trigger: "blur" },
+    { min: 10, message: t("contacts.validation.messageMin"), trigger: "blur" },
+  ],
 }));
 
 const isLoading = ref(false);
+
+function reset() {
+  formRef.value?.resetFields();
+  feedbackForm.value.email = "";
+  feedbackForm.value.phone = "";
+}
 
 const submitForm = async () => {
   if (!formRef.value) return;
@@ -50,7 +58,7 @@ const submitForm = async () => {
       });
 
       ElMessage.success(t("contacts.messages.success"));
-      formRef.value?.resetFields();
+      reset();
     } catch {
       ElMessage.error(t("contacts.messages.error"));
     } finally {
@@ -69,37 +77,6 @@ const submitForm = async () => {
       </div>
 
       <div class="contacts-layout">
-        <div class="contact-info">
-          <div class="info-card">
-            <div class="card-header">
-              <h2 class="info-title">{{ t("contacts.info.title") }}</h2>
-              <p class="info-description">{{ t("contacts.info.description") }}</p>
-            </div>
-
-            <div class="support-highlight">
-              <div class="support-status">
-                <span class="status-dot" />
-                {{ t("contacts.support.online") }}
-              </div>
-              <div class="support-main">
-                <el-icon><Phone /></el-icon>
-                <a href="tel:+998901234567" class="support-phone">
-                  +998 90 123 45 67
-                </a>
-              </div>
-              <p class="support-note">{{ t("contacts.support.workingHours") }}</p>
-              <div class="support-actions">
-                <a href="tel:+998901234567" class="support-action phone">
-                  {{ t("contacts.support.callNow") }}
-                </a>
-                <a href="mailto:info@mobistore.uz" class="support-action email">
-                  {{ t("contacts.support.writeEmail") }}
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div class="feedback-form">
           <div class="form-card">
             <h2 class="form-title">{{ t("contacts.form.title") }}</h2>
@@ -153,6 +130,7 @@ const submitForm = async () => {
                   v-model="feedbackForm.message"
                   type="textarea"
                   :rows="6"
+                  :minlength="10"
                   :placeholder="t('contacts.form.messagePlaceholder')"
                 />
               </el-form-item>
@@ -231,248 +209,12 @@ const submitForm = async () => {
 
   /* === LAYOUT === */
   .contacts-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
+    display: flex;
+    justify-content: center;
     margin-bottom: 48px;
 
     @media (max-width: 968px) {
-      grid-template-columns: 1fr;
-      gap: 24px;
-    }
-  }
-
-  /* === КОНТАКТНАЯ ИНФОРМАЦИЯ === */
-  .contact-info {
-    .info-card {
-      background: var(--color-bg-primary);
-      border-radius: 16px;
-      padding: 32px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-
-      @media (max-width: 768px) {
-        padding: 20px;
-      }
-    }
-  }
-
-  .card-header {
-    margin-bottom: 24px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid var(--color-bg-secondary);
-
-    @media (max-width: 480px) {
-      margin-bottom: 16px;
-      padding-bottom: 16px;
-    }
-  }
-
-  .info-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--color-text-primary);
-    margin-bottom: 8px;
-
-    @media (max-width: 768px) {
-      font-size: 22px;
-    }
-
-    @media (max-width: 480px) {
-      font-size: 20px;
-    }
-  }
-
-  .info-description {
-    font-size: 14px;
-    color: var(--color-text-secondary);
-    margin: 0;
-
-    @media (max-width: 480px) {
-      font-size: 13px;
-    }
-  }
-
-  .support-highlight {
-    background: linear-gradient(
-      135deg,
-      rgba(16, 185, 129, 0.08) 0%,
-      rgba(5, 105, 77, 0.08) 100%
-    );
-    border-radius: 16px;
-    padding: 24px;
-    border: 1px solid rgba(16, 185, 129, 0.2);
-    margin-bottom: 32px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-
-    @media (max-width: 768px) {
-      padding: 20px;
-      margin-bottom: 24px;
-      border-radius: 12px;
-    }
-
-    @media (max-width: 480px) {
-      padding: 16px;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .support-status {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #047857;
-
-      @media (max-width: 480px) {
-        font-size: 12px;
-      }
-
-      .status-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: #10b981;
-        box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.2);
-        display: inline-block;
-
-        @media (max-width: 480px) {
-          width: 6px;
-          height: 6px;
-          box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
-        }
-      }
-    }
-
-    .support-main {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-
-      @media (max-width: 480px) {
-        gap: 12px;
-      }
-
-      .el-icon {
-        font-size: 32px;
-        color: #047857;
-
-        @media (max-width: 768px) {
-          font-size: 28px;
-        }
-
-        @media (max-width: 480px) {
-          font-size: 24px;
-        }
-      }
-
-      .support-phone {
-        font-size: 32px;
-        font-weight: 700;
-        color: var(--color-text-primary);
-        text-decoration: none;
-
-        @media (max-width: 768px) {
-          font-size: 26px;
-        }
-
-        @media (max-width: 480px) {
-          font-size: 22px;
-        }
-
-        @media (max-width: 360px) {
-          font-size: 18px;
-        }
-      }
-    }
-
-    .support-note {
-      margin: 0;
-      font-size: 14px;
-      color: var(--color-text-secondary);
-      line-height: 1.5;
-
-      @media (max-width: 480px) {
-        font-size: 13px;
-        line-height: 1.4;
-      }
-    }
-
-    .support-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-
-      @media (max-width: 480px) {
-        gap: 8px;
-        flex-direction: column;
-      }
-
-      .support-action {
-        flex: 1;
-        min-width: 160px;
-        text-align: center;
-        padding: 12px 16px;
-        border-radius: 10px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: transform 0.2s, box-shadow 0.2s;
-
-        @media (max-width: 768px) {
-          min-width: 140px;
-          padding: 10px 14px;
-        }
-
-        @media (max-width: 480px) {
-          min-width: unset;
-          width: 100%;
-          padding: 12px 16px;
-          font-size: 14px;
-        }
-
-        &.phone {
-          background: #047857;
-          color: white;
-          box-shadow: 0 10px 20px rgba(4, 120, 87, 0.25);
-        }
-
-        &.email {
-          background: white;
-          color: #047857;
-          border: 1px solid rgba(4, 120, 87, 0.2);
-        }
-
-        &:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 15px 30px rgba(4, 120, 87, 0.2);
-        }
-
-        @media (max-width: 480px) {
-          &:hover {
-            transform: none;
-          }
-
-          &:active {
-            transform: scale(0.98);
-          }
-        }
-      }
-    }
-  }
-
-  .info-item {
-    display: flex;
-    gap: 16px;
-    padding: 16px;
-    background: var(--color-bg-secondary);
-    border-radius: 12px;
-    transition: all 0.2s;
-
-    &:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      transform: translateY(-2px);
+      margin-bottom: 32px;
     }
   }
 

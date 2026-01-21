@@ -92,7 +92,7 @@ const marqueeBrands = computed(() => {
 <style lang="scss" scoped>
 .brands-showcase {
   position: relative;
-  padding: 100px 0;
+  padding: 70px 0;
   background: #020617; /* Deepest Slate */
   overflow: hidden;
   color: #fff;
@@ -144,6 +144,8 @@ const marqueeBrands = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 32px;
+  padding-top: 30px;
+  padding-bottom: 30px;
   
   /* Fade edges */
   mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
@@ -152,7 +154,6 @@ const marqueeBrands = computed(() => {
 .marquee-track {
   display: flex;
   width: 100%;
-  overflow: hidden;
   
   &:hover .marquee-content {
     animation-play-state: paused;

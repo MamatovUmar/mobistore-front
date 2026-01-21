@@ -7,6 +7,7 @@ import {
 } from "@element-plus/icons-vue";
 import type { IListing } from "~/types/ads";
 import { formatCurrency } from "~/utils/formatters";
+import { formatRelativeTime } from "~/utils/formatDate";
 import StatusTag from "~/components/ad/StatusTag.vue";
 import { useRootStore } from "~/store/root";
 
@@ -39,8 +40,8 @@ const toggleFavorite = (e: MouseEvent) => {
   }
 };
 
-// Format date (placeholder - replace with actual date from listing)
-const postDate = computed(() => t('adCard.today'));
+// Format date from published_at
+const postDate = computed(() => formatRelativeTime(props.listing.published_at, t, locale.value));
 </script>
 
 <template>

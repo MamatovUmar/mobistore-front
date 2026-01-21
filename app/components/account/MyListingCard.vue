@@ -93,20 +93,20 @@ const getLocalizedCity = computed(() => {
             <el-dropdown-item command="view">{{ $t("account.listings.card.view") }}</el-dropdown-item>
             <el-dropdown-item command="edit">{{ $t("account.listings.card.edit") }}</el-dropdown-item>
             <el-dropdown-item
-              v-if="listing.status !== ListingStatus.ACTIVE"
-              command="active"
+              v-if="[ListingStatus.DRAFT, ListingStatus.ARCHIVED].includes(listing.status)"
+              command="moderation"
               divided
             >
               {{ $t("account.listings.card.activate") }}
             </el-dropdown-item>
             <el-dropdown-item
-              v-if="listing.status !== ListingStatus.SOLD"
+              v-if="listing.status === ListingStatus.ACTIVE"
               command="sold"
             >
               {{ $t("account.listings.card.sold") }}
             </el-dropdown-item>
             <el-dropdown-item
-              v-if="listing.status !== ListingStatus.ARCHIVED"
+              v-if="listing.status === ListingStatus.ACTIVE"
               command="archived"
             >
               {{ $t("account.listings.card.toArchive") }}

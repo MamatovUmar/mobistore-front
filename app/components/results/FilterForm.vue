@@ -32,7 +32,9 @@ const filters = reactive<IResultFilterForm>({
   state: query?.state,
   priceRange: [minPrice.value, maxPrice.value],
   ram: query?.ram ? Number(query.ram) : undefined,
+  ramUnit: query?.ramUnit || "GB",
   storage: query?.storage ? Number(query.storage) : undefined,
+  storageUnit: query?.storageUnit || "GB",
   allowTradeIn: query.allowTradeIn === "true",
   sortBy: query?.sortBy || "updated_at",
   sortOrder: query?.sortOrder || "desc",
@@ -54,7 +56,9 @@ const resetFilters = () => {
   filters.state = undefined;
   filters.priceRange = [minPrice.value, maxPrice.value];
   filters.ram = undefined;
+  filters.ramUnit = "GB";
   filters.storage = undefined;
+  filters.storageUnit = "GB";
   filters.allowTradeIn = false;
   filters.sortBy = "updated_at";
   filters.sortOrder = "desc";
@@ -76,7 +80,9 @@ watch(
       if (filters.modelId) query.modelId = String(filters.modelId);
       if (filters.state) query.state = filters.state;
       if (filters.ram) query.ram = String(filters.ram);
+      if (filters.ramUnit) query.ramUnit = filters.ramUnit;
       if (filters.storage) query.storage = String(filters.storage);
+      if (filters.storageUnit) query.storageUnit = filters.storageUnit;
       if (filters.allowTradeIn) query.allowTradeIn = "true";
       if (filters.sortBy) query.sortBy = filters.sortBy;
       if (filters.sortOrder) query.sortOrder = filters.sortOrder;
@@ -165,30 +171,40 @@ watch(
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="t('search.filters.ram')">
-        <el-select v-model="filters.ram" :placeholder="t('search.filters.placeholders.any')" clearable>
-          <el-option
-            v-for="ram in 36"
-            :key="ram"
-            :label="ram + 'GB'"
-            :value="ram"
-          />
-        </el-select>
-      </el-form-item>
-
-      <el-form-item :label="t('search.filters.storage')">
-        <el-select
-          v-model="filters.storage"
-          :placeholder="t('search.filters.placeholders.any')"
+      <el-form-item :label="t('createListing.fields.ram.label')">
+        <el-input
+          v-model.number="filters.ram"
+          style="max-width: 600px"
+          :placeholder="t('createListing.fields.ram.placeholder')"
+          type="number"
           clearable
         >
-          <el-option
-            v-for="storage in [4, 8, 16, 32, 64, 128, 256, 512, 1024]"
-            :key="storage"
-            :label="storage + 'GB'"
-            :value="storage"
-          />
-        </el-select>
+          <template #append>
+            <el-select v-model="filters.ramUnit" style="width: 80px">
+              <el-option label="MB" value="MB" />
+              <el-option label="GB" value="GB" />
+              <el-option label="TB" value="TB" />
+            </el-select>
+          </template>
+        </el-input>
+      </el-form-item>
+
+      <el-form-item :label="t('createListing.fields.memory.label')">
+        <el-input
+          v-model.number="filters.storage"
+          style="max-width: 600px"
+          :placeholder="t('createListing.fields.memory.placeholder')"
+          type="number"
+          clearable
+        >
+          <template #append>
+            <el-select v-model="filters.storageUnit" style="width: 80px">
+              <el-option label="MB" value="MB" />
+              <el-option label="GB" value="GB" />
+              <el-option label="TB" value="TB" />
+            </el-select>
+          </template>
+        </el-input>
       </el-form-item>
 
       <el-checkbox v-model="filters.allowTradeIn" size="large">
@@ -327,19 +343,6 @@ watch(
   width: 100%;
 }
 
-:deep(.el-input__wrapper) {
-  border-radius: 8px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease;
-
-  &:hover {
-    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.12);
-  }
-}
-
-:deep(.el-input__wrapper.is-focus) {
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-}
 
 .price-slider {
   padding: 4px 0;

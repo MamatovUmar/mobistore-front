@@ -29,6 +29,17 @@ const { $api } = useNuxtApp();
 const route = useRoute();
 const adId = computed(() => Number(route.params.id));
 
+// Форматирование цены с разделителями тысяч
+const formatPrice = (value: string | number | undefined) => {
+  if (!value) return '';
+  const numValue = String(value).replace(/\D/g, '');
+  return numValue.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+};
+
+const parsePrice = (value: string) => {
+  return value.replace(/\s/g, '');
+};
+
 const loading = ref(false);
 const loadingData = ref(true);
 const fileList = ref<any[]>([]);
@@ -120,23 +131,25 @@ const form = reactive<IListingForm & { images?: any }>({
   city_id: undefined,
   brand_id: undefined,
   model_id: undefined,
+  custom_brand: null,
+  custom_model: null,
   price: undefined,
   currency: "UZS",
   state: undefined,
   allow_trade_in: false,
   color: "",
   storage: undefined,
+  storage_unit: "GB",
   ram: undefined,
+  ram_unit: "GB",
   phone_number: "",
   telegram_link: "",
   show_phone: true,
   status: ListingStatus.ACTIVE,
   images: [],
-  custom_brand: null,
-  custom_model: null,
-  storage_unit: "",
-  ram_unit: "",
 });
+
+const originalForm = ref<Partial<IListingForm>>({});
 
 // Загрузка данных объявления
 const fetchAd = catcher(
@@ -170,11 +183,16 @@ const fetchAd = catcher(
       form.allow_trade_in = ad.allow_trade_in;
       form.color = ad.color;
       form.storage = ad.storage;
+      form.storage_unit = ad.storage_unit || "GB";
       form.ram = ad.ram;
+      form.ram_unit = ad.ram_unit || "GB";
       form.phone_number = ad.phone_number;
       form.telegram_link = ad.telegram_link || "";
       form.show_phone = ad.show_phone;
       form.status = ad.status;
+
+      // Сохраняем оригинальные данные для отслеживания изменений
+      originalForm.value = { ...form };
 
       // Загружаем существующие изображения
       if (ad.images && ad.images.length > 0) {
@@ -203,29 +221,58 @@ const updateListing = catcher(
     }
 
     loading.value = true;
+
+    // Формируем payload только с измененными полями
+    const payload: Partial<IListingForm> = {};
+
+    if (form.title !== originalForm.value.title) payload.title = form.title;
+    if (form.description !== originalForm.value.description)
+      payload.description = form.description;
+    if (form.region_id !== originalForm.value.region_id)
+      payload.region_id = form.region_id;
+    if (form.city_id !== originalForm.value.city_id)
+      payload.city_id = form.city_id;
+    if (form.price !== originalForm.value.price)
+      payload.price = Number(form.price);
+    if (form.currency !== originalForm.value.currency)
+      payload.currency = form.currency;
+    if (form.state !== originalForm.value.state) payload.state = form.state;
+    if (form.allow_trade_in !== originalForm.value.allow_trade_in)
+      payload.allow_trade_in = form.allow_trade_in;
+    if (form.color !== originalForm.value.color) payload.color = form.color;
+    if (form.storage !== originalForm.value.storage)
+      payload.storage = form.storage;
+    if (form.storage_unit !== originalForm.value.storage_unit)
+      payload.storage_unit = form.storage_unit;
+    if (form.ram !== originalForm.value.ram) payload.ram = form.ram;
+    if (form.ram_unit !== originalForm.value.ram_unit)
+      payload.ram_unit = form.ram_unit;
+    if (form.phone_number !== originalForm.value.phone_number)
+      payload.phone_number = form.phone_number;
+    if (form.telegram_link !== originalForm.value.telegram_link)
+      payload.telegram_link = form.telegram_link;
+    if (form.show_phone !== originalForm.value.show_phone)
+      payload.show_phone = form.show_phone;
+
+    // Обработка brand_id и custom_brand
+    if (form.brand_id !== originalForm.value.brand_id) {
+      payload.brand_id = form.brand_id || null;
+    }
+    if (form.custom_brand !== originalForm.value.custom_brand) {
+      payload.custom_brand = form.custom_brand || null;
+    }
+
+    // Обработка model_id и custom_model
+    if (form.model_id !== originalForm.value.model_id) {
+      payload.model_id = form.model_id || null;
+    }
+    if (form.custom_model !== originalForm.value.custom_model) {
+      payload.custom_model = form.custom_model || null;
+    }
+
     const response = await $api<IBaseResponse<IListing>>(`/ads/${adId.value}`, {
       method: "PUT",
-      body: {
-        title: form.title,
-        description: form.description,
-        region_id: form.region_id,
-        city_id: form.city_id,
-        brand_id: form.brand_id || null,
-        model_id: form.model_id || null,
-        custom_brand: form.custom_brand || null,
-        custom_model: form.custom_model || null,
-        price: Number(form.price),
-        currency: form.currency,
-        state: form.state,
-        status: form.status,
-        storage: form.storage,
-        ram: form.ram,
-        allow_trade_in: form.allow_trade_in,
-        color: form.color,
-        telegram_link: form.telegram_link,
-        phone_number: form.phone_number,
-        show_phone: form.show_phone,
-      },
+      body: payload,
     });
 
     if (response?.status) {
@@ -414,6 +461,7 @@ fetchAd();
                     v-if="!isCustomBrand"
                     v-model="form.brand_id"
                     :placeholder="$t('createListing.fields.brand.placeholder')"
+                    other
                     @select="handleBrandChange"
                     @select-other="handleBrandSelectOther"
                   />
@@ -471,6 +519,7 @@ fetchAd();
                     v-model="form.model_id"
                     :brand-id="form.brand_id"
                     :placeholder="$t('createListing.fields.model.placeholder')"
+                    other
                     @select="handleModelSelect"
                     @select-other="handleModelSelectOther"
                   />
@@ -481,56 +530,65 @@ fetchAd();
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item
-                  :label="$t('account.editListing.fields.memory')"
+                  :label="$t('createListing.fields.memory.label')"
                   prop="storage"
                 >
-                  <el-select
-                    v-model="form.storage"
-                    :placeholder="$t('account.editListing.placeholders.memory')"
+                  <el-input
+                    v-model.number="form.storage"
+                    style="max-width: 600px"
+                    :placeholder="$t('createListing.fields.memory.placeholder')"
+                    type="number"
                   >
-                    <el-option
-                      v-for="storage in [4, 8, 16, 32, 64, 128, 256, 512, 1024]"
-                      :key="storage"
-                      :label="storage + 'GB'"
-                      :value="storage"
-                    />
-                  </el-select>
+                    <template #append>
+                      <el-select
+                        v-model="form.storage_unit"
+                        style="width: 80px"
+                      >
+                        <el-option label="MB" value="MB" />
+                        <el-option label="GB" value="GB" />
+                        <el-option label="TB" value="TB" />
+                      </el-select>
+                    </template>
+                  </el-input>
                 </el-form-item>
               </el-col>
 
               <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item
-                  :label="$t('account.editListing.fields.ram')"
+                  :label="$t('createListing.fields.ram.label')"
                   prop="ram"
                 >
-                  <el-select
-                    v-model="form.ram"
-                    :placeholder="$t('account.editListing.placeholders.ram')"
+                  <el-input
+                    v-model.number="form.ram"
+                    style="max-width: 600px"
+                    :placeholder="$t('createListing.fields.ram.placeholder')"
+                    type="number"
                   >
-                    <el-option
-                      v-for="ram in 36"
-                      :key="ram"
-                      :label="ram + 'GB'"
-                      :value="ram"
-                    />
-                  </el-select>
+                    <template #append>
+                      <el-select v-model="form.ram_unit" style="width: 80px">
+                        <el-option label="MB" value="MB" />
+                        <el-option label="GB" value="GB" />
+                        <el-option label="TB" value="TB" />
+                      </el-select>
+                    </template>
+                  </el-input>
                 </el-form-item>
               </el-col>
 
               <el-col :xs="24" :sm="12" :md="8">
-                <el-form-item :label="$t('account.editListing.fields.color')">
+                <el-form-item :label="$t('createListing.fields.color.label')">
                   <el-input
                     v-if="colors?.length === 0"
                     v-model="form.color"
                     :placeholder="
-                      $t('account.editListing.placeholders.colorInput')
+                      $t('createListing.fields.color.placeholderInput')
                     "
                   />
                   <el-select
                     v-else
                     v-model="form.color"
                     :placeholder="
-                      $t('account.editListing.placeholders.colorSelect')
+                      $t('createListing.fields.color.placeholderSelect')
                     "
                   >
                     <el-option
@@ -547,25 +605,27 @@ fetchAd();
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item
-                  :label="$t('account.editListing.fields.condition')"
+                  :label="$t('createListing.fields.condition.label')"
                   prop="state"
                 >
                   <el-select
                     v-model="form.state"
                     :placeholder="
-                      $t('account.editListing.placeholders.condition')
+                      $t('createListing.fields.condition.placeholder')
                     "
                   >
                     <el-option
-                      :label="$t('account.editListing.conditions.new')"
+                      :label="$t('createListing.fields.condition.options.new')"
                       value="new"
                     />
                     <el-option
-                      :label="$t('account.editListing.conditions.restored')"
+                      :label="
+                        $t('createListing.fields.condition.options.restored')
+                      "
                       value="restored"
                     />
                     <el-option
-                      :label="$t('account.editListing.conditions.used')"
+                      :label="$t('createListing.fields.condition.options.used')"
                       value="used"
                     />
                   </el-select>
@@ -574,28 +634,31 @@ fetchAd();
 
               <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item
-                  :label="$t('account.editListing.fields.price')"
+                  :label="$t('createListing.fields.price.label')"
                   prop="price"
                 >
                   <el-input
-                    type="number"
                     v-model="form.price"
-                    :placeholder="$t('account.editListing.placeholders.price')"
+                    :placeholder="$t('createListing.fields.price.placeholder')"
+                    :formatter="formatPrice"
+                    :parser="parsePrice"
                   />
                 </el-form-item>
               </el-col>
 
               <el-col :xs="24" :sm="12" :md="8">
                 <el-form-item
-                  :label="$t('account.editListing.fields.currency')"
+                  :label="$t('createListing.fields.currency.label')"
                 >
                   <el-select
                     v-model="form.currency"
+                    readonly
                     :placeholder="
-                      $t('account.editListing.placeholders.currency')
+                      $t('createListing.fields.currency.placeholder')
                     "
                   >
                     <el-option label="UZS" value="UZS" />
+                    <!-- <el-option label="USD" value="USD" /> -->
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -604,7 +667,7 @@ fetchAd();
             <el-form-item>
               <el-checkbox
                 v-model="form.allow_trade_in"
-                :label="$t('account.editListing.checkboxes.exchange')"
+                :label="$t('createListing.fields.exchange')"
                 border
               />
             </el-form-item>
@@ -618,21 +681,25 @@ fetchAd();
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12">
                 <el-form-item
-                  :label="$t('account.editListing.fields.region')"
+                  :label="$t('createListing.fields.region.label')"
                   prop="region_id"
                 >
-                  <RegionAutocomplete v-model="form.region_id" />
+                  <RegionAutocomplete
+                    v-model="form.region_id"
+                    :placeholder="$t('createListing.fields.region.placeholder')"
+                  />
                 </el-form-item>
               </el-col>
 
               <el-col :xs="24" :sm="12">
                 <el-form-item
-                  :label="$t('account.editListing.fields.city')"
+                  :label="$t('createListing.fields.city.label')"
                   prop="city_id"
                 >
                   <CityAutocomplete
                     v-model="form.city_id"
                     :region-id="form.region_id"
+                    :placeholder="$t('createListing.fields.city.placeholder')"
                   />
                 </el-form-item>
               </el-col>
@@ -663,7 +730,7 @@ fetchAd();
             </el-form-item>
 
             <el-form-item
-              :label="$t('account.editListing.fields.addPhotos')"
+              :label="$t('createListing.fields.photos.label')"
               prop="images"
             >
               <el-upload
@@ -678,16 +745,12 @@ fetchAd();
               >
                 <el-icon class="el-icon--upload"><upload-filled /></el-icon>
                 <div class="el-upload__text">
-                  {{ $t("account.editListing.upload.dragText") }}
-                  <em>{{ $t("account.editListing.upload.clickText") }}</em>
+                  {{ $t("createListing.fields.photos.dragText") }}
+                  <em>{{ $t("createListing.fields.photos.clickText") }}</em>
                 </div>
                 <template #tip>
                   <div class="el-upload__tip">
-                    {{
-                      $t("account.editListing.upload.tip", {
-                        count: 8 - existingImages.length,
-                      })
-                    }}
+                    {{ $t("createListing.fields.photos.tip") }}
                   </div>
                 </template>
               </el-upload>
@@ -702,7 +765,7 @@ fetchAd();
             <el-row :gutter="20">
               <el-col :xs="24" :sm="12">
                 <el-form-item
-                  :label="$t('account.editListing.fields.phone')"
+                  :label="$t('createListing.fields.phone.label')"
                   prop="phone_number"
                 >
                   <PhoneNumber v-model="form.phone_number" />
@@ -711,20 +774,22 @@ fetchAd();
 
               <el-col :xs="24" :sm="12">
                 <el-form-item
-                  :label="$t('account.editListing.fields.telegram')"
+                  :label="$t('createListing.fields.telegram.label')"
                 >
                   <TelegramLink v-model="form.telegram_link" />
                 </el-form-item>
               </el-col>
-            </el-row>
 
-            <el-form-item>
-              <el-checkbox
-                v-model="form.show_phone"
-                :label="$t('account.editListing.checkboxes.showContacts')"
-                border
-              />
-            </el-form-item>
+              <el-col :xs="24" :sm="12">
+                <el-form-item>
+                  <el-checkbox
+                    v-model="form.show_phone"
+                    border
+                    :label="$t('createListing.fields.showContacts')"
+                  />
+                </el-form-item>
+              </el-col>
+            </el-row>
           </div>
 
           <el-row :gutter="20">
