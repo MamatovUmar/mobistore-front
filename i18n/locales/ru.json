@@ -92,6 +92,12 @@
     "noPhoto": "Нет фото",
     "today": "Сегодня"
   },
+  "time": {
+    "justNow": "Только что",
+    "minutesAgo": "{count} мин. назад",
+    "hoursAgo": "{count} ч. назад",
+    "daysAgo": "{count} дн. назад"
+  },
   "createListing": {
     "title": "Подать объявление",
     "subtitle": "Заполните информацию о вашем устройстве",

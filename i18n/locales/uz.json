@@ -92,6 +92,12 @@
     "noPhoto": "Rasm yo'q",
     "today": "Bugun"
   },
+  "time": {
+    "justNow": "Hozirgina",
+    "minutesAgo": "{count} daq. oldin",
+    "hoursAgo": "{count} soat oldin",
+    "daysAgo": "{count} kun oldin"
+  },
   "createListing": {
     "title": "E'lon berish",
     "subtitle": "Qurilmangiz haqidagi ma'lumotlarni to'ldiring",

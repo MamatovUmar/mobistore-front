@@ -186,13 +186,6 @@ const updateSeo = () => {
     "MobiStore",
   ];
 
-  if (currentFilters?.brand?.name) {
-    kw.push(
-      `${currentFilters.brand.name} ${t("search.seo.phones")}`,
-      `${currentFilters.brand.name} phone`
-    );
-  }
-
   if (currentFilters?.model?.name) {
     kw.push(
       `${currentFilters.model.name}`,

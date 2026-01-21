@@ -10,6 +10,7 @@ import { useChat } from "~/composables/useChat";
 import type { IConversation, IConversationMessage } from "~/types/chat";
 import type { IUser } from "~/types/user";
 import { useRootStore } from "~/store/root";
+import { formatRelativeTime as formatTime } from "~/utils/formatDate";
 
 const { t, locale } = useI18n();
 const localePath = useLocalePath();
@@ -300,20 +301,7 @@ const getActivityStatus = (lastActive?: string | null) => {
 
 const formatRelativeTime = (value?: string | null) => {
   if (!value) return "";
-  const date = new Date(value);
-  const now = new Date();
-  const diff = now.getTime() - date.getTime();
-  const mins = Math.floor(diff / 60000);
-  const hours = Math.floor(diff / 3600000);
-  const days = Math.floor(diff / 86400000);
-
-  if (mins < 1) return t("account.conversations.justNow");
-  if (mins < 60) return t("chat.ago.minutes", { count: mins }).replace("{count}", String(mins));
-  if (hours < 24) return t("chat.ago.hours", { count: hours }).replace("{count}", String(hours));
-  if (days === 1) return t("chat.yesterday");
-  if (days < 7) return t("chat.ago.days", { count: days }).replace("{count}", String(days));
-
-  return date.toLocaleDateString(locale.value === "uz" ? "uz-UZ" : "ru-RU");
+  return formatTime(value, t, locale.value);
 };
 
 const formatName = (user?: IUser | null) => {
