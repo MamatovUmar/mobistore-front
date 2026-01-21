@@ -235,7 +235,7 @@ const {
 } = await useAsyncData(
   queryKey,
   () => {
-    const { priceRange, page, ...rest } = route.query;
+    const { page, minPrice, maxPrice, ...rest } = route.query;
     const currentPage = page ? Number(page) : 1;
 
     return $api<IBaseResponse<IAdsResponse>>(`/ads`, {
@@ -243,8 +243,8 @@ const {
         ...rest,
         page: currentPage,
         limit: pageParams.limit,
-        minPrice: priceRange?.[0],
-        maxPrice: priceRange?.[1],
+        minPrice: minPrice ? Number(minPrice) : undefined,
+        maxPrice: maxPrice ? Number(maxPrice) : undefined,
         sortBy: pageParams.sortBy,
         sortOrder: pageParams.sortOrder,
       },

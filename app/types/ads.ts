@@ -130,7 +130,9 @@ export interface IResultFilterForm {
   state: string | undefined;
   priceRange: number[];
   ram: number | undefined;
+  ramUnit?: string;
   storage: number | undefined;
+  storageUnit?: string;
   allowTradeIn: boolean;
   sortBy: "updated_at" | "favorites_count" | "views_count" | "price";
   sortOrder: "asc" | "desc";

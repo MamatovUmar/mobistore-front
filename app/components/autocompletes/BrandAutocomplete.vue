@@ -27,31 +27,34 @@ const { t } = useI18n();
 const computedPlaceholder = computed(() => props.placeholder ?? t("components.brand.placeholder"));
 
 const loading = ref(false);
-// Инициализируем список брендов с initData для SSR
-const brands = ref<IBrand[]>(props.initData ? [props.initData] : []);
+const allBrands = ref<IBrand[]>([]);
 const searchQuery = ref("");
 
-const remoteSearch = async (query: string) => {
-  searchQuery.value = query;
+// Загружаем все бренды
+const fetchBrands = async () => {
   loading.value = true;
   try {
-    const res = await $api<IBaseResponse<IBrand[]>>(`/brands/search?q=${query}`);
-    const loadedBrands = res.data || [];
-    
-    // Сохраняем initData в списке если оно есть и не входит в загруженные бренды
-    if (props.initData && !loadedBrands.find(b => b.id === props.initData!.id)) {
-      brands.value = [props.initData, ...loadedBrands];
-    } else {
-      brands.value = loadedBrands;
-    }
+    const res = await $api<IBaseResponse<IBrand[]>>("/brands");
+    allBrands.value = res.data || [];
   } catch (error) {
-    console.error("Error searching brands:", error);
-    // Сохраняем initData даже при ошибке
-    brands.value = props.initData ? [props.initData] : [];
+    console.error("Error loading brands:", error);
+    allBrands.value = [];
   } finally {
     loading.value = false;
   }
 };
+
+// Фильтруем бренды на основе поискового запроса
+const filteredBrands = computed(() => {
+  if (!searchQuery.value.trim()) {
+    return allBrands.value;
+  }
+  
+  const query = searchQuery.value.toLowerCase().trim();
+  return allBrands.value.filter(brand => 
+    brand.name.toLowerCase().includes(query)
+  );
+});
 
 const handleChange = (value: number | null) => {
   if (value === OTHER_BRAND_VALUE) {
@@ -60,7 +63,7 @@ const handleChange = (value: number | null) => {
     emit("selectOther");
     return;
   }
-  const selectedBrand = brands.value.find(b => b.id === value);
+  const selectedBrand = allBrands.value.find(b => b.id === value);
   if (selectedBrand) {
     emit("select", selectedBrand);
   }
@@ -69,13 +72,14 @@ const handleChange = (value: number | null) => {
 // Следим за изменениями initData
 watch(() => props.initData, (newData) => {
   if (newData) {
-    // Добавляем initData в список если его там нет
-    if (!brands.value.find(b => b.id === newData.id)) {
-      brands.value = [newData, ...brands.value];
-    }
     model.value = newData.id;
   }
 }, { immediate: true });
+
+// Загружаем бренды при монтировании
+onMounted(() => {
+  fetchBrands();
+});
 </script>
 
 <template>
@@ -84,16 +88,14 @@ watch(() => props.initData, (newData) => {
     :placeholder="computedPlaceholder"
     :loading="loading"
     filterable
-    reserve-keyword
-    remote
     clearable
-    :remote-method="remoteSearch"
     :size
+    :filter-method="(query) => { searchQuery = query; }"
     @change="handleChange"
-    @focus="remoteSearch('')"
+    @visible-change="(visible) => { if (!visible) searchQuery = ''; }"
   >
     <el-option
-      v-for="brand in brands"
+      v-for="brand in filteredBrands"
       :key="brand.id"
       :label="brand.name"
       :value="brand.id"
