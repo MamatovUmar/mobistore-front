@@ -10,7 +10,11 @@ export default defineNuxtConfig({
     "@element-plus/nuxt",
     "@pinia/nuxt",
     "@nuxtjs/i18n",
+    "nuxt-yandex-metrika"
   ],
+  yandexMetrika: {
+    id: '106391123'
+  },
   runtimeConfig: {
     public: {
       apiUrl: "", // переопределяется через NUXT_PUBLIC_API_URL
