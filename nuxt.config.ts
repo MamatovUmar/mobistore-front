@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     "@element-plus/nuxt",
     "@pinia/nuxt",
     "@nuxtjs/i18n",
+    "@nuxt/scripts",
     "nuxt-yandex-metrika"
   ],
   yandexMetrika: {
