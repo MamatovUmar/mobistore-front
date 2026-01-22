@@ -13,7 +13,14 @@ export default defineNuxtConfig({
     "nuxt-yandex-metrika"
   ],
   yandexMetrika: {
-    id: '106391123'
+    id: '106391123',
+    options: {
+      clickmap: true,
+      trackLinks: true,
+      accurateTrackBounce: true,
+      webvisor: false,
+      ecommerce: 'dataLayer'
+    }
   },
   runtimeConfig: {
     public: {
