@@ -62,10 +62,6 @@ const handlePageChange = (page: number) => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-const navigateToModel = (modelId: number) => {
-  navigateTo(localePath(`/search?brandId=${brand.value?.id}&modelId=${modelId}`));
-};
-
 useSeoMeta({
   title: () => `${brandName.value} - ${t('brandModels.seo.title')}`,
   description: () => t('brandModels.seo.description', { brand: brandName.value }),
@@ -107,11 +103,11 @@ useSeoMeta({
       </div>
 
       <div v-else class="brand-models__grid">
-        <div
+        <NuxtLink
           v-for="model in models"
           :key="model.id"
+          :to="localePath(`/search?brandId=${brand?.id}&modelId=${model.id}`)"
           class="model-card"
-          @click="navigateToModel(model.id)"
         >
           <div class="model-card__image">
             <img
@@ -123,7 +119,7 @@ useSeoMeta({
           <div class="model-card__content">
             <h3 class="model-card__name">{{ model.name }}</h3>
           </div>
-        </div>
+        </NuxtLink>
       </div>
 
       <div v-if="pagination && pagination.pages > 1" class="brand-models__pagination">
@@ -198,10 +194,9 @@ useSeoMeta({
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s ease;
+  text-decoration: none;
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
     border-color: #3b82f6;
   }
 

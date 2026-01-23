@@ -40,10 +40,6 @@ const filteredBrands = computed(() => {
   );
 });
 
-const navigateToBrand = (alias: string) => {
-  navigateTo(localePath(`/brands/${alias}`));
-};
-
 useSeoMeta({
   title: () => t('brands.seo.title'),
   description: () => t('brands.seo.description'),
@@ -88,11 +84,11 @@ useSeoMeta({
       </div>
 
       <div v-else class="brands-page__grid">
-        <div
+        <NuxtLink
           v-for="brand in filteredBrands"
           :key="brand.id"
+          :to="localePath(`/brands/${brand.alias}`)"
           class="brand-card"
-          @click="navigateToBrand(brand.alias)"
         >
           <div class="brand-card__inner">
             <div class="brand-card__content">
@@ -108,7 +104,7 @@ useSeoMeta({
               <el-icon><ArrowRight /></el-icon>
             </div>
           </div>
-        </div>
+        </NuxtLink>
 
         <div v-if="filteredBrands.length === 0" class="brands-page__empty">
           <el-empty :description="t('brands.noResults')" />
@@ -186,6 +182,7 @@ useSeoMeta({
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  text-decoration: none;
 
   &:hover {
     border-color: #3b82f6;
