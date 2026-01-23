@@ -67,6 +67,37 @@
       "sold": "Продано"
     }
   },
+  "brands": {
+    "title": "Все бренды",
+    "subtitle": "Выберите бренд для поиска устройств",
+    "search": "Поиск бренда...",
+    "error": "Ошибка загрузки брендов",
+    "ads": "объявлений",
+    "models": "моделей",
+    "popular": "Популярный",
+    "noResults": "Бренды не найдены",
+    "seo": {
+      "title": "Бренды - MobiStore",
+      "description": "Список всех брендов мобильных телефонов и устройств на MobiStore",
+      "ogTitle": "Бренды - MobiStore",
+      "ogDescription": "Список всех брендов мобильных телефонов и устройств на MobiStore"
+    }
+  },
+  "brandModels": {
+    "breadcrumbs": {
+      "home": "Главная",
+      "brands": "Бренды"
+    },
+    "modelsCount": "моделей",
+    "error": "Ошибка загрузки моделей",
+    "noModels": "Модели не найдены",
+    "seo": {
+      "title": "Модели телефонов",
+      "description": "Все модели телефонов {brand} на MobiStore. Выберите модель для просмотра объявлений.",
+      "ogTitle": "Модели телефонов",
+      "ogDescription": "Все модели телефонов {brand} на MobiStore"
+    }
+  },
   "header": {
     "createAd": "Подать объявление",
     "adminPanel": "Админ панель",
@@ -79,7 +110,8 @@
     "termsOfService": "Пользовательское соглашение",
     "contacts": "Контакты",
     "location": "Ташкент, Узбекистан",
-    "copyright": "© 2025 MobiStore. Все права защищены."
+    "copyright": "© 2025 MobiStore. Все права защищены.",
+    "brands": "Бренды"
   },
   "userMenu": {
     "profile": "Личные данные",

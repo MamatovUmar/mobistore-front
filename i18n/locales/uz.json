@@ -67,6 +67,37 @@
       "sold": "Sotildi"
     }
   },
+  "brands": {
+    "title": "Barcha brendlar",
+    "subtitle": "Qurilmalarni qidirish uchun brendni tanlang",
+    "search": "Brend qidirish...",
+    "error": "Brendlarni yuklashda xatolik",
+    "ads": "ta e'lon",
+    "models": "ta model",
+    "popular": "Mashhur",
+    "noResults": "Brendlar topilmadi",
+    "seo": {
+      "title": "Brendlar - MobiStore",
+      "description": "MobiStore'dagi barcha mobil telefonlar va qurilmalar brendlari ro'yxati",
+      "ogTitle": "Brendlar - MobiStore",
+      "ogDescription": "MobiStore'dagi barcha mobil telefonlar va qurilmalar brendlari ro'yxati"
+    }
+  },
+  "brandModels": {
+    "breadcrumbs": {
+      "home": "Bosh sahifa",
+      "brands": "Brendlar"
+    },
+    "modelsCount": "ta model",
+    "error": "Modellarni yuklashda xatolik",
+    "noModels": "Modellar topilmadi",
+    "seo": {
+      "title": "Telefon modellari",
+      "description": "MobiStore'dagi barcha {brand} telefon modellari. E'lonlarni ko'rish uchun modelni tanlang.",
+      "ogTitle": "Telefon modellari",
+      "ogDescription": "MobiStore'dagi barcha {brand} telefon modellari"
+    }
+  },
   "header": {
     "createAd": "E'lon berish",
     "adminPanel": "Admin panel",
@@ -79,7 +110,8 @@
     "termsOfService": "Foydalanuvchi shartnomasi",
     "contacts": "Kontaktlar",
     "location": "Toshkent, O'zbekiston",
-    "copyright": "© 2025 MobiStore. Barcha huquqlar himoyalangan."
+    "copyright": "© 2025 MobiStore. Barcha huquqlar himoyalangan.",
+    "brands": "Brendlar"
   },
   "userMenu": {
     "profile": "Shaxsiy ma'lumotlar",
