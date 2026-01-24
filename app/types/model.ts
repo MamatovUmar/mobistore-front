@@ -138,7 +138,20 @@ export interface IModelImagesResponse {
   count: number;
 }
 
+export interface IModelListItem {
+  id: number;
+  name: string;
+  image: string;
+  brand_id: number;
+  alias: string;
+}
+
 export interface IModelResponse {
   models: IModel[];
+  pagination: IPagination;
+}
+
+export interface IModelListResponse {
+  models: IModelListItem[];
   pagination: IPagination;
 }

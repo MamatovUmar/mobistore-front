@@ -40,9 +40,10 @@ const localePath = useLocalePath();
         <div class="footer-column">
           <h4>{{ t('footer.help') }}</h4>
           <ul class="footer-links">
+            <li><NuxtLink :to="localePath('/info/contacts')">{{ t('footer.contacts') }}</NuxtLink></li>
+            <li><NuxtLink :to="localePath('/brands')">{{ t('footer.brands') }}</NuxtLink></li>
             <li><NuxtLink :to="localePath('/info/privacy')">{{ t('footer.privacyPolicy') }}</NuxtLink></li>
             <li><NuxtLink :to="localePath('/info/terms')">{{ t('footer.termsOfService') }}</NuxtLink></li>
-            <li><NuxtLink :to="localePath('/info/contacts')">{{ t('footer.contacts') }}</NuxtLink></li>
           </ul>
         </div>
 
