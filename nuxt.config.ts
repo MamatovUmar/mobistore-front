@@ -67,6 +67,10 @@ export default defineNuxtConfig({
     importStyle: "scss",
   },
 
+  build: {
+    transpile: ['element-plus'],
+  },
+
   // Оптимизация шрифтов
   fonts: {
     families: [
@@ -91,5 +95,12 @@ export default defineNuxtConfig({
   // Настройки рендеринга
   routeRules: {
     "/": { prerender: false },
+  },
+
+  // Vite конфигурация для dayjs
+  vite: {
+    optimizeDeps: {
+      include: ['dayjs'],
+    },
   },
 });

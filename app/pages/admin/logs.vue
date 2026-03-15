@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Refresh, Filter, Delete } from "@element-plus/icons-vue";
+import { Refresh, Filter, Delete, ArrowDown } from "@element-plus/icons-vue";
 import type {
   LogStatus,
   ILog,
@@ -32,7 +32,7 @@ const {
   refresh,
 } = useLogs();
 
-const filters = reactive<ILogsFilters>({
+const filters = ref<ILogsFilters>({
   page: 1,
   limit: 20,
   type: undefined,
@@ -65,32 +65,32 @@ const getStatusLabel = (status: LogStatus) => {
 };
 
 const fetchData = async () => {
-  await fetchLogs(filters);
+  await fetchLogs(filters.value);
 };
 
 const handlePageChange = (page: number) => {
-  filters.page = page;
+  filters.value.page = page;
   fetchData();
 };
 
 const handleSizeChange = (size: number) => {
-  filters.limit = size;
-  filters.page = 1;
+  filters.value.limit = size;
+  filters.value.page = 1;
   fetchData();
 };
 
 const applyFilters = () => {
-  filters.page = 1;
+  filters.value.page = 1;
   fetchData();
 };
 
 const resetFilters = () => {
-  filters.type = undefined;
-  filters.status = undefined;
-  filters.user_id = undefined;
-  filters.from_date = undefined;
-  filters.to_date = undefined;
-  filters.page = 1;
+  filters.value.type = undefined;
+  filters.value.status = undefined;
+  filters.value.user_id = undefined;
+  filters.value.from_date = undefined;
+  filters.value.to_date = undefined;
+  filters.value.page = 1;
   fetchData();
 };
 
@@ -131,7 +131,7 @@ const handleBulkStatusChange = async (newStatus: LogStatus) => {
     );
 
     await bulkUpdateStatus({ ids: selectedIds.value, status: newStatus });
-    await refresh(filters);
+    await refresh(filters.value);
     selectedIds.value = [];
   } catch {
     // Cancelled
@@ -145,16 +145,16 @@ const handleSelectionChange = (selection: ILog[]) => {
 const handleCleanup = async (payload: ICleanupPayload) => {
   await cleanupLogs(payload);
   cleanupDialogVisible.value = false;
-  await refresh(filters);
+  await refresh(filters.value);
 };
 
 const handleRefresh = async () => {
-  await refresh(filters);
+  await refresh(filters.value);
   ElMessage.success("Данные обновлены");
 };
 
 onMounted(() => {
-  refresh(filters);
+  refresh(filters.value);
 });
 </script>
 
