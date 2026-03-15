@@ -1,33 +1,64 @@
 <script setup lang="ts">
-import type { LogType, LogStatus } from "~/composables/useLogs";
-
-interface Filters {
-  type?: LogType;
-  status?: LogStatus;
-  user_id?: number;
-  from_date?: string;
-  to_date?: string;
-}
+import type { ILogsFilters, LogType, LogStatus } from "~/composables/useLogs";
 
 const props = defineProps<{
-  modelValue: Filters;
+  modelValue: ILogsFilters;
   visible: boolean;
 }>();
 
 const emit = defineEmits<{
-  "update:modelValue": [value: Filters];
+  "update:modelValue": [value: ILogsFilters];
   "update:visible": [value: boolean];
   apply: [];
   reset: [];
 }>();
 
-const filters = computed({
-  get: () => props.modelValue,
-  set: (val) => emit("update:modelValue", val),
+const updateFilters = (patch: Partial<ILogsFilters>) => {
+  emit("update:modelValue", {
+    ...props.modelValue,
+    ...patch,
+  });
+};
+
+const dateRange = computed<[string, string] | null>({
+  get: () => {
+    if (props.modelValue.from_date && props.modelValue.to_date) {
+      return [props.modelValue.from_date, props.modelValue.to_date] as [string, string];
+    }
+    return null;
+  },
+  set: (value: [string, string] | null) => {
+    if (value && value.length === 2) {
+      updateFilters({
+        from_date: value[0],
+        to_date: value[1],
+      });
+      return;
+    }
+    updateFilters({
+      from_date: undefined,
+      to_date: undefined,
+    });
+  },
 });
 
-const dateRange = ref<[Date, Date] | null>(null);
+const handleTypeChange = (value: LogType | undefined) => {
+  updateFilters({ type: value || undefined });
+};
 
+const handleStatusChange = (value: LogStatus | undefined) => {
+  updateFilters({ status: value || undefined });
+};
+
+const handleUserIdChange = (value: string | number) => {
+  if (value === "" || value === null || value === undefined) {
+    updateFilters({ user_id: undefined });
+    return;
+  }
+
+  const parsedValue = Number(value);
+  updateFilters({ user_id: Number.isNaN(parsedValue) ? undefined : parsedValue });
+};
 const typeOptions: { value: LogType; label: string }[] = [
   { value: "error", label: "Ошибка" },
   { value: "warning", label: "Предупреждение" },
@@ -42,24 +73,7 @@ const statusOptions: { value: LogStatus; label: string }[] = [
   { value: "ignored", label: "Игнорирован" },
 ];
 
-watch(dateRange, (val) => {
-  if (val && val.length === 2) {
-    emit("update:modelValue", {
-      ...props.modelValue,
-      from_date: val[0].toISOString().split("T")[0],
-      to_date: val[1].toISOString().split("T")[0],
-    });
-  } else {
-    emit("update:modelValue", {
-      ...props.modelValue,
-      from_date: undefined,
-      to_date: undefined,
-    });
-  }
-});
-
 const handleReset = () => {
-  dateRange.value = null;
   emit("reset");
 };
 </script>
@@ -72,10 +86,11 @@ const handleReset = () => {
           <div class="filter-item">
             <label class="filter-label">Тип</label>
             <el-select
-              v-model="filters.type"
+              :model-value="modelValue.type"
               placeholder="Все типы"
               clearable
               class="filter-select"
+              @update:model-value="handleTypeChange"
             >
               <el-option
                 v-for="option in typeOptions"
@@ -88,10 +103,11 @@ const handleReset = () => {
           <div class="filter-item">
             <label class="filter-label">Статус</label>
             <el-select
-              v-model="filters.status"
+              :model-value="modelValue.status"
               placeholder="Все статусы"
               clearable
               class="filter-select"
+              @update:model-value="handleStatusChange"
             >
               <el-option
                 v-for="option in statusOptions"
@@ -104,24 +120,27 @@ const handleReset = () => {
           <div class="filter-item">
             <label class="filter-label">ID пользователя</label>
             <el-input
-              v-model.number="filters.user_id"
+              :model-value="modelValue.user_id"
               placeholder="ID"
               clearable
               class="filter-input"
+              @update:model-value="handleUserIdChange"
             />
           </div>
           <div class="filter-item">
             <label class="filter-label">Период</label>
-            <!-- <el-date-picker
-              v-model="dateRange"
-              type="daterange"
-              range-separator="—"
-              start-placeholder="Начало"
-              end-placeholder="Конец"
-              format="DD.MM.YYYY"
-              value-format="YYYY-MM-DD"
-              class="filter-date"
-            /> -->
+            <ClientOnly>
+              <el-date-picker
+                v-model="dateRange"
+                type="daterange"
+                range-separator="—"
+                start-placeholder="Начало"
+                end-placeholder="Конец"
+                format="DD.MM.YYYY"
+                value-format="YYYY-MM-DD"
+                class="filter-date"
+              />
+            </ClientOnly>
           </div>
         </div>
         <div class="filters-actions">

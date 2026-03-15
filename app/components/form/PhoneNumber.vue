@@ -48,7 +48,7 @@ const formatPhoneNumber = (value: string): string => {
 
 // Получение полного номера с кодом страны
 const getFullNumber = (value: string): string => {
-  const cleaned = value.replace(/\D/g, "");
+  const cleaned = value.replace(/\D/g, "").slice(0, 12);
   const withoutPrefix = cleaned.startsWith("998") ? cleaned.slice(3) : cleaned;
   
   // Возвращаем полный номер с + и кодом страны, если есть цифры

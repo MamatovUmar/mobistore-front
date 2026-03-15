@@ -1,6 +1,7 @@
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig()
   const tokenCookie = useCookie('token')
+  const localePath = useLocalePath()
 
   const api = $fetch.create({
     baseURL: config.public.apiUrl,
@@ -13,7 +14,10 @@ export default defineNuxtPlugin((nuxtApp) => {
     async onResponseError({ response }) {
       if (response.status === 401) {
         tokenCookie.value = undefined
-        await nuxtApp.runWithContext(() => navigateTo('/login'))
+        await nuxtApp.runWithContext(() => navigateTo(localePath('/login')))
+      } else if (response.status === 403) {
+        tokenCookie.value = undefined
+        await nuxtApp.runWithContext(() => navigateTo(localePath('/')))
       }
     }
   })

@@ -2,6 +2,9 @@
   "name": "sm-front",
   "type": "module",
   "private": true,
+  "resolutions": {
+    "dayjs": "1.11.20"
+  },
   "scripts": {
     "build": "nuxt build",
     "dev": "NODE_OPTIONS=--max-old-space-size=4096 nuxt dev",
@@ -18,7 +21,7 @@
     "@nuxtjs/i18n": "10.2.1",
     "@pinia/nuxt": "0.11.2",
     "@vueup/vue-quill": "^1.2.0",
-    "dayjs": "^1.11.19",
+    "dayjs": "^1.11.20",
     "element-plus": "^2.11.5",
     "normalize.css": "^8.0.1",
     "nuxt": "^4.2.0",

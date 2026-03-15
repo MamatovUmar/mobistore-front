@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Loading } from "@element-plus/icons-vue";
+import { Loading, ArrowDown } from "@element-plus/icons-vue";
 import type { ILog, LogType, LogStatus } from "~/composables/useLogs";
 import type { IPagination } from "~/types";
 
