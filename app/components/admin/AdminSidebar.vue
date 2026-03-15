@@ -3,14 +3,12 @@ import {
   User,
   Document,
   Coin,
-  DataLine,
   Setting,
   HomeFilled,
   MessageBox,
   Memo,
   Iphone,
   Collection,
-  Calendar,
 } from "@element-plus/icons-vue";
 import { useRootStore } from "~/store/root";
 
@@ -68,13 +66,13 @@ const menuItems = [
     title: "Бренды",
     icon: Collection,
     path: "/admin/brands",
-    roles: ["admin", "moderator"],
+    roles: ["admin"],
   },
   {
     title: "Модели",
     icon: Iphone,
     path: "/admin/models",
-    roles: ["admin", "moderator"],
+    roles: ["admin"],
   }
 ];
 
