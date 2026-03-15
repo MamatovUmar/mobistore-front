@@ -165,10 +165,33 @@ export const useLogs = () => {
 
   const cleanupLogs = async (payload: ICleanupPayload) => {
     try {
-      const result = await $api<IBaseResponse<{ deleted: number }>>("/logs/cleanup", {
-        method: "DELETE",
-        body: payload,
-      });
+      const normalizedBeforeDate = payload.before_date?.trim();
+      if (!normalizedBeforeDate) {
+        ElMessage.error("Поле before_date обязательно");
+        return null;
+      }
+
+      const requestBody: ICleanupPayload = {
+        before_date: normalizedBeforeDate,
+      };
+      if (payload.type) {
+        requestBody.type = payload.type;
+      }
+      if (payload.status) {
+        requestBody.status = payload.status;
+      }
+
+      const result = await $api<IBaseResponse<{ deleted: number }>>(
+        "/logs/cleanup",
+        {
+          method: "DELETE",
+          query: requestBody,
+          body: requestBody,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       ElMessage.success(result.message || "Логи очищены");
       return result.data;
     } catch (error) {

@@ -143,6 +143,8 @@ const handleSelectionChange = (selection: ILog[]) => {
 };
 
 const handleCleanup = async (payload: ICleanupPayload) => {
+  console.log(111, payload);
+  
   await cleanupLogs(payload);
   cleanupDialogVisible.value = false;
   await refresh(filters.value);
