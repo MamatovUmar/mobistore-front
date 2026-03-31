@@ -6,7 +6,6 @@ import {
   StarFilled,
 } from "@element-plus/icons-vue";
 import type { IListing } from "~/types/ads";
-import { formatCurrency } from "~/utils/formatters";
 import { formatRelativeTime } from "~/utils/formatDate";
 import StatusTag from "~/components/ad/StatusTag.vue";
 import { useRootStore } from "~/store/root";
@@ -92,7 +91,7 @@ const postDate = computed(() => formatRelativeTime(props.listing.published_at, t
 
       <!-- Price with gradient -->
       <div class="price-tag">
-        {{ formatCurrency(listing.price, listing.currency) }}
+        {{ root.convertPrice(listing.price, listing.currency) }}
       </div>
 
       <!-- Location -->

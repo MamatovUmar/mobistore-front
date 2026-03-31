@@ -7,7 +7,6 @@ import {
   Loading,
 } from "@element-plus/icons-vue";
 import type { IListing } from "~/types/ads";
-import { formatCurrency } from "~/utils/formatters";
 import StatusTag from "~/components/ad/StatusTag.vue";
 import { useRootStore } from "~/store/root";
 
@@ -114,7 +113,7 @@ const postDate = computed(() => {
       <!-- Price & Actions -->
       <div class="price-actions">
         <div class="price-tag">
-          {{ formatCurrency(listing.price, listing.currency) }}
+          {{ root.convertPrice(listing.price, listing.currency) }}
         </div>
 
         <button
