@@ -9,6 +9,7 @@ import {
   Memo,
   Iphone,
   Collection,
+  Money
 } from "@element-plus/icons-vue";
 import { useRootStore } from "~/store/root";
 
@@ -48,6 +49,12 @@ const menuItems = [
     title: "Кеш",
     icon: Coin,
     path: "/admin/cache",
+    roles: ["admin"],
+  },
+  {
+    title: "Курс валют",
+    icon: Money,
+    path: "/admin/rates",
     roles: ["admin"],
   },
   {

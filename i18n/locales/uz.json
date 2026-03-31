@@ -1272,5 +1272,24 @@
         ]
       }
     }
+  },
+  "admin": {
+    "rates": {
+      "title": "Valyuta kurslari",
+      "subtitle": "O'zbekiston Markaziy banki kurslari",
+      "refresh": "Yangilash",
+      "sync": "Sinxronlash",
+      "loading": "Valyuta kurslari yuklanmoqda...",
+      "empty": "Valyuta kurslari haqida ma'lumot yo'q",
+      "syncButton": "Kurslarni sinxronlash",
+      "confirmSync": "O'zbekiston Markaziy bankidan valyuta kurslarini majburiy sinxronlashni xohlaysizmi?",
+      "confirmTitle": "Tasdiqlash",
+      "confirm": "Sinxronlash",
+      "cancel": "Bekor qilish",
+      "refreshSuccess": "Ma'lumotlar yangilandi",
+      "code": "Valyuta kodi",
+      "date": "Sana",
+      "sum": "so'm"
+    }
   }
 }

@@ -1,17 +1,22 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
-import { Monitor, Menu, Plus } from "@element-plus/icons-vue";
-import { useRootStore } from "~/store/root";
+import {ref, onMounted, onUnmounted} from "vue";
+import {Monitor, Menu, Plus} from "@element-plus/icons-vue";
+import {useRootStore} from "~/store/root";
 import HeaderChat from "./header/HeaderChat.vue";
 import HeaderUserMenu from "./header/HeaderUserMenu.vue";
 import HeaderAuthModal from "./header/HeaderAuthModal.vue";
 import HeaderMobileDrawer from "./header/HeaderMobileDrawer.vue";
 import LanguageSwitcher from "./header/LanguageSwitcher.vue";
+import CurrencySwitcher from "./header/CurrencySwitcher.vue";
 
+
+const {fetchLatestRates} = useRates();
 const rootStore = useRootStore();
 const router = useRouter();
-const { t } = useI18n();
+const {t} = useI18n();
 const localePath = useLocalePath();
+
+fetchLatestRates();
 
 const showAuthDialog = ref(false);
 const showMobileDrawer = ref(false);
@@ -50,18 +55,22 @@ const handleCreateAd = () => {
         <!-- Logo -->
         <NuxtLink :to="localePath('/')" class="logo-link">
           <div class="logo">
-            <img src="/logo.svg" alt="MobiStore" />
+            <img src="/logo.svg" alt="MobiStore"/>
           </div>
         </NuxtLink>
 
         <!-- Desktop Actions -->
         <div class="header-actions desktop-only">
           <button class="btn-create" @click="handleCreateAd">
-            <el-icon class="btn-icon"><Plus /></el-icon>
+            <el-icon class="btn-icon">
+              <Plus/>
+            </el-icon>
             <span class="btn-text">{{ t('header.createAd') }}</span>
           </button>
 
-          <LanguageSwitcher />
+          <LanguageSwitcher/>
+
+          <CurrencySwitcher/>
 
           <el-tooltip
             v-if="rootStore.isAdmin || rootStore.isModerator"
@@ -69,13 +78,15 @@ const handleCreateAd = () => {
             placement="bottom"
           >
             <el-button circle class="action-btn" @click="navigateTo(localePath('/admin'))">
-              <el-icon><Monitor /></el-icon>
+              <el-icon>
+                <Monitor/>
+              </el-icon>
             </el-button>
           </el-tooltip>
 
           <template v-if="rootStore.user">
             <!-- Chat -->
-            <HeaderChat />
+            <HeaderChat/>
           </template>
 
           <el-button
@@ -88,26 +99,28 @@ const handleCreateAd = () => {
           </el-button>
 
           <!-- User Menu -->
-          <HeaderUserMenu v-else />
+          <HeaderUserMenu v-else/>
         </div>
 
         <!-- Mobile Actions -->
         <div class="header-actions mobile-only">
-          <LanguageSwitcher />
-          
+          <LanguageSwitcher/>
+
           <el-button
             circle
             class="action-btn burger-btn"
             @click="showMobileDrawer = true"
           >
-            <el-icon><Menu /></el-icon>
+            <el-icon>
+              <Menu/>
+            </el-icon>
           </el-button>
         </div>
       </div>
     </div>
 
     <!-- Auth Dialog -->
-    <HeaderAuthModal v-model="showAuthDialog" />
+    <HeaderAuthModal v-model="showAuthDialog"/>
 
     <!-- Mobile Drawer -->
     <HeaderMobileDrawer
@@ -134,7 +147,7 @@ const handleCreateAd = () => {
   &.scrolled {
     background: rgba(255, 255, 255, 0.95);
     box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05),
-      0 4px 12px rgba(15, 23, 42, 0.08);
+    0 4px 12px rgba(15, 23, 42, 0.08);
   }
 }
 
@@ -163,6 +176,7 @@ const handleCreateAd = () => {
   display: flex;
   align-items: center;
   gap: 12px;
+
   img {
     height: 50px;
   }

@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import { UploadFilled } from "@element-plus/icons-vue";
-import type { FormInstance, FormRules } from "element-plus";
+import {UploadFilled} from "@element-plus/icons-vue";
+import type {FormInstance, FormRules} from "element-plus";
 import BrandAutocomplete from "~/components/autocompletes/BrandAutocomplete.vue";
 import ModelAutocomplete from "~/components/autocompletes/ModelAutocomplete.vue";
 import RegionAutocomplete from "~/components/autocompletes/RegionAutocomplete.vue";
 import CityAutocomplete from "~/components/autocompletes/CityAutocomplete.vue";
 import PhoneNumber from "~/components/form/PhoneNumber.vue";
 import TelegramLink from "~/components/form/TelegramLink.vue";
-import type { IListing, IListingForm } from "~/types/ads";
-import { ListingStatus, ImageFolder, EntityType } from "~/types/ads";
-import type { IBaseResponse } from "~/types/index";
-import type { IModel } from "~/types/model";
-import { useRootStore } from "~/store/root";
+import type {IListing, IListingForm} from "~/types/ads";
+import {ListingStatus, ImageFolder, EntityType} from "~/types/ads";
+import type {IBaseResponse} from "~/types/index";
+import type {IModel} from "~/types/model";
+import {useRootStore} from "~/store/root";
 
 definePageMeta({
   middleware: "auth-only",
 });
 
-const { $api } = useNuxtApp();
+const {$api} = useNuxtApp();
 const root = useRootStore();
-const { t } = useI18n();
+const {t} = useI18n();
 const localePath = useLocalePath();
 
 // Форматирование цены с разделителями тысяч
@@ -101,10 +101,10 @@ const rules = computed<FormRules<IListingForm & { images?: any }>>(() => ({
       trigger: "change",
     },
   ],
-  brand_id: [{ validator: validateBrand, trigger: "change" }],
-  custom_brand: [{ validator: validateBrand, trigger: "blur" }],
-  model_id: [{ validator: validateModel, trigger: "change" }],
-  custom_model: [{ validator: validateModel, trigger: "blur" }],
+  brand_id: [{validator: validateBrand, trigger: "change"}],
+  custom_brand: [{validator: validateBrand, trigger: "blur"}],
+  model_id: [{validator: validateModel, trigger: "change"}],
+  custom_model: [{validator: validateModel, trigger: "blur"}],
   price: [
     {
       required: true,
@@ -112,7 +112,7 @@ const rules = computed<FormRules<IListingForm & { images?: any }>>(() => ({
       trigger: "blur",
     },
   ],
-  images: [{ validator: validateImages, trigger: "change" }],
+  images: [{validator: validateImages, trigger: "change"}],
   state: [
     {
       required: true,
@@ -414,9 +414,9 @@ onMounted(() => {
                         v-model="form.storage_unit"
                         style="width: 80px"
                       >
-                        <el-option label="MB" value="MB" />
-                        <el-option label="GB" value="GB" />
-                        <el-option label="TB" value="TB" />
+                        <el-option label="MB" value="MB"/>
+                        <el-option label="GB" value="GB"/>
+                        <el-option label="TB" value="TB"/>
                       </el-select>
                     </template>
                   </el-input>
@@ -436,9 +436,9 @@ onMounted(() => {
                   >
                     <template #append>
                       <el-select v-model="form.ram_unit" style="width: 80px">
-                        <el-option label="MB" value="MB" />
-                        <el-option label="GB" value="GB" />
-                        <el-option label="TB" value="TB" />
+                        <el-option label="MB" value="MB"/>
+                        <el-option label="GB" value="GB"/>
+                        <el-option label="TB" value="TB"/>
                       </el-select>
                     </template>
                   </el-input>
@@ -527,8 +527,8 @@ onMounted(() => {
                       $t('createListing.fields.currency.placeholder')
                     "
                   >
-                    <el-option label="UZS" value="UZS" />
-                    <!-- <el-option label="USD" value="USD" /> -->
+                    <el-option label="UZS" value="UZS"/>
+                    <el-option label="USD" value="USD"/>
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -589,7 +589,9 @@ onMounted(() => {
                 accept="image/*"
                 multiple
               >
-                <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+                <el-icon class="el-icon--upload">
+                  <upload-filled/>
+                </el-icon>
                 <div class="el-upload__text">
                   {{ $t("createListing.fields.photos.dragText") }}
                   <em>{{ $t("createListing.fields.photos.clickText") }}</em>
@@ -614,7 +616,7 @@ onMounted(() => {
                   :label="$t('createListing.fields.phone.label')"
                   prop="phone_number"
                 >
-                  <PhoneNumber v-model="form.phone_number" />
+                  <PhoneNumber v-model="form.phone_number"/>
                 </el-form-item>
               </el-col>
 
@@ -622,7 +624,7 @@ onMounted(() => {
                 <el-form-item
                   :label="$t('createListing.fields.telegram.label')"
                 >
-                  <TelegramLink v-model="form.telegram_link" />
+                  <TelegramLink v-model="form.telegram_link"/>
                 </el-form-item>
               </el-col>
 
@@ -650,8 +652,8 @@ onMounted(() => {
               </el-button>
             </el-col>
           </el-row>
-          <br />
-          <br />
+          <br/>
+          <br/>
         </el-form>
       </div>
     </div>
@@ -661,11 +663,13 @@ onMounted(() => {
 <style lang="scss" scoped>
 .page-create {
   min-height: 60vh;
+
   .page-header {
     text-align: center;
     margin-bottom: 24px;
     margin-top: 40px;
   }
+
   .upload-demo {
     width: 100%;
   }
