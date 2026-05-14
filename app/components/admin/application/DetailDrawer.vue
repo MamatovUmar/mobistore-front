@@ -51,12 +51,14 @@ const getDeviceIcon = (deviceType: string) => {
       return Monitor;
   }
 };
+
+const { isMobile } = useBreakpoints();
 </script>
 
 <template>
   <el-drawer
     v-model="visible"
-    size="500px"
+    :size="isMobile ? '100%' : '500px'"
     :close-on-click-modal="true"
     :close-on-press-escape="true"
   >

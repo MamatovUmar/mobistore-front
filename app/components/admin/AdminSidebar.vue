@@ -14,10 +14,16 @@ import { useRootStore } from "~/store/root";
 
 defineProps<{
   collapsed: boolean;
+  mobileOpen: boolean;
+}>();
+
+const emit = defineEmits<{
+  (e: "close"): void;
 }>();
 
 const route = useRoute();
 const root = useRootStore();
+const { isTabletOrSmaller } = useBreakpoints();
 
 const menuItems = [
   {
@@ -82,19 +88,28 @@ const isActive = (path: string) => {
   }
   return route.path.startsWith(path);
 };
+
+const handleItemClick = () => {
+  if (isTabletOrSmaller.value) {
+    emit("close");
+  }
+};
 </script>
 
 <template>
   <aside
     class="admin-sidebar"
-    :class="{ 'admin-sidebar--collapsed': collapsed }"
+    :class="{
+      'admin-sidebar--collapsed': collapsed,
+      'admin-sidebar--mobile-open': mobileOpen,
+    }"
   >
     <div class="sidebar-header">
       <div class="logo">
         <el-icon :size="28" color="#3b82f6">
           <Setting />
         </el-icon>
-        <span v-show="!collapsed" class="logo-text">Admin Panel</span>
+        <span v-show="!collapsed || isTabletOrSmaller" class="logo-text">Admin Panel</span>
       </div>
     </div>
 
@@ -106,13 +121,14 @@ const isActive = (path: string) => {
             :to="item.path"
             class="menu-item"
             :class="{ 'menu-item--active': isActive(item.path) }"
+            @click="handleItemClick"
           >
             <el-icon :size="20">
               <component :is="item.icon" />
             </el-icon>
-            <span v-show="!collapsed" class="menu-text">{{ item.title }}</span>
+            <span v-show="!collapsed || isTabletOrSmaller" class="menu-text">{{ item.title }}</span>
             <el-tooltip
-              v-if="collapsed"
+              v-if="collapsed && !isTabletOrSmaller"
               :content="item.title"
               placement="right"
               :show-after="100"
@@ -125,7 +141,7 @@ const isActive = (path: string) => {
     </el-scrollbar>
 
     <div class="sidebar-footer">
-      <NuxtLink to="/" class="back-link">
+      <NuxtLink to="/" class="back-link" @click="handleItemClick">
         <el-icon :size="18">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -137,7 +153,7 @@ const isActive = (path: string) => {
             />
           </svg>
         </el-icon>
-        <span v-show="!collapsed">На сайт</span>
+        <span v-show="!collapsed || isTabletOrSmaller">На сайт</span>
       </NuxtLink>
     </div>
   </aside>
@@ -155,7 +171,7 @@ const isActive = (path: string) => {
   left: 0;
   top: 0;
   z-index: 100;
-  transition: width 0.3s ease;
+  transition: width 0.3s ease, transform 0.3s ease;
 
   &--collapsed {
     width: 64px;
@@ -267,13 +283,21 @@ const isActive = (path: string) => {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1023px) {
   .admin-sidebar {
     transform: translateX(-100%);
+    width: 240px;
 
     &--collapsed {
-      transform: translateX(0);
       width: 240px;
+
+      .logo-text {
+        display: inline;
+      }
+    }
+
+    &--mobile-open {
+      transform: translateX(0);
     }
   }
 }

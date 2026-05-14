@@ -79,6 +79,8 @@ const handleClose = () => {
   visible.value = false;
   formRef.value?.resetFields();
 };
+
+const { isMobile } = useBreakpoints();
 </script>
 
 <template>
@@ -86,7 +88,7 @@ const handleClose = () => {
     v-model="visible"
     title="Редактирование пользователя"
     direction="rtl"
-    size="500px"
+    :size="isMobile ? '100%' : '500px'"
     class="edit-drawer"
     @close="handleClose"
   >

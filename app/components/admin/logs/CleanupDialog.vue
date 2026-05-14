@@ -85,13 +85,16 @@ const handleClose = () => {
   selectedType.value = null;
   selectedStatus.value = null;
 };
+
+const { isMobile } = useBreakpoints();
 </script>
 
 <template>
   <el-dialog
     v-model="visible"
     title="Очистка логов"
-    width="450px"
+    :width="isMobile ? '95%' : '450px'"
+    :fullscreen="isMobile"
     @close="handleClose"
   >
     <el-form label-position="top">

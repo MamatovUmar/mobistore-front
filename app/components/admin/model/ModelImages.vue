@@ -18,6 +18,8 @@ const dialogImageUrl = ref("");
 const dialogVisible = ref(false);
 const fileList = ref<UploadUserFile[]>([]);
 
+const { isMobile } = useBreakpoints();
+
 // Sync fileList with props.images
 watch(
   () => props.images,
@@ -145,7 +147,7 @@ defineExpose({ clearPending: () => { pendingFiles.value = []; } });
       <el-icon><Plus /></el-icon>
     </el-upload>
 
-    <el-dialog v-model="dialogVisible">
+    <el-dialog v-model="dialogVisible" :width="isMobile ? '95%' : '50%'" :fullscreen="isMobile">
       <img
         w-full
         :src="dialogImageUrl"

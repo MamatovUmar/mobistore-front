@@ -55,11 +55,11 @@ defineProps<{
   gap: 16px;
   margin-bottom: 24px;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1023px) {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 420px) {
     grid-template-columns: 1fr;
   }
 }
@@ -72,6 +72,11 @@ defineProps<{
   align-items: center;
   gap: 16px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+
+  @media (max-width: 767px) {
+    padding: 14px;
+    gap: 12px;
+  }
 }
 
 .stat-icon {
@@ -111,6 +116,10 @@ defineProps<{
   font-weight: 700;
   color: var(--color-text-primary);
   line-height: 1.2;
+
+  @media (max-width: 767px) {
+    font-size: 18px;
+  }
 }
 
 .stat-label {

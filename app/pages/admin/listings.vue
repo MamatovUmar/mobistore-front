@@ -373,4 +373,20 @@ onMounted(() => {
   gap: 8px;
   flex-wrap: wrap;
 }
+
+@media (max-width: 767px) {
+  .page-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .toolbar-left,
+  .toolbar-right {
+    width: 100%;
+  }
+
+  .toolbar-right .el-button {
+    flex: 1;
+  }
+}
 </style>

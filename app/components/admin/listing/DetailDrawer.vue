@@ -82,6 +82,8 @@ watch(
     currentImageIndex.value = 0;
   }
 );
+
+const { isMobile } = useBreakpoints();
 </script>
 
 <template>
@@ -89,7 +91,7 @@ watch(
     v-model="visible"
     title="Детали объявления"
     direction="rtl"
-    size="600px"
+    :size="isMobile ? '100%' : '600px'"
     class="listing-drawer"
   >
     <template v-if="ad">

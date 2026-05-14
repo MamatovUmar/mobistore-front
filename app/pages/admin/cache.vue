@@ -188,11 +188,11 @@ const handleRefresh = async () => {
   gap: 16px;
   margin-bottom: 24px;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1023px) {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 480px) {
     grid-template-columns: 1fr;
   }
 }
@@ -223,6 +223,8 @@ const handleRefresh = async () => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .section-title {
@@ -266,12 +268,35 @@ const handleRefresh = async () => {
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1023px) {
     grid-template-columns: repeat(2, 1fr);
   }
 
   @media (max-width: 600px) {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .page-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .toolbar-actions {
+    width: 100%;
+
+    .el-button {
+      flex: 1;
+    }
+  }
+
+  .stat-card {
+    padding: 16px;
+  }
+
+  .stat-value {
+    font-size: 22px;
   }
 }
 
