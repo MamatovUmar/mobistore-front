@@ -241,12 +241,20 @@ const handleSearch = () => {
 .search-input {
   width: 320px;
 
-  @media (max-width: 600px) {
+  @media (max-width: 767px) {
     width: 100%;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 767px) {
+  .page-header {
+    margin-bottom: 16px;
+  }
+
+  .page-title {
+    font-size: 22px;
+  }
+
   .page-toolbar {
     flex-direction: column;
     align-items: stretch;
@@ -264,6 +272,10 @@ const handleSearch = () => {
   .toolbar-right {
     justify-content: flex-end;
     flex-wrap: wrap;
+
+    .el-button {
+      flex: 1;
+    }
   }
 }
 </style>

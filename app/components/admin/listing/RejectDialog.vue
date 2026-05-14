@@ -62,13 +62,16 @@ watch(
     }
   }
 );
+
+const { isMobile } = useBreakpoints();
 </script>
 
 <template>
   <el-dialog
     v-model="visible"
     title="Отклонить объявление"
-    width="500px"
+    :width="isMobile ? '95%' : '500px'"
+    :fullscreen="isMobile"
     :close-on-click-modal="false"
     class="reject-dialog"
     @closed="handleClose"

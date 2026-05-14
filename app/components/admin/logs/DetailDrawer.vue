@@ -86,6 +86,8 @@ const formatDate = (date: string) => {
     minute: "2-digit",
   });
 };
+
+const { isMobile } = useBreakpoints();
 </script>
 
 <template>
@@ -93,7 +95,7 @@ const formatDate = (date: string) => {
     v-model="visible"
     title="Детали лога"
     direction="rtl"
-    size="550px"
+    :size="isMobile ? '100%' : '550px'"
     class="log-drawer"
   >
     <template v-if="log">

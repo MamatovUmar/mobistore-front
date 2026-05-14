@@ -72,13 +72,16 @@ watch(
     }
   }
 );
+
+const { isMobile } = useBreakpoints();
 </script>
 
 <template>
   <el-dialog
     v-model="visible"
     title="Изменить статус"
-    width="500px"
+    :width="isMobile ? '95%' : '500px'"
+    :fullscreen="isMobile"
     :close-on-click-modal="false"
     class="status-dialog"
     @closed="handleClose"

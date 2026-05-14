@@ -182,11 +182,11 @@ const recentActivity = ref([
   gap: 20px;
   margin-bottom: 24px;
 
-  @media (max-width: 1200px) {
+  @media (max-width: 1199px) {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 480px) {
     grid-template-columns: 1fr;
   }
 }
@@ -245,7 +245,7 @@ const recentActivity = ref([
   grid-template-columns: 2fr 1fr;
   gap: 20px;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1023px) {
     grid-template-columns: 1fr;
   }
 }
@@ -329,6 +329,20 @@ const recentActivity = ref([
 
   .el-icon {
     margin-right: 8px;
+  }
+}
+
+@media (max-width: 767px) {
+  .stat-card {
+    padding: 16px;
+  }
+
+  .stat-value {
+    font-size: 20px;
+  }
+
+  .activity-item {
+    gap: 10px;
   }
 }
 </style>

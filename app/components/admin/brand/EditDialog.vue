@@ -143,12 +143,15 @@ onUnmounted(() => {
     URL.revokeObjectURL(newLogoPreview.value);
   }
 });
+
+const { isMobile } = useBreakpoints();
 </script>
 
 <template>
   <el-dialog
     :model-value="modelValue"
-    width="520px"
+    :width="isMobile ? '95%' : '520px'"
+    :fullscreen="isMobile"
     :close-on-click-modal="false"
     :show-close="false"
     class="brand-dialog"

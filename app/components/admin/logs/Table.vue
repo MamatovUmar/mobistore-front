@@ -95,6 +95,8 @@ const handlePageChange = (page: number) => {
 const handleSizeChange = (size: number) => {
   emit("update:limit", size);
 };
+
+const { isMobile } = useBreakpoints();
 </script>
 
 <template>
@@ -188,7 +190,9 @@ const handleSizeChange = (size: number) => {
         :page-size="limit"
         :page-sizes="[10, 20, 50, 100]"
         :total="pagination?.total ?? 0"
-        layout="total, sizes, prev, pager, next"
+        :layout="isMobile ? 'prev, pager, next' : 'total, sizes, prev, pager, next'"
+        :pager-count="isMobile ? 5 : 7"
+        :small="isMobile"
         background
         @current-change="handlePageChange"
         @size-change="handleSizeChange"
@@ -294,5 +298,16 @@ const handleSizeChange = (size: number) => {
   display: flex;
   justify-content: flex-end;
   padding-top: 20px;
+}
+
+@media (max-width: 767px) {
+  .logs-table-card .table-pagination {
+    justify-content: center;
+
+    .el-pagination {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
 }
 </style>

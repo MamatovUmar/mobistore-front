@@ -28,6 +28,8 @@ const {
   getModel,
 } = useAdminModels();
 
+const { isMobile } = useBreakpoints();
+
 onMounted(() => {
   fetchModels();
 });
@@ -242,7 +244,7 @@ const resetFormData = () => {
       <el-table-column prop="name" label="Название" min-width="200" sortable />
       <el-table-column prop="brand.name" label="Бренд" width="150" sortable />
 
-      <el-table-column label="Действия" width="180" fixed="right">
+      <el-table-column label="Действия" width="180" :fixed="isMobile ? false : 'right'">
         <template #default="{ row }">
           <el-button-group>
             <el-button
@@ -273,7 +275,9 @@ const resetFormData = () => {
         v-model:current-page="page"
         v-model:page-size="limit"
         :page-sizes="[10, 20, 50, 100]"
-        layout="total, sizes, prev, pager, next"
+        :layout="isMobile ? 'prev, pager, next' : 'total, sizes, prev, pager, next'"
+        :pager-count="isMobile ? 5 : 7"
+        :small="isMobile"
         :total="pagination.total"
       />
     </div>
@@ -282,7 +286,8 @@ const resetFormData = () => {
     <el-dialog
       v-model="editDialogVisible"
       title="Редактирование модели"
-      width="800px"
+      :width="isMobile ? '95%' : '800px'"
+      :fullscreen="isMobile"
       destroy-on-close
       :close-on-click-modal="false"
     >
@@ -301,7 +306,7 @@ const resetFormData = () => {
       v-model="detailDrawerVisible"
       title="Информация о модели"
       direction="rtl"
-      size="800px"
+      :size="isMobile ? '100%' : '800px'"
     >
       <div v-if="selectedModel" class="model-detail">
         <!-- Header with Image -->
@@ -532,7 +537,7 @@ const resetFormData = () => {
 .search-input {
   width: 280px;
 
-  @media (max-width: 600px) {
+  @media (max-width: 767px) {
     width: 100%;
   }
 }
@@ -541,6 +546,47 @@ const resetFormData = () => {
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;
+}
+
+@media (max-width: 767px) {
+  .page-header {
+    margin-bottom: 16px;
+  }
+
+  .page-title {
+    font-size: 22px;
+  }
+
+  .page-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .toolbar-left,
+  .toolbar-right {
+    width: 100%;
+  }
+
+  .toolbar-left {
+    flex-direction: column;
+
+    > * {
+      width: 100% !important;
+    }
+  }
+
+  .toolbar-right .el-button {
+    width: 100%;
+  }
+
+  .pagination-container {
+    justify-content: center;
+
+    :deep(.el-pagination) {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
 }
 
 .no-image {

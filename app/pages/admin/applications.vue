@@ -235,12 +235,20 @@ const handleSizeChange = (newSize: number) => {
 .search-input {
   width: 380px;
 
-  @media (max-width: 600px) {
+  @media (max-width: 767px) {
     width: 100%;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 767px) {
+  .page-header {
+    margin-bottom: 16px;
+  }
+
+  .page-title {
+    font-size: 22px;
+  }
+
   .page-toolbar {
     flex-direction: column;
     align-items: stretch;
@@ -258,6 +266,10 @@ const handleSizeChange = (newSize: number) => {
 
   .toolbar-right {
     justify-content: flex-end;
+
+    .el-button {
+      flex: 1;
+    }
   }
 }
 </style>
