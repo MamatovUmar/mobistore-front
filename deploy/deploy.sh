@@ -11,7 +11,7 @@ ENV="${1:-prod}"
 
 if [ "$ENV" = "dev" ]; then
     IMAGE="ghcr.io/mamatovumar/mobistore-front:dev"
-    BLUE_PORT=3000
+    BLUE_PORT=3004
     GREEN_PORT=3003
     NGINX_UPSTREAM="/etc/nginx/conf.d/mobistore-dev-upstream.conf"
     CONTAINER_PREFIX="mobistore_front_dev"
