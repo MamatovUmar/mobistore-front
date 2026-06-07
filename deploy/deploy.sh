@@ -16,6 +16,7 @@ if [ "$ENV" = "dev" ]; then
     NGINX_UPSTREAM="/etc/nginx/conf.d/mobistore-dev-upstream.conf"
     CONTAINER_PREFIX="mobistore_front_dev"
     PUBLIC_DIR="/var/www/mobistore/front-dev/public"
+    API_DOMAIN="api-dev.mobistore.uz"
 else
     IMAGE="ghcr.io/mamatovumar/mobistore-front:latest"
     BLUE_PORT=3001
@@ -23,6 +24,7 @@ else
     NGINX_UPSTREAM="/etc/nginx/conf.d/mobistore-prod-upstream.conf"
     CONTAINER_PREFIX="mobistore_front_prod"
     PUBLIC_DIR="/var/www/mobistore/front/public"
+    API_DOMAIN="api.mobistore.uz"
 fi
 
 echo "🚀 Deploying $ENV environment..."
@@ -62,6 +64,7 @@ docker run -d \
     --name "$NEW_CONTAINER" \
     --restart unless-stopped \
     -p "$NEW_PORT:3000" \
+    --add-host "$API_DOMAIN:host-gateway" \
     -v "$PUBLIC_DIR:/app/public:ro" \
     "$IMAGE"
 
