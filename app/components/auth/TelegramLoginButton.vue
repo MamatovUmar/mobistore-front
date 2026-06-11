@@ -26,7 +26,6 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import type { TelegramUser } from "~/types/auth";
 import { useRootStore } from "~/store/root";
-import { useCookie } from "#app";
 import { useAuthApi } from "~/composables/useAuthApi";
 import { useI18n } from "vue-i18n";
 
@@ -34,7 +33,7 @@ const { t } = useI18n();
 const localePath = useLocalePath();
 const config = useRuntimeConfig();
 const rootStore = useRootStore();
-const tokenCookie = useCookie("token", { maxAge: 60 * 60 * 24 * 7 });
+const tokenCookie = useTokenCookie();
 const { telegramLogin } = useAuthApi();
 
 const botName = config.public.telegramBotName;

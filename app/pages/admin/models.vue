@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import DOMPurify from "isomorphic-dompurify";
 import { Search, Refresh, Edit, Delete, View } from "@element-plus/icons-vue";
 import { useAdminModels } from "@/composables/useAdminModels";
 import type { IModel, IModelCreatePayload, IModelImage } from "@/types/model";
@@ -43,6 +44,11 @@ const actionLoading = ref(false);
 
 // Edit State
 const selectedModel = ref<IModel | null>(null);
+
+// Спецификации приходят как HTML из парсера — санитизируем перед v-html
+const sanitizedSpecs = computed(() =>
+  selectedModel.value?.specs ? DOMPurify.sanitize(selectedModel.value.specs) : ""
+);
 const currentGalleryImages = ref<IModelImage[]>([]);
 
 // Brand selection
@@ -317,7 +323,7 @@ const resetFormData = () => {
           </el-tag>
         </div>
 
-        <div class="admin-specs-list" v-html="selectedModel.specs"></div>
+        <div class="admin-specs-list" v-html="sanitizedSpecs"></div>
       </div>
     </el-drawer>
   </div>

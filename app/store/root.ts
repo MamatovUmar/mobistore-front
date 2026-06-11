@@ -8,7 +8,7 @@ import { useLocalePath } from "#i18n";
 
 export const useRootStore = defineStore("root", () => {
   const { $api } = useNuxtApp();
-  const tokenCookie = useCookie("token", { maxAge: 60 * 60 * 24 * 7 });
+  const tokenCookie = useTokenCookie();
   const localePath = useLocalePath();
 
   const user = ref<IUser>();
