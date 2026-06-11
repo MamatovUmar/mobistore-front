@@ -1,22 +1,18 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import ModelSpecsModal from "./ModelSpecsModal.vue";
+import { Tickets } from "@element-plus/icons-vue";
 import type { IListing } from '~/types/ads';
 
 const { listing } = defineProps<{
   listing: IListing;
 }>();
 
+const emit = defineEmits<{
+  "open-specs": [];
+}>();
+
 const { t } = useI18n();
 
-// Пример данных модели - в реальном приложении придут из API
 const modelData = computed(() => listing.model);
-
-const showModelSpecs = ref(false);
-
-const openModelSpecs = () => {
-  showModelSpecs.value = true;
-};
 
 // Основные характеристики для отображения на странице
 const mainSpecs = computed(() => [
@@ -51,9 +47,6 @@ const mainSpecs = computed(() => [
   <div v-if="listing" class="specs-section">
     <div class="specs-header">
       <h2 class="section-title">{{ t('listingDetails.characteristics') }}</h2>
-      <el-button v-if="listing.model" type="info" plain @click="openModelSpecs">
-        {{ t('listingDetails.fullCharacteristics') }}
-      </el-button>
     </div>
 
     <div class="specs-grid">
@@ -63,13 +56,16 @@ const mainSpecs = computed(() => [
       </div>
     </div>
 
-    <!-- Модалка с полными характеристиками -->
-    <ModelSpecsModal
-      v-if="modelData && listing.brand"
-      v-model:model-visible="showModelSpecs"
-      :model-data="modelData"
-      :brand="listing.brand"
-    />
+    <!-- Контекстный переход к полным характеристикам модели -->
+    <el-button
+      v-if="modelData"
+      class="full-specs-btn"
+      size="large"
+      @click="emit('open-specs')"
+    >
+      <el-icon class="full-specs-btn__icon"><Tickets /></el-icon>
+      {{ t('listingDetails.fullCharacteristics') }}
+    </el-button>
   </div>
 </template>
 
@@ -122,6 +118,26 @@ const mainSpecs = computed(() => [
   font-weight: 600;
   color: var(--color-text-primary);
   line-height: 1.4;
+}
+
+.full-specs-btn {
+  width: 100%;
+  margin-top: 20px;
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+  background: transparent;
+  font-weight: 600;
+
+  &:hover,
+  &:focus {
+    background: var(--color-primary);
+    color: var(--color-bg-primary);
+    border-color: var(--color-primary);
+  }
+}
+
+.full-specs-btn__icon {
+  margin-right: 8px;
 }
 
 @media (max-width: 768px) {
