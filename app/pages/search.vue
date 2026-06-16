@@ -546,7 +546,7 @@ definePageMeta({
 
   .filters-section {
     position: sticky;
-    top: 80px;
+    top: 20px;
   }
 
   .results-section {

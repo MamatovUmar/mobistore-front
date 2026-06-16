@@ -132,7 +132,7 @@ watch(
       <h3>{{ t('search.filters.title') }}</h3>
     </div>
 
-    <el-form :model="filters" label-position="top" size="large">
+    <el-form :model="filters" label-position="top">
       <el-form-item :label="t('search.filters.region')">
         <RegionAutocompletes
           v-model="filters.regionId"
@@ -246,8 +246,8 @@ watch(
 
       <el-button
         size="large"
-        @click="resetFilters"
         class="mt-20 w-full mobile-clear"
+        @click="resetFilters"
       >
         {{ t('search.filters.clear') }}
       </el-button>
