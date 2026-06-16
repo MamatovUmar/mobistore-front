@@ -136,6 +136,7 @@ watch(
       <el-form-item :label="t('search.filters.region')">
         <RegionAutocompletes
           v-model="filters.regionId"
+          size="default"
           :init-data="defaults?.region"
         />
       </el-form-item>
@@ -143,6 +144,7 @@ watch(
       <el-form-item :label="t('search.filters.city')">
         <CityAutocompletes
           v-model="filters.cityId"
+          size="default"
           :region-id="filters.regionId"
           :init-data="defaults?.city"
         />
@@ -151,6 +153,7 @@ watch(
       <el-form-item :label="t('search.filters.brand')">
         <BrandAutocomplete
           v-model="filters.brandId"
+          size="default"
           :init-data="defaults?.brand"
         />
       </el-form-item>
@@ -159,6 +162,7 @@ watch(
         <ModelAutocomplete
           v-model="filters.modelId"
           :brand-id="filters.brandId"
+          size="default"
           :init-data="defaults?.model"
         />
       </el-form-item>

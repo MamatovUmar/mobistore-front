@@ -10,7 +10,7 @@ interface Props {
   brandId?: number | null;
   initData?: IModel;
   other?: boolean;
-  size?: "large" | "small";
+  size?: "large" | "small" | "default";
 }
 
 const props = defineProps<Props>();

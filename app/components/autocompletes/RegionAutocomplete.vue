@@ -6,7 +6,7 @@ import type { IRegion } from "~/types/place";
 interface Props {
   placeholder?: string;
   initData?: IRegion;
-  size?: "large" | "small";
+  size?: "large" | "small" | "default";
 }
 
 const props = defineProps<Props>();

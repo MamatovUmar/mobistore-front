@@ -7,7 +7,7 @@ interface Props {
   placeholder?: string;
   regionId?: number;
   initData?: ICity;
-  size?: "large" | "small";
+  size?: "large" | "small" | "default";
 }
 
 const props = defineProps<Props>();

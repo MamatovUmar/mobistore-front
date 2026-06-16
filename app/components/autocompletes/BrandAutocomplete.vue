@@ -7,7 +7,7 @@ const OTHER_BRAND_VALUE = -1;
 
 interface Props {
   placeholder?: string;
-  size?: "large" | "small";
+  size?: "large" | "small" | "default";
   initData?: IBrand;
   other?: boolean;
 }
