@@ -103,6 +103,8 @@ const handleCreateAd = () => {
         <div class="header-actions mobile-only">
           <LanguageSwitcher/>
 
+          <CurrencySwitcher/>
+
           <el-button
             circle
             class="action-btn burger-btn"
