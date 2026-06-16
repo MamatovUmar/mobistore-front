@@ -594,6 +594,10 @@ const formatPrice = (price?: number, currency?: string) => {
   display: flex;
   flex-direction: column;
   position: relative;
+  // Ограничиваем высоту (как у .chat-panel), чтобы длинный список диалогов
+  // скроллился внутри панели, а не растягивал всю страницу.
+  max-height: 600px;
+  min-height: 0;
 
   .mobile-overlay {
     display: none;
@@ -606,6 +610,7 @@ const formatPrice = (price?: number, currency?: string) => {
     width: 85%;
     max-width: 340px;
     height: 100vh;
+    max-height: none;
     z-index: 1000;
     transform: translateX(-100%);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -747,7 +752,8 @@ const formatPrice = (price?: number, currency?: string) => {
   list-style: none;
   margin: 0;
   padding: 0;
-  max-height: 100%;
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
 }
 
