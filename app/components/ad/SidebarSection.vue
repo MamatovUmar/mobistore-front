@@ -38,9 +38,11 @@ const contacts = ref<IListingContacts>();
 const favorites = computed(() => root.user?.favorites || []);
 
 // Форматирование цены
-const formattedPrice = computed(() => {
-  return new Intl.NumberFormat("ru-RU").format(listing.price);
-});
+// Цена в выбранной пользователем валюте (convertPrice сам форматирует и
+// добавляет символ/«сум», поэтому listing.currency в шаблоне больше не нужен)
+const formattedPrice = computed(() =>
+  root.convertPrice(listing.price, listing.currency)
+);
 
 const isMy = computed(() => listing.user_id === root.user?.id);
 
@@ -128,7 +130,7 @@ const publishListing = catcher(
 
     <h1 class="listing-title">{{ listing.title }}</h1>
 
-    <div class="listing-price">{{ formattedPrice }} {{ listing.currency }}</div>
+    <div class="listing-price">{{ formattedPrice }}</div>
 
     <div v-if="!isArchived" class="listing-actions">
       <el-button

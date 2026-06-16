@@ -10,13 +10,10 @@ import LanguageSwitcher from "./header/LanguageSwitcher.vue";
 import CurrencySwitcher from "./header/CurrencySwitcher.vue";
 
 
-const {fetchLatestRates} = useRates();
 const rootStore = useRootStore();
 const router = useRouter();
 const {t} = useI18n();
 const localePath = useLocalePath();
-
-fetchLatestRates();
 
 const showAuthDialog = ref(false);
 const showMobileDrawer = ref(false);
