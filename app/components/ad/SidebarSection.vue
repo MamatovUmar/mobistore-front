@@ -37,16 +37,6 @@ const contacts = ref<IListingContacts>();
 
 const favorites = computed(() => root.user?.favorites || []);
 
-// Цена в выбранной пользователем валюте (convertPrice сам форматирует и
-// добавляет символ/«сум», поэтому listing.currency в шаблоне больше не нужен).
-// convertPrice — экшен Pinia-стора, и его внутренние чтения selectedCurrency/rates
-// computed-ом НЕ отслеживаются, поэтому при переключении валюты цена не
-// пересчитывалась. Явно зависим от стора, чтобы пересчёт срабатывал.
-const formattedPrice = computed(() => {
-  void root.selectedCurrency;
-  void root.rates;
-  return root.convertPrice(listing.price, listing.currency);
-});
 
 const isMy = computed(() => listing.user_id === root.user?.id);
 
@@ -134,7 +124,13 @@ const publishListing = catcher(
 
     <h1 class="listing-title">{{ listing.title }}</h1>
 
-    <div class="listing-price">{{ formattedPrice }}</div>
+    <!-- convertPrice вызываем прямо в шаблоне (как в AdCard): render-эффект
+         надёжно отслеживает selectedCurrency/rates, и цена реактивно
+         пересчитывается при переключении валюты. Через computed реактивность
+         терялась (convertPrice — экшен Pinia-стора). -->
+    <div class="listing-price">
+      {{ root.convertPrice(listing.price, listing.currency) }}
+    </div>
 
     <div v-if="!isArchived" class="listing-actions">
       <el-button
