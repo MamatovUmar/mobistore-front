@@ -266,7 +266,6 @@ watch(
   border: 1px solid var(--color-border-light);
   position: sticky;
   top: 80px;
-  max-height: calc(100vh - 120px);
   overflow-y: auto;
 
   /* Кастомный скроллбар */
