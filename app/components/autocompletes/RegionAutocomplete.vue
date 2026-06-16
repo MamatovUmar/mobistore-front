@@ -6,6 +6,7 @@ import type { IRegion } from "~/types/place";
 interface Props {
   placeholder?: string;
   initData?: IRegion;
+  size?: "large" | "small";
 }
 
 const props = defineProps<Props>();
@@ -46,7 +47,7 @@ watch(() => props.initData, (newData) => {
     :loading="placesStore.regionsLoading"
     filterable
     clearable
-    size="large"
+    :size="size || 'large'"
     @change="handleChange"
   >
     <el-option

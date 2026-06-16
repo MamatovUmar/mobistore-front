@@ -245,7 +245,6 @@ watch(
       </div>
 
       <el-button
-        size="large"
         class="mt-20 w-full mobile-clear"
         @click="resetFilters"
       >

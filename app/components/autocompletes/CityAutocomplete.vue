@@ -7,6 +7,7 @@ interface Props {
   placeholder?: string;
   regionId?: number;
   initData?: ICity;
+  size?: "large" | "small";
 }
 
 const props = defineProps<Props>();
@@ -94,7 +95,7 @@ watch(() => props.regionId, (newRegionId, oldRegionId) => {
     filterable
     reserve-keyword
     clearable
-    size="large"
+    :size="size || 'large'"
     @change="handleChange"
   >
     <el-option

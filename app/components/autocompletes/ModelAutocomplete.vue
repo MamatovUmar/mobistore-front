@@ -10,6 +10,7 @@ interface Props {
   brandId?: number | null;
   initData?: IModel;
   other?: boolean;
+  size?: "large" | "small";
 }
 
 const props = defineProps<Props>();
@@ -109,7 +110,7 @@ watch(() => props.initData, (newData) => {
     remote
     clearable
     :remote-method="remoteSearch"
-    size="large"
+    :size="size || 'large'"
     @change="handleChange"
   >
     <el-option
