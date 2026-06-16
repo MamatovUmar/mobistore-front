@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { Fold, Expand, Bell, User, SwitchButton } from "@element-plus/icons-vue";
+import { Fold, Expand, User, SwitchButton } from "@element-plus/icons-vue";
 import { useRootStore } from "~/store/root";
 import type { UserRole } from "~/types/admin-staff";
 
 const props = defineProps<{
   collapsed: boolean;
+  mobileOpen: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -12,6 +13,7 @@ const emit = defineEmits<{
 }>();
 
 const root = useRootStore();
+const { isTabletOrSmaller } = useBreakpoints();
 
 const role: Partial<Record<UserRole, string>> = {
   admin: 'Администратор',
@@ -26,9 +28,20 @@ const getPageTitle = () => {
     "/admin/listings": "Объявления",
     "/admin/logs": "Логи",
     "/admin/cache": "Кеш",
+    "/admin/staff": "Сотрудники",
+    "/admin/applications": "Заявки",
+    "/admin/brands": "Бренды",
+    "/admin/models": "Модели",
   };
   return titles[route.path] || "Админ-панель";
 };
+
+const burgerIcon = computed(() => {
+  if (isTabletOrSmaller.value) {
+    return props.mobileOpen ? Fold : Expand;
+  }
+  return props.collapsed ? Expand : Fold;
+});
 
 const handleCommand = (command: string) => {
   if (command === "logout") {
@@ -42,7 +55,7 @@ const handleCommand = (command: string) => {
     <div class="header-left">
       <el-button
         class="collapse-btn"
-        :icon="collapsed ? Expand : Fold"
+        :icon="burgerIcon"
         text
         @click="emit('toggle-sidebar')"
       />
@@ -97,6 +110,7 @@ const handleCommand = (command: string) => {
   display: flex;
   align-items: center;
   gap: 16px;
+  min-width: 0;
 }
 
 .collapse-btn {
@@ -113,6 +127,9 @@ const handleCommand = (command: string) => {
   font-weight: 600;
   color: var(--color-text-primary);
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .header-right {
@@ -164,9 +181,32 @@ const handleCommand = (command: string) => {
   line-height: 1.2;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1023px) {
+  .admin-header {
+    padding: 0 16px;
+  }
+
   .user-details {
     display: none;
+  }
+
+  .user-info {
+    padding: 4px;
+  }
+}
+
+@media (max-width: 767px) {
+  .admin-header {
+    height: 56px;
+    padding: 0 12px;
+  }
+
+  .page-title {
+    font-size: 16px;
+  }
+
+  .header-left {
+    gap: 8px;
   }
 }
 </style>

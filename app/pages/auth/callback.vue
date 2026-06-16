@@ -8,7 +8,7 @@ definePageMeta({
 
 const route = useRoute();
 const rootStore = useRootStore();
-const tokenCookie = useCookie("token", { maxAge: 60 * 60 * 24 * 7 });
+const tokenCookie = useTokenCookie();
 const { t } = useI18n();
 const localePath = useLocalePath();
 

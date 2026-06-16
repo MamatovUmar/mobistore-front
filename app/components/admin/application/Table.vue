@@ -45,6 +45,8 @@ const truncateText = (text: string, maxLength: number = 50) => {
   if (text.length <= maxLength) return text;
   return text.substring(0, maxLength) + "...";
 };
+
+const { isMobile } = useBreakpoints();
 </script>
 
 <template>
@@ -124,7 +126,7 @@ const truncateText = (text: string, maxLength: number = 50) => {
         </template>
       </el-table-column>
 
-      <el-table-column label="Действия" width="100" fixed="right">
+      <el-table-column label="Действия" width="100" :fixed="isMobile ? false : 'right'">
         <template #default="{ row }">
           <div class="actions-cell" @click.stop>
             <el-button-group>
@@ -155,7 +157,9 @@ const truncateText = (text: string, maxLength: number = 50) => {
         :page-size="limit"
         :page-sizes="[10, 20, 50, 100]"
         :total="pagination.total"
-        layout="total, sizes, prev, pager, next"
+        :layout="isMobile ? 'prev, pager, next' : 'total, sizes, prev, pager, next'"
+        :pager-count="isMobile ? 5 : 7"
+        :small="isMobile"
         background
         @current-change="handlePageChange"
         @size-change="handleSizeChange"
@@ -246,5 +250,16 @@ const truncateText = (text: string, maxLength: number = 50) => {
   display: flex;
   justify-content: flex-end;
   padding-top: 20px;
+}
+
+@media (max-width: 767px) {
+  .table-pagination {
+    justify-content: center;
+
+    :deep(.el-pagination) {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
 }
 </style>

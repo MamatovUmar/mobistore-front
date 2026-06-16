@@ -71,6 +71,8 @@ const getLocation = (user: IAdminUser) => {
   if (user.city?.name_ru) parts.push(user.city.name_ru);
   return parts.join(", ") || "Не указано";
 };
+
+const { isMobile } = useBreakpoints();
 </script>
 
 <template>
@@ -78,7 +80,7 @@ const getLocation = (user: IAdminUser) => {
     v-model="visible"
     title="Информация о пользователе"
     direction="rtl"
-    size="500px"
+    :size="isMobile ? '100%' : '500px'"
     class="user-drawer"
   >
     <template v-if="user">

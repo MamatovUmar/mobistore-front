@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import DOMPurify from "isomorphic-dompurify";
 import {
   User,
   Location,
@@ -54,6 +55,11 @@ const formatDate = (date: string | null) => {
   });
 };
 
+// Описание — HTML из rich-text-редактора пользователя, санитизируем перед v-html
+const sanitizedDescription = computed(() =>
+  props.ad?.description ? DOMPurify.sanitize(props.ad.description) : ""
+);
+
 const currentImageIndex = ref(0);
 
 const images = computed(() => props.ad?.images || []);
@@ -82,6 +88,8 @@ watch(
     currentImageIndex.value = 0;
   }
 );
+
+const { isMobile } = useBreakpoints();
 </script>
 
 <template>
@@ -89,7 +97,7 @@ watch(
     v-model="visible"
     title="Детали объявления"
     direction="rtl"
-    size="600px"
+    :size="isMobile ? '100%' : '600px'"
     class="listing-drawer"
   >
     <template v-if="ad">
@@ -153,7 +161,7 @@ watch(
         <!-- Description -->
         <div class="detail-section">
           <h4 class="section-title">Описание</h4>
-          <div class="listing-description" v-html="ad.description"></div>
+          <div class="listing-description" v-html="sanitizedDescription"></div>
         </div>
 
         <!-- Specs -->

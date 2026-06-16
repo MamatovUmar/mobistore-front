@@ -3,7 +3,6 @@ import { ref, reactive } from "vue";
 import { User, Lock, ArrowLeft } from "@element-plus/icons-vue";
 import type { IAuthResponse } from "~/types/auth";
 import { useRootStore } from "~/store/root";
-import { useCookie } from "#app";
 import TelegramLoginButton from "~/components/auth/TelegramLoginButton.vue";
 
 definePageMeta({
@@ -24,7 +23,7 @@ useSeoMeta({
 
 const { $api } = useNuxtApp();
 const rootStore = useRootStore();
-const tokenCookie = useCookie("token", { maxAge: 60 * 60 * 24 * 7 });
+const tokenCookie = useTokenCookie();
 
 const formRef = ref();
 const loading = ref(false);

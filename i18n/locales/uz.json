@@ -552,7 +552,11 @@
       "ram": "Operativ xotira",
       "storage": "Ichki xotira"
     },
-    "similarListings": "O'xshash e'lonlar"
+    "similarListings": "O'xshash e'lonlar",
+    "specsCard": {
+      "label": "Model xususiyatlari",
+      "cta": "Barcha xususiyatlarni ko'rish"
+    }
   },
   "chat": {
     "placeholder": "Xabar yozing...",

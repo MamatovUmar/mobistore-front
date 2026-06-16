@@ -109,6 +109,8 @@ const confirmRoleChange = () => {
   }
   showRoleDialog.value = false;
 };
+
+const { isMobile } = useBreakpoints();
 </script>
 
 <template>
@@ -116,7 +118,7 @@ const confirmRoleChange = () => {
     v-model="visible"
     title="Информация о сотруднике"
     direction="rtl"
-    size="500px"
+    :size="isMobile ? '100%' : '500px'"
     class="staff-drawer"
   >
     <template v-if="staff">
@@ -240,7 +242,8 @@ const confirmRoleChange = () => {
   <el-dialog
     v-model="showRoleDialog"
     title="Изменение роли"
-    width="400px"
+    :width="isMobile ? '95%' : '400px'"
+    :fullscreen="isMobile"
     :close-on-click-modal="false"
   >
     <div class="role-dialog-content">

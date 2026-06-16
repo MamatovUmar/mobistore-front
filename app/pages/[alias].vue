@@ -4,6 +4,8 @@ import InfoSection from "~/components/ad/InfoSection.vue";
 import CharacterSection from "~/components/ad/CharacterSection.vue";
 import SellerSection from "~/components/ad/SellerSection.vue";
 import SidebarSection from "~/components/ad/SidebarSection.vue";
+import ModelSpecsCard from "~/components/ad/ModelSpecsCard.vue";
+import ModelSpecsModal from "~/components/ad/ModelSpecsModal.vue";
 import ListingChat from "~/components/ad/ListingChat.vue";
 import type { IListing } from "~/types/ads";
 import type { IBaseResponse } from "~/types";
@@ -28,6 +30,7 @@ const {
 
 const listing = computed(() => data.value?.data);
 const showChat = ref(false);
+const showModelSpecs = ref(false);
 
 const config = useRuntimeConfig();
 const siteUrl = config.public.siteUrl || "https://mobistore.uz";
@@ -160,10 +163,13 @@ const statusAlert = computed(() => {
           <div v-if="listing">
             <AdGallery :listing="listing" />
             <InfoSection :listing="listing" />
-            <CharacterSection :listing="listing" />
+            <CharacterSection
+              :listing="listing"
+              @open-specs="showModelSpecs = true"
+            />
             <SellerSection :listing="listing" />
           </div>
-          <div v-if="listing">
+          <div v-if="listing" class="sidebar-col">
             <SidebarSection
               :listing="listing"
               :is-archived="
@@ -172,8 +178,21 @@ const statusAlert = computed(() => {
               @update="handleUpdate"
               @open-chat="openChat"
             />
+            <ModelSpecsCard
+              v-if="listing.model"
+              :model="listing.model"
+              :brand="listing.brand"
+              @open="showModelSpecs = true"
+            />
           </div>
         </div>
+
+        <ModelSpecsModal
+          v-if="listing.model && listing.brand"
+          v-model:model-visible="showModelSpecs"
+          :model-data="listing.model"
+          :brand="listing.brand"
+        />
 
         <ListingChat
           v-if="root.user"
@@ -207,6 +226,27 @@ const statusAlert = computed(() => {
 
   .breadcrumbs {
     padding: 20px 0;
+  }
+
+  .sidebar-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    // Липким делаем весь столбец как единый блок, а внутренний sticky
+    // у SidebarSection гасим — иначе карточка характеристик уезжает под него.
+    align-self: start;
+    position: sticky;
+    top: 10px;
+
+    :deep(.info-section) {
+      position: static;
+      top: auto;
+    }
+
+    @media (max-width: 1024px) {
+      position: static;
+      top: auto;
+    }
   }
 
   .listing-grid {

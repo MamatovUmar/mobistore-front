@@ -100,13 +100,16 @@ const getFullName = (user: IAdminUser) => {
 const canSubmit = computed(() => {
   return selectedUser.value !== null;
 });
+
+const { isMobile } = useBreakpoints();
 </script>
 
 <template>
   <el-dialog
     v-model="visible"
     title="Добавить сотрудника"
-    width="550px"
+    :width="isMobile ? '95%' : '550px'"
+    :fullscreen="isMobile"
     :close-on-click-modal="false"
     @close="handleClose"
   >
