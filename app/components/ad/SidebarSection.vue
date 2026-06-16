@@ -37,12 +37,16 @@ const contacts = ref<IListingContacts>();
 
 const favorites = computed(() => root.user?.favorites || []);
 
-// Форматирование цены
 // Цена в выбранной пользователем валюте (convertPrice сам форматирует и
-// добавляет символ/«сум», поэтому listing.currency в шаблоне больше не нужен)
-const formattedPrice = computed(() =>
-  root.convertPrice(listing.price, listing.currency)
-);
+// добавляет символ/«сум», поэтому listing.currency в шаблоне больше не нужен).
+// convertPrice — экшен Pinia-стора, и его внутренние чтения selectedCurrency/rates
+// computed-ом НЕ отслеживаются, поэтому при переключении валюты цена не
+// пересчитывалась. Явно зависим от стора, чтобы пересчёт срабатывал.
+const formattedPrice = computed(() => {
+  void root.selectedCurrency;
+  void root.rates;
+  return root.convertPrice(listing.price, listing.currency);
+});
 
 const isMy = computed(() => listing.user_id === root.user?.id);
 
