@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Phone, Message, Location } from "@element-plus/icons-vue";
+import { Phone, Location, ChatDotRound } from "@element-plus/icons-vue";
 
 const { t } = useI18n();
 const localePath = useLocalePath();
@@ -56,8 +56,13 @@ const localePath = useLocalePath();
               <span>+998 71 123 45 67</span>
             </li> -->
             <li>
-              <el-icon><Message /></el-icon>
-              <span>info@mobistore.uz</span>
+              <el-icon><ChatDotRound /></el-icon>
+              <a
+                href="https://t.me/mobistore_help"
+                target="_blank"
+                rel="noopener"
+                class="contact-link"
+              >@mobistore_help</a>
             </li>
             <li>
               <el-icon><Location /></el-icon>
@@ -199,6 +204,16 @@ const localePath = useLocalePath();
     .el-icon {
       color: #3b82f6;
       font-size: 18px;
+    }
+  }
+
+  .contact-link {
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: #3b82f6;
     }
   }
 }
