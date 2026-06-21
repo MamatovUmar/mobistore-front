@@ -267,6 +267,9 @@ onMounted(() => {
   padding: 4px 2px 12px;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+  @media (max-width: 1024px) {
+    max-width: calc(100vw - 95px);
+  }
 
   &::-webkit-scrollbar {
     height: 8px;
