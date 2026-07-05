@@ -56,6 +56,15 @@ const validateImages = (rule: any, value: any, callback: any) => {
   }
 };
 
+const validateDescription = (rule: any, value: any, callback: any) => {
+  // Проверяем длину реального текста, а не сырого HTML (пустой редактор = <p><br></p>)
+  if (stripHtml(form.description || "").length < 10) {
+    callback(new Error(t("createListing.validation.description")));
+  } else {
+    callback();
+  }
+};
+
 const validateBrand = (rule: any, value: any, callback: any) => {
   if (!form.brand_id && !form.custom_brand) {
     callback(new Error(t("createListing.validation.brand")));
@@ -80,13 +89,7 @@ const rules = computed<FormRules<IListingForm & { images?: any }>>(() => ({
       trigger: "blur",
     },
   ],
-  description: [
-    {
-      required: true,
-      message: t("createListing.validation.description"),
-      trigger: "blur",
-    },
-  ],
+  description: [{ validator: validateDescription, trigger: "blur" }],
   region_id: [
     {
       required: true,
