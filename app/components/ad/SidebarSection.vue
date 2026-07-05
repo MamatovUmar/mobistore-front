@@ -100,6 +100,10 @@ const handleMessage = () => {
 
 const publishListing = catcher(
   async () => {
+    if (!listing.images?.length) {
+      ElMessage.error(t("createListing.validation.images"));
+      return;
+    }
     publishLoading.value = true;
     await changeStatus(listing.id, ListingStatus.MODERATION);
     emit("update");

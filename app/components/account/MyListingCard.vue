@@ -34,6 +34,13 @@ const handleMenuAction = async (action: string) => {
       navigateTo(localePath(`/account/listings/edit/${props.listing.id}`));
       break;
     default:
+      if (
+        action === ListingStatus.MODERATION &&
+        !props.listing.images?.length
+      ) {
+        ElMessage.error(t("createListing.validation.images"));
+        break;
+      }
       await changeStatus(props.listing.id, action as ListingStatus);
       emit("statusChange");
       break;
