@@ -233,7 +233,8 @@
       "price": "Narxni kiriting",
       "state": "Holatini tanlang",
       "success": "E'lon muvaffaqiyatli yaratildi",
-      "imageUploadError": "Rasmlarni yuklashda xatolik yuz berdi"
+      "imageUploadError": "Rasmlarni yuklashda xatolik yuz berdi",
+      "imageFormat": "Yaroqsiz format. Faqat JPEG, PNG va WebP ruxsat etilgan"
     }
   },
   "components": {
@@ -898,6 +899,7 @@
       "messages": {
         "loadError": "E'lonni yuklashda xatolik",
         "updateSuccess": "E'lon muvaffaqiyatli yangilandi",
+        "updateError": "E'lonni yangilashda xatolik",
         "imageUploadSuccess": "Rasmlar muvaffaqiyatli yuklandi",
         "imageUploadError": "Rasmlarni yuklashda xatolik",
         "imageDeleteSuccess": "Rasm o'chirildi",

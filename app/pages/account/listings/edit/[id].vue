@@ -278,7 +278,12 @@ const updateListing = catcher(
     if (response?.status) {
       // Загружаем новые изображения, если есть
       if (fileList.value.length > 0) {
-        await saveImages(adId.value);
+        const uploaded = await uploadImages(adId.value);
+        if (!uploaded) {
+          // Оставляем пользователя на странице, чтобы загрузить фото снова
+          loading.value = false;
+          return;
+        }
       }
       ElMessage.success(t("account.editListing.messages.updateSuccess"));
       navigateTo(localePath("/account/listings"));
@@ -287,25 +292,23 @@ const updateListing = catcher(
   },
   (e: any) => {
     loading.value = false;
-    const details = e?.response?._data?.details ?? [];
-    details?.forEach((detail: any) => {
-      ElMessage.error(detail.errors?.join("\n"));
-    });
+    ElMessage.error(getErrorMessage(e, t("account.editListing.messages.updateError")));
   }
 );
 
-// Сохранение новых изображений
-const saveImages = catcher(
-  async (entityId: number | undefined) => {
-    if (!entityId || fileList.value.length === 0) {
-      return;
-    }
+// Загрузка новых изображений (со сжатием). Возвращает true при успехе.
+const uploadImages = async (entityId: number | undefined): Promise<boolean> => {
+  if (!entityId || fileList.value.length === 0) {
+    return true;
+  }
 
+  try {
     const formData = new FormData();
 
-    fileList.value.forEach((file) => {
-      formData.append("images", file.raw);
-    });
+    for (const file of fileList.value) {
+      const compressed = await compressImage(file.raw);
+      formData.append("images", compressed, compressed.name || file.name);
+    }
 
     formData.append("folder", ImageFolder.AD);
     formData.append("entityType", EntityType.AD);
@@ -319,12 +322,14 @@ const saveImages = catcher(
     if (response?.status) {
       ElMessage.success(t("account.editListing.messages.imageUploadSuccess"));
     }
-  },
-  (e: any) => {
-    ElMessage.error(t("account.editListing.messages.imageUploadError"));
-    console.error("Upload error:", e);
+    return true;
+  } catch (e: any) {
+    ElMessage.error(
+      getErrorMessage(e, t("account.editListing.messages.imageUploadError"))
+    );
+    return false;
   }
-);
+};
 
 // Удаление существующего изображения
 const deleteImage = catcher(
@@ -349,7 +354,15 @@ const deleteImage = catcher(
   }
 );
 
+const uploadRef = ref();
+
 const handleFileChange = (file: any, fileListData: any[]) => {
+  // Блокируем недопустимые форматы (HEIC и пр.)
+  if (file.raw && !isAllowedImage(file.raw)) {
+    ElMessage.error(t("createListing.validation.imageFormat"));
+    uploadRef.value?.handleRemove(file);
+    return;
+  }
   fileList.value = fileListData;
   form.images = fileListData;
   formRef.value?.validateField("images");
@@ -734,13 +747,14 @@ fetchAd();
               prop="images"
             >
               <el-upload
+                ref="uploadRef"
                 class="upload-demo"
                 drag
                 :auto-upload="false"
                 :limit="8 - existingImages.length"
                 :on-change="handleFileChange"
                 :on-remove="handleFileRemove"
-                accept="image/*"
+                accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
                 multiple
               >
                 <el-icon class="el-icon--upload"><upload-filled /></el-icon>
