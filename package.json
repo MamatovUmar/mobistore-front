@@ -21,6 +21,7 @@
     "@nuxtjs/i18n": "10.2.1",
     "@pinia/nuxt": "0.11.2",
     "@vueup/vue-quill": "^1.2.0",
+    "browser-image-compression": "^2.0.2",
     "dayjs": "^1.11.20",
     "element-plus": "^2.11.5",
     "isomorphic-dompurify": "^3.16.0",

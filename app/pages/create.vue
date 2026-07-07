@@ -56,6 +56,15 @@ const validateImages = (rule: any, value: any, callback: any) => {
   }
 };
 
+const validateDescription = (rule: any, value: any, callback: any) => {
+  // Проверяем длину реального текста, а не сырого HTML (пустой редактор = <p><br></p>)
+  if (stripHtml(form.description || "").length < 10) {
+    callback(new Error(t("createListing.validation.description")));
+  } else {
+    callback();
+  }
+};
+
 const validateBrand = (rule: any, value: any, callback: any) => {
   if (!form.brand_id && !form.custom_brand) {
     callback(new Error(t("createListing.validation.brand")));
@@ -80,13 +89,7 @@ const rules = computed<FormRules<IListingForm & { images?: any }>>(() => ({
       trigger: "blur",
     },
   ],
-  description: [
-    {
-      required: true,
-      message: t("createListing.validation.description"),
-      trigger: "blur",
-    },
-  ],
+  description: [{ validator: validateDescription, trigger: "blur" }],
   region_id: [
     {
       required: true,
@@ -172,35 +175,40 @@ const createListing = catcher(
       body: payload,
     });
     if (response?.status) {
-      ElMessage.success(t("createListing.validation.success"));
-      await saveImages(response.data?.id);
-      navigateTo(localePath(`/${response.data?.alias}`));
+      const uploaded = await uploadImages(response.data?.id);
+      if (uploaded) {
+        ElMessage.success(t("createListing.validation.success"));
+        navigateTo(localePath(`/${response.data?.alias}`));
+      } else {
+        // Объявление создано как черновик, но фото не загрузились —
+        // ведём в редактирование, чтобы пользователь загрузил снова.
+        navigateTo(localePath(`/account/listings/edit/${response.data?.id}`));
+      }
     }
     loading.value = false;
   },
   (e: any) => {
     loading.value = false;
-    const details = e?.response?._data?.details ?? [];
-    details?.forEach((detail: any) => {
-      ElMessage.error(detail.errors?.join("\n"));
-    });
+    ElMessage.error(getErrorMessage(e, t("createListing.validation.required")));
   }
 );
 
-const saveImages = catcher(
-  async (entityId: number | undefined) => {
-    if (!entityId || fileList.value.length === 0) {
-      return;
-    }
+// Загружает изображения объявления (со сжатием на клиенте).
+// Возвращает true при успехе, false — если загрузка не удалась.
+const uploadImages = async (entityId: number | undefined): Promise<boolean> => {
+  if (!entityId || fileList.value.length === 0) {
+    return true;
+  }
 
+  try {
     const formData = new FormData();
 
-    // Добавляем все файлы
-    fileList.value.forEach((file) => {
-      formData.append("images", file.raw);
-    });
+    // Сжимаем каждый файл перед отправкой
+    for (const file of fileList.value) {
+      const compressed = await compressImage(file.raw);
+      formData.append("images", compressed, compressed.name || file.name);
+    }
 
-    // Добавляем метаданные
     formData.append("folder", ImageFolder.AD);
     formData.append("entityType", EntityType.AD);
     formData.append("entityId", entityId.toString());
@@ -209,14 +217,22 @@ const saveImages = catcher(
       method: "POST",
       body: formData,
     });
-  },
-  (e: any) => {
-    ElMessage.error(t("createListing.validation.imageUploadError"));
-    console.error("Upload error:", e);
+    return true;
+  } catch (e: any) {
+    ElMessage.error(getErrorMessage(e, t("createListing.validation.imageUploadError")));
+    return false;
   }
-);
+};
+
+const uploadRef = ref();
 
 const handleFileChange = (file: any, fileListData: any[]) => {
+  // Блокируем недопустимые форматы (HEIC и пр.)
+  if (file.raw && !isAllowedImage(file.raw)) {
+    ElMessage.error(t("createListing.validation.imageFormat"));
+    uploadRef.value?.handleRemove(file);
+    return;
+  }
   fileList.value = fileListData;
   form.images = fileListData;
   formRef.value?.validateField("images");
@@ -580,13 +596,14 @@ onMounted(() => {
               prop="images"
             >
               <el-upload
+                ref="uploadRef"
                 class="upload-demo"
                 drag
                 :auto-upload="false"
                 :limit="8"
                 :on-change="handleFileChange"
                 :on-remove="handleFileRemove"
-                accept="image/*"
+                accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
                 multiple
               >
                 <el-icon class="el-icon--upload">
