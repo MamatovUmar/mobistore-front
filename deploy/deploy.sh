@@ -58,6 +58,15 @@ docker pull "$IMAGE"
 docker stop "$NEW_CONTAINER" 2>/dev/null || true
 docker rm "$NEW_CONTAINER" 2>/dev/null || true
 
+# Runtime-переменные (например NUXT_SSR_SHARED_SECRET для аналитики просмотров).
+# Файл опциональный: если его нет, контейнер стартует как раньше.
+RUNTIME_ENV_FILE="$(dirname "$PUBLIC_DIR")/.env.runtime"
+ENV_ARGS=()
+if [ -f "$RUNTIME_ENV_FILE" ]; then
+    echo "🔑 Using runtime env: $RUNTIME_ENV_FILE"
+    ENV_ARGS+=(--env-file "$RUNTIME_ENV_FILE")
+fi
+
 # Запуск нового контейнера
 echo "🐳 Starting new container on port $NEW_PORT..."
 docker run -d \
@@ -66,6 +75,7 @@ docker run -d \
     -p "$NEW_PORT:3000" \
     --add-host "$API_DOMAIN:host-gateway" \
     -v "$PUBLIC_DIR:/app/public:ro" \
+    "${ENV_ARGS[@]}" \
     "$IMAGE"
 
 # Health check (ждём до 60 сек)
