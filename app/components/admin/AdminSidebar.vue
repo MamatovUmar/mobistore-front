@@ -9,7 +9,8 @@ import {
   Memo,
   Iphone,
   Collection,
-  Money
+  Money,
+  TrendCharts
 } from "@element-plus/icons-vue";
 import { useRootStore } from "~/store/root";
 
@@ -43,6 +44,12 @@ const menuItems = [
     title: "Объявления",
     icon: MessageBox,
     path: "/admin/listings",
+    roles: ["admin", "moderator"],
+  },
+  {
+    title: "Аналитика",
+    icon: TrendCharts,
+    path: "/admin/analytics",
     roles: ["admin", "moderator"],
   },
   {

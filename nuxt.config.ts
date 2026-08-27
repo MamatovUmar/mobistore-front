@@ -12,6 +12,9 @@ export default defineNuxtConfig({
     "@nuxtjs/i18n"
   ],
   runtimeConfig: {
+    // Общий секрет с API: подтверждает, что заголовки X-Client-* пришли от SSR,
+    // а не подделаны снаружи. Задаётся через NUXT_SSR_SHARED_SECRET.
+    ssrSharedSecret: "",
     public: {
       apiUrl: "", // переопределяется через NUXT_PUBLIC_API_URL
       telegramBotName: "",
